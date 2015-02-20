@@ -1,0 +1,50 @@
+;; Object semanticdb-project-database-file
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "semanticdb-project-database-file"
+  :tables
+  (list
+    (semanticdb-table "semanticdb-table"
+      :major-mode 'c++-mode
+      :tags 
+        '( ("myadd.h" include (:system-flag t) nil [1 19])
+            ("iostream" include (:system-flag t) nil [20 39])
+            ("../helper.h" include nil nil [40 62])
+            ("main" function (:type "int") nil [64 176]))          
+      :file "main.cpp"
+      :pointmax 182
+      :fsize 181
+      :lastmodtime '(21734 57731 959367 829000)
+      :unmatched-syntax nil)
+    (semanticdb-table "semanticdb-table"
+      :major-mode 'c-mode
+      :tags 
+        '( ("Helper" type
+               (:members 
+                  ( ("public" label nil (reparse-symbol classsubparts) [17 24])
+                    ("help" function
+                       (:prototype-flag t
+                        :type "void")
+                        (reparse-symbol classsubparts) [38 50]))                  
+                :type "class")
+                nil [1 53]))          
+      :file "helper.h"
+      :pointmax 56
+      :fsize 55
+      :lastmodtime '(21734 50085 879175 275000)
+      :unmatched-syntax nil)
+    (semanticdb-table "semanticdb-table"
+      :major-mode 'c++-mode
+      :tags 
+        '( ("helper.h" include nil nil [1 20])
+            ("help" function
+               (:parent "Helper"
+                :type "void")
+                nil [22 71]))          
+      :file "helper.cpp"
+      :pointmax 72
+      :fsize 71
+      :lastmodtime '(21734 50351 743181 970000)
+      :unmatched-syntax nil))
+  :file "!home!dodge!demo!src!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.2")

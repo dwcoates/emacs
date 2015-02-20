@@ -1,0 +1,28 @@
+;; Object semanticdb-project-database-file
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "semanticdb-project-database-file"
+  :tables
+  (list
+    (semanticdb-table "semanticdb-table"
+      :major-mode 'c++-mode
+      :tags 
+        '( ("iostream" include (:system-flag t) nil [1 20])
+            ("foo" function (:type "int") nil [36 72])
+            ("main" function
+               (:arguments 
+                  ( ("argc" variable (:type "int") (reparse-symbol arg-sub-list) [83 92])
+                    ("argv" variable
+                       (:pointer 1
+                        :dereference 1
+                        :type "char")
+                        (reparse-symbol arg-sub-list) [93 106]))                  
+                :type "int")
+                nil [74 201]))          
+      :file "test.cpp"
+      :pointmax 204
+      :fsize 152
+      :lastmodtime '(21735 47897 932770 595000)
+      :unmatched-syntax nil))
+  :file "!home!dodge!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.2")
