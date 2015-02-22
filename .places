@@ -1,13 +1,13 @@
 ;;; -*- coding: utf-8 -*-
-(("/home/dodge/.emacs.d/settings/appearance.el" . 162)
+(("/home/dodge/.emacs.d/init.el" . 87)
+ ("/home/dodge/.emacs.d/recentf" . 2343)
+ ("/home/dodge/.emacs.d/ede-projects.el" . 86)
+ ("/home/dodge/.emacs.d/settings/appearance.el" . 162)
  ("/home/dodge/.emacs.d/settings/setup-org.el" . 713)
  ("/home/dodge/.emacs.d/settings/setup-magit.el" . 80)
  ("/home/dodge/.emacs.d/"
   (dired-filename . "/home/dodge/.emacs.d/#ac-comphist.dat#"))
- ("/home/dodge/.emacs.d/init.el" . 1589)
  ("/home/dodge/.emacs.d/settings/key-bindings.el" . 1676)
- ("/home/dodge/.emacs.d/recentf" . 2255)
- ("/home/dodge/.emacs.d/ede-projects.el" . 86)
  ("/home/dodge/.emacs.d/settings/setup-helm.el" . 2416)
  ("/home/dodge/.emacs.d/settings/"
   (dired-filename . "/home/dodge/.emacs.d/settings/setup-magit.el~"))

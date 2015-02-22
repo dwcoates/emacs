@@ -1,0 +1,17 @@
+auto-save-list
+backups
+*~
+.places
+session.*
+eshell
+elpa
+jdee-2.4.1
+key-chord
+xkcd
+*.elc
+.DS_Store
+.yas-compiled-snippets.el
+.cask
+/url/
+/var/
+/.sx/
