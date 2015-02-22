@@ -1,0 +1,89 @@
+;;; -*- coding: utf-8 -*-
+(("/home/dodge/.emacs.d/settings/appearance.el" . 162)
+ ("/home/dodge/.emacs.d/settings/setup-org.el" . 713)
+ ("/home/dodge/.emacs.d/settings/setup-magit.el" . 80)
+ ("/home/dodge/.emacs.d/"
+  (dired-filename . "/home/dodge/.emacs.d/#ac-comphist.dat#"))
+ ("/home/dodge/.emacs.d/init.el" . 1589)
+ ("/home/dodge/.emacs.d/settings/key-bindings.el" . 1676)
+ ("/home/dodge/.emacs.d/recentf" . 2255)
+ ("/home/dodge/.emacs.d/ede-projects.el" . 86)
+ ("/home/dodge/.emacs.d/settings/setup-helm.el" . 2416)
+ ("/home/dodge/.emacs.d/settings/"
+  (dired-filename . "/home/dodge/.emacs.d/settings/setup-magit.el~"))
+ ("/home/dodge/magnars.emacs/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d"))
+ ("/home/dodge/magnars.emacs/.emacs.d/settings/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/settings/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/init.el"))
+ ("/home/dodge/magnars.emacs/.emacs.d/init.el" . 5654)
+ ("/home/dodge/.emacs.d/elpa/helm-gtags-20150216.708/helm-gtags-autoloads.el" . 3292)
+ ("/home/dodge/.emacs.d/elpa/ggtags-20150129.46/ggtags-autoloads.el" . 1219)
+ ("/home/dodge/.emacs.d/test.cpp" . 32)
+ ("/home/dodge/.emacs.d/elpa/clang-format-20150119.248/clang-format-autoloads.el" . 817)
+ ("/home/dodge/.emacs.d/elpa/ac-clang-20150221.839/ac-clang-autoloads.el" . 256)
+ ("/home/dodge/.emacs.d/elpa/company-20150220.1432/company-autoloads.el" . 8672)
+ ("/home/dodge/.emacs.d/elpa/company-c-headers-20140930.1102/company-c-headers-autoloads.el" . 463)
+ ("/home/dodge/.emacs.d/elpa/company-irony-20140629.1118/company-irony-autoloads.el" . 640)
+ ("/home/dodge/.emacs.d/elpa/irony-20150216.1515/irony-autoloads.el" . 2778)
+ ("/home/dodge/.emacs.d/elpa/company-math-20150216.352/company-math-autoloads.el" . 753)
+ ("/home/dodge/.emacs.d/elpa/math-symbol-lists-20141126.1508/math-symbol-lists-autoloads.el" . 256)
+ ("/home/dodge/.emacs.d/elpa/yasnippet-20150212.240/snippets/"
+  (dired-filename . "/home/dodge/.emacs.d/elpa/yasnippet-20150212.240/snippets/.."))
+ ("/home/dodge/.emacs.d/elpa/"
+  (dired-filename . "/home/dodge/.emacs.d/elpa/yasnippet-20150212.240"))
+ ("/home/dodge/.emacs.d/elpa/yasnippet-20150212.240/" . 520)
+ ("/home/dodge/.emacs.d/settings/setup-yasnippet.el" . 74)
+ ("/home/dodge/test.cpp" . 269)
+ ("/home/dodge/magnars.emacs/.emacs.d/settings/setup-org.el" . 38)
+ ("/home/dodge/magnars.emacs/.emacs.d/settings/setup-magit.el" . 3957)
+ ("/home/dodge/magnars.emacs/.emacs.d/settings/setup-dired.el" . 18)
+ ("/home/dodge/magnars.emacs/.emacs.d/defuns/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/defuns/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/users/magnars/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/users/magnars/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/users/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/users/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/themes/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/themes/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/snippets/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/snippets/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/site-lisp/crappy-jsp-mode/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/site-lisp/crappy-jsp-mode/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/site-lisp/clj-refactor/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/site-lisp/clj-refactor/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/site-lisp/change-inner/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/site-lisp/change-inner/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/site-lisp/buster-snippets/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/site-lisp/buster-snippets/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/site-lisp/fold-this/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/site-lisp/fold-this/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/site-lisp/jade-mode/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/site-lisp/jade-mode/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/site-lisp/dash/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/site-lisp/dash/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/site-lisp/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/site-lisp/.."))
+ ("/bin/"
+  (dired-filename . "/bin/bash"))
+ ("/"
+  (dired-filename . "/bin"))
+ ("/home/dodge/.emacs.d/elpa/helm-dash-1.1/helm-dash-autoloads.el" . 689)
+ ("/home/dodge/.emacs.d/elpa/dash-at-point-20140626.35/dash-at-point-autoloads.el" . 5714)
+ ("/home/dodge/.emacs.d/xkcd/668.json" . 825)
+ ("/home/dodge/.emacs.d/xkcd/12.json" . 646)
+ ("/home/dodge/magnars.emacs/.emacs.d/.git/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/.git/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/project-archetypes/emacs-package/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/project-archetypes/emacs-package/.."))
+ ("/home/dodge/magnars.emacs/.emacs.d/project-archetypes/"
+  (dired-filename . "/home/dodge/magnars.emacs/.emacs.d/project-archetypes/.."))
+ ("/home/dodge/.emacs~" . 1164)
+ ("/home/dodge/*scratch*" . 594)
+ ("/home/dodge/.emacs.d/custom.el" . 110)
+ ("/home/dodge/.emacs.d/settings/sane-defaults.el" . 3098)
+ ("/home/dodge/"
+  (dired-filename . "/home/dodge/magnars.emacs"))
+ ("/home/dodge/.emacs.d/settings/setup-package.el" . 1353)
+ ("/home/dodge/magnars.emacs/.emacs.d/settings/sane-defaults.el" . 4341))

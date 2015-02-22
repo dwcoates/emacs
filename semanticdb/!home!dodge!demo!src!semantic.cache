@@ -9,12 +9,13 @@
         '( ("myadd.h" include (:system-flag t) nil [1 19])
             ("iostream" include (:system-flag t) nil [20 39])
             ("../helper.h" include nil nil [40 62])
-            ("main" function (:type "int") nil [64 176]))          
+            ("foo" function (:type "int") nil [64 140])
+            ("main" function (:type "int") nil [142 257]))          
       :file "main.cpp"
-      :pointmax 182
-      :fsize 181
-      :lastmodtime '(21734 57731 959367 829000)
-      :unmatched-syntax nil)
+      :pointmax 261
+      :fsize 260
+      :lastmodtime '(21737 26898 977111 112000)
+      :unmatched-syntax '((symbol 257 . 260) (symbol 257 . 260)))
     (semanticdb-table "semanticdb-table"
       :major-mode 'c-mode
       :tags 

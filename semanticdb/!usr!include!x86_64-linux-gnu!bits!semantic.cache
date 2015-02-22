@@ -369,6 +369,225 @@
           ("_BITS_BYTESWAP_H" . ((number "1" 1168 . 1169)))
           ("__bswap_constant_16" (spp-arg-list ("x") 1261 . 1264) . ((semantic-list "((unsigned short int) ((((x) >> 8) & 0xff) | (((x) & 0xff) << 8)))" 1272 . 1338)))
           )
+)
+    (semanticdb-table "semanticdb-table"
+      :major-mode 'c-mode
+      :tags 
+        '( ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("acos" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2236 2241]))                  
+                :type ("_Mdouble_BEGIN_NAMESPACE" type (:type "class") nil nil))
+                nil [2175 2260])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("asin" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2295 2300]))                  
+                :type "int")
+                nil [2283 2319])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("atan" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2357 2362]))                  
+                :type "int")
+                nil [2345 2381])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("atan2" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2421 2427]))                  
+                :type "int")
+                nil [2409 2461])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("cos" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2495 2499]))                  
+                :type "int")
+                nil [2483 2518])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("sin" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2549 2553]))                  
+                :type "int")
+                nil [2537 2572])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("tan" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2606 2610]))                  
+                :type "int")
+                nil [2594 2629])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("cosh" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2704 2709]))                  
+                :type "int")
+                nil [2692 2728])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("sinh" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2770 2775]))                  
+                :type "int")
+                nil [2758 2794])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("tanh" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2839 2844]))                  
+                :type "int")
+                nil [2827 2863])
+            ("__MATHDECL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type "void") (reparse-symbol arg-sub-list) [2946 2951])
+                    ("" variable (:type ("sincos" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [2951 2958]))                  
+                :type ("_Mdouble_END_NAMESPACE" type (:type "class") nil nil))
+                nil [2864 3020])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("exp" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3494 3498]))                  
+                :type ("_Mdouble_BEGIN_NAMESPACE" type (:type "class") nil nil))
+                nil [3423 3517])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("frexp" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3605 3611]))                  
+                :type "int")
+                nil [3593 3647])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("ldexp" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3700 3706]))                  
+                :type "int")
+                nil [3688 3741])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("log" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3786 3790]))                  
+                :type "int")
+                nil [3774 3809])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("log10" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3855 3861]))                  
+                :type "int")
+                nil [3843 3880])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("modf" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [3949 3954]))                  
+                :type "int")
+                nil [3937 4031])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("exp10" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4159 4165]))                  
+                :type ("_Mdouble_END_NAMESPACE" type (:type "class") nil nil))
+                nil [4032 4184])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("pow10" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4236 4242]))                  
+                :type "int")
+                nil [4224 4261])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("pow" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [4940 4944]))                  
+                :type ("_Mdouble_BEGIN_NAMESPACE" type (:type "class") nil nil))
+                nil [4871 4978])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("sqrt" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5028 5033]))                  
+                :type "int")
+                nil [5016 5052])
+            ("__MATHCALLX" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("ceil" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5636 5641]))                  
+                :type ("_Mdouble_BEGIN_NAMESPACE" type (:type "class") nil nil))
+                nil [5550 5673])
+            ("__MATHCALLX" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("fabs" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5716 5721]))                  
+                :type "int")
+                nil [5703 5753])
+            ("__MATHCALLX" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("floor" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5811 5817]))                  
+                :type "int")
+                nil [5798 5849])
+            ("__MATHCALL" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type ("fmod" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [5910 5915]))                  
+                :type "int")
+                nil [5898 5949])
+            ("__MATHDECL_1" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type "int") (reparse-symbol arg-sub-list) [6058 6062])
+                    ("" variable (:type ("__isinf" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [6062 6070]))                  
+                :type "int")
+                nil [6044 6121])
+            ("__MATHDECL_1" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type "int") (reparse-symbol arg-sub-list) [6191 6195])
+                    ("" variable (:type ("__finite" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [6195 6204]))                  
+                :type "int")
+                nil [6177 6255])
+            ("__MATHDECL_1" function
+               (:prototype-flag t
+                :arguments 
+                  ( ("" variable (:type "int") (reparse-symbol arg-sub-list) [7287 7291])
+                    ("" variable (:type ("__isnan" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [7291 7299]))                  
+                :type ("_Mdouble_END_NAMESPACE" type (:type "class") nil nil))
+                nil [6256 7350]))          
+      :file "mathcalls.h"
+      :pointmax 11616
+      :fsize 11615
+      :lastmodtime '(21696 15519 0 0)
+      :unmatched-syntax '((semantic-list 7301 . 7320) (semantic-list 6206 . 6225) (semantic-list 6072 . 6091) (semantic-list 5917 . 5947) (semantic-list 5836 . 5847) (semantic-list 5819 . 5834) (semantic-list 5740 . 5751) (semantic-list 5723 . 5738) (semantic-list 5660 . 5671) (semantic-list 5643 . 5658) (symbol 5053 . 5075) (semantic-list 5035 . 5050) (semantic-list 4946 . 4976) (semantic-list 4244 . 4259) (semantic-list 4167 . 4182) (semantic-list 3956 . 3990) (semantic-list 3863 . 3878) (semantic-list 3792 . 3807) (semantic-list 3708 . 3739) (semantic-list 3613 . 3645) (semantic-list 3500 . 3515) (semantic-list 2965 . 3018) (semantic-list 2846 . 2861) (semantic-list 2777 . 2792) (semantic-list 2711 . 2726) (semantic-list 2612 . 2627) (semantic-list 2555 . 2570) (semantic-list 2501 . 2516) (semantic-list 2429 . 2459) (semantic-list 2364 . 2379) (semantic-list 2302 . 2317) (semantic-list 2243 . 2258) (string 2062 . 2132) (symbol 2056 . 2061) (punctuation 2054 . 2055)))
+    (semanticdb-table "semanticdb-table"
+      :major-mode 'c-mode
+      :tags nil
+      :file "mathdef.h"
+      :pointmax 2282
+      :fsize 2281
+      :lastmodtime '(21696 15519 0 0)
+      :unmatched-syntax nil)
+    (semanticdb-table "semanticdb-table"
+      :major-mode 'c-mode
+      :tags 
+        '( ("endian.h" include (:system-flag t) nil [1535 1555])
+            ("__huge_val_t" type
+               (:typedef ("" type
+                     (:members 
+                        ( ("__c" variable
+                             (:dereference 1
+                              :type "unsigned char")
+                              (reparse-symbol classsubparts) [1573 1594])
+                          ("__d" variable (:type "double") (reparse-symbol classsubparts) [1595 1606]))                        
+                      :type "union")
+                      nil nil)
+                :type "typedef")
+                nil [1557 1622])
+            ("__huge_val" variable
+               (:typemodifiers ("static")
+                :default-value "{ __HUGE_VAL_bytes }"
+                :type ("__huge_val_t" type (:type "class") nil nil))
+                nil [1832 1886])
+            ("HUGE_VAL" variable (:constant-flag t) nil [1896 1904]))          
+      :file "huge_val.h"
+      :pointmax 1942
+      :fsize 1941
+      :lastmodtime '(21696 15519 0 0)
+      :unmatched-syntax '((string 1043 . 1108) (symbol 1037 . 1042) (punctuation 1035 . 1036))
+      :lexical-table 
+        '(("HUGE_VAL" . ((semantic-list "(__huge_val.__d)" 1905 . 1921)))
+          )
 ))
   :file "!usr!include!x86_64-linux-gnu!bits!semantic.cache"
   :semantic-tag-version "2.0"

@@ -1,0 +1,24 @@
+;; Object semanticdb-project-database-file
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "semanticdb-project-database-file"
+  :tables
+  (list
+    (semanticdb-table "semanticdb-table"
+      :major-mode 'js-mode
+      :tags nil
+      :file "12.json"
+      :pointmax 1
+      :fsize 646
+      :lastmodtime '(21737 10066 469323 872000)
+      :unmatched-syntax nil)
+    (semanticdb-table "semanticdb-table"
+      :major-mode 'js-mode
+      :tags nil
+      :file "668.json"
+      :pointmax 1
+      :fsize 825
+      :lastmodtime '(21737 10087 781323 603000)
+      :unmatched-syntax nil))
+  :file "!home!dodge!.emacs.d!xkcd!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.2")
