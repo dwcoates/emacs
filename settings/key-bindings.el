@@ -38,6 +38,12 @@
 ;; google c++ style popup
 (global-set-key (kbd "C-c +") 'flymake-popup-current-error-menu)
 
+(defun nispio/other-window (&optional arg)
+  "With prefix argument, select the next frame. Otherwise, select the next window"
+  (interactive "P")
+  (if arg (other-frame 1) (other-window 1)))
+(global-set-key (kbd "C-\\") 'nispio/other-window)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;; HELM ;;;;;;;;;;;;;;;;;;
