@@ -83,12 +83,16 @@
      cider
      )))
 
-
 ;;(condition-case nil
 ;;    (init--install-packages)
 ;;  (error
 ;;   (package-refresh-contents)
 ;;   (init--install-packages)))
+
+
+;; use-package, courtesy of John Wiegley
+(require 'use-package)
+
 (use-package cc-mode
   :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
          ("\\.m\\'"                   . c-mode)
@@ -108,14 +112,6 @@
             (insert "CHECK: ")
             (forward-line 1)))
         (insert "*/\n")))
-
-    ;; (defun my-c-indent-or-complete ()
-    ;;   (interactive)
-    ;;   (let ((class (syntax-class (syntax-after (1- (point))))))
-    ;;     (if (or (bolp) (and (/= 2 class)
-    ;;                         (/= 3 class)))
-    ;;         (call-interactively 'indent-according-to-mode)
-    ;;       (call-interactively 'auto-complete))))
 
     (defvar printf-index 0)
 
@@ -139,7 +135,7 @@
       (hide-ifdef-mode 1)
       (whitespace-mode 1)
       (which-function-mode 1)
-      ;; (auto-complete-mode 1)
+      (auto-complete-mode 1)
       (yas-minor-mode 1)
       (bug-reference-prog-mode 1)
 
@@ -149,16 +145,16 @@
 
       (bind-key "C-c p" 'insert-counting-printf c-mode-base-map)
 
-      ;; (setq ac-sources (list (if (and (fboundp 'semantic-active-p)
-      ;;                                 (funcall #'semantic-active-p))
-      ;;                            'ac-source-semantic
-      ;;                          'ac-source-gtags)))
-      ;; (bind-key "<A-tab>" 'ac-complete c-mode-base-map)
+      ;; why does this disable autocomplete?
+      ;; -----------------------------------------------------------
+      ; (setq ac-sources (list (if (and (fboundp 'semantic-active-p)
+      ;                                 (funcall #'semantic-active-p))
+      ;                            'ac-source-semantic
+      ;                          'ac-source-gtags)))
+      ; (bind-key "<C-tab>" 'ac-complete c-mode-base-map)
 
-      ;;(doxymacs-mode 1)
-      ;;(doxymacs-font-lock)
 
-      (bind-key "<return>" 'newline-and-indent c-mode-base-map)
+      ;(bind-key "<return>" 'newline-and-indent c-mode-base-map)
 
       ;; (set (make-local-variable 'yas-fallback-behavior)
       ;;      '(apply my-c-indent-or-complete . nil))
@@ -313,7 +309,8 @@
                         . (first c-lineup-topmost-intro-cont
                                  c-lineup-gnu-DEFUN-intro-cont))))
                    (c-special-indent-hook . c-gnu-impose-minimum)
-                   (c-block-comment-prefix . "")))
+                   (c-block-comment-prefix . ""))) 
+
 
     (add-to-list 'c-style-alist
                  '("clang"
@@ -415,7 +412,201 @@
         (goto-char here)))))
 
 
+;; ace-jump-mode
 
+(use-package ace-jump-mode
+  :bind ("M-h" . ace-jump-mode)
+  :config
+  (setq ace-jump-mode-submode-list
+        '(ace-jump-char-mode
+          ace-jump-word-mode
+          ace-jump-line-mode)))
+
+(defun char-mapping (key char)
+  (bind-key key `(lambda () (interactive) (insert ,char))))
+
+(char-mapping "A-G" "Γ")
+(char-mapping "A-l" "λ x → ")
+(char-mapping "A-:" " ∷ ")
+(char-mapping "A-r" " → ")
+(char-mapping "A-~" " ≅ ")
+(char-mapping "A-=" " ≡ ")
+
+
+(use-package ascii
+  :commands (ascii-on ascii-toggle)
+  :init
+  (progn
+    (defun ascii-toggle ()
+      (interactive)
+      (if ascii-display
+          (ascii-off)
+        (ascii-on)))
+
+    (bind-key "C-c e A" 'ascii-toggle)))
+
+(use-package tex-site
+  :load-path "site-lisp/auctex/preview/"
+  :defines (latex-help-cmd-alist latex-help-file)
+  :mode ("\\.tex\\'" . TeX-latex-mode)
+  :config
+  (progn
+    (defun latex-help-get-cmd-alist ()  ;corrected version:
+      "Scoop up the commands in the index of the latex info manual.
+   The values are saved in `latex-help-cmd-alist' for speed."
+      ;; mm, does it contain any cached entries
+      (if (not (assoc "\\begin" latex-help-cmd-alist))
+          (save-window-excursion
+            (setq latex-help-cmd-alist nil)
+            (Info-goto-node (concat latex-help-file "Command Index"))
+            (goto-char (point-max))
+            (while (re-search-backward "^\\* \\(.+\\): *\\(.+\\)\\." nil t)
+              (let ((key (buffer-substring (match-beginning 1) (match-end 1)))
+                    (value (buffer-substring (match-beginning 2)
+                                             (match-end 2))))
+                (add-to-list 'latex-help-cmd-alist (cons key value))))))
+      latex-help-cmd-alist)
+
+    (use-package latex-mode
+      :defer t
+      :config
+      (progn
+        (use-package preview)
+        (use-package ac-math)
+
+        (defun ac-latex-mode-setup ()
+          (nconc ac-sources
+                 '(ac-source-math-unicode ac-source-math-latex
+                                          ac-source-latex-commands)))
+
+        (add-to-list 'ac-modes 'latex-mode)
+        (add-hook 'latex-mode-hook 'ac-latex-mode-setup)
+
+        (info-lookup-add-help :mode 'latex-mode
+                              :regexp ".*"
+                              :parse-rule "\\\\?[a-zA-Z]+\\|\\\\[^a-zA-Z]"
+                              :doc-spec '(("(latex2e)Concept Index" )
+                                          ("(latex2e)Command Index")))))))
+
+
+
+(use-package auto-complete-config
+  :disabled t
+  :diminish auto-complete-mode
+  :init
+  (progn
+    (use-package pos-tip)
+    (ac-config-default))
+
+  :config
+  (progn
+    (ac-set-trigger-key "TAB")
+    (ac-set-trigger-key "<backtab>")
+    (setq ac-use-menu-map t)
+
+    (bind-key "A-M-?" 'ac-last-help)
+    (unbind-key "C-s" ac-completing-map)))
+
+(use-package cmake-mode
+  :mode (("CMakeLists\\.txt\\'" . cmake-mode)
+         ("\\.cmake\\'"         . cmake-mode)))
+
+
+(use-package compile
+  :defer t
+  :config
+  (progn
+    (defun cmake-project-filename ()
+      (let ((filename (match-string-no-properties 1)))
+        (save-match-data
+          (with-temp-buffer
+            (insert-file-contents-literally "cmake_install.cmake")
+            (goto-char (point-min))
+            (re-search-forward "Install script for directory: \\(.+\\)")
+            (cons filename (match-string-no-properties 1))))))
+
+    (push 'cmake compilation-error-regexp-alist)
+
+    (push '(cmake "^CMake Error at \\(.+?\\):\\([0-9]+\\)"
+                  (cmake-project-filename) 2 2 2)
+          compilation-error-regexp-alist-alist)
+
+    (push '(cmake "^\\(?:CMake Error at \\|  \\)\\(.+?\\):\\([0-9]+\\) ([A-Za-z_][A-Za-z0-9_]*)"
+                  (cmake-project-filename) 2)
+          compilation-error-regexp-alist-alist)
+
+    (defun find-directory (dir name)
+      (catch 'file
+        (let ((files
+               (delete
+                nil
+                (mapcar
+                 (lambda (entry)
+                   (and (not (string-match
+                              "\\`\\." (file-name-nondirectory entry)))
+                        (file-directory-p entry)
+                        entry))
+                 (directory-files dir t)))))
+          (dolist (file files)
+            (if (string= (file-name-nondirectory file) name)
+                (throw 'file file)))
+          (dolist (file files)
+            (let ((result (find-directory file name)))
+              (if result (throw 'file result)))))))
+
+    (defun ghc-project-filename ()
+      (let ((filename (match-string-no-properties 1)))
+        (save-excursion
+          (goto-char (point-min))
+          (if (re-search-forward "^Building \\(.+?\\)-[0-9]" nil t)
+              (cons filename (find-directory default-directory
+                                             (match-string 1)))))))
+
+    (add-hook 'compilation-finish-functions
+              (lambda (buf why)
+                (display-buffer buf)))))
+
+
+(use-package ispell
+  :bind (("C-c i c" . ispell-comments-and-strings)
+         ("C-c i d" . ispell-change-dictionary)
+         ("C-c i k" . ispell-kill-ispell)
+         ("C-c i m" . ispell-message)
+         ("C-c i r" . ispell-region)))
+
+
+(use-package gtags
+  :commands gtags-mode
+  :diminish gtags-mode
+  :config
+  (progn
+    (defun my-gtags-or-semantic-find-tag ()
+      (interactive)
+      (if (and (fboundp 'semantic-active-p)
+               (funcall #'semantic-active-p))
+          (call-interactively #'semantic-complete-jump)
+        (call-interactively #'gtags-find-tag)))
+
+    (bind-key "M-." 'my-gtags-or-semantic-find-tag gtags-mode-map)
+
+    (bind-key "C-c t ." 'gtags-find-rtag)
+    (bind-key "C-c t f" 'gtags-find-file)
+    (bind-key "C-c t p" 'gtags-parse-file)
+    (bind-key "C-c t g" 'gtags-find-with-grep)
+    (bind-key "C-c t i" 'gtags-find-with-idutils)
+    (bind-key "C-c t s" 'gtags-find-symbol)
+    (bind-key "C-c t r" 'gtags-find-rtag)
+    (bind-key "C-c t v" 'gtags-visit-rootdir)
+
+    (bind-key "<mouse-2>" 'gtags-find-tag-from-here gtags-mode-map)
+
+    (use-package helm-gtags
+      :bind ("M-T" . helm-gtags-select)
+      :config
+      (bind-key "M-," 'helm-gtags-resume gtags-mode-map))))
+
+
+;; sane-defaults
 (require 'sane-defaults)
 
 
@@ -426,22 +617,17 @@
 (setq guide-key/recursive-key-sequence-flag t)
 (setq guide-key/popup-window-position 'bottom)
 
+
+;; setup
 (eval-after-load 'org '(require 'setup-org))
 (eval-after-load 'dired '(require 'setup-dired))
 (eval-after-load 'magit '(require 'setup-magit))
 (eval-after-load 'grep '(require 'setup-rgrep))
 (eval-after-load 'shell '(require 'setup-shell))
-
-(require 'setup-yasnippet)
-
 (eval-after-load 'flycheck '(require 'setup-flycheck))
 
+(require 'setup-yasnippet)
 (require 'setup-helm)
-;(require 'ggtags)
-;(add-hook 'c-mode-common-hook
-;          (lambda ()
-;            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-;              (ggtags-mode 1))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -455,24 +641,6 @@
 ;;     std::|
 ;;(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
 
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;; AUTO-COMPLETE ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; start auto-complete with emacs
-(require 'auto-complete)
-;; do default config for auto-completion
-(require 'auto-complete-config)
-(ac-config-default)
-;; initialized auto-complete-c-headers with hook
-(defun my:ac-c-header-init ()
-  (require  'auto-complete-c-headers)
-  (add-to-list 'ac-sources 'ac-source-c-headers))
-(add-hook 'c++-mode-hook 'my:ac-c-header-init)
-(add-hook 'c-mode-hook 'my:ac-c-header-init)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -494,42 +662,16 @@
 (add-hook 'c-mode-common-hook 'google-make-newline-indent)
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;; SEMANTIC ;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; turn on Semantic
-(semantic-mode 1)
-;; adds semantic as a suggestion backend to auto-complete
-(defun my:add-semantic-to-autocomplete ()
-  (add-to-list 'ac-sources 'ac-source-semantic))
-(add-hook 'c-mode-common-hook 'my:add-semantic-to-autocomplete)
-;; turn on ede mode
-(global-ede-mode 1)
-;; create a project for 'demo' program
-;; you can use the system-include-path for setting up the system header file locations.
-(ede-cpp-root-project "my project" :file "~/demo/src/main.cpp"
-		      :include-path '("/../inc"))
-;; prompts semantic to parse open buffers in its spare time
-(global-semantic-idle-scheduler-mode 1)
-  
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;; JDEE ;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; JDEE initialization            *** COMMENTED UNTIL JDEE SET UP AGAIN ***
-;;(add-to-list 'load-path "~/.emacs.d/jdee-2.4.1/list")
-;;(load "jde")
-
 ; set up plain keybindings
 (require 'key-bindings)
 ; configure keychord mode and key chords
 (require 'setup-keychord)
 
+
 ;;(add-to-list 'load-path (expand-file-name "/home/dodge/.emacs.d/elpa/emacs-xkcd-1.0/emacs-xkcd.el"))
 ;;(require 'xkcd-mode)
-;;(global-set-key (kbd "C-x C-k r") 'xkcd-rand)
-;;(global-set-key (kbd "C-x C-k l") 'xkcd-latest)
+;(global-set-key (kbd "C-x C-k r") 'xkcd-rand)
+;(global-set-key (kbd "C-x C-k l") 'xkcd-latest)
 
 ;; conclude init by setting up specifics for the current user
 ;;(when (file-exists-p user-settings-dir)

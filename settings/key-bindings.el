@@ -99,7 +99,8 @@
        (error "Current window is the only window in its frame")
      (delete-other-windows))))
 
-(bind-key "C-c c" 'compile)
+;; ------------------- THIS HAS BEEN EDITED ------------------
+;(bind-key "C-c c" 'compile)
 
 (defun delete-current-line (&optional arg)
   (interactive "p")
