@@ -1,8 +1,31 @@
-int int main(int argc, char *argv[])
-{
-  int a = 3
+#include <iostream>
+#include <string>
+#include "test.h"
+#include <iostream>
+#include <set>
 
-      
-  
-  return 0;
+int foo3;
+
+struct myStruct {
+    int foo;
+    int foobar;
+    int foobarbaz(int a, std::string b);
+};
+
+int main()
+{
+    struct a;
+
+    s.foobarbaz(a, b);
+
+    myStruct mst;
+
+    set<int> diff;
+
+    string.
+
+    diff.insert
+
+
+    return 0;
 }
