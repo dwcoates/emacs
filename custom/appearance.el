@@ -1,7 +1,3 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;; APPEARANCE ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (add-to-list 'default-frame-alist '(height . 65))
 (add-to-list 'default-frame-alist '(width . 200))
 
@@ -22,6 +18,7 @@
 
 
 ;; enable line numbering
+(linum-mode t)
 (global-set-key (kbd "C-c l m") 'linum-mode)
 
 

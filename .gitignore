@@ -10,6 +10,11 @@ jdee-2.4.1
 key-chord
 xkcd
 *.elc
+*ede-projects*
+*cedet-projects*
+*projectile*
+temp
+backups
 .DS_Store
 .yas-compiled-snippets.el
 .cask

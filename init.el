@@ -29,6 +29,8 @@
     duplicate-thing
     ggtags
     helm
+    dash-at-point
+    dash-functional
     helm-gtags
     helm-projectile
     helm-swoop
@@ -63,6 +65,7 @@
 (require 'setup-helm-gtags)
 (require 'setup-cedet)
 (require 'setup-editing)
+(require 'setup-rgrep)
 
 
 ;; guide-key, displays possible key binding completions
@@ -80,21 +83,16 @@
 
 (windmove-default-keybindings)
 
-;; function-args
-(require 'function-args)
-(fa-config-default)
-(define-key c-mode-map  [(tab)] 'moo-complete)
-(define-key c++-mode-map  [(tab)] 'moo-complete)
-(define-key c-mode-map (kbd "M-o")  'fa-show)
-(define-key c++-mode-map (kbd "M-o")  'fa-show)
-
 
 ;; company
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
 (setq company-backends (delete 'company-semantic company-backends))
+
 (define-key c-mode-map  [(control tab)] 'company-complete)
 (define-key c++-mode-map  [(control tab)] 'company-complete)
+
+(global-set-key (kbd "C-c <tab>") 'helm-company)
 
 ;; company-c-headers
 ;(add-to-list 'company-c-headers-path-system "/usr/include/c++/4.8/")
@@ -212,9 +210,11 @@
 ;(setq golden-ratio-exclude-modes '("speed-bar-mode"))
 
 
-
 ;; Package zygospore
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
+
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -228,7 +228,10 @@
    (quote
     ("/usr/include/" "/usr/local/include/" "/usr/include/c++/4.6/")))
  '(company-c-headers-path-user (quote ("/home/dodge/workspace")))
- '(custom-enabled-themes (quote (wombat))))
+ '(custom-enabled-themes (quote (jazz)))
+ '(custom-safe-themes
+   (quote
+    ("789844278c5a75283b5015c1fc7bebe7e4cf97843b8f8cffe21fafa05e81e90a" "c87cc60d01cf755375759d165c1d60d9586c6a31f0b5437a0378c2a93cfc8407" default))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
