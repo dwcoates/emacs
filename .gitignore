@@ -6,6 +6,9 @@ backups
 session.*
 eshell
 elpa
+settings
+emacsBackupNewest
+temp
 jdee-2.4.1
 key-chord
 xkcd
@@ -25,7 +28,8 @@ elpa
 elpaBackup
 *txt
 Makefile
-*cpp
+*.cpp
+*.h
 history
 recentf
 *ac-comphist*
