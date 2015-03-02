@@ -36,6 +36,13 @@
 (define-key c++-mode-map (kbd "M-o")  'fa-show)
 
 
+;; please don't ask me if I really want to compile
+(global-set-key (kbd "<f5>") (lambda ()
+                               (interactive)
+                               (setq-local compilation-read-command nil)
+                               (call-interactively 'compile)))
+
+
 
 ;; Enable EDE only in C/C++
 (require 'ede)

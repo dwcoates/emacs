@@ -24,6 +24,7 @@ backups
 elpa
 elpaBackup
 *txt
+Makefile
 *cpp
 history
 recentf
