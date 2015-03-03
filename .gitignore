@@ -11,6 +11,10 @@ emacsBackupNewest
 temp
 jdee-2.4.1
 key-chord
+GPATH
+GRTAGS
+GSYMS
+GTAGS
 xkcd
 *.elc
 *ede-projects*
