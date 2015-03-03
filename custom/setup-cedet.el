@@ -25,15 +25,15 @@
 
 ;; add include paths for semantic
 ;; remove "c++-mode" to make path available to both c and c++ modes
-;(semantic-add-system-include '/path/to/library' 'c++-mode)
-
+                                        ;(semantic-add-system-include '/path/to/library' 'c++-mode)
 
 (require 'function-args)
 (fa-config-default)
 (define-key c-mode-map  [("C-c C-f C-h")] 'moo-complete)
 (define-key c++-mode-map  [(control tab)] 'moo-complete)
-(define-key c-mode-map (kbd "M-o")  'fa-show)
-(define-key c++-mode-map (kbd "M-o")  'fa-show)
+(define-key c-mode-map (kbd "C-c M-o s")  'fa-show)
+(define-key c++-mode-map (kbd "C-c M-o s")  'fa-show)
+
 
 
 ;; please don't ask me if I really want to compile
@@ -49,3 +49,6 @@
 (global-ede-mode)
 
 (provide 'setup-cedet)
+
+
+;;; setup-cedet ends here

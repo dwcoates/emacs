@@ -4,13 +4,19 @@
 
 (add-to-list 'load-path "~/.emacs.d/custom")
 
+
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (package-initialize)
+
 
 (setq gc-cons-threshold 100000000)
 (setq inhibit-startup-message t)
+
 
 (require 'appearance)
 
@@ -46,6 +52,7 @@
     projectile
     volatile-highlights
     undo-tree
+    helm-company
     guide-key
     zygospore))
 
@@ -66,6 +73,7 @@
 (require 'setup-cedet)
 (require 'setup-editing)
 (require 'setup-rgrep)
+(require 'setup-flycheck)
 
 
 ;; guide-key, displays possible key binding completions
@@ -222,6 +230,8 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(blink-cursor-delay 1.5)
  '(blink-cursor-mode t)
  '(company-c-headers-path-system

@@ -38,7 +38,6 @@
 
 
 
-
 (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 
 (global-set-key (kbd "M-x") 'helm-M-x)
