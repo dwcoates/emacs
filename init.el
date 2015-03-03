@@ -191,14 +191,17 @@
 (require 'golden-ratio)
 (golden-ratio-mode t)
 
-
-
-;; ensure golden-ratio compatibility with helm
+;; ensure golden-ratio compatibility with helm.
 (defun pl/helm-alive-p ()
   (if (boundp 'helm-alive-p)
       (symbol-value 'helm-alive-p)))
 
 (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
+
+;; list of buffers to not be resized by golden-ratio.
+(setq golden-ratio-exclude-buffer-names
+             '("*Flycheck errors*"
+               "*SPEEDBAR*"))
 
 
 
@@ -215,7 +218,6 @@
 
 ;; Package: speedbar
 (setq speedbar-show-unknown-files t)
-;(setq golden-ratio-exclude-modes '("speed-bar-mode"))
 
 
 ;; Package zygospore

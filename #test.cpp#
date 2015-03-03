@@ -1,0 +1,47 @@
+#include <string>
+#include <iostream>
+#include <cmath>
+#include <stdio.h>
+
+void foo();
+
+struct myStruct {
+        myStruct() {
+                str = "hello struct";
+        }
+        int a;
+        std::string str;
+        int foo(int a) {
+                return a++;
+        }
+};
+
+
+int main() {
+        foo();
+
+        myStruct s;
+
+        std::string str = "hello";
+
+        std::cout << s.str << std::endl;
+
+        s.foo(5);
+
+        s.foo(40);
+
+        s.foo(3);
+
+        s.foo(15);
+
+        s.foo(3);
+        
+        return 0;
+}
+
+void foo() {
+        std::cout << "hello, this is foo()" << std::endl;
+        std::cout << "hello, this is foo()" << std::endl;
+
+        return;
+}
