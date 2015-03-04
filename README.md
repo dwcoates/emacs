@@ -11,4 +11,4 @@ From [Ubuntu Elisp ppa](https://launchpad.net/~ubuntu-elisp/+archive/ubuntu/ppa)
 
     sudo apt-add-repository ppa:ubuntu-elisp/ppa
     sudo apt-get update
-    sudo apt-get install emacs-snapshot emacs-snapshot-el`
+    sudo apt-get install emacs-snapshot emacs-snapshot-el
