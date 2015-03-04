@@ -231,7 +231,7 @@
 
 
 ;; Package: tramp
-;(setq tramp-default-method "ssh")
+(setq tramp-default-method "ssh")
 
 
 ;; Package zygospore
