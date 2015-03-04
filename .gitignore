@@ -16,6 +16,9 @@ GRTAGS
 GSYMS
 GTAGS
 xkcd
+\#*\#
+\#*
+tramp
 *.elc
 *ede-projects*
 *cedet-projects*

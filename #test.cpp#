@@ -14,6 +14,10 @@ struct myStruct {
         int foo(int a) {
                 return a++;
         }
+        int averyveryverylongvariablename;
+        int averyverysortalongting;
+        int averyverysolrtalongting;
+        int alveryverysortalongting;
 };
 
 
@@ -28,15 +32,15 @@ int main() {
 
         s.foo(5);
 
-        s.foo(40);
+        int f = s.averyveryverylongvariablename;
 
-        s.foo(3);
+        str.assign(8, 'd');
 
         s.foo(15);
 
-        s.foo(3);
-        
-        return 0;
+        str.append(34, 9);
+
+        return f;
 }
 
 void foo() {

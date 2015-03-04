@@ -230,5 +230,9 @@
 (setq speedbar-show-unknown-files t)
 
 
+;; Package: tramp
+;(setq tramp-default-method "ssh")
+
+
 ;; Package zygospore
-(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
+(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-window)
