@@ -8,20 +8,27 @@
  '(ansi-color-names-vector
    ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(blink-cursor-delay 1.5)
+ '(blink-cursor-mode t)
  '(company-c-headers-path-system
    (quote
     ("/usr/include/" "/usr/local/include/" "/usr/include/c++/4.6/")))
  '(company-c-headers-path-user (quote ("/home/dodge/workspace")))
+ '(company-minimum-prefix-length 2)
+ '(company-tooltip-margin 2)
  '(custom-enabled-themes (quote (jazzy-dodge)))
  '(custom-safe-themes
    (quote
-    ("b8c99a002227c98b796605d479bcca6fe71c1c20f22fe68fb9d65b91a9373563" "c87cc60d01cf755375759d165c1d60d9586c6a31f0b5437a0378c2a93cfc8407" default)))
- '(fci-rule-color "#151515"))
+    ("930a202ae41cb4417a89bc3a6f969ebb7fcea5ffa9df6e7313df4f7a2a631434" "b8c99a002227c98b796605d479bcca6fe71c1c20f22fe68fb9d65b91a9373563" "c87cc60d01cf755375759d165c1d60d9586c6a31f0b5437a0378c2a93cfc8407" default)))
+ '(fci-rule-color "#151515")
+ '(package-selected-packages
+   (quote
+    (light-soap-theme zygospore yasnippet ws-butler volatile-highlights undo-tree sr-speedbar smartparens jazz-theme iedit helm-swoop helm-projectile helm-gtags helm-flycheck helm-company guide-key golden-ratio ggtags function-args duplicate-thing dtrt-indent dash-functional dash-at-point company-irony comment-dwim-2 cmake-mode clean-aindent-mode anzu))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(button ((t (:inherit link))))
  '(company-preview ((t (:background "saddle brown" :foreground "wheat"))))
  '(company-preview-common ((t (:inherit company-preview :foreground "navajo white"))))
  '(company-scrollbar-bg ((t (:inherit company-tooltip :background "goldenrod"))))
@@ -30,4 +37,11 @@
  '(company-tooltip-annotation ((t (:inherit company-tooltip :foreground "black"))))
  '(company-tooltip-mouse ((t (:inherit highlight :background "gray42"))))
  '(company-tooltip-search ((t (:inherit company-tooltip-selection))))
- '(cursor ((t (:background "saddle brown")))))
+ '(cursor ((t (:background "saddle brown"))))
+ '(helm-M-x-key ((t (:foreground "red3" :underline t))))
+ '(helm-candidate-number ((t (:background "salmon2" :foreground "black"))))
+ '(helm-selection ((t (:background "goldenrod"))))
+ '(mode-line ((t (:background "burlywood4" :foreground "cornsilk" :box (:line-width 1 :style released-button) :weight bold))))
+ '(mode-line-buffer-id ((t (:foreground "aquamarine" :weight bold))))
+ '(mode-line-inactive ((t (:background "tan" :foreground "cornsilk" :box (:line-width 1 :style pressed-button)))))
+ '(region ((t (:background "saddle brown" :foreground "#e4e3c1")))))
