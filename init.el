@@ -50,7 +50,10 @@
     comment-dwim-2
     dtrt-indent
     ws-butler
+    flycheck
     iedit
+    company-c-headers
+    company-irony
     yasnippet
     smartparens
     projectile
