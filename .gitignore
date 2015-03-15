@@ -19,6 +19,11 @@ xkcd
 \#*\#
 \#*
 tramp
+*.clj*
+*.cpp*
+*.org*
+*.tex*
+*.pdf*
 *.elc
 *ede-projects*
 *cedet-projects*

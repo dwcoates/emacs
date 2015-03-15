@@ -44,6 +44,7 @@
     helm-gtags
     helm-projectile
     helm-swoop
+    cider
     golden-ratio
     function-args
     clean-aindent-mode
@@ -51,11 +52,13 @@
     dtrt-indent
     ws-butler
     flycheck
+    clj-refactor
     iedit
     company-c-headers
     company-irony
     yasnippet
     smartparens
+    flycheck-clojure
     projectile
     volatile-highlights
     undo-tree
@@ -81,6 +84,8 @@
 (require 'setup-editing)
 (require 'setup-rgrep)
 (require 'setup-flycheck)
+(require 'setup-org-mode)
+(require 'setup-clojure-mode)
 
 
 ;; guide-key, displays possible key binding completions
