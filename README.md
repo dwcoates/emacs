@@ -16,6 +16,7 @@ From [Ubuntu Elisp ppa](https://launchpad.net/~ubuntu-elisp/+archive/ubuntu/ppa)
 # 2) Edit emacs default directory path string
     (setq default-directory "/home/bean/")
     ;; this should be the first line of emacs/init.el
+    ;; edit "bean" to your name
     
 # 3) Apply new emacs configuration
     rm -rf .emacs.d
