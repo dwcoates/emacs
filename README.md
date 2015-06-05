@@ -11,9 +11,9 @@ reinstalling emacs.d from scratch. Any dependency notes will be made inside of o
     sudo apt-get update
     sudo apt-get install emacs-snapshot emacs-snapshot-el
 
-More info about this PPA [here](https://launchpad.net/~ubuntu-elisp/+archive/ubuntu/ppa)
+More info about this PPA [here](https://launchpad.net/~ubuntu-elisp/+archive/ubuntu/ppa).
 
-# 2) Edit Emacs default directory path string.
+# 2) Edit Emacs default directory path string
 After cloning *emacs*, make the following edit:
 
     (setq default-directory "/home/dodge/")
