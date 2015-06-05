@@ -7,11 +7,11 @@ reinstalling emacs.d from scratch. Any dependency notes will be made inside of o
 
 # 1) Install latest Emacs snapshot for Ubuntu
 
-From [Ubuntu Elisp ppa](https://launchpad.net/~ubuntu-elisp/+archive/ubuntu/ppa)
-
     sudo apt-add-repository ppa:ubuntu-elisp/ppa
     sudo apt-get update
     sudo apt-get install emacs-snapshot emacs-snapshot-el
+    
+    More info about this PPA [here](https://launchpad.net/~ubuntu-elisp/+archive/ubuntu/ppa)
 
 # 2) Edit emacs default directory path string
 After cloning emacs, make the following edit:
