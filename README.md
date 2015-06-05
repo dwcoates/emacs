@@ -21,7 +21,7 @@ After cloning *emacs*, make the following edit:
     ;; edit "dodge" to your user name
     
 # 3) Apply new Emacs configuration
-    rm -rf ~/.emacs.d
+    cp ~/.emacs.d ~/.old_emacs.d
     mv emacs ~/.emacs.d
     
 # 4) Running Emacs at this point should install necessary dependencies automatically
