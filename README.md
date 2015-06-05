@@ -14,9 +14,10 @@ From [Ubuntu Elisp ppa](https://launchpad.net/~ubuntu-elisp/+archive/ubuntu/ppa)
     sudo apt-get install emacs-snapshot emacs-snapshot-el
 
 # 2) Edit emacs default directory path string
-    (setq default-directory "/home/bean/")
+After cloning emacs, make the following edit:
+    (setq default-directory "/home/dodge/")
     ;; this should be the first line of emacs/init.el
-    ;; edit "bean" to your name
+    ;; edit "dodge" to your user name
     
 # 3) Apply new emacs configuration
     rm -rf .emacs.d
