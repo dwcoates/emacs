@@ -15,6 +15,7 @@ From [Ubuntu Elisp ppa](https://launchpad.net/~ubuntu-elisp/+archive/ubuntu/ppa)
 
 # 2) Edit emacs default directory path string
 After cloning emacs, make the following edit:
+
     (setq default-directory "/home/dodge/")
     ;; this should be the first line of emacs/init.el
     ;; edit "dodge" to your user name
