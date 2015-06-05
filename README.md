@@ -24,4 +24,4 @@ After cloning *emacs*, make the following edit:
     mv ~/.emacs.d ~/.old_emacs.d
     mv emacs ~/.emacs.d
     
-# 4) Running Emacs at this point should install necessary dependencies automatically. Revert to original setup by simply reversing step 3. 
+# 4) Running Emacs at this point should install necessary dependencies automatically. 
