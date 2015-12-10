@@ -26,5 +26,10 @@
 (toggle-truncate-lines)
 (global-set-key (kbd "C-c ; t") 'toggle-truncate-lines)
 
+;; display time in mode line
+(display-time-mode t)
+;; set modeline to powerline
+(powerline-default-theme)
+
 
 (provide 'appearance)

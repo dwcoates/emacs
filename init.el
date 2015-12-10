@@ -64,6 +64,8 @@
     undo-tree
     helm-company
     guide-key
+    magit
+    nyan-mode
     zygospore))
 
 (defun install-packages ()
