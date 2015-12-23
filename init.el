@@ -1,6 +1,9 @@
-;; Temporarily exists for now so I can configure emacs a bit faster.
-(setq default-directory "/home/dodge/")
-(cd "./.emacs.d")
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 
 ;; setup load path
 (add-to-list 'load-path "~/.emacs.d/custom")
@@ -55,12 +58,13 @@
 ;; Package: tramp
 (setq tramp-default-method "ssh")
 
+(push (substitute-in-file-name "path-to-ztree-directory") load-path)
+(require 'ztree)
 
 
 (add-hook 'emacs-lisp-mode-hook
             (lambda ()
               (set (make-local-variable 'company-backends) '(company-elisp))))
-
 
 
 ;; Compilation
@@ -75,7 +79,6 @@
  gdb-many-windows t
  ;; Non-nil means display source file containing the main routine at startup
  gdb-show-main t)
-
 
 
 ;; Package zygospore
