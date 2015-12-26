@@ -42,6 +42,8 @@
     guide-key
     magit
     nyan-mode
+    powerline
+    ztree
     ;;    epc
     ;;    jedi
     zygospore))

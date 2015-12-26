@@ -85,5 +85,8 @@
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-window)
 
 
+(require 'setup-specifics)
+
+
 (provide 'init)
 ;;; init.el ends here
