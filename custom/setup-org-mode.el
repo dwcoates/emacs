@@ -8,12 +8,12 @@
 (defun my-latex-mode-hook ()
   (latex-mode))
 
-(global-set-key [M-S-<left>] 'org-mode-delete-column)
-(global-set-key [M-S-<right>] 'org-mode-insert-column)
-(global-set-key [M-<left>] 'org-mode-move-column-left)
-(global-set-key [M-<right>] 'org-mode-move-column-right)
+(global-set-key (kbd "C-c o k") 'org-mode-delete-column)
+(global-set-key (kbd "C-c o i") 'org-mode-insert-column)
+(global-set-key (kbd "C-c o j") 'org-mode-move-column-left)
+(global-set-key (kbd "C-c o l") 'org-mode-move-column-right)
 
-(global-set-key [M-S-<RET>] 'org-mode-todo-heading)
+(global-set-key (kbd "C-c o RET") 'org-mode-todo-heading)
 
 
 ;; move point to top-level heading

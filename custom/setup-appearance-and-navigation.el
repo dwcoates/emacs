@@ -80,10 +80,10 @@
 
 
 ;; Set keys to move between windows
-(global-set-key [M-s-<left>] 'windmove-left)
-(global-set-key [M-s-<right>] 'windmove-right)
-(global-set-key [M-s-<up>] 'windmove-up)
-(global-set-key [M-s-<down>] 'windmove-down)
+(global-set-key (kbd "C-x w j") 'windmove-left)
+(global-set-key (kbd "C-x w l") 'windmove-right)
+(global-set-key (kbd "C-x w i") 'windmove-up)
+(global-set-key (kbd "C-x w k") 'windmove-down)
 
 
 ;; Package: smartparens

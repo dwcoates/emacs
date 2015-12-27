@@ -9,19 +9,24 @@
 (on-emacs-startup)
 
 
-(defun open-everything-org-in-horizontal ()
+(defun smart-open-in-horizontal (filename)
   (interactive)
-  (if (not (>  (length (window-list)) 1))
-      (split-window-horizontally)
-    (next-multiframe-window)
-    (find-file "~/workspace/organization/everything.org")
+  (if (=  (length 'window-list) 1)
+      (if (not (= buffer-file-name "/home/dodge/workspace/organization/everything.org"))
+          '(split-window-horizontally
+           find-file "~/workspace/organization/everything.org")             )
+    (if (= (get-buffer-window "everything.org") nil)
+        (switch-to-buffer "everything.org")
+      (next-multiframe-window)
+        )
     )
   (previous-buffer)
   )
 
-(global-set-key (kbd "C-c o e") 'open-everything-org-in-horizontal)
+
+;(global-set-key (kbd "C-c o e") (smart-open-in-horizontal "~/workspace/organization/everything.org"))
+;(global-set-key (kbd "C-c e i") (smart-open-in-horizontal "~/.emacs.d/init.el"))
 
 
-                                        ;(global-set-key (kbd "C-c f e i") (find-file "~/.emacs.d/init.el"))
 
 (provide 'setup-specifics)

@@ -4,6 +4,7 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
+(setq debug-on-error t)
 
 ;; setup load path
 (add-to-list 'load-path "~/.emacs.d/custom")
@@ -33,6 +34,7 @@
 (require 'setup-org-mode)
 (require 'setup-clojure-mode)
 (require 'setup-company)
+(require 'setup-magit)
 (require 'setup-appearance-and-navigation)
 ;; Package: projectile
 (require 'projectile)
