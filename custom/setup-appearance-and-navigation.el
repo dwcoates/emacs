@@ -110,8 +110,8 @@
 	  '("*Flycheck errors*"
 		"*SPEEDBAR*"))
 ;; turn on golden ratio
-(golden-ratio-mode t)
-
+(global-set-key (kbd "C-x w g SPC") 'golden-ratio)
+(global-set-key (kbd "C-x w g m") 'golden-ratio-mode)
 
 ;; Package: speedbar
 (setq speedbar-show-unknown-files t)
