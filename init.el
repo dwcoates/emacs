@@ -20,7 +20,6 @@
 (require 'setup-packages)
 
 
-
 ;; this variables must be set before load helm-gtags
 (setq helm-gtags-prefix-key "\C-cg")
 

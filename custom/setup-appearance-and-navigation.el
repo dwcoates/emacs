@@ -49,7 +49,7 @@
 (toggle-truncate-lines)
 (global-set-key (kbd "C-c ; t") 'toggle-truncate-lines)
 
-
+(blink-cursor-mode 0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;       Editing and Appearance Packages        ;;;;;;
