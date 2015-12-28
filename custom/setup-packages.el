@@ -5,6 +5,9 @@
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
 (add-to-list 'package-archives
+             '("melpa-stable" . "http://melpa-stable.org/packages/") t)
+
+(add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (package-initialize)
 
@@ -47,6 +50,8 @@
     ;;    epc
     ;;    jedi
     zygospore))
+
+(load-file "~/.emacs.d/geiser/elisp/geiser.el")
 
 (defun install-packages ()
   "Install all required packages."

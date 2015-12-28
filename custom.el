@@ -22,7 +22,7 @@
  '(fci-rule-color "#151515")
  '(package-selected-packages
    (quote
-    (ztree rainbow-delimiters jedi epc powerline nyan-mode nyan-prompt magit helm company flycheck-clojure clj-refactor cider px latex-preview-pane company-c-headers company-irony zygospore yasnippet ws-butler volatile-highlights undo-tree smartparens light-soap-theme iedit helm-swoop helm-projectile helm-gtags helm-company guide-key golden-ratio ggtags function-args flycheck duplicate-thing dtrt-indent dash-functional dash-at-point comment-dwim-2 clean-aindent-mode anzu))))
+    (geiser ztree rainbow-delimiters jedi epc powerline nyan-mode nyan-prompt magit helm company flycheck-clojure clj-refactor cider px latex-preview-pane company-c-headers company-irony zygospore yasnippet ws-butler volatile-highlights undo-tree smartparens light-soap-theme iedit helm-swoop helm-projectile helm-gtags helm-company guide-key golden-ratio ggtags function-args flycheck duplicate-thing dtrt-indent dash-functional dash-at-point comment-dwim-2 clean-aindent-mode anzu))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -37,11 +37,12 @@
  '(company-tooltip-annotation ((t (:inherit company-tooltip :foreground "black"))))
  '(company-tooltip-mouse ((t (:inherit highlight :background "gray42"))))
  '(company-tooltip-search ((t (:inherit company-tooltip-selection))))
- '(cursor ((t (:background "saddle brown"))))
+ '(cursor ((t (:background "medium orchid"))))
  '(custom-button ((t (:background "LightYellow3" :foreground "black" :box (:line-width 2 :style released-button)))))
  '(custom-comment ((t (:background "bisque4"))))
  '(font-lock-comment-face ((t (:foreground "tomato"))))
  '(font-lock-string-face ((t (:foreground "dark orange"))))
+ '(fringe ((t (:background "tomato3"))))
  '(helm-M-x-key ((t (:foreground "red3" :underline t))))
  '(helm-candidate-number ((t (:background "salmon2" :foreground "black"))))
  '(helm-selection ((t (:background "sienna"))))
@@ -49,5 +50,5 @@
  '(mode-line ((t (:background "burlywood4" :foreground "cornsilk" :box (:line-width 1 :style released-button) :weight bold))))
  '(mode-line-buffer-id ((t (:foreground "aquamarine" :weight bold))))
  '(mode-line-inactive ((t (:background "tan" :foreground "cornsilk" :box (:line-width 1 :style pressed-button)))))
- '(org-level-4 ((t (:inherit outline-8))))
+ '(org-level-4 ((t (:inherit outline-4))))
  '(region ((t (:background "saddle brown" :foreground "#e4e3c1")))))

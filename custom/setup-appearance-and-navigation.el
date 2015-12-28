@@ -55,7 +55,6 @@
 ;;;;;       Editing and Appearance Packages        ;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 ;; function for switching between two most recently visited buffers
 (defun switch-to-other-buffer ()
   "Switch to last visited buffer."
@@ -63,6 +62,15 @@
   (switch-to-buffer (other-buffer)))
 (global-set-key [C-c b] 'switch-to-other-buffer)
 
+
+(defun toggle-maximize-buffer () "Maximize buffer"
+       (interactive)
+       (if (= 1 (length (window-list)))
+           (jump-to-register '_)
+         (progn
+           (window-configuration-to-register '_)
+           (delete-other-windows))))
+(global-set-key (kbd "C-x w m") 'toggle-maximize-buffer)
 
 
 ;; display time in mode line
@@ -118,8 +126,10 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;   Functions;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 
 
 (provide 'setup-appearance-and-navigation)
