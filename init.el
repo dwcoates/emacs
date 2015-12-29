@@ -31,7 +31,6 @@
 (require 'setup-rgrep)
 (require 'setup-flycheck)
 (require 'setup-org-mode)
-(require 'setup-clojure-mode)
 (require 'setup-company)
 (require 'setup-magit)
 (require 'setup-appearance-and-navigation)
