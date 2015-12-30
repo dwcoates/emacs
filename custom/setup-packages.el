@@ -57,6 +57,7 @@
     nyan-mode
     powerline
     ztree
+    geiser
     ;;    epc
     ;;    jedi
     zygospore))
