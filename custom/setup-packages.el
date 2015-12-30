@@ -3,23 +3,31 @@
 ;; setup package repos
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
-
 (add-to-list 'package-archives
              '("melpa-stable" . "http://melpa-stable.org/packages/") t)
-
+(add-to-list 'package-archives
+             '("tromey" . "http://tromey.com/elpa/") t)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (package-initialize)
 
+
+;; Download the ELPA archive description if needed.
+;; This informs Emacs about the latest versions of all packages, and
+;; makes them available for download.
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+
 ;; no dependency notes
-(defconst dep-packages
+(defvar dep-packages
   '(
     ;; clojure
     clojure-mode
     clojure-mode-extra-font-locking
     flycheck-clojure
     cider
-    clj-refactor
+    ;clj-refactor
     ;; helm
     helm
     helm-gtags
@@ -30,6 +38,7 @@
     company
     duplicate-thing
     ggtags
+    paredit
     dash-at-point
     dash-functional
     smex
@@ -63,6 +72,23 @@
     zygospore))
 
 (load-file "~/.emacs.d/geiser/elisp/geiser.el")
+
+
+;; On OS X, an Emacs instance started from the graphical user
+;; interface will have a different environment than a shell in a
+;; terminal window, because OS X does not run a shell during the
+;; login. Obviously this will lead to unexpected results when
+;; calling external utilities like make from Emacs.
+;; This library works around this problem by copying important
+;; environment variables from the user's shell.
+;; https://github.com/purcell/exec-path-from-shell
+(if (eq system-type 'darwin)
+    (add-to-list 'dep-packages 'exec-path-from-shell))
+
+(dolist (p dep-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
+
 
 (defun install-packages ()
   "Install all required packages."

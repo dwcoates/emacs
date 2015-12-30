@@ -24,6 +24,7 @@
 (setq helm-gtags-prefix-key "\C-cg")
 
 ;; ****** Setup rest of package configurations *******
+(require 'setup-appearance-and-navigation)
 (require 'setup-helm)
 (require 'setup-helm-gtags)
 (require 'setup-cedet)
@@ -33,12 +34,12 @@
 (require 'setup-org-mode)
 (require 'setup-company)
 (require 'setup-magit)
-(require 'setup-appearance-and-navigation)
+(require 'setup-clojure)
+(require 'setup-lisp-editing)
 ;; Package: projectile
 (require 'projectile)
 (projectile-global-mode)
 (setq projectile-enable-caching t)
-;; Package: helm-projectile
 (require 'helm-projectile)
 (helm-projectile-on)
 (setq projectile-completion-system 'helm)

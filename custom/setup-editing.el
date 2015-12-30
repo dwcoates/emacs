@@ -1,5 +1,10 @@
 ;; GROUP: Editing -> Editing Basics
 
+(show-paren-mode 1)
+
+;; Highlight current line
+(global-hl-line-mode 1)
+
 (setq global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
       mark-ring-max 10000                ; increase kill ring to contains 10000 entries
       mode-require-final-newline t      ; add a newline to end of file
@@ -48,6 +53,26 @@
                             (whitespace-mode 1)))
 
 
+;; Hippie expand
+(global-set-key (kbd "M-/") 'hippie-expand)
+;; Lisp-friendly hippie expand
+(setq hippie-expand-try-functions-list
+      '(try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol))
+
+
+
+(setq electric-indent-mode nil)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;   PACKAGES
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 ;; Package: volatile-highlights
 ;; GROUP: Editing -> Volatile Highlights
 (require 'volatile-highlights)
@@ -72,36 +97,36 @@
 (add-hook 'text-mode 'ws-butler-mode)
 (add-hook 'fundamental-mode 'ws-butler-mode)
 
+
 ;; Package: undo-tree
 ;; GROUP: Editing -> Undo -> Undo Tree
 (require 'undo-tree)
 (global-undo-tree-mode)
 
 
-;; Package: yasnippet
-;; GROUP: Editing -> Yasnippet
-(require 'yasnippet)
-(yas-global-mode 1)
-
-
 ;; PACKAGE: smartparens
-(require 'smartparens-config)
-(setq sp-base-key-bindings 'paredit)
-(setq sp-autoskip-closing-pair 'always)
-(setq sp-hybrid-kill-entire-symbol nil)
-(sp-use-paredit-bindings)
+;(require 'smartparens-config)
+;(setq sp-base-key-bindings 'paredit)
+;(setq sp-autoskip-closing-pair 'always)
+;(setq sp-hybrid-kill-entire-symbol nil)
+;(sp-use-paredit-bindings)
 
-(show-smartparens-global-mode +1)
-(smartparens-global-mode 1)
+;(show-smartparens-global-mode +1)
+;(smartparens-global-mode 1)
+
 
 
 ;; PACKAGE: comment-dwim-2
 (global-set-key (kbd "M-;") 'comment-dwim-2)
 
 
+
+;; Package: yasnippet
+(require 'yasnippet)
+(yas-global-mode 1)
+
 ;; Jump to end of snippet definition
 (define-key yas-keymap (kbd "<return>") 'yas/exit-all-snippets)
-
 
 ;; Inter-field navigation
 (defun yas/goto-end-of-active-field ()
@@ -112,7 +137,6 @@
         (move-end-of-line 1)
       (goto-char position))))
 
-
 (defun yas/goto-start-of-active-field ()
   (interactive)
   (let* ((snippet (car (yas--snippets-at-point)))
@@ -121,7 +145,6 @@
         (move-beginning-of-line 1)
       (goto-char position))))
 
-
 (define-key yas-keymap (kbd "C-e") 'yas/goto-end-of-active-field)
 (define-key yas-keymap (kbd "C-a") 'yas/goto-start-of-active-field)
 ;; (define-key yas-minor-mode-map [(tab)] nil)
@@ -129,7 +152,6 @@
 ;; (define-key yas-minor-mode-map (kbd "C-<tab>") 'yas-expand)
 ;; No dropdowns please, yas
 (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
-
 
 ;; No need to be so verbose
 (setq yas-verbosity 1)
@@ -161,6 +183,20 @@
 (require 'duplicate-thing)
 (global-set-key (kbd "M-c") 'duplicate-thing)
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;; CUSTOM FUNCTIONS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; use 2 spaces for tabs
+(defun die-tabs ()
+  (interactive)
+  (set-variable 'tab-width 2)
+  (mark-whole-buffer)
+  (untabify (region-beginning) (region-end))
+  (keyboard-quit))
 
 
 ;; Customized functions

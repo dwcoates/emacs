@@ -2,6 +2,17 @@
 ;;;;;          Basic Appearance Settings           ;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Color Themes
+;; Read http://batsov.com/articles/2012/02/19/color-theming-in-emacs-reloaded/
+;; for a great explanation of emacs color themes.
+;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Custom-Themes.html
+;; for a more technical explanation.
+;;;;;;;;;;;;;; CONSIDER ADDING THIS IN AFTER WORKING ;;;;;;;;;;;;;;;
+                                        ;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+                                        ;(add-to-list 'load-path "~/.emacs.d/themes")
+                                        ;(load-theme 'tomorrow-night-bright t)
+
+
 ;; setup default window size
 (add-to-list 'default-frame-alist '(height . 55))
 (add-to-list 'default-frame-alist '(width . 220))
@@ -28,8 +39,8 @@
 
 ;; set font
 (add-to-list 'default-frame-alist
-	     '(font .  "DejaVu Sans Mono-09"))
-(set-face-attribute 'default t :font  "DejaVu Sans Mono-09")
+         '(font .  "Ubuntu Mono-11"))
+(set-face-attribute 'default t :font  "Ubuntu Mono-11")
 
 
 ;; disables tool bar
@@ -50,6 +61,10 @@
 (global-set-key (kbd "C-c ; t") 'toggle-truncate-lines)
 
 (blink-cursor-mode 0)
+
+(global-hl-line-mode 1)
+(set-face-background 'hl-line "#3b3b3b")
+(set-face-foreground 'highlight nil)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
