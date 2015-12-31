@@ -31,10 +31,10 @@
  ("C-x p h" . sp-forward-symbol)
  ("C-x p g" . sp-backward-symbol)
 
- ("C-x p e" . sp-forward-slurp-sexp)
+ ("C-x p t" . sp-forward-slurp-sexp)
  ("C-x p w" . sp-forward-barf-sexp)
  ("C-x p r"  . sp-backward-slurp-sexp)
- ("C-x p t"  . sp-backward-barf-sexp)
+ ("C-x p q"  . sp-backward-barf-sexp)
 
  ("C-x p C-t" . sp-transpose-sexp)
  ("C-x p k" . sp-kill-sexp)
@@ -42,11 +42,12 @@
  ("C-x p C-k"   . sp-backward-kill-sexp)
  ("C-x p C-w" . sp-copy-sexp)
 
-; ("C-x p d" . sp-delete-sexp)        ;; this function doesn
+; ("C-x p d" . sp-delete-sexp)        ;; this function doesnt exist?
 
  ("<backspace>" . sp-backward-delete-char)
- ("M-<backspace>" . backward-kill-word)     ;; this should be like paredit
- ("C-<backspace>" . sp-backward-kill-word)     ;; this should be like paredit
+ ("C-<backspace>" . backward-delete-char)     ;; this should be like paredit
+ ("M-<backspace>" . sp-backward-kill-word)     ;; this should be like paredit
+ ("M-s-<backspace>" . backward-kill-word)     ;; this should be like paredit
  ([remap sp-backward-kill-word] . backward-kill-word)
 
  ("M-[" . sp-backward-unwrap-sexp)
