@@ -22,6 +22,7 @@
 ;; no dependency notes
 (defvar dep-packages
   '(
+    use-package
     ;; clojure
     clojure-mode
     clojure-mode-extra-font-locking
