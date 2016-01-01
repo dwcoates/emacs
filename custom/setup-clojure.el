@@ -2,9 +2,6 @@
 ;; Clojure
 ;;;;;;;;;;;;;;;;;;
 
-;; Enable paredit for Clojure
-(add-hook 'clojure-mode-hook 'enable-paredit-mode)
-
 ;; This is useful for working with camel-case tokens, like names of
 ;; Java classes (e.g. JavaClassName)
 (add-hook 'clojure-mode-hook 'subword-mode)
@@ -50,9 +47,6 @@
 
 ;; Wrap when navigating history.
 (setq cider-repl-wrap-history t)
-
-;; enable paredit in your REPL
-(add-hook 'cider-repl-mode-hook 'paredit-mode)
 
 ;; Use clojure mode for other extensions
 (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
