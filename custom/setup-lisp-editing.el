@@ -4,6 +4,7 @@
 (add-hook 'ielm-mode-hook             #'rainbow-delimiters-mode-enable)
 (add-hook 'lisp-mode-hook             #'rainbow-delimiters-mode-enable)
 (add-hook 'lisp-interaction-mode-hook #'rainbow-delimiters-mode-enable)
+(add-hook 'clojure-mode-hook          #'rainbow-delimiters-mode-enable)
 (add-hook 'scheme-mode-hook           #'rainbow-delimiters-mode-enable)
 
 

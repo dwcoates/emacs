@@ -1,5 +1,6 @@
 (defun my-org-mode-hook ()
-  (org-mode))
+  (org-mode)
+  'turn-on-auto-fill)
 
 (setq org-src-fontify-natively t)
 
@@ -25,5 +26,6 @@
 
 ;; make todo's check recursively when determining the number of todo's under it
 (setq org-hierarchical-todo-statistics nil)
+
 
 (provide 'setup-org-mode)

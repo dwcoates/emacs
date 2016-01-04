@@ -39,8 +39,9 @@
 (setq cider-repl-pop-to-buffer-on-connect t)
 
 ;; When there's a cider error, show its buffer and switch to it
-(setq cider-show-error-buffer t)
+(setq cider-show-error-buffer nil)
 (setq cider-auto-select-error-buffer t)
+
 
 ;; Where to store the cider history.
 (setq cider-repl-history-file "~/.emacs.d/cider-history")
@@ -57,7 +58,7 @@
 
 ;; key bindings
 ;;;;;;;;;;;;;;;;;;;;;; CHECK THESE FOR CONFLICTIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; these help me out with the way I usually develop web apps
+;; these help with development of web apps
 (defun cider-start-http-server ()
   (interactive)
   (cider-load-current-buffer)
@@ -81,7 +82,5 @@
      (define-key clojure-mode-map (kbd "C-c r") 'cider-refresh)
      (define-key clojure-mode-map (kbd "C-c u") 'cider-user-ns)
      (define-key cider-mode-map (kbd "C-c u") 'cider-user-ns)))
-
-
 
 (provide 'setup-clojure)

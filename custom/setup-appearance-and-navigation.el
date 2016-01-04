@@ -39,8 +39,8 @@
 
 ;; set font
 (add-to-list 'default-frame-alist
-         '(font .  "Ubuntu Mono-11"))
-(set-face-attribute 'default t :font  "Ubuntu Mono-11")
+         '(font .  "Ubuntu Mono-13"))
+(set-face-attribute 'default t :font  "Ubuntu Mono-13")
 
 
 ;; disables tool bar
@@ -65,6 +65,9 @@
 (global-hl-line-mode 1)
 (set-face-background 'hl-line "#3b3b3b")
 (set-face-foreground 'highlight nil)
+
+(global-set-key (kbd "C-x w b") 'previous-buffer)
+;(global-set-key (kbd "C-x w v") '(switch-to-buffer nil))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
