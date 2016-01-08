@@ -28,4 +28,14 @@
 (setq org-hierarchical-todo-statistics nil)
 
 
+;; This is for makig sure that the top-level todo automatically is marked DONE if all sub-levels
+;; are DONE. TODO otherwise.
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  (let (org-log-done org-log-states)   ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+
+
 (provide 'setup-org-mode)

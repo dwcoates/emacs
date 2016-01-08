@@ -68,6 +68,11 @@
 (setq electric-indent-mode nil)
 
 
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;   PACKAGES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
