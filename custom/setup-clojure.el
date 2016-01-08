@@ -43,6 +43,9 @@
 (setq cider-auto-select-error-buffer t)
 
 
+;;
+(global-set-key (kbd "C-' 1") 'cider-visit-error-buffer)
+
 ;; Where to store the cider history.
 (setq cider-repl-history-file "~/.emacs.d/cider-history")
 

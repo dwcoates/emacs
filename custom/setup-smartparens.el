@@ -1,4 +1,4 @@
-(require 'smartparens-config)
+p(require 'smartparens-config)
 (setq sp-base-key-bindings 'paredit)
 (setq sp-autoskip-closing-pair 'always)
 (setq sp-hybrid-kill-entire-symbol nil)
@@ -11,38 +11,43 @@
 (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
+(defun sp-delete-sexp ()
+    (interactive)
+  (sp-select-next-thing)
+  (delete-region))
+
 ;; Key bindings
 (bind-keys
  :map smartparens-mode-map
- ("C-x p a" . sp-beginning-of-sexp)
- ("C-x p e" . sp-end-of-sexp)
+ ("C-' a" . sp-beginning-of-sexp)
+ ("C-' e" . sp-end-of-sexp)
 
- ("C-x p k" . sp-down-sexp)
- ("C-x p i"   . sp-up-sexp)
- ("C-x p j" . sp-backward-down-sexp)
- ("C-x p l"   . sp-backward-up-sexp)
+ ("C-' k" . sp-down-sexp)
+ ("C-' i"   . sp-up-sexp)
+ ("C-' j" . sp-backward-down-sexp)
+ ("C-' l"   . sp-backward-up-sexp)
 
- ("C-x p f" . sp-forward-sexp)
- ("C-x p b" . sp-backward-sexp)
+ ("C-' f" . sp-forward-sexp)
+ ("C-' b" . sp-backward-sexp)
 
- ("C-x p n" . sp-next-sexp)
- ("C-x p p" . sp-previous-sexp)
+ ("C-' n" . sp-next-sexp)
+ ("C-' p" . sp-previous-sexp)
 
- ("C-x p h" . sp-forward-symbol)
- ("C-x p g" . sp-backward-symbol)
+ ("C-' h" . sp-forward-symbol)
+ ("C-' g" . sp-backward-symbol)
 
- ("C-x p t" . sp-forward-slurp-sexp)
- ("C-x p w" . sp-forward-barf-sexp)
- ("C-x p r"  . sp-backward-slurp-sexp)
- ("C-x p q"  . sp-backward-barf-sexp)
+ ("C-' t" . sp-forward-slurp-sexp)
+ ("C-' w" . sp-forward-barf-sexp)
+ ("C-' r"  . sp-backward-slurp-sexp)
+ ("C-' q"  . sp-backward-barf-sexp)
 
- ("C-x p C-t" . sp-transpose-sexp)
- ("C-x p k" . sp-kill-sexp)
- ("C-x p h"   . sp-kill-hybrid-sexp)
- ("C-x p C-k"   . sp-backward-kill-sexp)
- ("C-x p C-w" . sp-copy-sexp)
+ ("C-' C-t" . sp-transpose-sexp)
+ ("C-' k" . sp-kill-sexp)
+ ("C-' h"   . sp-kill-hybrid-sexp)
+ ("C-' C-k"   . sp-backward-kill-sexp)
+ ("C-' C-w" . sp-copy-sexp)
 
-; ("C-x p d" . sp-delete-sexp)        ;; this function doesnt exist?
+ ("C-' d" . sp-delete-sexp)        ;; this function doesnt exist?
 
  ("<backspace>" . sp-backward-delete-char)
  ("C-<backspace>" . backward-delete-char)     ;; this should be like paredit
@@ -52,6 +57,7 @@
 
  ("M-[" . sp-backward-unwrap-sexp)
  ("M-]" . sp-unwrap-sexp)
+ ("M-s-[" . sp-rewrap-sexp)
 
  ("C-x C-t" . sp-transpose-hybrid-sexp)
 
