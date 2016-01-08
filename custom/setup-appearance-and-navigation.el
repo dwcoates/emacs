@@ -91,6 +91,19 @@
            (delete-other-windows))))
 (global-set-key (kbd "C-x w m") 'toggle-maximize-buffer)
 
+(defun transpose-windows (arg)
+  "Transpose the buffers shown in two windows."
+  (interactive "p")
+  (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
+    (while (/= arg 0)
+      (let ((this-win (window-buffer))
+            (next-win (window-buffer (funcall selector))))
+        (set-window-buffer (selected-window) next-win)
+        (set-window-buffer (funcall selector) this-win)
+        (select-window (funcall selector)))
+      (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
+(global-set-key (kbd "C-x w t") 'transpose-windows)
+
 
 ;; display time in mode line
 (display-time-mode t)
