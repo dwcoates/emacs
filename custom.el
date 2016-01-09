@@ -30,7 +30,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(button ((t (:inherit link))))
- '(company-preview ((t (:background "saddle brown" :foreground "wheat"))))
+ '(company-preview ((t (:background "gray12" :foreground "wheat"))))
  '(company-preview-common ((t (:inherit company-preview :foreground "navajo white"))))
  '(company-scrollbar-bg ((t (:inherit company-tooltip :background "dim gray"))))
  '(company-scrollbar-fg ((t (:background "gray14"))))
@@ -53,7 +53,7 @@
  '(mode-line ((t (:background "burlywood4" :foreground "cornsilk" :box (:line-width 1 :style released-button) :weight bold))))
  '(mode-line-buffer-id ((t (:foreground "aquamarine" :weight bold))))
  '(mode-line-inactive ((t (:background "tan" :foreground "cornsilk" :box (:line-width 1 :style pressed-button)))))
- '(org-level-1 ((t (:foreground "goldenrod"))))
+ '(org-level-1 ((t (:foreground "royal blue"))))
  '(org-level-2 ((t (:foreground "light coral"))))
  '(org-level-4 ((t (:inherit outline-4))))
  '(org-level-6 ((t (:inherit outline-7))))
@@ -68,4 +68,4 @@
  '(rainbow-delimiters-depth-8-face ((t (:foreground "SeaGreen2"))))
  '(rainbow-delimiters-depth-9-face ((t (:foreground "chocolate"))))
  '(rainbow-delimiters-unmatched-face ((t (:foreground "red"))))
- '(region ((t (:background "saddle brown" :foreground "#e4e3c1")))))
+ '(region ((t (:background "dark cyan" :foreground "#e4e3c1")))))
