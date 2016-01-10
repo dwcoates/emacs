@@ -4,7 +4,7 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
-(setq debug-on-error t)
+(setq debug-on-error nil)
 
 ;; setup load path
 (add-to-list 'load-path "~/.emacs.d/custom")

@@ -40,7 +40,8 @@
 ;; set font
 (add-to-list 'default-frame-alist
          '(font .  "Ubuntu Mono-13"))
-(set-face-attribute 'default t :font  "Ubuntu Mono-13")
+(set-face-attribute 'default t :font  "Ubuntu Mono-13
+")
 
 
 ;; disables tool bar

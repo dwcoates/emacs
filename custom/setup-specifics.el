@@ -29,6 +29,22 @@
   (previous-buffer)
   )
 
+(global-set-key (kbd "C-c o e")
+                (lambda () (interactive) (find-file "~/workspace/organization/everything.org")))
+(global-set-key (kbd "C-c o C-e")
+                (lambda ()
+                  (interactive)
+                  (find-file-other-window "~/workspace/organization/everything.org")))
+(global-set-key (kbd "C-c 7 C-e")
+                (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
+(global-set-key (kbd "C-c 8 C-e")
+                (lambda () (interactive) (find-file "~/.emacs.d/custom/")))
+
+
+;; default notes file.
+(setq org-default-notes-file "~/workspace/organization/everything.org")
+
+
 
 ;(global-set-key (kbd "C-c o e") (smart-open-in-horizontal "~/workspace/organization/everything.org"))
 ;(global-set-key (kbd "C-c e i") (smart-open-in-horizontal "~/.emacs.d/init.el"))
