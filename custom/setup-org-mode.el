@@ -16,6 +16,8 @@
 
 (global-set-key (kbd "C-c o RET") 'org-mode-todo-heading)
 
+(setq org-goto-interface 'outline-path-completion
+      org-goto-max-level 10)
 
 ;; org-capture allows you to take a note anywhere, which it will write to the org-default-notes-file.
 ;; this is set in ~/.emacs.d/custom/setup-specifics.el

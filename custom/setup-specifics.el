@@ -9,6 +9,7 @@
   (windmove-right)
   (switch-to-buffer "*Org Agenda*")
   (windmove-left)
+  (enlarge-window-horizontally 10)
 
   ;; FRAME 2
   )
@@ -26,8 +27,7 @@
       (next-multiframe-window)
         )
     )
-  (previous-buffer)
-  )
+  (previous-buffer))
 
 (global-set-key (kbd "C-c o e")
                 (lambda () (interactive) (find-file "~/workspace/organization/everything.org")))

@@ -14,8 +14,8 @@
 
 
 ;; setup default window size
-(add-to-list 'default-frame-alist '(height . 55))
-(add-to-list 'default-frame-alist '(width . 220))
+(add-to-list 'default-frame-alist '(height . 40))
+(add-to-list 'default-frame-alist '(width . 160))
 
 
 ;; get rid of annoying stuff
@@ -40,8 +40,11 @@
 ;; set font
 (add-to-list 'default-frame-alist
          '(font .  "Ubuntu Mono-13"))
-(set-face-attribute 'default t :font  "Ubuntu Mono-13
-")
+(set-face-attribute 'default t :font  "Ubuntu Mono-13")
+
+
+(global-unset-key (kbd "C-x 5 0"))
+(global-set-key (kbd "C-x 5 DEL") 'delete-frame)
 
 
 ;; disables tool bar
