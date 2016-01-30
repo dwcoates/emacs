@@ -16,6 +16,9 @@
 (key-chord-define-global "df" 'iy-go-to-char-backward)
 
 
+;; find-file-at-point
+(key-chord-define-global "ff" 'find-file-at-point)
+
 
 ;; setup default window size
 (add-to-list 'default-frame-alist '(height . 40))
@@ -138,10 +141,10 @@
 (global-set-key (kbd "C-x w i") 'windmove-up)
 (global-set-key (kbd "C-x w k") 'windmove-down)
 ;; corresponding key-chord configs
-(key-chord-define-global "xj" windmove-left')
-(key-chord-define-global "xl" windmove-right')
-(key-chord-define-global "xi" windmove-up')
-(key-chord-define-global "xk" windmove-down)
+(key-chord-define-global "xj" 'windmove-left)
+(key-chord-define-global "xl" 'windmove-right)
+(key-chord-define-global "xi" 'windmove-up)
+(key-chord-define-global "xk" 'windmove-down)
 
 
 
