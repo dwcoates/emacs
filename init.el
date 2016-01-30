@@ -14,11 +14,9 @@
 (load custom-file)
 
 
-
 ;; Sets up dependencies for the rest of the configurations.
 ;; Must be loaded before rest of package configurations, obviously
 (require 'setup-packages)
-
 
 ;; this variables must be set before load helm-gtags
 (setq helm-gtags-prefix-key "\C-cg")
@@ -35,6 +33,7 @@
 (require 'setup-magit)
 (require 'setup-clojure)
 (require 'setup-editing)
+(require 'misc)
 ;; Package: projectile
 (require 'projectile)
 (projectile-global-mode)
@@ -66,13 +65,11 @@
             (lambda ()
               (set (make-local-variable 'company-backends) '(company-elisp))))
 
-
 ;; Compilation
 (global-set-key (kbd "<f5>") (lambda ()
                                (interactive)
                                (setq-local compilation-read-command nil)
                                (call-interactively 'compile)))
-
 ;; setup GDB
 (setq
  ;; use gdb-many-windows by default
@@ -84,9 +81,7 @@
 ;; Package zygospore
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-window)
 
-
 (require 'setup-specifics)
-
 
 (provide 'init)
 ;;; init.el ends here

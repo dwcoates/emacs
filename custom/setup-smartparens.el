@@ -13,8 +13,10 @@
 
 (defun sp-delete-sexp ()
     (interactive)
-  (sp-select-next-thing)
-  (delete-region))
+    (sp-beginning-of-sexp)
+    (mark)
+    (sp-end-of-sexp)
+  (delete-region (point) (mark)))
 
 ;; Key bindings
 (bind-keys

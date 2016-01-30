@@ -1,6 +1,8 @@
 (defun my-org-mode-hook ()
-  (org-mode)
-  'turn-on-auto-fill)
+  (toggle-truncate-lines)
+  (toggle-word-wrap))
+
+(add-hook 'org-mode-hook 'my-org-mode-hook)
 
 (setq org-src-fontify-natively t)
 
@@ -68,7 +70,7 @@
   ;;  (unless (get-buffer-window buf)
   ;;    (org-agenda-goto-calendar)))
   )
-(run-with-idle-timer 300 t 'jump-to-org-agenda)
+(run-with-idle-timer 600 t 'jump-to-org-agenda)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;; KEY BINDINGS

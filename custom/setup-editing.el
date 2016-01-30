@@ -1,5 +1,8 @@
 ;; GROUP: Editing -> Editing Basics
 
+
+
+
 (show-paren-mode 1)
 
 ;; Highlight current line
@@ -17,10 +20,28 @@
 (set-keyboard-coding-system 'utf-8)
 (set-language-environment "UTF-8")
 (prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
 
 (setq-default indent-tabs-mode nil)
 (delete-selection-mode)
 (global-set-key (kbd "RET") 'newline-and-indent)
+
+
+(define-key key-translation-map (kbd "C-c u p") (kbd "φ"))
+(define-key key-translation-map (kbd "C-c u x") (kbd "ξ"))
+(define-key key-translation-map (kbd "C-c u i") (kbd "∞"))
+(define-key key-translation-map (kbd "C-c u l") (kbd "λ"))
+(define-key key-translation-map (kbd "C-c u <right>") (kbd "→"))
+
+
+
+(define-abbrev-table 'global-abbrev-table '(
+                                            ("alpha" "α")
+                                            ("inf" "∞")
+                                            ("ar" "→")
+                                            ("lambda" "λ")
+                                            ))
+(abbrev-mode 1)
 
 
 ;; GROUP: Editing -> Killing

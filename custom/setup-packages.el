@@ -39,7 +39,10 @@
     company
     duplicate-thing
     ggtags
+    key-chord
+    ace-window
     paredit
+    iy-go-to-char
     dash-at-point
     dash-functional
     smex

@@ -59,6 +59,8 @@
  '(org-level-4 ((t (:inherit outline-4))))
  '(org-level-6 ((t (:inherit outline-7))))
  '(org-level-7 ((t (:foreground "yellow green"))))
+ '(org-scheduled ((t (:foreground "yellow3"))))
+ '(org-scheduled-today ((t (:foreground "yellow2"))))
  '(rainbow-delimiters-depth-1-face ((t (:foreground "indian red"))))
  '(rainbow-delimiters-depth-2-face ((t (:foreground "light sea green"))))
  '(rainbow-delimiters-depth-3-face ((t (:foreground "orchid"))))

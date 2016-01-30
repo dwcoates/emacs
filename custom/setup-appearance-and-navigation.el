@@ -2,15 +2,19 @@
 ;;;;;          Basic Appearance Settings           ;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Color Themes
-;; Read http://batsov.com/articles/2012/02/19/color-theming-in-emacs-reloaded/
-;; for a great explanation of emacs color themes.
-;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Custom-Themes.html
-;; for a more technical explanation.
-;;;;;;;;;;;;;; CONSIDER ADDING THIS IN AFTER WORKING ;;;;;;;;;;;;;;;
-                                        ;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-                                        ;(add-to-list 'load-path "~/.emacs.d/themes")
-                                        ;(load-theme 'tomorrow-night-bright t)
+
+;; Package: key-chord
+(require 'key-chord)
+(key-chord-mode 1)
+;; Max time delay between two key presses to be considered a key chord
+(setq key-chord-two-keys-delay 0.1)
+;; Max time delay between two presses of the same key to be considered a key chord.
+;; Should normally be a little longer than `key-chord-two-keys-delay'.
+(setq key-chord-one-key-delay 0.2)
+
+(key-chord-define-global "fg" 'iy-go-to-char)
+(key-chord-define-global "df" 'iy-go-to-char-backward)
+
 
 
 ;; setup default window size
@@ -45,6 +49,9 @@
 
 (global-unset-key (kbd "C-x 5 0"))
 (global-set-key (kbd "C-x 5 DEL") 'delete-frame)
+
+(global-unset-key (kbd "C-x 0"))
+(global-set-key (kbd "C-x DEL") 'delete-window)
 
 
 ;; disables tool bar
@@ -83,17 +90,19 @@
   "Switch to last visited buffer."
   (interactive)
   (switch-to-buffer (other-buffer)))
-(global-set-key [C-c b] 'switch-to-other-buffer)
+(global-set-key (kbd "C-c b") 'switch-to-other-buffer)
 
 
-(defun toggle-maximize-buffer () "Maximize buffer"
+(defun toggle-maximize-buffer ()
+  "Maximize/minimize buffer"
        (interactive)
        (if (= 1 (length (window-list)))
            (jump-to-register '_)
          (progn
            (window-configuration-to-register '_)
            (delete-other-windows))))
-(global-set-key (kbd "C-x w m") 'toggle-maximize-buffer)
+(key-chord-define-global "xm" 'toggle-maximize-buffer)
+
 
 (defun transpose-windows (arg)
   "Transpose the buffers shown in two windows."
@@ -128,17 +137,31 @@
 (global-set-key (kbd "C-x w l") 'windmove-right)
 (global-set-key (kbd "C-x w i") 'windmove-up)
 (global-set-key (kbd "C-x w k") 'windmove-down)
+;; corresponding key-chord configs
+(key-chord-define-global "xj" windmove-left')
+(key-chord-define-global "xl" windmove-right')
+(key-chord-define-global "xi" windmove-up')
+(key-chord-define-global "xk" windmove-down)
+
 
 
 ;; Package: smartparens
 (require 'smartparens-config)
 (setq sp-base-key-bindings 'paredit)
-(setq sp-autoskip-closing-pair 'always)
+(setq sp-autoskibp-closing-pair 'always)
 (setq sp-hybrid-kill-entire-symbol nil)
 (sp-use-paredit-bindings)
 ;; turn on smartparens
 (show-smartparens-global-mode +1)
 (smartparens-global-mode 1)
+
+;; Package: rainbow-delimiters
+(require 'rainbow-delimiters)
+(rainbow-delimiters-mode)
+
+;; Package: ace-window
+(require 'ace-window)
+(key-chord-define-global "xo" 'ace-window)
 
 
 ;; Package: golden ratio

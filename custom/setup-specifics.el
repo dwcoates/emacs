@@ -4,14 +4,14 @@
   ;; FRAME 1
   (find-file "~/workspace/organization/everything.org")
   (org-agenda)
-  (delete-window)     ; this is here because for whatever reason, org-agenda insists on opening horizontal=
+  (delete-window)  ; this is here because for whatever reason, org-agenda insists on opening horizontal
   (split-window-horizontally)
   (windmove-right)
   (switch-to-buffer "*Org Agenda*")
   (windmove-left)
   (enlarge-window-horizontally 10)
-
   ;; FRAME 2
+
   )
 (on-emacs-startup)
 
@@ -29,16 +29,42 @@
     )
   (previous-buffer))
 
+
 (global-set-key (kbd "C-c o e")
                 (lambda () (interactive) (find-file "~/workspace/organization/everything.org")))
 (global-set-key (kbd "C-c o C-e")
                 (lambda ()
                   (interactive)
                   (find-file-other-window "~/workspace/organization/everything.org")))
-(global-set-key (kbd "C-c 7 C-e")
+
+(global-set-key (kbd "C-c o i")
                 (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
-(global-set-key (kbd "C-c 8 C-e")
+(global-set-key (kbd "C-c o C-i")
+                (lambda ()
+                  (interactive)
+                  (find-file-other-window "~/.emacs.d/init.el")))
+
+(global-set-key (kbd "C-c o c")
                 (lambda () (interactive) (find-file "~/.emacs.d/custom/")))
+(global-set-key (kbd "C-c o C-c")
+                (lambda ()
+                  (interactive)
+                  (find-file-other-window "~/.emacs.d/custom/")))
+
+;; this doesnt work until dwc-find-file-other-frame is fixed (custom/misc.el)
+(global-set-key (kbd "C-c o f e")
+                (lambda ()
+                  (interactive)
+                  (dwc-find-file-other-frame "~/.emacs.d/init.el")
+                  (split-window-horizontally)
+                  (windmove-right)
+                  (find-file "~/.emacs.d/custom/")))
+(global-set-key (kbd "C-c o C-c")
+                (lambda ()
+                  (interactive)
+                  (find-file-other-window "~/.emacs.d/custom/")))
+
+
 
 
 ;; default notes file.
