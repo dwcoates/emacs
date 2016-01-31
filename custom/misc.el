@@ -13,4 +13,4 @@
   (message ""))
 
 
-(dwc-find-file-other-frame "~")
+(provide 'misc)

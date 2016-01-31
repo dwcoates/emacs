@@ -13,9 +13,10 @@
 
 (defun sp-delete-sexp ()
     (interactive)
-    (sp-beginning-of-sexp)
+    (sp-forward-sexp)
+    (sp-backward-sexp)
     (mark)
-    (sp-end-of-sexp)
+    (sp-forward-sexp)
   (delete-region (point) (mark)))
 
 
@@ -75,35 +76,35 @@
  ("C-c `"  . wrap-with-back-quotes))
 
 ;; Key bindings
-(key-chord-define-global "ka" 'sp-beginning-of-sexp)
-(key-chord-define-global "ke" 'sp-end-of-sexp)
+(key-chord-define-global "8a" 'sp-beginning-of-sexp)
+(key-chord-define-global "8e" 'sp-end-of-sexp)
 
-(key-chord-define-global "dk" 'sp-down-sexp)
-(key-chord-define-global "di"   'sp-up-sexp)
-(key-chord-define-global "dj" 'sp-backward-down-sexp)
-(key-chord-define-global "dl"   'sp-backward-up-sexp)
+(key-chord-define-global "4k" 'sp-down-sexp)
+(key-chord-define-global "4i"   'sp-up-sexp)
+(key-chord-define-global "4j" 'sp-backward-down-sexp)
+(key-chord-define-global "4l"   'sp-backward-up-sexp)
 
-(key-chord-define-global "kf" 'sp-forward-sexp)
-(key-chord-define-global "kb" 'sp-backward-sexp)
+(key-chord-define-global "8f" 'sp-forward-sexp)
+(key-chord-define-global "8b" 'sp-backward-sexp)
 
-(key-chord-define-global "dn" 'sp-next-sexp)
-(key-chord-define-global "dp" 'sp-previous-sexp)
+(key-chord-define-global "4n" 'sp-next-sexp)
+(key-chord-define-global "4p" 'sp-previous-sexp)
 
-(key-chord-define-global "dh" 'sp-forward-symbol)
-(key-chord-define-global "kg" 'sp-backward-symbol)
+(key-chord-define-global "4h" 'sp-forward-symbol)
+(key-chord-define-global "8g" 'sp-backward-symbol)
 
-(key-chord-define-global "kt" 'sp-forward-slurp-sexp)
-(key-chord-define-global "kw" 'sp-forward-barf-sexp)
-(key-chord-define-global "kr"  'sp-backward-slurp-sexp)
-(key-chord-define-global "kq"  'sp-backward-barf-sexp)
+(key-chord-define-global "8t" 'sp-forward-slurp-sexp)
+(key-chord-define-global "8w" 'sp-forward-barf-sexp)
+(key-chord-define-global "8r"  'sp-backward-slurp-sexp)
+(key-chord-define-global "8q"  'sp-backward-barf-sexp)
 
-(key-chord-define-global "dt" 'sp-transpose-sexp)
-(key-chord-define-global "dk" 'sp-kill-sexp)
-(key-chord-define-global "dh" 'sp-kill-hybrid-sexp)
-(key-chord-define-global "dj" 'sp-backward-kill-sexp)
-(key-chord-define-global "dw" 'sp-copy-sexp)
+(key-chord-define-global "4t" 'sp-transpose-sexp)
+(key-chord-define-global "4k" 'sp-kill-sexp)
+(key-chord-define-global "4h" 'sp-kill-hybrid-sexp)
+(key-chord-define-global "4j" 'sp-backward-kill-sexp)
+(key-chord-define-global "4w" 'sp-copy-sexp)
 
-(key-chord-define-global "kd" 'sp-delete-sexp)        ;; this function doesnt exist?
+(key-chord-define-global "8d" 'sp-delete-sexp)        ;; this function doesnt exist?
 
 ;("<backspace>" . sp-backward-delete-char)
 ;("C-<backspace>" . backward-delete-char)     ;; this should be like paredit

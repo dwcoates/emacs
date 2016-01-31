@@ -69,6 +69,8 @@
 (linum-mode t)
 (global-set-key (kbd "C-c l m") 'linum-mode)
 
+;; key-chord for add region to kill ring
+(key-chord-define-global "qw" 'kill-ring-save)
 
 ;; dont truncate lines
 (toggle-truncate-lines)
@@ -146,7 +148,9 @@
 (key-chord-define-global "xi" 'windmove-up)
 (key-chord-define-global "xk" 'windmove-down)
 
-
+;; Package: ace-jump-mode
+(require 'ace-jump-mode)
+(key-chord-define-global "cj" 'ace-jump-mode)
 
 ;; Package: smartparens
 (require 'smartparens-config)

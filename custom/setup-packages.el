@@ -42,6 +42,7 @@
     key-chord
     ace-window
     paredit
+    expand-region
     iy-go-to-char
     dash-at-point
     dash-functional

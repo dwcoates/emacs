@@ -188,6 +188,8 @@
 (global-set-key (kbd "C-;") 'iedit-mode)
 
 
+(require 'expand-region)
+(key-chord-define-global ";l" 'er/expand-region)
 
 ;; PACKAGE: duplicate-thing
 (require 'duplicate-thing)

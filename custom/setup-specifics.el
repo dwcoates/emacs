@@ -11,7 +11,6 @@
   (windmove-left)
   (enlarge-window-horizontally 10)
   ;; FRAME 2
-
   )
 (on-emacs-startup)
 
@@ -51,6 +50,30 @@
                   (interactive)
                   (find-file-other-window "~/.emacs.d/custom/")))
 
+(global-set-key (kbd "C-c o s")
+                (lambda () (interactive) (find-file "~/.emacs.d/custom/setup-specifics.el")))
+(global-set-key (kbd "C-c o C-s")
+                (lambda ()
+                  (interactive)
+                  (find-file-other-window "~/.emacs.d/custom/setup-specifics.el")))
+
+(global-set-key (kbd "C-c o p")
+                (lambda () (interactive) (find-file "~/.emacs.d/custom/setup-smartparens.el")))
+(global-set-key (kbd "C-c o C-p")
+                (lambda ()
+                  (interactive)
+                  (find-file-other-window "~/.emacs.d/custom/setup-smartparens.el")))
+
+(global-set-key (kbd "C-c o a")
+                (lambda ()
+                  (interactive)
+                  (find-file "~/.emacs.d/custom/setup-appearance-and-navigation.el")))
+(global-set-key (kbd "C-c o C-a")
+                (lambda ()
+                  (interactive)
+                  (find-file-other-window "~/.emacs.d/custom/setup-appearance-and-navigation.el")))
+
+
 ;; this doesnt work until dwc-find-file-other-frame is fixed (custom/misc.el)
 (global-set-key (kbd "C-c o f e")
                 (lambda ()
@@ -59,7 +82,7 @@
                   (split-window-horizontally)
                   (windmove-right)
                   (find-file "~/.emacs.d/custom/")))
-(global-set-key (kbd "C-c o C-c")
+(global-set-key (kbd "C-c o f C-e")
                 (lambda ()
                   (interactive)
                   (find-file-other-window "~/.emacs.d/custom/")))
