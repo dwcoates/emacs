@@ -1,5 +1,6 @@
 (defun my-org-mode-hook ()
   (toggle-truncate-lines)
+  (abbrev-mode 1)
   (toggle-word-wrap))
 
 (add-hook 'org-mode-hook 'my-org-mode-hook)

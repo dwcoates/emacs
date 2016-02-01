@@ -17,7 +17,7 @@
 
 
 ;; find-file-at-point
-(key-chord-define-global "ff" 'find-file-at-point)
+(key-chord-define-global "fp" 'find-file-at-point)
 
 
 ;; setup default window size

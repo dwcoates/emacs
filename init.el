@@ -81,7 +81,13 @@
 ;; Package zygospore
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-window)
 
+;; Edit With Emacs (Google Chrome Extension)
+(add-to-list 'load-path "~/.emacs.d/edit-with-emacs")
+(require 'edit-server)
+(edit-server-start)
+
 (require 'setup-specifics)
 
 (provide 'init)
 ;;; init.el ends here
+(put 'narrow-to-region 'disabled nil)

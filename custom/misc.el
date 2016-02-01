@@ -12,5 +12,8 @@
   (toggle-scroll-bar)
   (message ""))
 
+;; do I like calculator?
+(global-set-key (kbd "C-=") 'calculator)
+
 
 (provide 'misc)

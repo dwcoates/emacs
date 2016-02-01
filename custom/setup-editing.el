@@ -43,6 +43,15 @@
                                             ))
 (abbrev-mode 1)
 
+(require 'char-menu)
+(key-chord-define-global "cm" 'char-menu)
+(setq char-menu '("—" "‘’" "“”" "…" "«»" "–"
+                        ("Typography" "•" "©" "†" "‡" "°" "·" "§" "№" "★")
+                        ("Math"       "≈" "≡" "≠" "∞" "×" "±" "∓" "÷" "√")
+                        ("Arrows"     "←" "→" "↑" "↓" "⇐" "⇒" "⇑" "⇓")
+                        ("Greek"      "α" "β" "Y" "δ" "ε" "ζ" "η" "θ" "ι" "κ" "λ" "μ"
+                         "ν" "ξ" "ο" "π" "ρ" "σ" "τ" "υ" "φ" "χ" "ψ" "ω")))
+
 
 ;; GROUP: Editing -> Killing
 (setq kill-ring-max 10000 ; increase kill-ring capacity
@@ -92,7 +101,9 @@
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
-
+;; narrowing and widening
+(key-chord-define-global "rn" 'narrow-to-region)
+(key-chord-define-global "wn" 'widen)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;   PACKAGES
@@ -179,7 +190,6 @@
 (global-anzu-mode)
 (global-set-key (kbd "M-%") 'anzu-query-replace)
 (global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp)
-
 
 
 ;; PACKAGE: iedit
