@@ -9,6 +9,8 @@
              '("tromey" . "http://tromey.com/elpa/") t)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(add-to-list 'package-archives
+             '("elpy" . "https://jorgenschaefer.github.io/packages/"))
 (package-initialize)
 
 
@@ -42,6 +44,7 @@
     key-chord
     ace-window
     paredit
+    elpy
     expand-region
     iy-go-to-char
     dash-at-point

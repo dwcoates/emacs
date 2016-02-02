@@ -32,6 +32,7 @@
 (require 'setup-company)
 (require 'setup-magit)
 (require 'setup-clojure)
+(require 'setup-python)
 (require 'setup-editing)
 (require 'misc)
 ;; Package: projectile
