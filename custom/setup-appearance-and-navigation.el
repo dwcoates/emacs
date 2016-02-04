@@ -143,10 +143,10 @@
 (global-set-key (kbd "C-x w i") 'windmove-up)
 (global-set-key (kbd "C-x w k") 'windmove-down)
 ;; corresponding key-chord configs
-(key-chord-define-global "xj" 'windmove-left)
-(key-chord-define-global "xl" 'windmove-right)
-(key-chord-define-global "xi" 'windmove-up)
-(key-chord-define-global "xk" 'windmove-down)
+(key-chord-define-global "wj" 'windmove-left)
+(key-chord-define-global "wl" 'windmove-right)
+(key-chord-define-global "wi" 'windmove-up)
+(key-chord-define-global "wk" 'windmove-down)
 
 ;; Package: ace-jump-mode
 (require 'ace-jump-mode)
