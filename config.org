@@ -1,0 +1,1640 @@
+This is my emacs config file.
+
+* Init
+#+BEGIN_SRC emacs-lisp
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
+(setq debug-on-error nil)
+
+;; Keep emacs-generated custom settings in a separate file so they don't pollute init.el
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file)
+#+END_SRC
+** Packages
+#+BEGIN_SRC emacs-lisp 
+(require 'package)
+#+END_SRC
+*** Add repos to list
+#+BEGIN_SRC emacs-lisp
+;; setup package repos
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://melpa-stable.org/packages/") t)
+(add-to-list 'package-archives
+             '("tromey" . "http://tromey.com/elpa/") t)
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(add-to-list 'package-archives
+             '("elpy" . "https://jorgenschaefer.github.io/packages/"))
+(package-initialize)
+
+;; Download the ELPA archive description if needed.
+;; This informs Emacs about the latest versions of all packages, and
+;; makes them available for download.
+(when (not package-archive-contents)
+  (package-refresh-contents))
+#+END_SRC
+*** dep-packages
+#+BEGIN_SRC emacs-lisp
+;; no dependency notes
+(defvar dep-packages
+  '(
+    use-package
+    ;;;; clojure
+    clojure-mode
+    clojure-mode-extra-font-locking
+    flycheck-clojure
+    cider
+    ;clj-refactor
+    ;;;; helm
+    helm
+    helm-gtags
+    helm-projectile
+    helm-swoop
+    ;;;; misc
+    anzu
+    company
+    duplicate-thing
+    ggtags
+    key-chord
+    ace-window
+    paredit
+    elpy
+    expand-region
+    iy-go-to-char
+    dash-at-point
+    dash-functional
+    smex
+    projectile
+    rainbow-delimiters
+    tagedit
+    golden-ratio
+    function-args
+    clean-aindent-mode
+    comment-dwim-2
+    dtrt-indent
+    ws-butler
+    flycheck
+    iedit
+    company-c-headers
+    company-irony
+    yasnippet
+    smartparens
+    projectile
+    volatile-highlights
+    undo-tree
+    helm-company
+    guide-key
+    magit
+    nyan-mode
+    powerline
+    ztree
+    geiser
+    ;;    epc
+    ;;    jedi
+    zygospore))
+
+(load-file "~/.emacs.d/geiser/elisp/geiser.el")
+#+END_SRC
+*** OSX snippet 
+   On OS X, an Emacs instance started from the graphical user
+interface will have a different environment than a shell in a
+terminal window, because OS X does not run a shell during the
+login. Obviously this will lead to unexpected results when
+calling external utilities like make from Emacs.
+This library works around this problem by copying important
+environment variables from the user's shell.
+https://github.com/purcell/exec-path-from-shell
+
+#+BEGIN_SRC emacs-lisp
+(if (eq system-type 'darwin)
+    (add-to-list 'dep-packages 'exec-path-from-shell))
+#+END_SRC
+*** Install Packages
+#+BEGIN_SRC emacs-lisp
+(dolist (p dep-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
+
+(defun install-packages ()
+  "Install all required packages."
+  (interactive)
+  (unless package-archive-contents
+    (package-refresh-contents))
+  (dolist (package dep-packages)
+    (unless (package-installed-p package)
+      (package-install package))))
+
+(install-packages)
+#+END_SRC
+
+* Appearance and Navigation
+** Basic Appearance Settings
+#+BEGIN_SRC emacs-lisp 
+;; setup default window size
+(add-to-list 'default-frame-alist '(height . 40))
+(add-to-list 'default-frame-alist '(width . 160))
+
+;; get rid of annoying stuff
+(setq gc-cons-threshold 100000000)
+(setq inhibit-startup-message t)
+
+;; because why not
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;; Save point position between sessions
+(require 'saveplace)
+(setq-default save-place t)
+(setq save-place-file (expand-file-name ".places" user-emacs-directory))
+
+;; no splash screen
+(setq inhibit-startup-screen t)
+
+;; set font
+(add-to-list 'default-frame-alist
+         '(font .  "Ubuntu Mono-13"))
+(set-face-attribute 'default t :font  "Ubuntu Mono-13")
+
+(global-unset-key (kbd "C-x 5 0"))
+(global-set-key (kbd "C-x 5 DEL") 'delete-frame)
+
+(global-unset-key (kbd "C-x 0"))
+(global-set-key (kbd "C-x DEL") 'delete-window)
+
+;; disables tool bar
+(tool-bar-mode -1)
+;; disables menu bar, can re-enable as a popub with 'C-mouse-3'
+(menu-bar-mode -99)
+;; no scroll bar please
+(toggle-scroll-bar -1)
+
+;; enable line numbering
+(linum-mode t)
+(global-set-key (kbd "C-c l m") 'linum-mode)
+
+;; key-chord for add region to kill ring
+(key-chord-define-global "qw" 'kill-ring-save)
+
+;; dont truncate lines
+(toggle-truncate-lines)
+(global-set-key (kbd "C-c ; t") 'toggle-truncate-lines)
+
+(blink-cursor-mode 0)
+
+(global-hl-line-mode 1)
+(set-face-background 'hl-line "#3b3b3b")
+(set-face-foreground 'highlight nil)
+
+(global-set-key (kbd "C-x w b") 'previous-buffer)
+;(global-set-key (kbd "C-x w v") '(switch-to-buffer nil))
+
+;; display time in mode line
+(display-time-mode t)
+;; set modeline to powerline
+(powerline-default-theme)
+#+END_SRC
+
+** Basic Navigation Setup
+#+BEGIN_SRC emacs-lisp
+;; Package: key-chord
+(key-chord-mode 1)
+;; Max time delay between two key presses to be considered a key chord
+(setq key-chord-two-keys-delay 0.1)
+
+;; Max time delay between two presses of the same key to be considered a key chord.
+;; Should normally be a little longer than `key-chord-two-keys-delay'.
+(setq key-chord-one-key-delay 0.2)
+
+(key-chord-define-global "fg" 'iy-go-to-char)
+(key-chord-define-global "df" 'iy-go-to-char-backward)
+
+;; find-file-at-point
+(key-chord-define-global "fp" 'find-file-at-point)
+#+END_SRC
+
+** Functions
+#+BEGIN_SRC emacs-lisp
+;; function for switching between two most recently visited buffers
+(defun switch-to-other-buffer ()
+  "Switch to last visited buffer."
+  (interactive)
+  (switch-to-buffer (other-buffer)))
+(global-set-key (kbd "C-c b") 'switch-to-other-buffer)
+
+
+(defun toggle-maximize-buffer ()
+  "Maximize/minimize buffer"
+       (interactive)
+       (if (= 1 (length (window-list)))
+           (jump-to-register '_)
+         (progn
+           (window-configuration-to-register '_)
+           (delete-other-windows))))
+(key-chord-define-global "xm" 'toggle-maximize-buffer)
+
+
+(defun transpose-windows (arg)
+  "Transpose the buffers shown in two windows."
+  (interactive "p")
+  (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
+    (while (/= arg 0)
+      (let ((this-win (window-buffer))
+            (next-win (window-buffer (funcall selector))))
+        (set-window-buffer (selected-window) next-win)
+        (set-window-buffer (funcall selector) this-win)
+        (select-window (funcall selector)))
+      (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
+(global-set-key (kbd "C-x w t") 'transpose-windows)
+#+END_SRC
+** Navigation and Appearance Packages
+*** guide-key
+#+BEGIN_SRC emacs-lisp
+;; guide-key, displays possible key binding completions
+(require 'guide-key)
+(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +"))
+(guide-key-mode 1)
+(setq guide-key/recursive-key-sequence-flag t)
+(setq guide-key/popup-window-position 'bottom)
+#+END_SRC
+*** windmove
+#+BEGIN_SRC emacs-lisp
+;; Set keys to move between windows
+(global-set-key (kbd "C-x w j") 'windmove-left)
+(global-set-key (kbd "C-x w l") 'windmove-right)
+(global-set-key (kbd "C-x w i") 'windmove-up)
+(global-set-key (kbd "C-x w k") 'windmove-down)
+;; corresponding key-chord configs
+(key-chord-define-global "wj" 'windmove-left)
+(key-chord-define-global "wl" 'windmove-right)
+(key-chord-define-global "wi" 'windmove-up)
+(key-chord-define-global "wk" 'windmove-down)
+#+END_SRC
+*** ace-jump
+#+BEGIN_SRC emacs-lisp
+;; Package: ace-jump-mode
+(require 'ace-jump-mode)
+(key-chord-define-global "cj" 'ace-jump-mode)
+#+END_SRC
+*** smartparens
+#+BEGIN_SRC emacs-lisp
+;; Package: smartparens
+(require 'smartparens-config)
+(setq sp-base-key-bindings 'paredit)
+(setq sp-autoskibp-closing-pair 'always)
+(setq sp-hybrid-kill-entire-symbol nil)
+(sp-use-paredit-bindings)
+;; turn on smartparens
+(show-smartparens-global-mode +1)
+(smartparens-global-mode 1)
+#+END_SRC
+*** rainbow-delimiters
+#+BEGIN_SRC emacs-lisp
+;; Package: rainbow-delimiters
+(require 'rainbow-delimiters)
+(rainbow-delimiters-mode)
+#+END_SRC
+*** ace-window
+#+BEGIN_SRC emacs-lisp
+;; Package: ace-window
+(require 'ace-window)
+(key-chord-define-global "xo" 'ace-window)
+#+END_SRC
+*** golden-ratio
+#+BEGIN_SRC emacs-lisp
+;; Package: golden ratio
+(require 'golden-ratio)
+;; ensure golden-ratio compatibility with helm.
+(defun pl/helm-alive-p ()
+  (if (boundp 'helm-alive-p)
+      (symbol-value 'helm-alive-p)))
+(add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
+;; list of buffers to not be resized by golden-ratio.
+(setq golden-ratio-exclude-buffer-names
+	  '("*Flycheck errors*"
+		"*SPEEDBAR*"))
+;; turn on golden ratio
+(global-set-key (kbd "C-x w g SPC") 'golden-ratio)
+(global-set-key (kbd "C-x w g m") 'golden-ratio-mode)
+#+END_SRC
+*** speedbar
+#+BEGIN_SRC emacs-lisp
+;; Package: speedbar
+(setq speedbar-show-unknown-files t)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;   Functions;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+END_SRC
+*** zygospore
+#+BEGIN_SRC emacs-lisp 
+(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-window)
+#+END_SRC
+* helm
+** Init
+#+BEGIN_SRC emacs-lisp
+;; this variables must be set before load helm-gtags
+(setq helm-gtags-prefix-key "\C-cg")
+
+(require 'helm-config)
+(require 'helm-grep)
+#+END_SRC
+** Basic Configuration and Commands
+#+BEGIN_SRC emacs-lisp
+
+;; helm size
+(helm-autoresize-mode t)
+(setq helm-autoresize-max-height 30)
+(setq helm-autoresize-min-height 20)
+
+
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+
+(define-key helm-map (kbd "C-\-") 'helm-execute-persistent-action) ; rebihnd tab to do persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+(define-key helm-grep-mode-map (kbd "<rqeturn>")  'helm-grep-mode-jump-other-window)
+(define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
+(define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
+
+
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+
+(setq
+ helm-scroll-amount 4 ; scroll 4 lines other window using M-<next>/M-<prior>
+ helm-ff-search-library-in-sexp t ; search for library in `require' and `declare-function' sexp.
+ helm-split-window-in-side-p t ;; open helm buffer inside current window, not occupy whole other window
+ helm-candidate-number-limit 500 ; limit the number of displayed canidates
+ helm-ff-file-name-history-use-recentf t
+ helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
+ helm-buffers-fuzzy-matching t          ; fuzzy matching buffer names when non-nil
+ )
+
+
+
+(add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
+(global-set-key (kbd "C-c s o") 'helm-occur)
+
+(global-set-key (kbd "C-c h C-c w") 'helm-wikipedia-suggest)
+(global-set-key (kbd "C-c h C-c g") 'helm-google-suggest)
+(global-set-key (kbd "C-c h C-c s") 'helm-surfraw)
+
+(global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
+(global-set-key (kbd "C-c h c") 'helm-calcul-expression)
+
+;(global-set-key (kbd "C-c h x") 'helm-register)
+;(global-set-key (kbd "C-x r j") 'jump-to-register)
+
+(define-key 'help-command (kbd "C-f") 'helm-apropos)
+(define-key 'help-command (kbd "r") 'helm-info-emacs)
+(define-key 'help-command (kbd "C-l") 'helm-locate-library)
+
+;;; Save current position to mark ring
+(add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
+
+;; show minibuffer history with Helm
+(define-key minibuffer-local-map (kbd "M-p") 'helm-minibuffer-history)
+
+(define-key global-map [remap find-tag] 'helm-etags-select)
+
+(define-key global-map [remap list-buffers] 'helm-buffers-list)
+
+
+#+END_SRC
+** helm-eshell
+#+BEGIN_SRC emacs-lisp
+(require 'helm-eshell)
+;; use helm to list eshell history
+(add-hook 'eshell-mode-hook
+          #'(lambda ()
+              (define-key 'eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
+#+END_SRC 
+** helm-swoop
+#+BEGIN_SRC emacs-lisp
+;; Locate the helm-swoop folder to your path
+(require 'helm-swoop)
+
+(global-set-key (kbd "C-c s s") 'helm-swoop)
+(global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
+
+;; When doing isearch, hand the word over to helm-swoop
+(define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+
+;; From helm-swoop to helm-multi-swoop-all
+(define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+
+;; Save buffer when helm-multi-swoop-edit complete
+(setq helm-multi-swoop-edit-save t)
+;; If this value is t, split window inside the current window
+
+(setq helm-swoop-split-with-multiple-windows t)
+;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+
+(setq helm-swoop-split-direction 'split-window-vertically)
+;; If nil, you can slightly boost invoke speed in exchange for text color
+
+(setq helm-swoop-speed-or-color t) 
+#+END_SRC
+** final
+#+BEGIN_SRC emacs-lisp
+(define-key global-map (kbd "C-c l c") 'helm-lisp-completion-at-point)
+;;fuzzy matching for elisp helm completion
+(setq helm-lisp-fuzzy-completion t)
+
+(helm-mode 1)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(require 'helm-gtags)
+
+(setq
+ helm-gtags-ignore-case t
+ helm-gtags-auto-update t
+ helm-gtags-use-input-at-cursor t
+ helm-gtags-pulse-at-cursor t
+ helm-gtags-prefix-key "\C-cg"
+ helm-gtags-suggested-key-mapping t
+ )
+
+;; Enable helm-gtags-mode in Dired so you can jump to any tag
+;; when navigate project tree with Dired
+(add-hook 'dired-mode-hook 'helm-gtags-mode)
+
+;; Enable helm-gtags-mode in Eshell for the same reason as above
+(add-hook 'eshell-mode-hook 'helm-gtags-mode)
+
+;; Enable helm-gtags-mode in languages that GNU Global supports
+(add-hook 'c-mode-hook 'helm-gtags-mode)
+(add-hook 'c++-mode-hook 'helm-gtags-mode)
+(add-hook 'java-mode-hook 'helm-gtags-mode)
+(add-hook 'asm-mode-hook 'helm-gtags-mode)
+
+;; key bindings
+(define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
+(define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
+(define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+
+(provide 'setup-helm-gtags)
+
+#+END_SRC
+* flycheck
+#+BEGIN_SRC emacs-lisp 
+(require 'flycheck)
+
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+(global-set-key (kbd "C-c ! n") 'flycheck-next-error)
+(global-set-key (kbd "C-c ! p") 'flycheck-previous-error)
+(global-set-key (kbd "C-c ! h") 'helm-flycheck)
+#+END_SRC
+* magit
+#+BEGIN_SRC  emacs-lisp
+(global-set-key (kbd "C-c m s") 'magit-status)
+#+END_SRC
+* org-mode
+#+BEGIN_SRC emacs-lisp
+(defun my-org-mode-hook ()
+  (toggle-truncate-lines)
+  (abbrev-mode 1)
+  (toggle-word-wrap))
+
+(add-hook 'org-mode-hook 'my-org-mode-hook)
+
+(setq org-src-fontify-natively t)
+#+END_SRC
+** column editing
+#+BEGIN_SRC emacs-lisp
+;(add-hook 'org-mode-hook 'my-org-mode-hook)
+(global-set-key (kbd "C-c o k") 'org-mode-delete-column)
+(global-set-key (kbd "C-c o i") 'org-mode-insert-column)
+(global-set-key (kbd "C-c o j") 'org-mode-move-column-left)
+(global-set-key (kbd "C-c o l") 'org-mode-move-column-right)
+
+(global-set-key (kbd "C-c o RET") 'org-mode-todo-heading)
+#+END_SRC
+** org-path-completion
+#+BEGIN_SRC emacs-lisp
+(setq org-goto-interface 'outline-path-completion
+      org-goto-max-level 10)
+#+END_SRC
+** org-capture
+org-capture allows you to take a note anywhere, which it will write to the org-default-notes-file.
+#+BEGIN_SRC emacs-lisp
+;; this is set in ~/.emacs.d/custom/setup-specifics.el
+(global-set-key (kbd "C-c c") 'org-capture)
+#+END_SRC
+** org-back-to-top-level-heading
+#+BEGIN_SRC elisp
+;; move point to top-level heading
+(defun org-back-to-top-level-heading ()
+  "Go back to the current top level heading."
+  (interactive)
+  (or (re-search-backward "^\* " nil t)
+      (goto-char (point-min))))
+
+;; make todo's check recursively when determining the number of todo's under it
+(setq org-hierarchical-todo-statistics nil)
+#+END_SRC
+** org-summary-todo
+This is for making sure that the top-level todo automatically is marked DONE if all sub-levels are DONE. 
+TODO otherwise.
+#+BEGIN_SRC elisp
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  (let (org-log-done org-log-states)   ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+#+END_SRC
+** jump-to-org-agenda
+This is a snippet from John Wiegley. 
+It shows org agenda after emacs has been idle for a certain amount of time.
+#+BEGIN_SRC elisp
+(defun jump-to-org-agenda ()
+  (interactive)
+  (let ((buf (get-buffer "*Org Agenda*"))
+        wind)
+    (if buf
+        (if (setq wind (get-buffer-window buf))
+            (select-window wind)
+          (if (called-interactively-p)
+              (progn
+                (select-window (display-buffer buf t t))
+                (org-fit-window-to-buffer)
+                ;; (org-agenda-redo)
+                )
+            (with-selected-window (display-buffer buf)
+              (org-fit-window-to-buffer)
+              ;; (org-agenda-redo)
+              )))
+      (call-interactively 'org-agenda-list)))
+  ;;(let ((buf (get-buffer "*Calendar*")))
+  ;;  (unless (get-buffer-window buf)
+  ;;    (org-agenda-goto-calendar)))
+  )
+(run-with-idle-timer 600 t 'jump-to-org-agenda)
+#+END_SRC
+
+* cedet
+#+BEGIN_SRC emacs-lisp
+(require 'cc-mode)
+(require 'semantic)
+
+
+(global-semanticdb-minor-mode 1)
+
+(global-semantic-idle-scheduler-mode 1)
+(global-semantic-stickyfunc-mode 1)
+
+
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(set-default 'semantic-case-fold t)
+
+(semantic-mode 1)
+
+(defun dwc-cedet-hook ()
+  (local-set-key "\C-c\C-j" 'semantic-ia-fast-jump)
+  (local-set-key "\C-c\C-j" 'semantic-ia-fast-jump)
+  (local-set-key "\C-c\C-s" 'semantic-ia-show-summary))
+
+(add-hook 'c-mode-common-hook 'dodge-cedet-hook)
+(add-hook 'c-mode-hook 'dodge-cedet-hook)
+(add-hook 'c++-mode-hook 'dodge-cedet-hook)
+
+
+;; add include paths for semantic
+;; remove "c++-mode" to make path available to both c and c++ modes
+                                        ;(semantic-add-system-include '/path/to/library' 'c++-mode)
+
+(require 'function-args)
+(fa-config-default)
+(define-key c-mode-map  [("C-c C-f C-h")] 'moo-complete)
+(define-key c++-mode-map  [(control tab)] 'moo-complete)
+(define-key c-mode-map (kbd "C-c M-o s")  'fa-show)
+(define-key c++-mode-map (kbd "C-c M-o s")  'fa-show)
+
+
+
+;; please don't ask me if I really want to compile
+(global-set-key (kbd "<f5>") (lambda ()
+                               (interactive)
+                               (setq-local compilation-read-command nil)
+                               (call-interactively 'compile)))
+
+
+
+;; Enable EDE only in C/C++
+(require 'ede)
+(global-ede-mode)
+#+END_SRC
+
+* clojure
+** clojure-mode
+#+BEGIN_SRC emacs-lisp
+;; This is useful for working with camel-case tokens, like names of
+;; Java classes (e.g. JavaClassName)
+(add-hook 'clojure-mode-hook 'subword-mode)
+
+;; A little more syntax highlighting
+(require 'clojure-mode-extra-font-locking)
+
+
+;;;;;;;;;; MIDJE ???? ;;;;;;;;;;;;;;
+;; syntax hilighting for midje
+(add-hook 'clojure-mode-hook
+          (lambda ()
+            (setq inferior-lisp-program "lein repl")
+            (font-lock-add-keywords
+             nil
+             '(("(\\(facts?\\)"
+                (1 font-lock-keyword-face))
+               ("(\\(background?\\)"
+                (1 font-lock-keyword-face))))
+            (define-clojure-indent (fact 1))
+            (define-clojure-indent (facts 1))))
+#+END_SRC
+** CIDER
+#+BEGIN_SRC emacs-lisp 
+;; provides minibuffer documentation for the code you're typing into the repl
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+
+;; go right to the REPL buffer when it's finished connecting
+;;;;;;;;;;;;;;;;;;; HOW CAN I MAKE IT SPLIT IN VERTICAL? ;;;;;;;;;;;;;;;;;
+(setq cider-repl-pop-to-buffer-on-connect t)
+
+;; When there's a cider error, show its buffer and switch to it
+(setq cider-show-error-buffer nil)
+(setq cider-auto-select-error-buffer t)
+
+(global-set-key (kbd "C-' 1") 'cider-visit-error-buffer)
+
+;; Where to store the cider history.
+(setq cider-repl-history-file "~/.emacs.d/cider-history")
+
+;; Wrap when navigating history.
+(setq cider-repl-wrap-history t)
+
+;; Use clojure mode for other extensions
+(add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
+
+
+;; key bindings
+#+END_SRC
+** Functions
+#+BEGIN_SRC emacs-lisp 
+;; these help with development of web apps
+(defun cider-start-http-server ()
+  (interactive)
+  (cider-load-current-buffer)
+  (let ((ns (cider-current-ns)))
+    (cider-repl-set-ns ns)
+    (cider-interactive-eval (format "(println '(def server (%s/start))) (println 'server)" ns))
+    (cider-interactive-eval (format "(def server (%s/start)) (println server)" ns))))
+
+
+(defun cider-refresh ()
+  (interactive)
+  (cider-interactive-eval (format "(user/reset)")))
+
+(defun cider-user-ns ()
+  (interactive)
+  (cider-repl-set-ns "user"))
+
+(eval-after-load 'cider
+  '(progn
+     (define-key clojure-mode-map (kbd "C-c C-v") 'cider-start-http-server)
+     (define-key clojure-mode-map (kbd "C-c r") 'cider-refresh)
+     (define-key clojure-mode-map (kbd "C-c u") 'cider-user-ns)
+     (define-key cider-mode-map (kbd "C-c u") 'cider-user-ns)
+     (define-key cider-mode-map (kbd "C-`") 'cider-jack-in)))
+#+END_SRC
+* python
+#+BEGIN_SRC emacs-lisp
+(require 'elpy)
+
+(add-hook 'python-mode-hook
+          (lambda ()
+            (elpy-mode)
+            (elpy-enable)))
+
+(provide 'setup-python)
+#+END_SRC
+* company
+#+BEGIN_SRC  emacs-lisp
+(require 'company)
+
+(add-hook 'after-init-hook 'global-company-mode)
+(setq company-backends (delete 'company-semantic company-backends))
+
+(define-key c-mode-map  [(control tab)] 'company-complete)
+(define-key c++-mode-map  [(control tab)] 'company-complete)
+
+(global-set-key (kbd "C-c <tab>") 'helm-company)
+
+;; company-c-headers
+;(add-to-list 'company-c-headers-path-system "/usr/include/c++/4.8/")
+(add-to-list 'company-backends 'company-c-headers)
+(eval-after-load 'company
+  '(add-to-list 'company-backends 'company-irony))
+;; (optional) adds CC special commands to `company-begin-commands' in order to
+;; trigger completion at interesting places, such as after scope operator std::|
+(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
+
+;; hs-minor-mode for folding source code
+(add-hook 'c-mode-common-hook 'hs-minor-mode)
+
+
+;; *********** Available C style: ***************
+;; “gnu”:    The default style for GNU projects
+;; “k&r”:    What Kernighan and Ritchie, the authors of C used in their book
+;; “bsd”:    What BSD developers use, aka “Allman style” after Eric Allman.
+;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
+;; “stroustrup”: What Stroustrup, the author of C++ used in his book
+;; “ellemtel”:  Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,”
+;;             Erik Nyquist and Mats Henricson, Ellemtel
+;; “linux”:  What the Linux developers use for kernel development
+;; “python”:What Python developers use for extension modules
+;; “java”:  The default style for java-mode (see below)
+;; “user”:  When you want to define your own style
+;; **********************************************
+(setq
+ c-default-style "linux" ;; set style to "linux"
+ )
+
+(provide 'setup-company)
+;;; setup-company.el ends here
+
+#+END_SRC
+
+* compilation
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "<f5>") (lambda ()
+                               (interactive)
+                               (setq-local compilation-read-command nil)
+                               (call-interactively 'compile)))
+;; Setup GDB
+(setq gdb-many-windows t
+ ;; Non-nil means display source file containing the main routine at startup
+ gdb-show-main t)
+#+END_SRC
+* editing
+** Basic Editing Configurations
+#+BEGIN_SRC emacs-lisp
+(show-paren-mode 1)
+
+;; Highlight current line
+(global-hl-line-mode 1)
+
+(setq global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
+      mark-ring-max 10000                ; increase kill ring to contains 10000 entries
+      mode-require-final-newline t      ; add a newline to end of file
+      tab-width 4)                       ; default to 4 visible spaces to display a tab
+
+(add-hook 'sh-mode-hook (lambda ()
+                          (setq tab-width 4)))
+
+(setq kill-ring-max 10000 ; increase kill-ring capacity
+      kill-whole-line t)  ; if NIL, kill whole line and move the next line up
+;; show whitespace in diff-mode
+(add-hook 'diff-mode-hook (lambda ()
+                            (setq-local whitespace-style
+                                        '(face
+                                          tabs
+                                          tab-mark
+                                          spaces
+                                          space-mark
+                                          trailing
+                                          indentation::space
+                                          indentation::tab
+                                          newline
+                                          newline-mark))
+                            (whitespace-mode 1)))
+
+(setq electric-indent-mode nil)
+
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
+;; narrowing and widening
+(key-chord-define-global "rn" 'narrow-to-region)
+(key-chord-define-global "wn" 'widen)
+#+END_SRC
+** Unicode
+#+BEGIN_SRC emacs-lisp 
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-language-environment "UTF-8")
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+
+(setq-default indent-tabs-mode nil)
+(delete-selection-mode)
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+(define-key key-translation-map (kbd "C-c u p") (kbd "φ"))
+(define-key key-translation-map (kbd "C-c u x") (kbd "ξ"))
+(define-key key-translation-map (kbd "C-c u i") (kbd "∞"))
+(define-key key-translation-map (kbd "C-c u l") (kbd "λ"))
+(define-key key-translation-map (kbd "C-c u <right>") (kbd "→"))
+
+(define-abbrev-table 'global-abbrev-table '(
+                                            ("alpha" "α")
+                                            ("inf" "∞")
+                                            ("ar" "→")
+                                            ("lambda" "λ")
+                                            ))
+(abbrev-mode 1)
+#+END_SRC
+*** char-menu
+#+BEGIN_SRC emacs-lisp 
+(require 'char-menu)
+(key-chord-define-global "cm" 'char-menu)
+(setq char-menu '("—" "‘’" "“”" "…" "«»" "–"
+                        ("Typography" "•" "©" "†" "‡" "°" "·" "§" "№" "★")
+                        ("Math"       "≈" "≡" "≠" "∞" "×" "±" "∓" "÷" "√")
+                        ("Arrows"     "←" "→" "↑" "↓" "⇐" "⇒" "⇑" "⇓")
+                        ("Greek"      "α" "β" "Y" "δ" "ε" "ζ" "η" "θ" "ι" "κ" "λ" "μ"
+                         "ν" "ξ" "ο" "π" "ρ" "σ" "τ" "υ" "φ" "χ" "ψ" "ω")))
+
+
+#+END_SRC
+** Comments
+#+BEGIN_SRC emacs-lisp 
+(defun toggle-comment-on-line ()
+  "comment or uncomment current line"
+  (interactive)
+  (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
+(global-set-key (kbd "C-;") 'toggle-comment-on-line)
+#+END_SRC
+** Packages
+*** hippie-expand
+#+BEGIN_SRC emacs-lisp 
+;; Hippie expand
+(global-set-key (kbd "M-/") 'hippie-expand)
+;; Lisp-friendly hippie expand
+(setq hippie-expand-try-functions-list
+      '(try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol))
+#+END_SRC
+
+*** volatile-highlights
+#+BEGIN_SRC emacs-lisp 
+(require 'volatile-highlights)
+(volatile-highlights-mode t)
+
+
+#+END_SRC
+*** clean-aindent-mode
+#+BEGIN_SRC emacs-lisp 
+(require 'clean-aindent-mode)
+(add-hook 'prog-mode-hook 'clean-aindent-mode)
+
+
+#+END_SRC
+*** dtrt-indent
+#+BEGIN_SRC emacs-lisp 
+(require 'dtrt-indent)
+(dtrt-indent-mode 1)
+(setq dtrt-indent-verbosity 0)
+#+END_SRC
+*** ws-butler
+#+BEGIN_SRC emacs-lisp 
+(require 'ws-butler)
+(add-hook 'c-mode-common-hook 'ws-butler-mode)
+(add-hook 'text-mode 'ws-butler-mode)
+(add-hook 'fundamental-mode 'ws-butler-mode)
+(add-hook 'prog-mode-hook 'ws-butler-mode)
+
+
+#+END_SRC
+*** undo-tree
+#+BEGIN_SRC emacs-lisp 
+(require 'undo-tree)
+(global-undo-tree-mode)
+
+
+
+#+END_SRC
+*** yasnippet
+#+BEGIN_SRC emacs-lisp 
+(require 'yasnippet)
+(yas-global-mode 1)
+
+;; Jump to end of snippet definition
+(define-key yas-keymap (kbd "<return>") 'yas/exit-all-snippets) 
+
+;; Inter-field navigation
+(defun yas/goto-end-of-active-field ()
+  (interactive)
+  (let* ((snippet (car (yas--snippets-at-point)))
+         (position (yas--field-end (yas--snippet-active-field snippet))))
+    (if (= (point) position)
+        (move-end-of-line 1)
+      (goto-char position))))
+
+(defun yas/goto-start-of-active-field ()
+  (interactive)
+  (let* ((snippet (car (yas--snippets-at-point)))
+         (position (yas--field-start (yas--snippet-active-field snippet))))
+    (if (= (point) position)
+        (move-beginning-of-line 1)
+      (goto-char position))))
+
+(define-key yas-keymap (kbd "C-e") 'yas/goto-end-of-active-field)
+(define-key yas-keymap (kbd "C-a") 'yas/goto-start-of-active-field)
+;; (define-key yas-minor-mode-map [(tab)] nil)
+;; (define-key yas-minor-mode-map (kbd "TAB") nil)
+;; (define-key yas-minor-mode-map (kbd "C-<tab>") 'yas-expand)
+;; No dropdowns please, yas
+(setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
+
+;; No need to be so verbose
+(setq yas-verbosity 1)
+
+;; Wrap around region
+(setq yas-wrap-around-region t)
+
+(add-hook 'term-mode-hook (lambda() (setq yas-dont-activate t)))
+
+
+#+END_SRC
+*** anzu
+#+BEGIN_SRC emacs-lisp 
+(require 'anzu)
+(global-anzu-mode)
+(global-set-key (kbd "M-%") 'anzu-query-replace)
+(global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp)
+
+
+#+END_SRC
+*** iedit
+#+BEGIN_SRC emacs-lisp 
+(setq iedit-toggle-key-default nil)
+(require 'iedit)
+(global-set-key (kbd "C-;") 'iedit-mode)
+
+#+END_SRC
+*** clean-auto-indent
+#+BEGIN_SRC emacs-lisp
+(require 'clean-aindent-mode)
+(add-hook 'prog-mode-hook 'clean-aindent-mode)
+#+END_SRC
+*** expand-region
+#+BEGIN_SRC emacs-lisp 
+(require 'expand-region)
+(key-chord-define-global ";l" 'er/expand-region)
+
+#+END_SRC
+*** duplicate-thing
+#+BEGIN_SRC emacs-lisp 
+(require 'duplicate-thing)
+(global-set-key (kbd "M-c") 'duplicate-thing)
+#+END_SRC 
+*** smartparens
+#+BEGIN_SRC emacs-lisp
+(require 'smartparens-config)
+(setq sp-base-key-bindings 'paredit)
+(setq sp-autoskip-closing-pair 'always)
+(setq sp-hybrid-kill-entire-symbol nil)
+(setq sp-backward-delete-char 'paredit-backward-delete)
+(sp-use-paredit-bindings)
+
+(show-smartparens-global-mode +1)
+(smartparens-global-mode 1)
+
+(add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
+(add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+#+END_SRC
+*** sp-delete-sexp
+#+BEGIN_SRC emacs-lisp
+(defun sp-delete-sexp ()
+    (interactive)
+    (sp-forward-sexp)
+    (sp-backward-sexp)
+    (mark)
+    (sp-forward-sexp)
+  (delete-region (point) (mark)))
+#+END_SRC
+
+*** bindings
+**** bind-keys
+#+BEGIN_SRC emacs-lisp 
+(bind-keys
+ :map smartparens-mode-map
+ ("C-' a" . sp-beginning-of-sexp)
+ ("C-' e" . sp-end-of-sexp)
+
+ ("C-' k" . sp-down-sexp)
+ ("C-' i"   . sp-up-sexp)
+ ("C-' j" . sp-backward-down-sexp)
+ ("C-' l"   . sp-backward-up-sexp)
+
+ ("C-' f" . sp-forward-sexp)
+ ("C-' b" . sp-backward-sexp)
+
+ ("C-' n" . sp-next-sexp)
+ ("C-' p" . sp-previous-sexp)
+
+ ("C-' h" . sp-forward-symbol)
+ ("C-' g" . sp-backward-symbol)
+
+ ("C-' t" . sp-forward-slurp-sexp)
+ ("C-' w" . sp-forward-barf-sexp)
+ ("C-' r"  . sp-backward-slurp-sexp)
+ ("C-' q"  . sp-backward-barf-sexp)
+
+ ("C-' C-t" . sp-transpose-sexp)
+ ("C-' k" . sp-kill-sexp)
+ ("C-' h"   . sp-kill-hybrid-sexp)
+ ("C-' C-k"   . sp-backward-kill-sexp)
+ ("C-' C-w" . sp-copy-sexp)
+
+ ("C-' d" . sp-delete-sexp)        ;; this function doesnt exist?
+
+ ("<backspace>" . sp-backward-delete-char)
+ ("C-<backspace>" . backward-delete-char)     ;; this should be like paredit
+ ("M-<backspace>" . sp-backward-kill-word)     ;; this should be like paredit
+ ("M-s-<backspace>" . backward-kill-word)     ;; this should be like paredit
+ ([remap sp-backward-kill-word] . backward-kill-word)
+
+ ("M-[" . sp-backward-unwrap-sexp)
+ ("M-]" . sp-unwrap-sexp)
+ ("M-s-[" . sp-rewrap-sexp)
+
+ ("C-x C-t" . sp-transpose-hybrid-sexp)
+
+ ("C-c ("  . wrap-with-parens)
+ ("C-c ["  . wrap-with-brackets)
+ ("C-c {"  . wrap-with-braces)
+ ("C-c '"  . wrap-with-single-quotes)
+ ("C-c \"" . wrap-with-double-quotes)
+ ("C-c _"  . wrap-with-underscores)
+ ("C-c `"  . wrap-with-back-quotes))
+#+END_SRC
+**** key-chord
+#+BEGIN_SRC emacs-lisp
+;; Key bindings
+(key-chord-define-global "8a" 'sp-beginning-of-sexp)
+(key-chord-define-global "8e" 'sp-end-of-sexp)
+
+(key-chord-define-global "4k" 'sp-down-sexp)
+(key-chord-define-global "4i"   'sp-up-sexp)
+(key-chord-define-global "4j" 'sp-backward-down-sexp)
+(key-chord-define-global "4l"   'sp-backward-up-sexp)
+
+(key-chord-define-global "8f" 'sp-forward-sexp)
+(key-chord-define-global "8b" 'sp-backward-sexp)
+
+(key-chord-define-global "4n" 'sp-next-sexp)
+(key-chord-define-global "4p" 'sp-previous-sexp)
+
+(key-chord-define-global "4h" 'sp-forward-symbol)
+(key-chord-define-global "8g" 'sp-backward-symbol)
+
+(key-chord-define-global "8t" 'sp-forward-slurp-sexp)
+(key-chord-define-global "8w" 'sp-forward-barf-sexp)
+(key-chord-define-global "8r"  'sp-backward-slurp-sexp)
+(key-chord-define-global "8q"  'sp-backward-barf-sexp)
+
+(key-chord-define-global "4t" 'sp-transpose-sexp)
+(key-chord-define-global "4k" 'sp-kill-sexp)
+(key-chord-define-global "4h" 'sp-kill-hybrid-sexp)
+(key-chord-define-global "4j" 'sp-backward-kill-sexp)
+(key-chord-define-global "4w" 'sp-copy-sexp)
+
+(key-chord-define-global "8d" 'sp-delete-sexp)        ;; this function doesnt exist?
+
+;("<backspace>" . sp-backward-delete-char)
+;("C-<backspace>" . backward-delete-char)     ;; this should be like paredit
+;("M-<backspace>" . sp-backward-kill-word)     ;; this should be like paredit
+;("M-s-<backspace>" . backward-kill-word)     ;; this should be like paredit
+;([remap sp-backward-kill-word] . backward-kill-word)
+
+(key-chord-define-global "u9" 'sp-backward-unwrap-sexp)
+(key-chord-define-global "u0" 'sp-unwrap-sexp)
+(key-chord-define-global "90" 'sp-rewrap-sexp) ; this is probably a poor choice, but whatever.
+
+(key-chord-define-global "r9"  'wrap-with-parens)
+(key-chord-define-global "r["  'wrap-with-brackets)
+(key-chord-define-global "r{"  'wrap-with-braces)
+(key-chord-define-global "r'"  'wrap-with-single-quotes)
+(key-chord-define-global "r\"" 'wrap-with-double-quotes)
+(key-chord-define-global "r_"  'wrap-with-underscores)
+(key-chord-define-global "r`"  'wrap-with-back-quotes)
+#+END_SRC 
+
+** Lisp Editing
+
+#+BEGIN_SRC emacs-lisp
+;(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'rainbow-delimiters-mode-enable)
+(add-hook 'eval-expression-minibuffer-setup-hook #'rainbow-delimiters-mode-enable)
+(add-hook 'ielm-mode-hook             #'rainbow-delimiters-mode-enable)
+(add-hook 'lisp-mode-hook             #'rainbow-delimiters-mode-enable)
+(add-hook 'lisp-interaction-mode-hook #'rainbow-delimiters-mode-enable)
+(add-hook 'clojure-mode-hook          #'rainbow-delimiters-mode-enable)
+(add-hook 'scheme-mode-hook           #'rainbow-delimiters-mode-enable)
+
+;; eldoc-mode shows documentation in the minibuffer when writing code
+;; http://www.emacswiki.org/emacs/ElDoc
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+#+END_SRC
+
+*** Emacs Lisp 
+#+BEGIN_SRC emacs-lisp
+;; use 2 spaces for tabs
+(defun die-tabs ()
+  (interactive)
+  (set-variable 'tab-width 2)
+  (mark-whole-buffer)
+  (untabify (region-beginning) (region-end))
+  (keyboard-quit))
+
+
+;; Customized functions
+(defun prelude-move-beginning-of-line (arg)
+  "Move point back to indentation of beginning of line.
+
+Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line.
+
+If ARG is not nil or 1, move forward ARG - 1 lines first. If
+point reaches the beginning or end of the buffer, stop there."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  ;; Move lines first
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+
+(global-set-key (kbd "C-a") 'prelude-move-beginning-of-line)
+
+
+
+(defadvice kill-ring-save (before slick-copy activate compile)
+  "When called interactively with no active region, copy a single
+line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (message "Copied line")
+     (list (line-beginning-position)
+           (line-beginning-position 2)))))
+
+
+
+(defadvice kill-region (before slick-cut activate compile)
+  "When called interactively with no active region, kill a single
+  line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (list (line-beginning-position)
+           (line-beginning-position 2)))))
+
+
+
+;; kill a line, including whitespace characters until next non-whiepsace character
+;; of next line
+(defadvice kill-line (before check-position activate)
+  (if (member major-mode
+              '(emacs-lisp-mode scheme-mode lisp-mode
+                                c-mode c++-mode objc-mode
+                                latex-mode plain-tex-mode))
+      (if (and (eolp) (not (bolp)))
+          (progn (forward-char 1)
+                 (just-one-space 0)
+                 (backward-char 1)))))
+
+;; taken from prelude-editor.el
+;; automatically indenting yanked text if in programming-modes
+(defvar yank-indent-modes
+  '(LaTeX-mode TeX-mode)
+  "Modes in which to indent regions that are yanked (or yank-popped).
+Only modes that don't derive from `prog-mode' should be listed here.")
+
+
+
+(defvar yank-indent-blacklisted-modes
+  '(python-mode slim-mode haml-mode)
+  "Modes for which auto-indenting is suppressed.")
+
+
+
+(defvar yank-advised-indent-threshold 1000
+  "Threshold (# chars) over which indentation does not automatically occur.")
+
+(defun yank-advised-indent-function (beg end)
+  "Do indentation, as long as the region isn't too large."
+  (if (<= (- end beg) yank-advised-indent-threshold)
+      (indent-region beg end nil)))
+
+
+(defadvice yank (after yank-indent activate)
+  "If current mode is one of 'yank-indent-modes,
+indent yanked text (with prefix arg don't indent)."
+  (if (and (not (ad-get-arg 0))
+           (not (member major-mode yank-indent-blacklisted-modes))
+           (or (derived-mode-p 'prog-mode)
+               (member major-mode yank-indent-modes)))
+      (let ((transient-mark-mode nil))
+        (yank-advised-indent-function (region-beginning) (region-end)))))
+
+
+(defadvice yank-pop (after yank-pop-indent activate)
+  "If current mode is one of `yank-indent-modes',
+indent yanked text (with prefix arg don't indent)."
+  (when (and (not (ad-get-arg 0))
+             (not (member major-mode yank-indent-blacklisted-modes))
+             (or (derived-mode-p 'prog-mode)
+                 (member major-mode yank-indent-modes)))
+    (let ((transient-mark-mode nil))
+      (yank-advised-indent-function (region-beginning) (region-end)))))
+
+
+
+;; prelude-core.el
+(defun indent-buffer ()
+  "Indent the currently visited buffer."
+  (interactive)
+  (indent-region (point-min) (point-max)))
+
+
+;; prelude-editing.el
+(defcustom prelude-indent-sensitive-modes
+  '(coffee-mode python-mode slim-mode haml-mode yaml-mode)
+  "Modes for which auto-indenting is suppressed."
+  :type 'list)
+
+
+(defun indent-region-or-buffer ()
+  "Indent a region if selected, otherwise the whole buffer."
+  (interactive)
+  (unless (member major-mode prelude-indent-sensitive-modes)
+    (save-excursion
+      (if (region-active-p)
+          (progn
+            (indent-region (region-beginning) (region-end))
+            (message "Indented selected region."))
+        (progn
+          (indent-buffer)
+          (message "Indented buffer.")))
+      (whitespace-cleanup))))
+
+(global-set-key (kbd "C-c i") 'indent-region-or-buffer)
+
+
+
+;; add duplicate line function from Prelude
+;; taken from prelude-core.el
+(defun prelude-get-positions-of-line-or-region ()
+  "Return positions (beg . end) of the current line
+or region."
+  (let (beg end)
+    (if (and mark-active (> (point) (mark)))
+        (exchange-point-and-mark))
+    (setq beg (line-beginning-position))
+    (if mark-active
+        (exchange-point-and-mark))
+    (setq end (line-end-position))
+    (cons beg end)))
+
+
+;; smart openline
+(defun prelude-smart-open-line (arg)
+  "Insert an empty line after the current line.
+Position the cursor at its beginning, according to the current mode.
+With a prefix ARG open line above the current line."
+  (interactive "P")
+  (if arg
+      (prelude-smart-open-line-above)
+    (progn
+      (move-end-of-line nil)
+      (newline-and-indent))))
+
+
+(defun prelude-smart-open-line-above ()
+  "Insert an empty line above the current line.
+Position the cursor at it's beginning, according to the current mode."
+  (interactive)
+  (move-beginning-of-line nil)
+  (newline-and-indent)
+  (forward-line -1)
+  (indent-according-to-mode))
+
+(global-set-key (kbd "M-o") 'prelude-smart-open-line)
+(global-set-key (kbd "M-o") 'open-line)
+
+
+(add-hook 'emacs-lisp-mode-hook
+            (lambda ()
+              (set (make-local-variable 'company-backends) '(company-elisp))))
+#+END_SRC
+**** Basic Configurations
+#+BEGIN_SRC emacs-lisp 
+;; delete region command is useful sometimes where <delete> doesnt work
+(global-set-key (kbd "C-c <delete>") 'delete-region)
+
+;; remap backward-char to something more comfortable
+;(setq map (make-sparse-keymap))
+;(define-key map "\C-v" 'backward-char)
+
+
+;; folding
+(add-hook 'c-mode-common-hook 'hs-minor-mode)
+(global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
+(global-set-key (kbd "C-c f h") 'hs-hide-block)
+(global-set-key (kbd "C-c f s") 'hs-show-block)
+(global-set-key (kbd "C-c f a h") 'hs-hide-all)
+(global-set-key (kbd "C-c f a s") 'hs-show-all)
+
+
+;; narrowing
+(global-set-key (kbd "C-x n d") 'narrow-to-defun)
+(global-set-key (kbd "C-x n r") 'narrow-to-region)
+(global-set-key (kbd "C-x n w") 'widen)
+
+
+
+; automatically indent when press RET
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+;; activate whitespace-mode to view all whitespace characters
+(global-set-key (kbd "C-c w") 'whitespace-mode)
+
+;; show unncessary whitespace that can mess up your diff
+(add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
+
+;; use space to indent by default
+(setq-default indent-tabs-mode nil)
+
+;; set appearance of a tab that is represented by 4 spaces
+(setq-default tab-width 4)
+#+END_SRC
+* projectile
+#+BEGIN_SRC emacs-lisp
+;; Package: projectile
+(require 'projectile)
+(projectile-global-mode)
+(setq projectile-enable-caching t)
+(require 'helm-projectile)
+(helm-projectile-on)
+(setq projectile-completion-system 'helm)
+(setq projectile-indexing-method 'alien)
+;; Package: tramp
+(setq tramp-default-method "ssh")
+#+END_SRC
+* rgrep
+#+BEGIN_SRC emacs-lisp 
+(defun rgrep-fullscreen (regexp &optional files dir confirm)
+  "Open grep in full screen, saving windows."
+  (interactive
+   (progn
+     (grep-compute-defaults)
+     (cond
+      ((and grep-find-command (equal current-prefix-arg '(16)))
+       (list (read-from-minibuffer "Run: " grep-find-command
+                                   nil nil 'grep-find-history)))
+      ((not grep-find-template)
+       (error "grep.el: No `grep-find-template' available"))
+      (t (let* ((regexp (grep-read-regexp))
+                (files (grep-read-files regexp))
+                (dir (ido-read-directory-name "Base directory: "
+                                              nil default-directory t))
+                (confirm (equal current-prefix-arg '(4))))
+           (list regexp files dir confirm))))))
+  (window-configuration-to-register ?$)
+  (rgrep regexp files dir confirm)
+  (switch-to-buffer "*grep*")
+  (delete-other-windows)
+  (beginning-of-buffer))
+
+(defun rgrep-quit-window ()
+  (interactive)
+  (kill-buffer)
+  (jump-to-register ?$))
+
+(defun rgrep-goto-file-and-close-rgrep ()
+  (interactive)
+  (compile-goto-error)
+  (kill-buffer "*grep*")
+  (delete-other-windows)
+  (message "Type C-x r j $ to return to pre-rgrep windows."))
+
+(defvar git-grep-switches "--extended-regexp -I -n"
+  "Switches to pass to `git grep'.")
+
+(defun git-grep-fullscreen (regexp &optional files dir confirm)
+  (interactive
+   (let* ((regexp (grep-read-regexp))
+          (files (grep-read-files regexp))
+          (files (if (string= "* .*" files) "*" files))
+          (dir (ido-read-directory-name "Base directory: "
+                                        nil default-directory t))
+          (confirm (equal current-prefix-arg '(4))))
+     (list regexp files dir confirm)))
+  (let ((command (format "cd %s && git --no-pager grep %s %s -e %S -- '%s' "
+                         dir
+                         git-grep-switches
+                         (if (s-lowercase? regexp) " --ignore-case" "")
+                         regexp
+                         files))
+        (grep-use-null-device nil))
+    (when confirm
+      (setq command (read-shell-command "Run git-grep: " command 'git-grep-history)))
+    (window-configuration-to-register ?$)
+    (grep command)
+    (switch-to-buffer "*grep*")
+    (delete-other-windows)
+    (beginning-of-buffer)))
+
+(eval-after-load "grep"
+  '(progn
+     ;; Don't recurse into some directories
+     (add-to-list 'grep-find-ignored-directories "target")
+     (add-to-list 'grep-find-ignored-directories "node_modules")
+     (add-to-list 'grep-find-ignored-directories "vendor")
+
+     ;; Add custom keybindings
+     (define-key grep-mode-map "q" 'rgrep-quit-window)
+     (define-key grep-mode-map (kbd "C-<return>") 'rgrep-goto-file-and-close-rgrep)
+     (define-key grep-mode-map (kbd "C-x C-s") 'wgrep-save-all-buffers)
+
+     ;; Use same keybinding as occur
+     (setq wgrep-enable-key "e")))
+
+;; Command to add cursor to all matches in wgrep
+
+(require 'dash)
+
+(defvar grep-match-positions nil)
+(make-variable-buffer-local 'grep-match-positions)
+
+(defun grep-register-match-positions ()
+  (save-excursion
+    (forward-line 0)
+    (let ((end (point)) beg)
+      (goto-char compilation-filter-start)
+      (forward-line 0)
+      (setq beg (point))
+      ;; Only operate on whole lines so we don't get caught with part of an
+      ;; escape sequence in one chunk and the rest in another.
+      (when (< (point) end)
+        (setq end (copy-marker end))
+        ;; Register all positions of matches
+        (while (re-search-forward "\033\\[0?1;31m\\(.*?\\)\033\\[[0-9]*m" end 1)
+          (add-to-list 'grep-match-positions (set-marker (make-marker) (match-beginning 1))))))))
+
+(eval-after-load "grep"
+  '(defadvice grep-mode (after grep-register-match-positions activate)
+     (add-hook 'compilation-filter-hook 'grep-register-match-positions nil t)))
+
+(defun mc/add-cursors-to-all-matches ()
+  (interactive)
+  (--each grep-match-positions
+    (unless (= 0 it-index)
+      (mc/create-fake-cursor-at-point))
+    (goto-char it))
+  (mc/maybe-multiple-cursors-mode))
+
+(eval-after-load "multiple-cursors"
+  '(add-to-list 'mc--default-cmds-to-run-once 'mc/add-cursors-to-all-matches))
+
+(eval-after-load "wgrep"
+  '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
+#+END_SRC
+
+* Edit With Emacs (Google Chrome extension)
+#+BEGIN_SRC emacs-lisp
+;; Edit With Emacs (Google Chrome Extension)
+(add-to-list 'load-path "~/.emacs.d/edit-with-emacs")
+(require 'edit-server)
+(edit-server-start)
+#+END_SRC
+* misc
+** functions
+#+BEGIN_SRC emacs-lisp
+(defun dwc-remove-headers ()
+  (goto-char (point-min))
+  (re-search-forward "^$")
+  (goto-char (+ 1 (point)))
+  (delete-region (point) (point-min)))
+
+
+;; this works, but only because of  (message "") hack
+(defun dwc-find-file-other-frame (file)
+  (interactive "find file: ")
+  (find-file-other-frame file)
+  (toggle-scroll-bar)
+  (message ""))
+
+#+END_SRC
+* specifics
+This header is devoted to personalizations specific to my personal setup.
+** on-emacs-startup
+#+BEGIN_SRC emacs-lisp 
+(defun on-emacs-startup ()
+  (interactive)
+  ;; FRAME 1
+  (find-file "~/workspace/organization/everything.org")
+  (org-agenda)
+  (delete-window)  ; this is here because for whatever reason, org-agenda insists on opening horizontal
+  (split-window-horizontally)
+  (windmove-right)
+  (switch-to-buffer "*Org Agenda*")
+  (windmove-left)
+  (enlarge-window-horizontally 10)
+  ;; FRAME 2
+  )
+(on-emacs-startup)
+#+END_SRC
+** smart-open-in-horizontal
+#+BEGIN_SRC emacs-lisp 
+(defun smart-open-in-horizontal (filename)
+  (interactive)
+  (if (=  (length 'window-list) 1)
+      (if (not (= buffer-file-name "/home/dodge/workspace/organization/everything.org"))
+          '(split-window-horizontally
+           find-file "~/workspace/organization/everything.org")             )
+    (if (= (get-buffer-window "everything.org") nil)
+        (switch-to-buffer "everything.org")
+      (next-multiframe-window)
+        )
+    )
+  (previous-buffer))
+#+END_SRC
+** file key-bindings
+#+BEGIN_SRC emacs-lisp 
+#+end_src_lang
+*** everything.org
+#+begin_src emacs-lisp 
+(global-set-key (kbd "C-c o e")
+                (lambda () (interactive) (find-file "~/workspace/organization/everything.org")))
+(global-set-key (kbd "C-c o C-e")
+                (lambda ()
+                  (interactive)
+                  (find-file-other-window "~/workspace/organization/everything.org")))
+
+;; This doesnt work until dwc-find-file-other-frame is fixed (custom/misc.el)
+(global-set-key (kbd "C-c o f e")
+                (lambda ()
+                  (interactive)
+                  (dwc-find-file-other-frame "~/.emacs.d/init.el")
+                  (split-window-horizontally)
+                  (windmove-right)
+                  (find-file "~/.emacs.d/custom/")))
+(global-set-key (kbd "C-c o f C-e")
+                (lambda ()
+                  (interactive)
+                  (find-file-other-window "~/.emacs.d/custom/")))
+#+end_src
+*** init.el
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c o i")
+                (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
+(global-set-key (kbd "C-c o C-i")
+                (lambda ()
+                  (interactive)
+                  (find-file-other-window "~/.emacs.d/init.el")))
+#+end_src
+** org
+#+begin_src emacs-lisp
+;; default notes file.
+(setq org-default-notes-file "~/workspace/organization/everything.org")
+#+END_SRC
+
