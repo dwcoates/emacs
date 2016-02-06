@@ -1583,10 +1583,4 @@ Position the cursor at it's beginning, according to the current mode."
     (dwc-backup-specifics "specifics.el" "~/.emacsSpecificsBackup.el")
     (apply function args)))
 #+END_SRC)
-* End
-This contains settings specific to my setup, such as key bindings for opening certain files, etc.
-#+BEGIN_SRC emacs-lisp
-(add-to-list 'load-path "~/.emacs.d")
-(load "specifics.el")
-#+END_SRC
 
