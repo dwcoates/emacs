@@ -7,6 +7,7 @@ Any dependency notes will be made inside of or near to the `dep-packages` defini
 # 1) Install latest Emacs (Emacs 24.4+)
 # 2) Apply new Emacs configuration
 Making sure that emacs is closed before performing the following. 
+
     rm ~/.emacs.d
     mv ~/.emacs.d ~/.old_emacs.d
     mv emacs ~/.emacs.d
