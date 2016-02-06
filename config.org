@@ -1548,14 +1548,16 @@ Position the cursor at it's beginning, according to the current mode."
 #+END_SRC
 * misc
 ** functions
+*** remove-headers
 #+BEGIN_SRC emacs-lisp
 (defun dwc-remove-headers ()
   (goto-char (point-min))
   (re-search-forward "^$")
   (goto-char (+ 1 (point)))
   (delete-region (point) (point-min)))
-
-
+#+END_SRC
+*** my-find-file-other-frame
+#+BEGIN_SRC emacs-lisp
 ;; this works, but only because of  (message "") hack
 (defun dwc-find-file-other-frame (file)
   (interactive "find file: ")
@@ -1563,10 +1565,28 @@ Position the cursor at it's beginning, according to the current mode."
   (toggle-scroll-bar)
   (message ""))
 
+
 #+END_SRC
+*** backup specifics
+#+BEGIN_SRC emacs-lisp
+;; Backup function to target when called.
+(defun dwc-backup-specifics (file target)
+"Copy file to target and apply function"
+    (if (not (file-exists-p file))
+      (write-region "" nil file)) ; create file
+    (if (file-exists-p target)
+      (delete-file target))
+    (copy-file file target))
+
+;; Advise magit-push to backup specifics.el to a backup file in home
+(advice-add 'magit-push :around #'(lambda (function &rest args)
+    (dwc-backup-specifics "specifics.el" "~/.emacsSpecificsBackup.el")
+    (apply function args)))
+#+END_SRC)
 * End
 This contains settings specific to my setup, such as key bindings for opening certain files, etc.
 #+BEGIN_SRC emacs-lisp
-(require 'specifics)
+(add-to-list 'load-path "~/.emacs.d")
+(load "specifics.el")
 #+END_SRC
 
