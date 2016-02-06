@@ -18,7 +18,7 @@ This is my emacs config file.
 #+BEGIN_SRC emacs-lisp 
 (require 'package)
 #+END_SRC
-*** Add repos to list
+*** Add repositories
 #+BEGIN_SRC emacs-lisp
 ;; setup package repos
 (add-to-list 'package-archives
@@ -39,7 +39,7 @@ This is my emacs config file.
 (when (not package-archive-contents)
   (package-refresh-contents))
 #+END_SRC
-*** dep-packages
+*** Dependency packages
 #+BEGIN_SRC emacs-lisp
 ;; no dependency notes
 (defvar dep-packages
@@ -115,7 +115,7 @@ https://github.com/purcell/exec-path-from-shell
 (if (eq system-type 'darwin)
     (add-to-list 'dep-packages 'exec-path-from-shell))
 #+END_SRC
-*** Install Packages
+*** Install packages
 #+BEGIN_SRC emacs-lisp
 (dolist (p dep-packages)
   (when (not (package-installed-p p))
