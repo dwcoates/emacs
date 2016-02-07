@@ -2,10 +2,8 @@ This is my emacs config file.
 
 * Init
 #+BEGIN_SRC emacs-lisp
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
+;; Added by Package.el.  
+;; This must come before configurations of installed packages.  
 (package-initialize)
 
 (setq debug-on-error nil)
@@ -13,11 +11,10 @@ This is my emacs config file.
 ;; Keep emacs-generated custom settings in a separate file so they don't pollute init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file)
-#+END_SRC
-** Packages
-#+BEGIN_SRC emacs-lisp 
+
 (require 'package)
 #+END_SRC
+
 *** Add repositories
 #+BEGIN_SRC emacs-lisp
 ;; setup package repos
@@ -39,7 +36,7 @@ This is my emacs config file.
 (when (not package-archive-contents)
   (package-refresh-contents))
 #+END_SRC
-*** Dependency packages
+*** Define dependency packages
 #+BEGIN_SRC emacs-lisp
 ;; no dependency notes
 (defvar dep-packages
@@ -101,7 +98,9 @@ This is my emacs config file.
 
 (load-file "~/.emacs.d/geiser/elisp/geiser.el")
 #+END_SRC
-*** OSX snippet 
+*** OSX compatibility snippet
+I run linux, but this may be useful for those who use OSX. Description:
+
    On OS X, an Emacs instance started from the graphical user
 interface will have a different environment than a shell in a
 terminal window, because OS X does not run a shell during the
@@ -115,7 +114,7 @@ https://github.com/purcell/exec-path-from-shell
 (if (eq system-type 'darwin)
     (add-to-list 'dep-packages 'exec-path-from-shell))
 #+END_SRC
-*** Install packages
+*** Install needed packages
 #+BEGIN_SRC emacs-lisp
 (dolist (p dep-packages)
   (when (not (package-installed-p p))
@@ -819,6 +818,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 
 (setq kill-ring-max 10000 ; increase kill-ring capacity
       kill-whole-line t)  ; if NIL, kill whole line and move the next line up
+
 ;; show whitespace in diff-mode
 (add-hook 'diff-mode-hook (lambda ()
                             (setq-local whitespace-style
@@ -839,9 +839,48 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
-;; narrowing and widening
+;; show unncessary whitespace that can mess up your diff
+(add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
+
+;; use space to indent by default
+(setq-default indent-tabs-mode nil)
+
+;; set appearance of a tab that is represented by 4 spaces
+(setq-default tab-width 4)
+#+END_SRC
+*** Key commands
+#+BEGIN_SRC emacs-lisp 
+;; delete region command is useful sometimes where <delete> doesnt work
+(global-set-key (kbd "C-c <delete>") 'delete-region)
+
+;; remap backward-char to something more comfortable
+;(setq map (make-sparse-keymap))
+;(define-key map "\C-v" 'backward-char)
+
+;; folding
+(add-hook 'c-mode-common-hook 'hs-minor-mode)
+(global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
+(global-set-key (kbd "C-c f h") 'hs-hide-block)
+(global-set-key (kbd "C-c f s") 'hs-show-block)
+(global-set-key (kbd "C-c f a h") 'hs-hide-all)
+(global-set-key (kbd "C-c f a s") 'hs-show-all)
+
+;; narrowing
+(global-set-key (kbd "C-x n d") 'narrow-to-defun)
+(global-set-key (kbd "C-x n r") 'narrow-to-region)
+(global-set-key (kbd "C-x n w") 'widen)
 (key-chord-define-global "rn" 'narrow-to-region)
 (key-chord-define-global "wn" 'widen)
+
+; automatically indent when press RET
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+;; activate whitespace-mode to view all whitespace characters
+(global-set-key (kbd "C-c w") 'whitespace-mode)
+
+(key-chord-define-global "rk" 'delete-whitespace-rectangle)
+#+END_SRC
+
 #+END_SRC
 ** Unicode
 #+BEGIN_SRC emacs-lisp 
@@ -1020,6 +1059,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 *** smartparens
 #+BEGIN_SRC emacs-lisp
 (require 'smartparens-config)
+
 (setq sp-base-key-bindings 'paredit)
 (setq sp-autoskip-closing-pair 'always)
 (setq sp-hybrid-kill-entire-symbol nil)
@@ -1032,9 +1072,14 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
 (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 #+END_SRC
-*** sp-delete-sexp
+**** TODO sp-delete-sexp
+    SCHEDULED: <2016-02-07 Sun>        
+    - Note taken on [2016-02-06 Sat 16:09] \\
+      Currently broken.
+
 #+BEGIN_SRC emacs-lisp
 (defun sp-delete-sexp ()
+"Deletes sexp at point. Does not save to kill ring."
     (interactive)
     (sp-forward-sexp)
     (sp-backward-sexp)
@@ -1043,7 +1088,6 @@ It shows org agenda after emacs has been idle for a certain amount of time.
   (delete-region (point) (mark)))
 #+END_SRC
 
-*** bindings
 **** bind-keys
 #+BEGIN_SRC emacs-lisp 
 (bind-keys
@@ -1170,16 +1214,18 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 #+END_SRC
 
 *** Emacs Lisp 
+**** die-tabs
 #+BEGIN_SRC emacs-lisp
-;; use 2 spaces for tabs
 (defun die-tabs ()
+"use 2 spaces for tabs"
   (interactive)
   (set-variable 'tab-width 2)
   (mark-whole-buffer)
   (untabify (region-beginning) (region-end))
   (keyboard-quit))
-
-
+#+END_SRC
+**** prelude-move-beginning-of-line
+#+BEGIN_SRC emacs-lisp
 ;; Customized functions
 (defun prelude-move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.
@@ -1205,9 +1251,10 @@ point reaches the beginning or end of the buffer, stop there."
       (move-beginning-of-line 1))))
 
 (global-set-key (kbd "C-a") 'prelude-move-beginning-of-line)
+#+END_SRC
 
-
-
+**** defadvice kill-ring-save
+#+BEGIN_SRC emacs-lisp 
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single
 line instead."
@@ -1216,9 +1263,10 @@ line instead."
      (message "Copied line")
      (list (line-beginning-position)
            (line-beginning-position 2)))))
+#+END_SRC
 
-
-
+**** defadvice kill-region
+#+BEGIN_SRC emacs-lisp 
 (defadvice kill-region (before slick-cut activate compile)
   "When called interactively with no active region, kill a single
   line instead."
@@ -1226,9 +1274,10 @@ line instead."
    (if mark-active (list (region-beginning) (region-end))
      (list (line-beginning-position)
            (line-beginning-position 2)))))
+#+END_SRC
 
-
-
+**** defadvice kill-line
+#+BEGIN_SRC emacs-lisp 
 ;; kill a line, including whitespace characters until next non-whiepsace character
 ;; of next line
 (defadvice kill-line (before check-position activate)
@@ -1240,31 +1289,41 @@ line instead."
           (progn (forward-char 1)
                  (just-one-space 0)
                  (backward-char 1)))))
-
+#+END_SRC
+**** variables
+yank-indent-modes
+#+BEGIN_SRC emacs-lisp 
 ;; taken from prelude-editor.el
 ;; automatically indenting yanked text if in programming-modes
 (defvar yank-indent-modes
   '(LaTeX-mode TeX-mode)
   "Modes in which to indent regions that are yanked (or yank-popped).
 Only modes that don't derive from `prog-mode' should be listed here.")
+#+END_SRC
 
-
-
+yank-indent-blacklisted-modes
+#+BEGIN_SRC emacs-lisp 
 (defvar yank-indent-blacklisted-modes
   '(python-mode slim-mode haml-mode)
   "Modes for which auto-indenting is suppressed.")
+#+END_SRC
 
-
-
+yank-advised-indent-threshol
+#+BEGIN_SRC emacs-lisp 
 (defvar yank-advised-indent-threshold 1000
   "Threshold (# chars) over which indentation does not automatically occur.")
+#+END_SRC
 
+yank-advised-indent-function
+#+BEGIN_SRC emacs-lisp 
 (defun yank-advised-indent-function (beg end)
   "Do indentation, as long as the region isn't too large."
   (if (<= (- end beg) yank-advised-indent-threshold)
       (indent-region beg end nil)))
+#+END_SRC
 
-
+**** defadvice yank
+#+BEGIN_SRC emacs-lisp 
 (defadvice yank (after yank-indent activate)
   "If current mode is one of 'yank-indent-modes,
 indent yanked text (with prefix arg don't indent)."
@@ -1274,8 +1333,10 @@ indent yanked text (with prefix arg don't indent)."
                (member major-mode yank-indent-modes)))
       (let ((transient-mark-mode nil))
         (yank-advised-indent-function (region-beginning) (region-end)))))
+#+END_SRC
 
-
+**** defadvice yank-pop
+#+BEGIN_SRC emacs-lisp 
 (defadvice yank-pop (after yank-pop-indent activate)
   "If current mode is one of `yank-indent-modes',
 indent yanked text (with prefix arg don't indent)."
@@ -1285,23 +1346,28 @@ indent yanked text (with prefix arg don't indent)."
                  (member major-mode yank-indent-modes)))
     (let ((transient-mark-mode nil))
       (yank-advised-indent-function (region-beginning) (region-end)))))
+#+END_SRC
 
-
-
+**** indent-buffer
+#+BEGIN_SRC emacs-lisp
 ;; prelude-core.el
 (defun indent-buffer ()
   "Indent the currently visited buffer."
   (interactive)
   (indent-region (point-min) (point-max)))
+#+END_SRC
 
-
+**** prelude-indent-sensitive-modes
+#+BEGIN_SRC emacs-lisp 
 ;; prelude-editing.el
 (defcustom prelude-indent-sensitive-modes
   '(coffee-mode python-mode slim-mode haml-mode yaml-mode)
   "Modes for which auto-indenting is suppressed."
   :type 'list)
+#+END_SRC
 
-
+**** indent-region-or-buffer
+#+BEGIN_SRC emacs-lisp 
 (defun indent-region-or-buffer ()
   "Indent a region if selected, otherwise the whole buffer."
   (interactive)
@@ -1317,11 +1383,11 @@ indent yanked text (with prefix arg don't indent)."
       (whitespace-cleanup))))
 
 (global-set-key (kbd "C-c i") 'indent-region-or-buffer)
+#+END_SRC
 
-
-
-;; add duplicate line function from Prelude
-;; taken from prelude-core.el
+**** prelude-get-positions-of-line-or-region
+#+BEGIN_SRC emacs-lisp 
+;; add duplicate line function from Prelude. taken from prelude-core.el.
 (defun prelude-get-positions-of-line-or-region ()
   "Return positions (beg . end) of the current line
 or region."
@@ -1333,9 +1399,13 @@ or region."
         (exchange-point-and-mark))
     (setq end (line-end-position))
     (cons beg end)))
+#+END_SRC
 
+**** prelude-smart-open-line
 
-;; smart openline
+smart openline
+
+#+BEGIN_SRC emacs-lisp 
 (defun prelude-smart-open-line (arg)
   "Insert an empty line after the current line.
 Position the cursor at its beginning, according to the current mode.
@@ -1346,8 +1416,10 @@ With a prefix ARG open line above the current line."
     (progn
       (move-end-of-line nil)
       (newline-and-indent))))
+#+END_SRC
 
-
+**** prelude-smart-open-line-above
+#+BEGIN_SRC emacs-lisp 
 (defun prelude-smart-open-line-above ()
   "Insert an empty line above the current line.
 Position the cursor at it's beginning, according to the current mode."
@@ -1364,47 +1436,6 @@ Position the cursor at it's beginning, according to the current mode."
 (add-hook 'emacs-lisp-mode-hook
             (lambda ()
               (set (make-local-variable 'company-backends) '(company-elisp))))
-#+END_SRC
-**** Basic Configurations
-#+BEGIN_SRC emacs-lisp 
-;; delete region command is useful sometimes where <delete> doesnt work
-(global-set-key (kbd "C-c <delete>") 'delete-region)
-
-;; remap backward-char to something more comfortable
-;(setq map (make-sparse-keymap))
-;(define-key map "\C-v" 'backward-char)
-
-
-;; folding
-(add-hook 'c-mode-common-hook 'hs-minor-mode)
-(global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
-(global-set-key (kbd "C-c f h") 'hs-hide-block)
-(global-set-key (kbd "C-c f s") 'hs-show-block)
-(global-set-key (kbd "C-c f a h") 'hs-hide-all)
-(global-set-key (kbd "C-c f a s") 'hs-show-all)
-
-
-;; narrowing
-(global-set-key (kbd "C-x n d") 'narrow-to-defun)
-(global-set-key (kbd "C-x n r") 'narrow-to-region)
-(global-set-key (kbd "C-x n w") 'widen)
-
-
-
-; automatically indent when press RET
-(global-set-key (kbd "RET") 'newline-and-indent)
-
-;; activate whitespace-mode to view all whitespace characters
-(global-set-key (kbd "C-c w") 'whitespace-mode)
-
-;; show unncessary whitespace that can mess up your diff
-(add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
-
-;; use space to indent by default
-(setq-default indent-tabs-mode nil)
-
-;; set appearance of a tab that is represented by 4 spaces
-(setq-default tab-width 4)
 #+END_SRC
 * projectile
 #+BEGIN_SRC emacs-lisp
@@ -1583,4 +1614,5 @@ Position the cursor at it's beginning, according to the current mode."
     (dwc-backup-specifics "specifics.el" "~/.emacsSpecificsBackup.el")
     (apply function args)))
 #+END_SRC)
+
 
