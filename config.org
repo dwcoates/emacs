@@ -154,23 +154,17 @@ https://github.com/purcell/exec-path-from-shell
 ;; no splash screen
 (setq inhibit-startup-screen t)
 
-;; set font
-(add-to-list 'default-frame-alist
-         '(font .  "Ubuntu Mono-13"))
-(set-face-attribute 'default t :font  "Ubuntu Mono-13")
-
-(global-unset-key (kbd "C-x 5 0"))
-(global-set-key (kbd "C-x 5 DEL") 'delete-frame)
-
-(global-unset-key (kbd "C-x 0"))
-(global-set-key (kbd "C-x DEL") 'delete-window)
-
 ;; disables tool bar
 (tool-bar-mode -1)
 ;; disables menu bar, can re-enable as a popub with 'C-mouse-3'
 (menu-bar-mode -99)
 ;; no scroll bar please
 (toggle-scroll-bar -1)
+
+;; set font
+(add-to-list 'default-frame-alist
+         '(font .  "Ubuntu Mono-13"))
+(set-face-attribute 'default t :font  "Ubuntu Mono-13")
 
 ;; enable line numbering
 (linum-mode t)
@@ -186,11 +180,9 @@ https://github.com/purcell/exec-path-from-shell
 (blink-cursor-mode 0)
 
 (global-hl-line-mode 1)
+
 (set-face-background 'hl-line "#3b3b3b")
 (set-face-foreground 'highlight nil)
-
-(global-set-key (kbd "C-x w b") 'previous-buffer)
-;(global-set-key (kbd "C-x w v") '(switch-to-buffer nil))
 
 ;; display time in mode line
 (display-time-mode t)
@@ -214,6 +206,15 @@ https://github.com/purcell/exec-path-from-shell
 
 ;; find-file-at-point
 (key-chord-define-global "fp" 'find-file-at-point)
+
+
+;; the original configuration is too close on the keyboard to other-frame
+(global-unset-key (kbd "C-x 5 0"))
+(global-set-key (kbd "C-x 5 DEL") 'delete-frame)
+
+;; likewise, too close to other-window
+(global-unset-key (kbd "C-x 0"))
+(global-set-key (kbd "C-x DEL") 'delete-window)
 #+END_SRC
 
 ** Functions
@@ -222,7 +223,7 @@ https://github.com/purcell/exec-path-from-shell
 (defun switch-to-other-buffer ()
   "Switch to last visited buffer."
   (interactive)
-  (switch-to-buffer (other-buffer)))
+  (switch-to-buffer (other-buffer (current-buffer) 1)))
 (global-set-key (kbd "C-c b") 'switch-to-other-buffer)
 
 
