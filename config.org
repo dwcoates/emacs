@@ -200,14 +200,14 @@ https://github.com/purcell/exec-path-from-shell
 
 ** Basic Navigation Setup
 #+BEGIN_SRC emacs-lisp
-;; Package: key-chord
 (key-chord-mode 1)
-;; Max time delay between two key presses to be considered a key chord
-(setq key-chord-two-keys-delay 0.1)
+;; Max time delay between two key presses to be considered a key chord.
+;; I have this set to be very short, short enough that to trigger the command, the keys have to be pressed 
+;; as one motion, and not in sequence. For example, with this setting, I can't (realistically) trigger a      ;; command assigned to "we" by pressing 'w' and 'e' in sequence as I would typing the word naturally.
+;; This makes two-handed keys chords a slightly unreliable, at least without practice.
+(setq key-chord-two-keys-delay 0.035)
 
-;; Max time delay between two presses of the same key to be considered a key chord.
-;; Should normally be a little longer than `key-chord-two-keys-delay'.
-(setq key-chord-one-key-delay 0.2)
+;(setq key-chord-one-key-delay 0.2)
 
 (key-chord-define-global "fg" 'iy-go-to-char)
 (key-chord-define-global "df" 'iy-go-to-char-backward)
@@ -864,13 +864,12 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (global-set-key (kbd "C-c f s") 'hs-show-block)
 (global-set-key (kbd "C-c f a h") 'hs-hide-all)
 (global-set-key (kbd "C-c f a s") 'hs-show-all)
-
 ;; narrowing
 (global-set-key (kbd "C-x n d") 'narrow-to-defun)
 (global-set-key (kbd "C-x n r") 'narrow-to-region)
 (global-set-key (kbd "C-x n w") 'widen)
-(key-chord-define-global "rn" 'narrow-to-region)
-(key-chord-define-global "wn" 'widen)
+(key-chord-define-global "m," 'narrow-to-region)
+(key-chord-define-global ",." 'widen)
 
 ; automatically indent when press RET
 (global-set-key (kbd "RET") 'newline-and-indent)
@@ -879,6 +878,9 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (global-set-key (kbd "C-c w") 'whitespace-mode)
 
 (key-chord-define-global "rk" 'delete-whitespace-rectangle)
+
+(key-chord-define-global ";/" 'comment-region)
+(key-chord-define-global "/." 'uncomment-region)
 #+END_SRC
 
 #+END_SRC
