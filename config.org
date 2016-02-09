@@ -208,7 +208,7 @@ https://github.com/purcell/exec-path-from-shell
 ;(setq key-chord-one-key-delay 0.2)
 
 #+END_SRC
-** helm
+** Helm
 *** Init
 #+BEGIN_SRC emacs-lisp
 ;; this variables must be set before load helm-gtags
@@ -295,7 +295,7 @@ https://github.com/purcell/exec-path-from-shell
 (require 'helm-eshell)
 ;; use helm to list eshell history
 (add-hook 'eshell-mode-hook
-          #'(lambda ()
+          (lambda ()
               (define-key 'eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
 #+END_SRC 
 *** final
@@ -359,7 +359,7 @@ https://github.com/purcell/exec-path-from-shell
 (global-set-key (kbd "C-x DEL") 'delete-window)
 #+end_src
 
-** helm-swoop
+** Helm-swoop
 #+BEGIN_SRC emacs-lisp
 ;; Locate the helm-swoop folder to your path
 (require 'helm-swoop)
@@ -386,7 +386,7 @@ https://github.com/purcell/exec-path-from-shell
 (setq helm-swoop-speed-or-color t) 
 #+END_SRC
 
-** flycheck
+** Flycheck
 #+BEGIN_SRC emacs-lisp 
 (require 'flycheck)
 
@@ -397,7 +397,7 @@ https://github.com/purcell/exec-path-from-shell
 (global-set-key (kbd "C-c ! h") 'helm-flycheck)
 #+END_SRC
 
-** company 
+** Company 
 #+begin_src emacs-lisp
 (require 'company)
 
@@ -642,7 +642,7 @@ https://github.com/purcell/exec-path-from-shell
 
 #+END_SRC
 
-** smartparens
+** Smartparens
 #+BEGIN_SRC emacs-lisp
 (require 'smartparens-config)
 (setq sp-base-key-bindings 'paredit)
@@ -908,64 +908,7 @@ https://github.com/purcell/exec-path-from-shell
 #+END_SRC 
 
 ** Functions
-*** Comments
-#+BEGIN_SRC emacs-lisp 
-(defun toggle-comment-on-line ()
-  "comment or uncomment current line"
-  (interactive)
-  (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
-(global-set-key (kbd "C-;") 'toggle-comment-on-line)
-#+END_SRC
-
-* Development Environments
-** Compilation
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "<f5>") (lambda ()
-                               (interactive)
-                               (setq-local compilation-read-command nil)
-                               (call-interactively 'compile)))
-;; Setup GDB
-(setq gdb-many-windows t
- ;; Non-nil means display source file containing the main routine at startup
- gdb-show-main t)
-#+END_SRC
-
-** Projectile
-#+BEGIN_SRC emacs-lisp
-;; Package: projectile
-(require 'projectile)
-(projectile-global-mode)
-(setq projectile-enable-caching t)
-(require 'helm-projectile)
-(helm-projectile-on)
-(setq projectile-completion-system 'helm)
-(setq projectile-indexing-method 'alien)
-;; Package: tramp
-(setq tramp-default-method "ssh")
-#+END_SRC
-
-** Languages
-*** TO BE DIVIDED AMONG LISPS
-
-#+BEGIN_SRC emacs-lisp
-;(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
-(add-hook 'emacs-lisp-mode-hook       #'rainbow-delimiters-mode-enable)
-(add-hook 'eval-expression-minibuffer-setup-hook #'rainbow-delimiters-mode-enable)
-(add-hook 'ielm-mode-hook             #'rainbow-delimiters-mode-enable)
-(add-hook 'lisp-mode-hook             #'rainbow-delimiters-mode-enable)
-(add-hook 'lisp-interaction-mode-hook #'rainbow-delimiters-mode-enable)
-(add-hook 'clojure-mode-hook          #'rainbow-delimiters-mode-enable)
-(add-hook 'scheme-mode-hook           #'rainbow-delimiters-mode-enable)
-
-;; eldoc-mode shows documentation in the minibuffer when writing code
-;; http://www.emacswiki.org/emacs/ElDoc
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-#+END_SRC
-
-**** Emacs Lisp 
-***** die-tabs
+*** die-tabs
 #+BEGIN_SRC emacs-lisp
 (defun die-tabs ()
 "use 2 spaces for tabs"
@@ -975,7 +918,7 @@ https://github.com/purcell/exec-path-from-shell
   (untabify (region-beginning) (region-end))
   (keyboard-quit))
 #+END_SRC
-***** prelude-move-beginning-of-line
+*** prelude-move-beginning-of-line
 #+BEGIN_SRC emacs-lisp
 ;; Customized functions
 (defun prelude-move-beginning-of-line (arg)
@@ -1004,7 +947,7 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key (kbd "C-a") 'prelude-move-beginning-of-line)
 #+END_SRC
 
-***** defadvice kill-ring-save
+*** defadvice kill-ring-save
 #+BEGIN_SRC emacs-lisp 
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single
@@ -1016,7 +959,7 @@ line instead."
            (line-beginning-position 2)))))
 #+END_SRC
 
-***** defadvice kill-region
+*** defadvice kill-region
 #+BEGIN_SRC emacs-lisp 
 (defadvice kill-region (before slick-cut activate compile)
   "When called interactively with no active region, kill a single
@@ -1027,7 +970,7 @@ line instead."
            (line-beginning-position 2)))))
 #+END_SRC
 
-***** defadvice kill-line
+*** defadvice kill-line
 #+BEGIN_SRC emacs-lisp 
 ;; kill a line, including whitespace characters until next non-whiepsace character
 ;; of next line
@@ -1041,7 +984,7 @@ line instead."
                  (just-one-space 0)
                  (backward-char 1)))))
 #+END_SRC
-***** variables
+*** variables
 yank-indent-modes
 #+BEGIN_SRC emacs-lisp 
 ;; taken from prelude-editor.el
@@ -1073,7 +1016,7 @@ yank-advised-indent-function
       (indent-region beg end nil)))
 #+END_SRC
 
-***** defadvice yank
+*** defadvice yank
 #+BEGIN_SRC emacs-lisp 
 (defadvice yank (after yank-indent activate)
   "If current mode is one of 'yank-indent-modes,
@@ -1086,7 +1029,7 @@ indent yanked text (with prefix arg don't indent)."
         (yank-advised-indent-function (region-beginning) (region-end)))))
 #+END_SRC
 
-***** defadvice yank-pop
+*** defadvice yank-pop
 #+BEGIN_SRC emacs-lisp 
 (defadvice yank-pop (after yank-pop-indent activate)
   "If current mode is one of `yank-indent-modes',
@@ -1099,7 +1042,7 @@ indent yanked text (with prefix arg don't indent)."
       (yank-advised-indent-function (region-beginning) (region-end)))))
 #+END_SRC
 
-***** indent-buffer
+*** indent-buffer
 #+BEGIN_SRC emacs-lisp
 ;; prelude-core.el
 (defun indent-buffer ()
@@ -1108,7 +1051,7 @@ indent yanked text (with prefix arg don't indent)."
   (indent-region (point-min) (point-max)))
 #+END_SRC
 
-***** prelude-indent-sensitive-modes
+*** prelude-indent-sensitive-modes
 #+BEGIN_SRC emacs-lisp 
 ;; prelude-editing.el
 (defcustom prelude-indent-sensitive-modes
@@ -1117,7 +1060,7 @@ indent yanked text (with prefix arg don't indent)."
   :type 'list)
 #+END_SRC
 
-***** indent-region-or-buffer
+*** indent-region-or-buffer
 #+BEGIN_SRC emacs-lisp 
 (defun indent-region-or-buffer ()
   "Indent a region if selected, otherwise the whole buffer."
@@ -1136,7 +1079,7 @@ indent yanked text (with prefix arg don't indent)."
 (global-set-key (kbd "C-c i") 'indent-region-or-buffer)
 #+END_SRC
 
-***** prelude-get-positions-of-line-or-region
+*** prelude-get-positions-of-line-or-region
 #+BEGIN_SRC emacs-lisp 
 ;; add duplicate line function from Prelude. taken from prelude-core.el.
 (defun prelude-get-positions-of-line-or-region ()
@@ -1152,7 +1095,7 @@ or region."
     (cons beg end)))
 #+END_SRC
 
-***** prelude-smart-open-line
+*** prelude-smart-open-line
 
 smart openline
 
@@ -1169,7 +1112,7 @@ With a prefix ARG open line above the current line."
       (newline-and-indent))))
 #+END_SRC
 
-***** prelude-smart-open-line-above
+*** prelude-smart-open-line-above
 #+BEGIN_SRC emacs-lisp 
 (defun prelude-smart-open-line-above ()
   "Insert an empty line above the current line.
@@ -1189,11 +1132,101 @@ Position the cursor at it's beginning, according to the current mode."
               (set (make-local-variable 'company-backends) '(company-elisp))))
 #+END_SRC
 
+*** toggle-comment-on-line
+#+BEGIN_SRC emacs-lisp 
+(defun toggle-comment-on-line ()
+  "comment or uncomment current line"
+  (interactive)
+  (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
+(global-set-key (kbd "C-;") 'toggle-comment-on-line)
+#+END_SRC
+
+* Development Environments
+** Basic Settings
+*** Compilation
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "<f5>") (lambda ()
+                               (interactive)
+                               (setq-local compilation-read-command nil)
+                               (call-interactively 'compile)))
+#+END_SRC
+
+*** Debugging
+#+BEGIN_SRC emacs-lisp
+;; Setup GDB
+(setq gdb-many-windows t
+ ;; Non-nil means display source file containing the main routine at startup
+ gdb-show-main t)
+#+END_SRC
+
+*** Projectile
+#+BEGIN_SRC emacs-lisp
+(require 'projectile)
+(projectile-global-mode)
+(setq projectile-enable-caching t)
+
+(require 'helm-projectile)
+(helm-projectile-on)
+(setq projectile-completion-system 'helm)
+(setq projectile-indexing-method 'alien)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(setq tramp-default-method "ssh")
+#+END_SRC
+ 
+** Lisps
+#+BEGIN_SRC emacs-lisp
+;(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'rainbow-delimiters-mode-enable)
+(add-hook 'eval-expression-minibuffer-setup-hook #'rainbow-delimiters-mode-enable)
+(add-hook 'ielm-mode-hook             #'rainbow-delimiters-mode-enable)
+(add-hook 'lisp-mode-hook             #'rainbow-delimiters-mode-enable)
+(add-hook 'lisp-interaction-mode-hook #'rainbow-delimiters-mode-enable)
+(add-hook 'clojure-mode-hook          #'rainbow-delimiters-mode-enable)
+(add-hook 'scheme-mode-hook           #'rainbow-delimiters-mode-enable)
+
+;; eldoc-mode shows documentation in the minibuffer when writing code
+;; http://www.emacswiki.org/emacs/ElDoc
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+#+END_SRC
+
+*** Emacs Lisp 
+#+begin_src emacs-lisp
+(define-prefix-command 'Apropos-Prefix nil "Apropos (a,c,d,i,l,v,C-v)")
+(global-set-key (kbd "C-h C-a") 'Apropos-Prefix)
+(define-key Apropos-Prefix (kbd "a")   'apropos)
+(define-key Apropos-Prefix (kbd "C-a") 'apropos)
+(define-key Apropos-Prefix (kbd "c")   'apropos-command)
+(define-key Apropos-Prefix (kbd "d")   'apropos-documentation)
+(define-key Apropos-Prefix (kbd "i")   'info-apropos)
+(define-key Apropos-Prefix (kbd "l")   'apropos-library)
+(define-key Apropos-Prefix (kbd "v")   'apropos-variable)
+(define-key Apropos-Prefix (kbd "C-v") 'apropos-value)
+#+end_src
+
+#+begin_src emacs-lisp
+(eldoc-mode 1)
+#+end_src
+
+#+begin_src emacs-lisp
+(defun my/bindkey-ielm-other-window ()
+  (local-set-key (kbd "<f9>") (lambda ()
+                                (let ((ielm-buffer (get-buffer "*ielm*")))
+                                  (if (equal ielm-buffer nil)
+                                      (ielm)
+                                    (switch-to-buffer-other-window ielm-buffer)))
+                                )))
+
+(add-hook 'emacs-lisp-mode-hook 'my/bindkey-ielm-other-window)
+#+end_src
+
 *** Clojure
 **** clojure-mode
 #+BEGIN_SRC emacs-lisp
-;; This is useful for working with camel-case tokens, like names of
-;; Java classes (e.g. JavaClassName)
+;; This is useful for working with camel-case tokens
 (add-hook 'clojure-mode-hook 'subword-mode)
 
 ;; A little more syntax highlighting
@@ -1273,7 +1306,7 @@ Position the cursor at it's beginning, according to the current mode."
      (define-key cider-mode-map (kbd "C-`") 'cider-jack-in)))
 #+END_SRC
 
-*** Python
+** Python
 #+BEGIN_SRC emacs-lisp
 (require 'elpy)
 
@@ -1284,8 +1317,7 @@ Position the cursor at it's beginning, according to the current mode."
 
 (provide 'setup-python)
 #+END_SRC
-*** Emacs Lisp
-*** C/C++
+** C/C++
 #+begin_src emacs-lisp
 (require 'cc-mode)
 (require 'semantic)
@@ -1323,7 +1355,7 @@ Position the cursor at it's beginning, according to the current mode."
  )
 #+end_src
 
-**** CEDET
+*** CEDET
 #+BEGIN_SRC emacs-lisp
 (global-semanticdb-minor-mode 1)
 
@@ -1373,7 +1405,7 @@ Position the cursor at it's beginning, according to the current mode."
 #+END_SRC
 
 * Organization and Version Control
-** magit
+** Magit
 #+BEGIN_SRC  emacs-lisp
 (global-set-key (kbd "C-c m s") 'magit-status)
 #+END_SRC
@@ -1391,7 +1423,7 @@ Position the cursor at it's beginning, according to the current mode."
 *** On magit-push
 #+BEGIN_SRC emacs-lisp
 ;; Advise magit-push to backup specifics.el to a backup file in home
-(advice-add 'magit-push :around #'(lambda (push &rest args)
+(advice-add 'magit-push :around (lambda (push &rest args)
     (dwc-backup-specifics "specifics.el" "~/.emacsSpecificsBackup.el")
     (apply push args)))
 #+END_SRC)
