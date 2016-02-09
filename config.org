@@ -47,9 +47,11 @@ This library works around this problem by copying important
 environment variables from the user's shell.
 https://github.com/purcell/exec-path-from-shell
 
+
 #+BEGIN_SRC emacs-lisp
 (if (eq system-type 'darwin)
-    (add-to-list 'dep-packages 'exec-path-from-shell))
+  (unless (package-installed-p 'exec-path-from-shell')
+    (package-install ''exec-path-from-shell)))
 #+END_SRC
 *** Setup use-packages
 #+BEGIN_SRC emacs-lisp
