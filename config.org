@@ -2,11 +2,8 @@ This is my emacs config file.
 
 * Init
 #+BEGIN_SRC emacs-lisp
-;; Added by Package.el.  
 ;; This must come before configurations of installed packages.  
 (package-initialize)
-
-(setq debug-on-error nil)
 
 ;; Keep emacs-generated custom settings in a separate file so they don't pollute init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -14,10 +11,11 @@ This is my emacs config file.
 
 (require 'package)
 #+END_SRC
-
 *** Add repositories
 #+BEGIN_SRC emacs-lisp
 ;; setup package repos
+(add-to-list 'package-archives 
+             '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives
@@ -29,74 +27,13 @@ This is my emacs config file.
 (add-to-list 'package-archives
              '("elpy" . "https://jorgenschaefer.github.io/packages/"))
 (package-initialize)
+#+END_SRC
 
-;; Download the ELPA archive description if needed.
-;; This informs Emacs about the latest versions of all packages, and
-;; makes them available for download.
+Download the ELPA archive description if needed. This informs Emacs about the latest 
+versions of all packages, and makes them available for download.
+#+BEGIN_SRC emacs-lisp
 (when (not package-archive-contents)
   (package-refresh-contents))
-#+END_SRC
-*** Define dependency packages
-#+BEGIN_SRC emacs-lisp
-;; no dependency notes
-(defvar dep-packages
-  '(
-    use-package
-    ;;;; clojure
-    clojure-mode
-    clojure-mode-extra-font-locking
-    flycheck-clojure
-    cider
-    ;clj-refactor
-    ;;;; helm
-    helm
-    helm-gtags
-    helm-projectile
-    helm-swoop
-    ;;;; misc
-    anzu
-    company
-    duplicate-thing
-    ggtags
-    key-chord
-    ace-window
-    paredit
-    elpy
-    expand-region
-    iy-go-to-char
-    dash-at-point
-    dash-functional
-    smex
-    projectile
-    rainbow-delimiters
-    tagedit
-    golden-ratio
-    function-args
-    clean-aindent-mode
-    comment-dwim-2
-    dtrt-indent
-    ws-butler
-    flycheck
-    iedit
-    company-c-headers
-    company-irony
-    yasnippet
-    smartparens
-    projectile
-    volatile-highlights
-    undo-tree
-    helm-company
-    guide-key
-    magit
-    nyan-mode
-    powerline
-    ztree
-    geiser
-    ;;    epc
-    ;;    jedi
-    zygospore))
-
-(load-file "~/.emacs.d/geiser/elisp/geiser.el")
 #+END_SRC
 *** OSX compatibility snippet
 I run linux, but this may be useful for those who use OSX. Description:
@@ -114,22 +51,18 @@ https://github.com/purcell/exec-path-from-shell
 (if (eq system-type 'darwin)
     (add-to-list 'dep-packages 'exec-path-from-shell))
 #+END_SRC
-*** Install needed packages
+*** Setup use-packages
 #+BEGIN_SRC emacs-lisp
-(dolist (p dep-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
 
-(defun install-packages ()
-  "Install all required packages."
-  (interactive)
-  (unless package-archive-contents
-    (package-refresh-contents))
-  (dolist (package dep-packages)
-    (unless (package-installed-p package)
-      (package-install package))))
-
-(install-packages)
+(setq use-package-verbose t)
+(require 'use-package)
+(use-package auto-compile
+  :ensure t
+  :config (auto-compile-on-load-mode))
+(setq load-prefer-newer t)
+(setq use-package-always-ensure t)
 #+END_SRC
 
 * General
@@ -161,7 +94,7 @@ https://github.com/purcell/exec-path-from-shell
 
 ;; disables tool bar
 (tool-bar-mode -1)
-;; disables menu bar, can re-enable as a popub with 'C-mouse-3'
+;; disables pmenu bar, can re-enable as a popub with 'C-mouse-3'
 (menu-bar-mode -99)
 ;; no scroll bar please
 (toggle-scroll-bar -1)
@@ -169,9 +102,6 @@ https://github.com/purcell/exec-path-from-shell
 ;; enable line numbering
 (linum-mode t)
 (global-set-key (kbd "C-c l m") 'linum-mode)
-
-;; key-chord for add region to kill ring
-(key-chord-define-global "qw" 'kill-ring-save)
 
 ;; dont truncate lines
 (toggle-truncate-lines)
@@ -186,16 +116,27 @@ https://github.com/purcell/exec-path-from-shell
 (global-set-key (kbd "C-x w b") 'previous-buffer)
 ;(global-set-key (kbd "C-x w v") '(switch-to-buffer nil))
 
-;; display time in mode line
+;; display time in mode linep
 (display-time-mode t)
 ;; set modeline to powerline
+(use-package powerline)
 (powerline-default-theme)
 #+END_SRC
 
 ** Key-Command Interface
 *** Key Chords
 #+BEGIN_SRC emacs-lisp
+(use-package key-chord
+  :ensure t
+  :init
+  (progn
+    (setq key-chord-one-key-delay 0.035)
+    (key-chord-mode 1)))
+
 (key-chord-mode 1)
+
+;; key-chord for add region to kill ring
+(key-chord-define-global "qw" 'kill-ring-save)
 
 ;; Max time delay between two key presses to be considered a key chord.
 ;; I have this set to be very short, short enough that to trigger the command, the keys 
@@ -213,9 +154,10 @@ https://github.com/purcell/exec-path-from-shell
 #+BEGIN_SRC emacs-lisp
 ;; this variables must be set before load helm-gtags
 (setq helm-gtags-prefix-key "\C-cg")
+(use-package helm-swoop)
 
-(require 'helm-config)
-(require 'helm-grep)
+;(require 'helm-config)
+;(require 'helm-grep)
 #+END_SRC
 *** Basic Configuration and Commands
 #+BEGIN_SRC emacs-lisp
@@ -264,12 +206,12 @@ https://github.com/purcell/exec-path-from-shell
 (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
 (global-set-key (kbd "C-c s o") 'helm-occur)
 
-(global-set-key (kbd "C-c h C-c w") 'helm-wikipedia-suggest)
-(global-set-key (kbd "C-c h C-c g") 'helm-google-suggest)
-(global-set-key (kbd "C-c h C-c s") 'helm-surfraw)
+;(global-set-key (kbd "C-c h C-c w") 'helm-wikipedia-suggest)
+;(global-set-key (kbd "C-c h C-c g") 'helm-google-suggest)
+;(global-set-key (kbd "C-c h C-c s") 'helm-surfraw)
 
-(global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
-(global-set-key (kbd "C-c h c") 'helm-calcul-expression)
+;(global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
+;(global-set-key (kbd "C-c h c") 'helm-calcul-expression)
 
 ;(global-set-key (kbd "C-c h x") 'helm-register)
 ;(global-set-key (kbd "C-x r j") 'jump-to-register)
@@ -307,6 +249,7 @@ https://github.com/purcell/exec-path-from-shell
 (helm-mode 1)
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
+(use-package helm-gtags)
 (require 'helm-gtags)
 
 (setq
@@ -346,6 +289,8 @@ https://github.com/purcell/exec-path-from-shell
 * Navigation and Interface
 ** Basic Settings
 #+begin_src emacs-lisp
+(use-package iy-go-to-char)
+
 (key-chord-define-global "fg" 'iy-go-to-char)
 (key-chord-define-global "df" 'iy-go-to-char-backward)
 
@@ -388,6 +333,7 @@ https://github.com/purcell/exec-path-from-shell
 
 ** Flycheck
 #+BEGIN_SRC emacs-lisp 
+(use-package flycheck)
 (require 'flycheck)
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
@@ -399,6 +345,8 @@ https://github.com/purcell/exec-path-from-shell
 
 ** Company 
 #+begin_src emacs-lisp
+(use-package company
+   :ensure helm-company)
 (require 'company)
 
 (add-hook 'after-init-hook 'global-company-mode)
@@ -410,6 +358,7 @@ https://github.com/purcell/exec-path-from-shell
 ** Packages
 *** guide-key
 #+BEGIN_SRC emacs-lisp
+(use-package guide-key)
 ;; guide-key, displays possible key binding completions
 (require 'guide-key)
 (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +"))
@@ -432,24 +381,26 @@ https://github.com/purcell/exec-path-from-shell
 #+END_SRC
 *** ace-jump
 #+BEGIN_SRC emacs-lisp
-;; Package: ace-jump-mode
+(use-package ace-jump-mode)
 (require 'ace-jump-mode)
 (key-chord-define-global "cj" 'ace-jump-mode)
 #+END_SRC
 *** rainbow-delimiters
 #+BEGIN_SRC emacs-lisp
-;; Package: rainbow-delimiters
+(use-package rainbow-delimiters)
+
 (require 'rainbow-delimiters)
 (rainbow-delimiters-mode)
 #+END_SRC
 *** ace-window
 #+BEGIN_SRC emacs-lisp
-;; Package: ace-window
+(use-package ace-window)
 (require 'ace-window)
 (key-chord-define-global "xo" 'ace-window)
 #+END_SRC
 *** golden-ratio
 #+BEGIN_SRC emacs-lisp
+(use-package golden-ratio)
 ;; Package: golden ratio
 (require 'golden-ratio)
 ;; ensure golden-ratio compatibility with helm.
@@ -480,10 +431,12 @@ https://github.com/purcell/exec-path-from-shell
 #+END_SRC
 *** zygospore
 #+BEGIN_SRC emacs-lisp 
+(use-package zygospore)
+
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-window)
 #+END_SRC
 
-** Functions (divide this)
+** Functions 
 #+BEGIN_SRC emacs-lisp
 ;; function for switching between two most recently visited buffers
 (defun switch-to-other-buffer ()
@@ -630,6 +583,8 @@ https://github.com/purcell/exec-path-from-shell
 #+END_SRC
 *** char-menu
 #+BEGIN_SRC emacs-lisp 
+(use-package char-menu)
+
 (require 'char-menu)
 (key-chord-define-global "cm" 'char-menu)
 (setq char-menu '("—" "‘’" "“”" "…" "«»" "–"
@@ -644,6 +599,8 @@ https://github.com/purcell/exec-path-from-shell
 
 ** Smartparens
 #+BEGIN_SRC emacs-lisp
+(use-package smartparens)
+
 (require 'smartparens-config)
 (setq sp-base-key-bindings 'paredit)
 (setq sp-autoskip-closing-pair 'always)
@@ -795,6 +752,8 @@ https://github.com/purcell/exec-path-from-shell
 
 *** volatile-highlights
 #+BEGIN_SRC emacs-lisp 
+(use-package volatile-highlights)
+
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 
@@ -802,6 +761,7 @@ https://github.com/purcell/exec-path-from-shell
 #+END_SRC
 *** clean-aindent-mode
 #+BEGIN_SRC emacs-lisp 
+(use-package clean-aindent-mode)
 (require 'clean-aindent-mode)
 (add-hook 'prog-mode-hook 'clean-aindent-mode)
 
@@ -809,12 +769,14 @@ https://github.com/purcell/exec-path-from-shell
 #+END_SRC
 *** dtrt-indent
 #+BEGIN_SRC emacs-lisp 
+(use-package dtrt-indent)
 (require 'dtrt-indent)
 (dtrt-indent-mode 1)
 (setq dtrt-indent-verbosity 0)
 #+END_SRC
 *** ws-butler
 #+BEGIN_SRC emacs-lisp 
+(use-package ws-butler)
 (require 'ws-butler)
 (add-hook 'c-mode-common-hook 'ws-butler-mode)
 (add-hook 'text-mode 'ws-butler-mode)
@@ -825,6 +787,7 @@ https://github.com/purcell/exec-path-from-shell
 #+END_SRC
 *** undo-tree
 #+BEGIN_SRC emacs-lisp 
+(use-package undo-tree)
 (require 'undo-tree)
 (global-undo-tree-mode)
 
@@ -833,6 +796,8 @@ https://github.com/purcell/exec-path-from-shell
 #+END_SRC
 *** yasnippet
 #+BEGIN_SRC emacs-lisp 
+(use-package yasnippet)
+
 (require 'yasnippet)
 (yas-global-mode 1)
 
@@ -876,15 +841,15 @@ https://github.com/purcell/exec-path-from-shell
 #+END_SRC
 *** anzu
 #+BEGIN_SRC emacs-lisp 
+(use-package anzu)
 (require 'anzu)
 (global-anzu-mode)
 (global-set-key (kbd "M-%") 'anzu-query-replace)
 (global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp)
-
-
 #+END_SRC
 *** iedit
 #+BEGIN_SRC emacs-lisp 
+(use-package iedit)
 (setq iedit-toggle-key-default nil)
 (require 'iedit)
 (global-set-key (kbd "C-;") 'iedit-mode)
@@ -897,12 +862,14 @@ https://github.com/purcell/exec-path-from-shell
 #+END_SRC
 *** expand-region
 #+BEGIN_SRC emacs-lisp 
+(use-package expand-region)
 (require 'expand-region)
 (key-chord-define-global ";l" 'er/expand-region)
 
 #+END_SRC
 *** duplicate-thing
 #+BEGIN_SRC emacs-lisp 
+(use-package duplicate-thing)
 (require 'duplicate-thing)
 (global-set-key (kbd "M-c") 'duplicate-thing)
 #+END_SRC 
@@ -1161,9 +1128,13 @@ Position the cursor at it's beginning, according to the current mode."
 
 *** Projectile
 #+BEGIN_SRC emacs-lisp
+(use-package projectile)
+
 (require 'projectile)
 (projectile-global-mode)
 (setq projectile-enable-caching t)
+
+(use-package helm-projectile)
 
 (require 'helm-projectile)
 (helm-projectile-on)
@@ -1191,8 +1162,7 @@ Position the cursor at it's beginning, according to the current mode."
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-#+END_SRC
-
+#+END_SRC   
 *** Emacs Lisp 
 #+begin_src emacs-lisp
 (define-prefix-command 'Apropos-Prefix nil "Apropos (a,c,d,i,l,v,C-v)")
@@ -1226,6 +1196,12 @@ Position the cursor at it's beginning, according to the current mode."
 *** Clojure
 **** clojure-mode
 #+BEGIN_SRC emacs-lisp
+(use-package clojure-mode 
+  :config
+  (use-package clojure-mode-extra-font-locking)
+  (use-package flycheck-clojure)
+; (clj-refactor)
+  )
 ;; This is useful for working with camel-case tokens
 (add-hook 'clojure-mode-hook 'subword-mode)
 
@@ -1248,6 +1224,10 @@ Position the cursor at it's beginning, according to the current mode."
             (define-clojure-indent (facts 1))))
 #+END_SRC
 **** CIDER
+#+BEGIN_SRC emacs-lisp 
+(use-package cider)
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp 
 ;; provides minibuffer documentation for the code you're typing into the repl
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
@@ -1308,6 +1288,8 @@ Position the cursor at it's beginning, according to the current mode."
 
 ** Python
 #+BEGIN_SRC emacs-lisp
+(use-package elpy)
+
 (require 'elpy)
 
 (add-hook 'python-mode-hook
@@ -1319,6 +1301,9 @@ Position the cursor at it's beginning, according to the current mode."
 #+END_SRC
 ** C/C++
 #+begin_src emacs-lisp
+(use-package company-c-headers
+   :ensure company-irony)
+
 (require 'cc-mode)
 (require 'semantic)
 
@@ -1381,7 +1366,7 @@ Position the cursor at it's beginning, according to the current mode."
 ;; add include paths for semantic
 ;; remove "c++-mode" to make path available to both c and c++ modes
                                         ;(semantic-add-system-include '/path/to/library' 'c++-mode)
-
+(use-package function-args)
 (require 'function-args)
 (fa-config-default)
 (define-key c-mode-map  [("C-c C-f C-h")] 'moo-complete)
@@ -1407,6 +1392,8 @@ Position the cursor at it's beginning, according to the current mode."
 * Organization and Version Control
 ** Magit
 #+BEGIN_SRC  emacs-lisp
+(use-package magit)
+
 (global-set-key (kbd "C-c m s") 'magit-status)
 #+END_SRC
 *** backup specifics
@@ -1516,6 +1503,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 #+BEGIN_SRC emacs-lisp
 ;; Edit With Emacs (Google Chrome Extension)
 (add-to-list 'load-path "~/.emacs.d/edit-with-emacs")
+(use-package edit-server)
 (require 'edit-server)
 (edit-server-start)
 #+END_SRC
