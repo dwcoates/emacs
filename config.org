@@ -1368,7 +1368,7 @@ Position the cursor at it's beginning, according to the current mode."
 
 (semantic-mode 1)
 
-(defun dwc-cedet-hook ()
+(defun my/cedet-hook ()
   (local-set-key "\C-c\C-j" 'semantic-ia-fast-jump)
   (local-set-key "\C-c\C-j" 'semantic-ia-fast-jump)
   (local-set-key "\C-c\C-s" 'semantic-ia-show-summary))
@@ -1412,7 +1412,7 @@ Position the cursor at it's beginning, according to the current mode."
 *** backup specifics
 #+BEGIN_SRC emacs-lisp
 ;; Backup function to target when called.
-(defun dwc-backup-specifics (file target)
+(defun my/backup-specifics (file target)
 "Copy file to target and apply function"
     (if (not (file-exists-p file))
       (write-region "" nil file)) ; create file
@@ -1424,7 +1424,7 @@ Position the cursor at it's beginning, according to the current mode."
 #+BEGIN_SRC emacs-lisp
 ;; Advise magit-push to backup specifics.el to a backup file in home
 (advice-add 'magit-push :around (lambda (push &rest args)
-    (dwc-backup-specifics "specifics.el" "~/.emacsSpecificsBackup.el")
+    (my/backup-specifics "specifics.el" "~/.emacsSpecificsBackup.el")
     (apply push args)))
 #+END_SRC)
 ** Org Mode
@@ -1644,7 +1644,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 ** functions
 *** remove-headers
 #+BEGIN_SRC emacs-lisp
-(defun dwc-remove-headers ()
+(defun my/remove-headers ()
   (goto-char (point-min))
   (re-search-forward "^$")
   (goto-char (+ 1 (point)))
@@ -1653,7 +1653,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 *** my-find-file-other-frame
 #+BEGIN_SRC emacs-lisp
 ;; this works, but only because of  (message "") hack
-(defun dwc-find-file-other-frame (file)
+(defun my/find-file-other-frame (file)
   (interactive "find file: ")
   (find-file-other-frame file)
   (toggle-scroll-bar)
