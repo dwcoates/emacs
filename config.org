@@ -11,7 +11,7 @@ This is my emacs config file.
 
 (require 'package)
 #+END_SRC
-*** Add repositories
+** Add repositories
 #+BEGIN_SRC emacs-lisp
 ;; setup package repos
 (add-to-list 'package-archives 
@@ -35,7 +35,7 @@ versions of all packages, and makes them available for download.
 (when (not package-archive-contents)
   (package-refresh-contents))
 #+END_SRC
-*** OSX compatibility snippet
+** OSX compatibility snippet
 I run linux, but this may be useful for those who use OSX. Description:
 
    On OS X, an Emacs instance started from the graphical user
@@ -46,14 +46,12 @@ calling external utilities like make from Emacs.
 This library works around this problem by copying important
 environment variables from the user's shell.
 https://github.com/purcell/exec-path-from-shell
-
-
 #+BEGIN_SRC emacs-lisp
 (if (eq system-type 'darwin)
-  (unless (package-installed-p 'exec-path-from-shell')
-    (package-install ''exec-path-from-shell)))
+  (unless (package-installed-p 'exec-path-from-shell)
+    (package-install 'exec-path-from-shell)))
 #+END_SRC
-*** Setup use-packages
+** Setup use-packages
 #+BEGIN_SRC emacs-lisp
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
@@ -66,7 +64,6 @@ https://github.com/purcell/exec-path-from-shell
 (setq load-prefer-newer t)
 (setq use-package-always-ensure t)
 #+END_SRC
-
 * General
 ** Basic Settings
 #+BEGIN_SRC emacs-lisp 
@@ -102,7 +99,6 @@ https://github.com/purcell/exec-path-from-shell
 (toggle-scroll-bar -1)
 
 ;; enable line numbering
-(linum-mode t)
 (global-set-key (kbd "C-c l m") 'linum-mode)
 
 ;; dont truncate lines
@@ -127,90 +123,83 @@ https://github.com/purcell/exec-path-from-shell
 
 ** Key-Command Interface
 *** Key Chords
+$key-chord-one-key-delay$ defines the max time delay between two key presses to be considered a key chord. 
+I have this set to be very short, short enough that to trigger the command, the keys pretty much have to 
+be pressed as one motion, and not in sequence. For example, with this setting, I can't (realistically) trigger 
+a command assigned to "we" key chord by pressing 'w' and 'e' in sequence as I would typing them in a word 
+naturally. This makes two-handed keys chords slightly unreliable, at least without practice. So generally, my
+key chords consist of keys adjacent to one another.
 #+BEGIN_SRC emacs-lisp
 (use-package key-chord
   :ensure t
   :init
   (progn
     (setq key-chord-one-key-delay 0.035)
-    (key-chord-mode 1)))
-
-(key-chord-mode 1)
-
-;; key-chord for add region to kill ring
-(key-chord-define-global "qw" 'kill-ring-save)
-
-;; Max time delay between two key presses to be considered a key chord.
-;; I have this set to be very short, short enough that to trigger the command, the keys 
-;; have to be pressed as one motion, and not in sequence. For example, with this setting, 
-;; I can't (realistically) trigger a      ;; command assigned to "we" by pressing 'w' and 'e' 
-;; in sequence as I would typing the word naturally. This makes two-handed keys chords a 
-;; slightly unreliable, at least without practice.
-(setq key-chord-two-keys-delay 0.035)
-
-;(setq key-chord-one-key-delay 0.2)
-
+    (key-chord-mode 1))
+)
 #+END_SRC
 ** Helm
-*** Init
+This variables must be set before loading helm-gtags
 #+BEGIN_SRC emacs-lisp
-;; this variables must be set before load helm-gtags
 (setq helm-gtags-prefix-key "\C-cg")
-(use-package helm-swoop)
-
-;(require 'helm-config)
-;(require 'helm-grep)
+#+END_SRC
+*use-package helm*
+#+BEGIN_SRC emacs-lisp
+(use-package helm
+  :commands (helm-grep helm-eshell)
+  :bind (("M-x" . helm-M-x)
+         ("M-y" . helm-show-kill-ring)
+         ("C-h SPC" . helm-all-mark-rings)
+         ("C-x b" . helm-mini)
+         ("C-x C-f" . helm-find-files)
+         ("C-h SPC" . helm-all-mark-rings)
+         ("C-c s o" . helm-occur))
+  :init (progn
+	  (require 'helm-config)
+	  (setq
+	   helm-scroll-amount 4              ; scroll 4 lines other window using M-<next>/M-<prior>
+	   helm-ff-search-library-in-sexp t  ; search for library in `require' and `declare-function' sexp.
+	   helm-split-window-in-side-p t     ; open helm buffer inside current window, not occupy whole other window
+	   helm-candidate-number-limit 500   ; limit the number of displayed canidates
+	   helm-ff-file-name-history-use-recentf t
+	   helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
+	   helm-buffers-fuzzy-matching t)      ; fuzzy matching buffer names when non-nil
+	  (helm-mode 1))
+  :config (progn
+	    (require 'helm-grep)
+	    (require 'helm-eshell)
+	    ))
 #+END_SRC
 *** Basic Configuration and Commands
+Helm size
 #+BEGIN_SRC emacs-lisp
-
-;; helm size
 (helm-autoresize-mode t)
 (setq helm-autoresize-max-height 30)
 (setq helm-autoresize-min-height 20)
+#+end_src
 
-
-(global-set-key (kbd "C-c h") 'helm-command-prefix)
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c h") 'helm-command-prefix-key)
 (global-unset-key (kbd "C-x c"))
 
-
 (define-key helm-map (kbd "C-\-") 'helm-execute-persistent-action) ; rebihnd tab to do persistent action
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)  ; make TAB works in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action)             ; list actions using C-z
 
-(define-key helm-grep-mode-map (kbd "<rqeturn>")  'helm-grep-mode-jump-other-window)
+(define-key helm-grep-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
 (define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
 (define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
+
 
 
 (when (executable-find "curl")
   (setq helm-google-suggest-use-curl-p t))
 
-(setq
- helm-scroll-amount 4 ; scroll 4 lines other window using M-<next>/M-<prior>
- helm-ff-search-library-in-sexp t ; search for library in `require' and `declare-function' sexp.
- helm-split-window-in-side-p t ;; open helm buffer inside current window, not occupy whole other window
- helm-candidate-number-limit 500 ; limit the number of displayed canidates
- helm-ff-file-name-history-use-recentf t
- helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
- helm-buffers-fuzzy-matching t          ; fuzzy matching buffer names when non-nil
- )
-
-
-
 (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
-(global-set-key (kbd "C-c s o") 'helm-occur)
-
-;(global-set-key (kbd "C-c h C-c w") 'helm-wikipedia-suggest)
-;(global-set-key (kbd "C-c h C-c g") 'helm-google-suggest)
-;(global-set-key (kbd "C-c h C-c s") 'helm-surfraw)
+(global-set-key (kbd "C-c i w") 'helm-wikipedia-suggest)
+(global-set-key (kbd "C-c i g") 'helm-google-suggest)
+(global-set-key (kbd "C-c i s") 'helm-surfraw)
 
 ;(global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
 ;(global-set-key (kbd "C-c h c") 'helm-calcul-expression)
@@ -224,70 +213,31 @@ https://github.com/purcell/exec-path-from-shell
 
 ;;; Save current position to mark ring
 (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
+#+END_SRC
 
-;; show minibuffer history with Helm
+Show minibuffer history with Helm
+#+BEGIN_SRC emacs-lisp
 (define-key minibuffer-local-map (kbd "M-p") 'helm-minibuffer-history)
+#+END_SRC
 
+Navigating file
+#+BEGIN_SRC emacs-lisp
 (define-key global-map [remap find-tag] 'helm-etags-select)
 
 (define-key global-map [remap list-buffers] 'helm-buffers-list)
-
-
 #+END_SRC
-*** helm-eshell
+
+Use Helm to list eshell history:
 #+BEGIN_SRC emacs-lisp
-(require 'helm-eshell)
-;; use helm to list eshell history
 (add-hook 'eshell-mode-hook
           (lambda ()
-              (define-key 'eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
+              (local-set-key 'eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))
 #+END_SRC 
-*** final
+
+Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "find-file" as one of the possible completions.
 #+BEGIN_SRC emacs-lisp
-(define-key global-map (kbd "C-c l c") 'helm-lisp-completion-at-point)
-;;fuzzy matching for elisp helm completion
 (setq helm-lisp-fuzzy-completion t)
-
-(helm-mode 1)
 #+END_SRC
-#+BEGIN_SRC emacs-lisp
-(use-package helm-gtags)
-(require 'helm-gtags)
-
-(setq
- helm-gtags-ignore-case t
- helm-gtags-auto-update t
- helm-gtags-use-input-at-cursor t
- helm-gtags-pulse-at-cursor t
- helm-gtags-prefix-key "\C-cg"
- helm-gtags-suggested-key-mapping t
- )
-
-;; Enable helm-gtags-mode in Dired so you can jump to any tag
-;; when navigate project tree with Dired
-(add-hook 'dired-mode-hook 'helm-gtags-mode)
-
-;; Enable helm-gtags-mode in Eshell for the same reason as above
-(add-hook 'eshell-mode-hook 'helm-gtags-mode)
-
-;; Enable helm-gtags-mode in languages that GNU Global supports
-(add-hook 'c-mode-hook 'helm-gtags-mode)
-(add-hook 'c++-mode-hook 'helm-gtags-mode)
-(add-hook 'java-mode-hook 'helm-gtags-mode)
-(add-hook 'asm-mode-hook 'helm-gtags-mode)
-
-;; key bindings
-(define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
-(define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
-(define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-
-(provide 'setup-helm-gtags)
-
-#+END_SRC
-
 * Navigation and Interface
 ** Basic Settings
 #+begin_src emacs-lisp
@@ -308,7 +258,7 @@ https://github.com/purcell/exec-path-from-shell
 
 ** Helm-swoop
 #+BEGIN_SRC emacs-lisp
-;; Locate the helm-swoop folder to your path
+(use-package helm-swoop)
 (require 'helm-swoop)
 
 (global-set-key (kbd "C-c s s") 'helm-swoop)
@@ -491,6 +441,9 @@ https://github.com/purcell/exec-path-from-shell
 
 (setq kill-ring-max 10000 ; increase kill-ring capacity
       kill-whole-line t)  ; if NIL, kill whole line and move the next line up
+
+;; key-chord for add region to kill ring
+(key-chord-define-global "qw" 'kill-ring-save)
 
 ;; show whitespace in diff-mode
 (add-hook 'diff-mode-hook (lambda ()
@@ -1111,7 +1064,7 @@ Position the cursor at it's beginning, according to the current mode."
 #+END_SRC
 
 * Development Environments
-** Basic Settings
+** General Settings
 *** Compilation
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "<f5>") (lambda ()
@@ -1148,6 +1101,41 @@ Position the cursor at it's beginning, according to the current mode."
 (setq tramp-default-method "ssh")
 #+END_SRC
  
+*** Gtags
+#+BEGIN_SRC emacs-lisp
+(use-package helm-gtags
+  :init
+  (setq
+   helm-gtags-ignore-case t
+   helm-gtags-auto-update t
+   helm-gtags-use-input-at-cursor t
+   helm-gtags-pulse-at-cursor t
+   helm-gtags-prefix-key "\C-cg"
+   helm-gtags-suggested-key-mapping t))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+;; Enable helm-gtags-mode in Dired so you can jump to any tag
+;; when navigate project tree with Dired
+(add-hook 'dired-mode-hook 'helm-gtags-mode)
+
+;; Enable helm-gtags-mode in Eshell for the same reason as above
+(add-hook 'eshell-mode-hook 'helm-gtags-mode)
+
+;; Enable helm-gtags-mode in languages that GNU Global supports
+(add-hook 'c-mode-hook 'helm-gtags-mode)
+(add-hook 'c++-mode-hook 'helm-gtags-mode)
+(add-hook 'java-mode-hook 'helm-gtags-mode)
+(add-hook 'asm-mode-hook 'helm-gtags-mode)
+
+;; key bindings
+(define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
+(define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
+(define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+(define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+(define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+(define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+#+END_SRC
 ** Lisps
 #+BEGIN_SRC emacs-lisp
 ;(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
@@ -1195,6 +1183,10 @@ Position the cursor at it's beginning, according to the current mode."
 (add-hook 'emacs-lisp-mode-hook 'my/bindkey-ielm-other-window)
 #+end_src
 
+Display possible symbol completions in a helm buffer:
+#+BEGIN_SRC emacs-lisp
+(define-key global-map (kbd "C-c l c") 'helm-lisp-completion-at-point)
+#+END_SRC
 *** Clojure
 **** clojure-mode
 #+BEGIN_SRC emacs-lisp
@@ -1651,3 +1643,4 @@ It shows org agenda after emacs has been idle for a certain amount of time.
   '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
 #+END_SRC
 
+ 
