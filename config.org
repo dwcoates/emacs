@@ -397,7 +397,16 @@ https://github.com/purcell/exec-path-from-shell
 (global-set-key (kbd "C-c ! h") 'helm-flycheck)
 #+END_SRC
 
-** company (do this last)
+** company 
+#+begin_src emacs-lisp
+(require 'company)
+
+(add-hook 'after-init-hook 'global-company-mode)
+(setq company-backends (delete 'company-semantic company-backends))
+
+(global-set-key (kbd "C-c <tab>") 'helm-company)
+#+end_src
+
 ** Packages
 *** guide-key
 #+BEGIN_SRC emacs-lisp
@@ -1276,13 +1285,46 @@ Position the cursor at it's beginning, according to the current mode."
 (provide 'setup-python)
 #+END_SRC
 *** Emacs Lisp
-*** C and C++
-**** cedet
-#+BEGIN_SRC emacs-lisp
+*** C/C++
+#+begin_src emacs-lisp
 (require 'cc-mode)
 (require 'semantic)
 
+(define-key c-mode-map  [(control tab)] 'company-complete)
+(define-key c++-mode-map  [(control tab)] 'company-complete)
 
+;; company-c-headers
+;(add-to-list 'company-c-headers-path-system "/usr/include/c++/4.8/")
+(add-to-list 'company-backends 'company-c-headers)
+(eval-after-load 'company
+  '(add-to-list 'company-backends 'company-irony))
+
+;; (optional) adds CC special commands to `company-begin-commands' in order to
+;; trigger completion at interesting places, such as after scope operator std::|
+(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
+
+(add-hook 'c-mode-common-hook 'hs-minor-mode)
+
+;; *********** Available C style: ***************
+;; “gnu”:    The default style for GNU projects
+;; “k&r”:    What Kernighan and Ritchie, the authors of C used in their book
+;; “bsd”:    What BSD developers use, aka “Allman style” after Eric Allman.
+;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
+;; “stroustrup”: What Stroustrup, the author of C++ used in his book
+;; “ellemtel”:  Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,”
+;;             Erik Nyquist and Mats Henricson, Ellemtel
+;; “linux”:  What the Linux developers use for kernel development
+;; “python”:What Python developers use for extension modules
+;; “java”:  The default style for java-mode (see below)
+;; “user”:  When you want to define your own style
+;; **********************************************
+(setq
+ c-default-style "linux" ;; set style to "linux"
+ )
+#+end_src
+
+**** CEDET
+#+BEGIN_SRC emacs-lisp
 (global-semanticdb-minor-mode 1)
 
 (global-semantic-idle-scheduler-mode 1)
@@ -1437,7 +1479,6 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (run-with-idle-timer 600 t 'jump-to-org-agenda)
 #+END_SRC
 
-
 * Emacs as an Internet Interface
 ** Edit With Emacs (Google Chrome extension)
 #+BEGIN_SRC emacs-lisp
@@ -1447,53 +1488,6 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (edit-server-start)
 #+END_SRC
 ** IRC
-* company
-#+BEGIN_SRC  emacs-lisp
-(require 'company)
-
-(add-hook 'after-init-hook 'global-company-mode)
-(setq company-backends (delete 'company-semantic company-backends))
-
-(define-key c-mode-map  [(control tab)] 'company-complete)
-(define-key c++-mode-map  [(control tab)] 'company-complete)
-
-(global-set-key (kbd "C-c <tab>") 'helm-company)
-
-;; company-c-headers
-;(add-to-list 'company-c-headers-path-system "/usr/include/c++/4.8/")
-(add-to-list 'company-backends 'company-c-headers)
-(eval-after-load 'company
-  '(add-to-list 'company-backends 'company-irony))
-;; (optional) adds CC special commands to `company-begin-commands' in order to
-;; trigger completion at interesting places, such as after scope operator std::|
-(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
-
-;; hs-minor-mode for folding source code
-(add-hook 'c-mode-common-hook 'hs-minor-mode)
-
-
-;; *********** Available C style: ***************
-;; “gnu”:    The default style for GNU projects
-;; “k&r”:    What Kernighan and Ritchie, the authors of C used in their book
-;; “bsd”:    What BSD developers use, aka “Allman style” after Eric Allman.
-;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
-;; “stroustrup”: What Stroustrup, the author of C++ used in his book
-;; “ellemtel”:  Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,”
-;;             Erik Nyquist and Mats Henricson, Ellemtel
-;; “linux”:  What the Linux developers use for kernel development
-;; “python”:What Python developers use for extension modules
-;; “java”:  The default style for java-mode (see below)
-;; “user”:  When you want to define your own style
-;; **********************************************
-(setq
- c-default-style "linux" ;; set style to "linux"
- )
-
-(provide 'setup-company)
-;;; setup-company.el ends here
-
-#+END_SRC
-
 * rgrep
 #+BEGIN_SRC emacs-lisp 
 (defun rgrep-fullscreen (regexp &optional files dir confirm)
@@ -1632,8 +1626,6 @@ It shows org agenda after emacs has been idle for a certain amount of time.
   (find-file-other-frame file)
   (toggle-scroll-bar)
   (message ""))
-
-
 #+END_SRC
 
 
