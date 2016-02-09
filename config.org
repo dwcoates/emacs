@@ -132,8 +132,8 @@ https://github.com/purcell/exec-path-from-shell
 (install-packages)
 #+END_SRC
 
-* Appearance and Navigation
-** Basic Appearance Settings
+* General
+** Basic Settings
 #+BEGIN_SRC emacs-lisp 
 ;; setup default window size
 (add-to-list 'default-frame-alist '(height . 40))
@@ -154,17 +154,17 @@ https://github.com/purcell/exec-path-from-shell
 ;; no splash screen
 (setq inhibit-startup-screen t)
 
+;; set font
+(add-to-list 'default-frame-alist
+         '(font .  "Ubuntu Mono-13"))
+(set-face-attribute 'default t :font  "Ubuntu Mono-13")
+
 ;; disables tool bar
 (tool-bar-mode -1)
 ;; disables menu bar, can re-enable as a popub with 'C-mouse-3'
 (menu-bar-mode -99)
 ;; no scroll bar please
 (toggle-scroll-bar -1)
-
-;; set font
-(add-to-list 'default-frame-alist
-         '(font .  "Ubuntu Mono-13"))
-(set-face-attribute 'default t :font  "Ubuntu Mono-13")
 
 ;; enable line numbering
 (linum-mode t)
@@ -180,9 +180,11 @@ https://github.com/purcell/exec-path-from-shell
 (blink-cursor-mode 0)
 
 (global-hl-line-mode 1)
-
 (set-face-background 'hl-line "#3b3b3b")
 (set-face-foreground 'highlight nil)
+
+(global-set-key (kbd "C-x w b") 'previous-buffer)
+;(global-set-key (kbd "C-x w v") '(switch-to-buffer nil))
 
 ;; display time in mode line
 (display-time-mode t)
@@ -190,156 +192,24 @@ https://github.com/purcell/exec-path-from-shell
 (powerline-default-theme)
 #+END_SRC
 
-** Basic Navigation Setup
+** Key-Command Interface
+*** Key Chords
 #+BEGIN_SRC emacs-lisp
 (key-chord-mode 1)
+
 ;; Max time delay between two key presses to be considered a key chord.
-;; I have this set to be very short, short enough that to trigger the command, the keys have to be pressed 
-;; as one motion, and not in sequence. For example, with this setting, I can't (realistically) trigger a      ;; command assigned to "we" by pressing 'w' and 'e' in sequence as I would typing the word naturally.
-;; This makes two-handed keys chords a slightly unreliable, at least without practice.
+;; I have this set to be very short, short enough that to trigger the command, the keys 
+;; have to be pressed as one motion, and not in sequence. For example, with this setting, 
+;; I can't (realistically) trigger a      ;; command assigned to "we" by pressing 'w' and 'e' 
+;; in sequence as I would typing the word naturally. This makes two-handed keys chords a 
+;; slightly unreliable, at least without practice.
 (setq key-chord-two-keys-delay 0.035)
 
 ;(setq key-chord-one-key-delay 0.2)
 
-(key-chord-define-global "fg" 'iy-go-to-char)
-(key-chord-define-global "df" 'iy-go-to-char-backward)
-
-;; find-file-at-point
-(key-chord-define-global "fp" 'find-file-at-point)
-
-
-;; the original configuration is too close on the keyboard to other-frame
-(global-unset-key (kbd "C-x 5 0"))
-(global-set-key (kbd "C-x 5 DEL") 'delete-frame)
-
-;; likewise, too close to other-window
-(global-unset-key (kbd "C-x 0"))
-(global-set-key (kbd "C-x DEL") 'delete-window)
 #+END_SRC
-
-** Functions
-#+BEGIN_SRC emacs-lisp
-;; function for switching between two most recently visited buffers
-(defun switch-to-other-buffer ()
-  "Switch to last visited buffer."
-  (interactive)
-  (switch-to-buffer (other-buffer (current-buffer) 1)))
-(global-set-key (kbd "C-c b") 'switch-to-other-buffer)
-
-
-(defun toggle-maximize-buffer ()
-  "Maximize/minimize buffer"
-       (interactive)
-       (if (= 1 (length (window-list)))
-           (jump-to-register '_)
-         (progn
-           (window-configuration-to-register '_)
-           (delete-other-windows))))
-(key-chord-define-global "xm" 'toggle-maximize-buffer)
-
-
-(defun transpose-windows (arg)
-  "Transpose the buffers shown in two windows."
-  (interactive "p")
-  (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
-    (while (/= arg 0)
-      (let ((this-win (window-buffer))
-            (next-win (window-buffer (funcall selector))))
-        (set-window-buffer (selected-window) next-win)
-        (set-window-buffer (funcall selector) this-win)
-        (select-window (funcall selector)))
-      (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
-(global-set-key (kbd "C-x w t") 'transpose-windows)
-#+END_SRC
-** Navigation and Appearance Packages
-*** guide-key
-#+BEGIN_SRC emacs-lisp
-;; guide-key, displays possible key binding completions
-(require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +"))
-(guide-key-mode 1)
-(setq guide-key/recursive-key-sequence-flag t)
-(setq guide-key/popup-window-position 'bottom)
-#+END_SRC
-*** windmove
-#+BEGIN_SRC emacs-lisp
-;; Set keys to move between windows
-(global-set-key (kbd "C-x w j") 'windmove-left)
-(global-set-key (kbd "C-x w l") 'windmove-right)
-(global-set-key (kbd "C-x w i") 'windmove-up)
-(global-set-key (kbd "C-x w k") 'windmove-down)
-;; corresponding key-chord configs
-(key-chord-define-global "wj" 'windmove-left)
-(key-chord-define-global "wl" 'windmove-right)
-(key-chord-define-global "wi" 'windmove-up)
-(key-chord-define-global "wk" 'windmove-down)
-#+END_SRC
-*** ace-jump
-#+BEGIN_SRC emacs-lisp
-;; Package: ace-jump-mode
-(require 'ace-jump-mode)
-(key-chord-define-global "cj" 'ace-jump-mode)
-#+END_SRC
-*** smartparens
-#+BEGIN_SRC emacs-lisp
-;; Package: smartparens
-(require 'smartparens-config)
-(setq sp-base-key-bindings 'paredit)
-(setq sp-autoskibp-closing-pair 'always)
-(setq sp-hybrid-kill-entire-symbol nil)
-(sp-use-paredit-bindings)
-;; turn on smartparens
-(show-smartparens-global-mode +1)
-(smartparens-global-mode 1)
-#+END_SRC
-*** rainbow-delimiters
-#+BEGIN_SRC emacs-lisp
-;; Package: rainbow-delimiters
-(require 'rainbow-delimiters)
-(rainbow-delimiters-mode)
-#+END_SRC
-*** ace-window
-#+BEGIN_SRC emacs-lisp
-;; Package: ace-window
-(require 'ace-window)
-(key-chord-define-global "xo" 'ace-window)
-#+END_SRC
-*** golden-ratio
-#+BEGIN_SRC emacs-lisp
-;; Package: golden ratio
-(require 'golden-ratio)
-;; ensure golden-ratio compatibility with helm.
-(defun pl/helm-alive-p ()
-  (if (boundp 'helm-alive-p)
-      (symbol-value 'helm-alive-p)))
-(add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
-;; list of buffers to not be resized by golden-ratio.
-(setq golden-ratio-exclude-buffer-names
-	  '("*Flycheck errors*"
-		"*SPEEDBAR*"))
-;; turn on golden ratio
-(global-set-key (kbd "C-x w g SPC") 'golden-ratio)
-(global-set-key (kbd "C-x w g m") 'golden-ratio-mode)
-#+END_SRC
-*** speedbar
-#+BEGIN_SRC emacs-lisp
-;; Package: speedbar
-(setq speedbar-show-unknown-files t)
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;   Functions;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#+END_SRC
-*** zygospore
-#+BEGIN_SRC emacs-lisp 
-(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-window)
-#+END_SRC
-* helm
-** Init
+** helm
+*** Init
 #+BEGIN_SRC emacs-lisp
 ;; this variables must be set before load helm-gtags
 (setq helm-gtags-prefix-key "\C-cg")
@@ -347,7 +217,7 @@ https://github.com/purcell/exec-path-from-shell
 (require 'helm-config)
 (require 'helm-grep)
 #+END_SRC
-** Basic Configuration and Commands
+*** Basic Configuration and Commands
 #+BEGIN_SRC emacs-lisp
 
 ;; helm size
@@ -420,7 +290,7 @@ https://github.com/purcell/exec-path-from-shell
 
 
 #+END_SRC
-** helm-eshell
+*** helm-eshell
 #+BEGIN_SRC emacs-lisp
 (require 'helm-eshell)
 ;; use helm to list eshell history
@@ -428,33 +298,7 @@ https://github.com/purcell/exec-path-from-shell
           #'(lambda ()
               (define-key 'eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
 #+END_SRC 
-** helm-swoop
-#+BEGIN_SRC emacs-lisp
-;; Locate the helm-swoop folder to your path
-(require 'helm-swoop)
-
-(global-set-key (kbd "C-c s s") 'helm-swoop)
-(global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
-
-;; When doing isearch, hand the word over to helm-swoop
-(define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-
-;; From helm-swoop to helm-multi-swoop-all
-(define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-
-;; Save buffer when helm-multi-swoop-edit complete
-(setq helm-multi-swoop-edit-save t)
-;; If this value is t, split window inside the current window
-
-(setq helm-swoop-split-with-multiple-windows t)
-;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-
-(setq helm-swoop-split-direction 'split-window-vertically)
-;; If nil, you can slightly boost invoke speed in exchange for text color
-
-(setq helm-swoop-speed-or-color t) 
-#+END_SRC
-** final
+*** final
 #+BEGIN_SRC emacs-lisp
 (define-key global-map (kbd "C-c l c") 'helm-lisp-completion-at-point)
 ;;fuzzy matching for elisp helm completion
@@ -498,7 +342,51 @@ https://github.com/purcell/exec-path-from-shell
 (provide 'setup-helm-gtags)
 
 #+END_SRC
-* flycheck
+
+* Navigation and Interface
+** Basic Settings
+#+begin_src emacs-lisp
+(key-chord-define-global "fg" 'iy-go-to-char)
+(key-chord-define-global "df" 'iy-go-to-char-backward)
+
+;; find-file-at-point
+(key-chord-define-global "fp" 'find-file-at-point)
+
+(global-unset-key (kbd "C-x 5 0"))
+(global-set-key (kbd "C-x 5 DEL") 'delete-frame)
+
+(global-unset-key (kbd "C-x 0"))
+(global-set-key (kbd "C-x DEL") 'delete-window)
+#+end_src
+
+** helm-swoop
+#+BEGIN_SRC emacs-lisp
+;; Locate the helm-swoop folder to your path
+(require 'helm-swoop)
+
+(global-set-key (kbd "C-c s s") 'helm-swoop)
+(global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
+
+;; When doing isearch, hand the word over to helm-swoop
+(define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+
+;; From helm-swoop to helm-multi-swoop-all
+(define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+
+;; Save buffer when helm-multi-swoop-edit complete
+(setq helm-multi-swoop-edit-save t)
+;; If this value is t, split window inside the current window
+
+(setq helm-swoop-split-with-multiple-windows t)
+;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+
+(setq helm-swoop-split-direction 'split-window-vertically)
+;; If nil, you can slightly boost invoke speed in exchange for text color
+
+(setq helm-swoop-speed-or-color t) 
+#+END_SRC
+
+** flycheck
 #+BEGIN_SRC emacs-lisp 
 (require 'flycheck)
 
@@ -508,301 +396,121 @@ https://github.com/purcell/exec-path-from-shell
 (global-set-key (kbd "C-c ! p") 'flycheck-previous-error)
 (global-set-key (kbd "C-c ! h") 'helm-flycheck)
 #+END_SRC
-* magit
-#+BEGIN_SRC  emacs-lisp
-(global-set-key (kbd "C-c m s") 'magit-status)
-#+END_SRC
-* org-mode
+
+** company (do this last)
+** Packages
+*** guide-key
 #+BEGIN_SRC emacs-lisp
-(defun my-org-mode-hook ()
-  (toggle-truncate-lines)
-  (abbrev-mode 1)
-  (toggle-word-wrap))
-
-(add-hook 'org-mode-hook 'my-org-mode-hook)
-
-(setq org-src-fontify-natively t)
+;; guide-key, displays possible key binding completions
+(require 'guide-key)
+(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +"))
+(guide-key-mode 1)
+(setq guide-key/recursive-key-sequence-flag t)
+(setq guide-key/popup-window-position 'bottom)
 #+END_SRC
-** column editing
+*** windmove
 #+BEGIN_SRC emacs-lisp
-;(add-hook 'org-mode-hook 'my-org-mode-hook)
-(global-set-key (kbd "C-c o k") 'org-mode-delete-column)
-(global-set-key (kbd "C-c o i") 'org-mode-insert-column)
-(global-set-key (kbd "C-c o j") 'org-mode-move-column-left)
-(global-set-key (kbd "C-c o l") 'org-mode-move-column-right)
-
-(global-set-key (kbd "C-c o RET") 'org-mode-todo-heading)
+;; Set keys to move between windows
+(global-set-key (kbd "C-x w j") 'windmove-left)
+(global-set-key (kbd "C-x w l") 'windmove-right)
+(global-set-key (kbd "C-x w i") 'windmove-up)
+(global-set-key (kbd "C-x w k") 'windmove-down)
+;; corresponding key-chord configs
+(key-chord-define-global "wj" 'windmove-left)
+(key-chord-define-global "wl" 'windmove-right)
+(key-chord-define-global "wi" 'windmove-up)
+(key-chord-define-global "wk" 'windmove-down)
 #+END_SRC
-** org-path-completion
+*** ace-jump
 #+BEGIN_SRC emacs-lisp
-(setq org-goto-interface 'outline-path-completion
-      org-goto-max-level 10)
+;; Package: ace-jump-mode
+(require 'ace-jump-mode)
+(key-chord-define-global "cj" 'ace-jump-mode)
 #+END_SRC
-** org-capture
-org-capture allows you to take a note anywhere, which it will write to the org-default-notes-file.
+*** rainbow-delimiters
 #+BEGIN_SRC emacs-lisp
-;; this is set in ~/.emacs.d/custom/setup-specifics.el
-(global-set-key (kbd "C-c c") 'org-capture)
+;; Package: rainbow-delimiters
+(require 'rainbow-delimiters)
+(rainbow-delimiters-mode)
 #+END_SRC
-** org-back-to-top-level-heading
-#+BEGIN_SRC elisp
-;; move point to top-level heading
-(defun org-back-to-top-level-heading ()
-  "Go back to the current top level heading."
-  (interactive)
-  (or (re-search-backward "^\* " nil t)
-      (goto-char (point-min))))
-
-;; make todo's check recursively when determining the number of todo's under it
-(setq org-hierarchical-todo-statistics nil)
-#+END_SRC
-** org-summary-todo
-This is for making sure that the top-level todo automatically is marked DONE if all sub-levels are DONE. 
-TODO otherwise.
-#+BEGIN_SRC elisp
-(defun org-summary-todo (n-done n-not-done)
-  "Switch entry to DONE when all subentries are done, to TODO otherwise."
-  (let (org-log-done org-log-states)   ; turn off logging
-    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
-
-(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
-#+END_SRC
-** jump-to-org-agenda
-This is a snippet from John Wiegley. 
-It shows org agenda after emacs has been idle for a certain amount of time.
-#+BEGIN_SRC elisp
-(defun jump-to-org-agenda ()
-  (interactive)
-  (let ((buf (get-buffer "*Org Agenda*"))
-        wind)
-    (if buf
-        (if (setq wind (get-buffer-window buf))
-            (select-window wind)
-          (if (called-interactively-p)
-              (progn
-                (select-window (display-buffer buf t t))
-                (org-fit-window-to-buffer)
-                ;; (org-agenda-redo)
-                )
-            (with-selected-window (display-buffer buf)
-              (org-fit-window-to-buffer)
-              ;; (org-agenda-redo)
-              )))
-      (call-interactively 'org-agenda-list)))
-  ;;(let ((buf (get-buffer "*Calendar*")))
-  ;;  (unless (get-buffer-window buf)
-  ;;    (org-agenda-goto-calendar)))
-  )
-(run-with-idle-timer 600 t 'jump-to-org-agenda)
-#+END_SRC
-
-* cedet
+*** ace-window
 #+BEGIN_SRC emacs-lisp
-(require 'cc-mode)
-(require 'semantic)
-
-
-(global-semanticdb-minor-mode 1)
-
-(global-semantic-idle-scheduler-mode 1)
-(global-semantic-stickyfunc-mode 1)
-
-
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-(set-default 'semantic-case-fold t)
-
-(semantic-mode 1)
-
-(defun dwc-cedet-hook ()
-  (local-set-key "\C-c\C-j" 'semantic-ia-fast-jump)
-  (local-set-key "\C-c\C-j" 'semantic-ia-fast-jump)
-  (local-set-key "\C-c\C-s" 'semantic-ia-show-summary))
-
-(add-hook 'c-mode-common-hook 'dodge-cedet-hook)
-(add-hook 'c-mode-hook 'dodge-cedet-hook)
-(add-hook 'c++-mode-hook 'dodge-cedet-hook)
-
-
-;; add include paths for semantic
-;; remove "c++-mode" to make path available to both c and c++ modes
-                                        ;(semantic-add-system-include '/path/to/library' 'c++-mode)
-
-(require 'function-args)
-(fa-config-default)
-(define-key c-mode-map  [("C-c C-f C-h")] 'moo-complete)
-(define-key c++-mode-map  [(control tab)] 'moo-complete)
-(define-key c-mode-map (kbd "C-c M-o s")  'fa-show)
-(define-key c++-mode-map (kbd "C-c M-o s")  'fa-show)
-
-
-
-;; please don't ask me if I really want to compile
-(global-set-key (kbd "<f5>") (lambda ()
-                               (interactive)
-                               (setq-local compilation-read-command nil)
-                               (call-interactively 'compile)))
-
-
-
-;; Enable EDE only in C/C++
-(require 'ede)
-(global-ede-mode)
+;; Package: ace-window
+(require 'ace-window)
+(key-chord-define-global "xo" 'ace-window)
 #+END_SRC
-
-* clojure
-** clojure-mode
+*** golden-ratio
 #+BEGIN_SRC emacs-lisp
-;; This is useful for working with camel-case tokens, like names of
-;; Java classes (e.g. JavaClassName)
-(add-hook 'clojure-mode-hook 'subword-mode)
-
-;; A little more syntax highlighting
-(require 'clojure-mode-extra-font-locking)
-
-
-;;;;;;;;;; MIDJE ???? ;;;;;;;;;;;;;;
-;; syntax hilighting for midje
-(add-hook 'clojure-mode-hook
-          (lambda ()
-            (setq inferior-lisp-program "lein repl")
-            (font-lock-add-keywords
-             nil
-             '(("(\\(facts?\\)"
-                (1 font-lock-keyword-face))
-               ("(\\(background?\\)"
-                (1 font-lock-keyword-face))))
-            (define-clojure-indent (fact 1))
-            (define-clojure-indent (facts 1))))
+;; Package: golden ratio
+(require 'golden-ratio)
+;; ensure golden-ratio compatibility with helm.
+(defun pl/helm-alive-p ()
+  (if (boundp 'helm-alive-p)
+      (symbol-value 'helm-alive-p)))
+(add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
+;; list of buffers to not be resized by golden-ratio.
+(setq golden-ratio-exclude-buffer-names
+	  '("*Flycheck errors*"
+		"*SPEEDBAR*"))
+;; turn on golden ratio
+(global-set-key (kbd "C-x w g SPC") 'golden-ratio)
+(global-set-key (kbd "C-x w g m") 'golden-ratio-mode)
 #+END_SRC
-** CIDER
+*** speedbar
+#+BEGIN_SRC emacs-lisp
+;; Package: speedbar
+(setq speedbar-show-unknown-files t)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;   Functions;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#+END_SRC
+*** zygospore
 #+BEGIN_SRC emacs-lisp 
-;; provides minibuffer documentation for the code you're typing into the repl
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-
-;; go right to the REPL buffer when it's finished connecting
-;;;;;;;;;;;;;;;;;;; HOW CAN I MAKE IT SPLIT IN VERTICAL? ;;;;;;;;;;;;;;;;;
-(setq cider-repl-pop-to-buffer-on-connect t)
-
-;; When there's a cider error, show its buffer and switch to it
-(setq cider-show-error-buffer nil)
-(setq cider-auto-select-error-buffer t)
-
-(global-set-key (kbd "C-' 1") 'cider-visit-error-buffer)
-
-;; Where to store the cider history.
-(setq cider-repl-history-file "~/.emacs.d/cider-history")
-
-;; Wrap when navigating history.
-(setq cider-repl-wrap-history t)
-
-;; Use clojure mode for other extensions
-(add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
-(add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
-(add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
-(add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
-
-
-;; key bindings
+(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-window)
 #+END_SRC
-** Functions
-#+BEGIN_SRC emacs-lisp 
-;; these help with development of web apps
-(defun cider-start-http-server ()
-  (interactive)
-  (cider-load-current-buffer)
-  (let ((ns (cider-current-ns)))
-    (cider-repl-set-ns ns)
-    (cider-interactive-eval (format "(println '(def server (%s/start))) (println 'server)" ns))
-    (cider-interactive-eval (format "(def server (%s/start)) (println server)" ns))))
 
-
-(defun cider-refresh ()
-  (interactive)
-  (cider-interactive-eval (format "(user/reset)")))
-
-(defun cider-user-ns ()
-  (interactive)
-  (cider-repl-set-ns "user"))
-
-(eval-after-load 'cider
-  '(progn
-     (define-key clojure-mode-map (kbd "C-c C-v") 'cider-start-http-server)
-     (define-key clojure-mode-map (kbd "C-c r") 'cider-refresh)
-     (define-key clojure-mode-map (kbd "C-c u") 'cider-user-ns)
-     (define-key cider-mode-map (kbd "C-c u") 'cider-user-ns)
-     (define-key cider-mode-map (kbd "C-`") 'cider-jack-in)))
-#+END_SRC
-* python
+** Functions (divide this)
 #+BEGIN_SRC emacs-lisp
-(require 'elpy)
-
-(add-hook 'python-mode-hook
-          (lambda ()
-            (elpy-mode)
-            (elpy-enable)))
-
-(provide 'setup-python)
-#+END_SRC
-* company
-#+BEGIN_SRC  emacs-lisp
-(require 'company)
-
-(add-hook 'after-init-hook 'global-company-mode)
-(setq company-backends (delete 'company-semantic company-backends))
-
-(define-key c-mode-map  [(control tab)] 'company-complete)
-(define-key c++-mode-map  [(control tab)] 'company-complete)
-
-(global-set-key (kbd "C-c <tab>") 'helm-company)
-
-;; company-c-headers
-;(add-to-list 'company-c-headers-path-system "/usr/include/c++/4.8/")
-(add-to-list 'company-backends 'company-c-headers)
-(eval-after-load 'company
-  '(add-to-list 'company-backends 'company-irony))
-;; (optional) adds CC special commands to `company-begin-commands' in order to
-;; trigger completion at interesting places, such as after scope operator std::|
-(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
-
-;; hs-minor-mode for folding source code
-(add-hook 'c-mode-common-hook 'hs-minor-mode)
+;; function for switching between two most recently visited buffers
+(defun switch-to-other-buffer ()
+  "Switch to last visited buffer."
+  (interactive)
+  (switch-to-buffer (other-buffer) (current-buffer) 1))
+(global-set-key (kbd "C-c b") 'switch-to-other-buffer)
 
 
-;; *********** Available C style: ***************
-;; “gnu”:    The default style for GNU projects
-;; “k&r”:    What Kernighan and Ritchie, the authors of C used in their book
-;; “bsd”:    What BSD developers use, aka “Allman style” after Eric Allman.
-;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
-;; “stroustrup”: What Stroustrup, the author of C++ used in his book
-;; “ellemtel”:  Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,”
-;;             Erik Nyquist and Mats Henricson, Ellemtel
-;; “linux”:  What the Linux developers use for kernel development
-;; “python”:What Python developers use for extension modules
-;; “java”:  The default style for java-mode (see below)
-;; “user”:  When you want to define your own style
-;; **********************************************
-(setq
- c-default-style "linux" ;; set style to "linux"
- )
+(defun toggle-maximize-buffer ()
+  "Maximize/minimize buffer"
+       (interactive)
+       (if (= 1 (length (window-list)))
+           (jump-to-register '_)
+         (progn
+           (window-configuration-to-register '_)
+           (delete-other-windows))))
+(key-chord-define-global "xm" 'toggle-maximize-buffer)
 
-(provide 'setup-company)
-;;; setup-company.el ends here
 
+(defun transpose-windows (arg)
+  "Transpose the buffers shown in two windows."
+  (interactive "p")
+  (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
+    (while (/= arg 0)
+      (let ((this-win (window-buffer))
+            (next-win (window-buffer (funcall selector))))
+        (set-window-buffer (selected-window) next-win)
+        (set-window-buffer (funcall selector) this-win)
+        (select-window (funcall selector)))
+      (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
+(global-set-key (kbd "C-x w t") 'transpose-windows)
 #+END_SRC
 
-* compilation
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "<f5>") (lambda ()
-                               (interactive)
-                               (setq-local compilation-read-command nil)
-                               (call-interactively 'compile)))
-;; Setup GDB
-(setq gdb-many-windows t
- ;; Non-nil means display source file containing the main routine at startup
- gdb-show-main t)
-#+END_SRC
-* editing
-** Basic Editing Configurations
+* Editing
+** Basic Settings
 #+BEGIN_SRC emacs-lisp
 (show-paren-mode 1)
 
@@ -885,7 +593,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 #+END_SRC
 
 #+END_SRC
-** Unicode
+** UTF-8
 #+BEGIN_SRC emacs-lisp 
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
@@ -924,14 +632,144 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 
 
 #+END_SRC
-** Comments
-#+BEGIN_SRC emacs-lisp 
-(defun toggle-comment-on-line ()
-  "comment or uncomment current line"
-  (interactive)
-  (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
-(global-set-key (kbd "C-;") 'toggle-comment-on-line)
+
+** smartparens
+#+BEGIN_SRC emacs-lisp
+(require 'smartparens-config)
+(setq sp-base-key-bindings 'paredit)
+(setq sp-autoskip-closing-pair 'always)
+(setq sp-hybrid-kill-entire-symbol nil)
+(setq sp-backward-delete-char 'paredit-backward-delete)
+(sp-use-paredit-bindings)
+
+(show-smartparens-global-mode +1)
+(smartparens-global-mode 1)
+
+(add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
+(add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 #+END_SRC
+*** TODO sp-delete-sexp
+    SCHEDULED: <2016-02-07 Sun>        
+    - Note taken on [2016-02-06 Sat 16:09] \\
+      Currently broken.
+
+#+BEGIN_SRC emacs-lisp
+(defun sp-delete-sexp ()
+"Deletes sexp at point. Does not save to kill ring."
+    (interactive)
+    (sp-forward-sexp)
+    (sp-backward-sexp)
+    (mark)
+    (sp-forward-sexp)
+  (delete-region (point) (mark)))
+#+END_SRC
+
+*** bind-keys
+#+BEGIN_SRC emacs-lisp 
+(bind-keys
+ :map smartparens-mode-map
+ ("C-' a" . sp-beginning-of-sexp)
+ ("C-' e" . sp-end-of-sexp)
+
+ ("C-' k" . sp-down-sexp)
+ ("C-' i"   . sp-up-sexp)
+ ("C-' j" . sp-backward-down-sexp)
+ ("C-' l"   . sp-backward-up-sexp)
+
+ ("C-' f" . sp-forward-sexp)
+ ("C-' b" . sp-backward-sexp)
+
+ ("C-' n" . sp-next-sexp)
+ ("C-' p" . sp-previous-sexp)
+
+ ("C-' h" . sp-forward-symbol)
+ ("C-' g" . sp-backward-symbol)
+
+ ("C-' t" . sp-forward-slurp-sexp)
+ ("C-' w" . sp-forward-barf-sexp)
+ ("C-' r"  . sp-backward-slurp-sexp)
+ ("C-' q"  . sp-backward-barf-sexp)
+
+ ("C-' C-t" . sp-transpose-sexp)
+ ("C-' k" . sp-kill-sexp)
+ ("C-' h"   . sp-kill-hybrid-sexp)
+ ("C-' C-k"   . sp-backward-kill-sexp)
+ ("C-' C-w" . sp-copy-sexp)
+
+ ("C-' d" . sp-delete-sexp)        ;; this function doesnt exist?
+
+ ("<backspace>" . sp-backward-delete-char)
+ ("C-<backspace>" . backward-delete-char)     ;; this should be like paredit
+ ("M-<backspace>" . sp-backward-kill-word)     ;; this should be like paredit
+ ("M-s-<backspace>" . backward-kill-word)     ;; this should be like paredit
+ ([remap sp-backward-kill-word] . backward-kill-word)
+
+ ("M-[" . sp-backward-unwrap-sexp)
+ ("M-]" . sp-unwrap-sexp)
+ ("M-s-[" . sp-rewrap-sexp)
+
+ ("C-x C-t" . sp-transpose-hybrid-sexp)
+
+ ("C-c ("  . wrap-with-parens)
+ ("C-c ["  . wrap-with-brackets)
+ ("C-c {"  . wrap-with-braces)
+ ("C-c '"  . wrap-with-single-quotes)
+ ("C-c \"" . wrap-with-double-quotes)
+ ("C-c _"  . wrap-with-underscores)
+ ("C-c `"  . wrap-with-back-quotes))
+#+END_SRC
+*** key-chord
+#+BEGIN_SRC emacs-lisp
+;; Key bindings
+(key-chord-define-global "8a" 'sp-beginning-of-sexp)
+(key-chord-define-global "8e" 'sp-end-of-sexp)
+
+(key-chord-define-global "4k" 'sp-down-sexp)
+(key-chord-define-global "4i"   'sp-up-sexp)
+(key-chord-define-global "4j" 'sp-backward-down-sexp)
+(key-chord-define-global "4l"   'sp-backward-up-sexp)
+
+(key-chord-define-global "8f" 'sp-forward-sexp)
+(key-chord-define-global "8b" 'sp-backward-sexp)
+
+(key-chord-define-global "4n" 'sp-next-sexp)
+(key-chord-define-global "4p" 'sp-previous-sexp)
+
+(key-chord-define-global "4h" 'sp-forward-symbol)
+(key-chord-define-global "8g" 'sp-backward-symbol)
+
+(key-chord-define-global "8t" 'sp-forward-slurp-sexp)
+(key-chord-define-global "8w" 'sp-forward-barf-sexp)
+(key-chord-define-global "8r"  'sp-backward-slurp-sexp)
+(key-chord-define-global "8q"  'sp-backward-barf-sexp)
+
+(key-chord-define-global "4t" 'sp-transpose-sexp)
+(key-chord-define-global "4k" 'sp-kill-sexp)
+(key-chord-define-global "4h" 'sp-kill-hybrid-sexp)
+(key-chord-define-global "4j" 'sp-backward-kill-sexp)
+(key-chord-define-global "4w" 'sp-copy-sexp)
+
+(key-chord-define-global "8d" 'sp-delete-sexp)        ;; this function doesnt exist?
+
+;("<backspace>" . sp-backward-delete-char)
+;("C-<backspace>" . backward-delete-char)     ;; this should be like paredit
+;("M-<backspace>" . sp-backward-kill-word)     ;; this should be like paredit
+;("M-s-<backspace>" . backward-kill-word)     ;; this should be like paredit
+;([remap sp-backward-kill-word] . backward-kill-word)
+
+(key-chord-define-global "u9" 'sp-backward-unwrap-sexp)
+(key-chord-define-global "u0" 'sp-unwrap-sexp)
+(key-chord-define-global "90" 'sp-rewrap-sexp) ; this is probably a poor choice, but whatever.
+
+(key-chord-define-global "r9"  'wrap-with-parens)
+(key-chord-define-global "r["  'wrap-with-brackets)
+(key-chord-define-global "r{"  'wrap-with-braces)
+(key-chord-define-global "r'"  'wrap-with-single-quotes)
+(key-chord-define-global "r\"" 'wrap-with-double-quotes)
+(key-chord-define-global "r_"  'wrap-with-underscores)
+(key-chord-define-global "r`"  'wrap-with-back-quotes)
+#+END_SRC 
+
 ** Packages
 *** hippie-expand
 #+BEGIN_SRC emacs-lisp 
@@ -1059,145 +897,46 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (require 'duplicate-thing)
 (global-set-key (kbd "M-c") 'duplicate-thing)
 #+END_SRC 
-*** smartparens
-#+BEGIN_SRC emacs-lisp
-(require 'smartparens-config)
 
-(setq sp-base-key-bindings 'paredit)
-(setq sp-autoskip-closing-pair 'always)
-(setq sp-hybrid-kill-entire-symbol nil)
-(setq sp-backward-delete-char 'paredit-backward-delete)
-(sp-use-paredit-bindings)
-
-(show-smartparens-global-mode +1)
-(smartparens-global-mode 1)
-
-(add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
-(add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
-#+END_SRC
-**** TODO sp-delete-sexp
-    SCHEDULED: <2016-02-07 Sun>        
-    - Note taken on [2016-02-06 Sat 16:09] \\
-      Currently broken.
-
-#+BEGIN_SRC emacs-lisp
-(defun sp-delete-sexp ()
-"Deletes sexp at point. Does not save to kill ring."
-    (interactive)
-    (sp-forward-sexp)
-    (sp-backward-sexp)
-    (mark)
-    (sp-forward-sexp)
-  (delete-region (point) (mark)))
-#+END_SRC
-
-**** bind-keys
+** Functions
+*** Comments
 #+BEGIN_SRC emacs-lisp 
-(bind-keys
- :map smartparens-mode-map
- ("C-' a" . sp-beginning-of-sexp)
- ("C-' e" . sp-end-of-sexp)
-
- ("C-' k" . sp-down-sexp)
- ("C-' i"   . sp-up-sexp)
- ("C-' j" . sp-backward-down-sexp)
- ("C-' l"   . sp-backward-up-sexp)
-
- ("C-' f" . sp-forward-sexp)
- ("C-' b" . sp-backward-sexp)
-
- ("C-' n" . sp-next-sexp)
- ("C-' p" . sp-previous-sexp)
-
- ("C-' h" . sp-forward-symbol)
- ("C-' g" . sp-backward-symbol)
-
- ("C-' t" . sp-forward-slurp-sexp)
- ("C-' w" . sp-forward-barf-sexp)
- ("C-' r"  . sp-backward-slurp-sexp)
- ("C-' q"  . sp-backward-barf-sexp)
-
- ("C-' C-t" . sp-transpose-sexp)
- ("C-' k" . sp-kill-sexp)
- ("C-' h"   . sp-kill-hybrid-sexp)
- ("C-' C-k"   . sp-backward-kill-sexp)
- ("C-' C-w" . sp-copy-sexp)
-
- ("C-' d" . sp-delete-sexp)        ;; this function doesnt exist?
-
- ("<backspace>" . sp-backward-delete-char)
- ("C-<backspace>" . backward-delete-char)     ;; this should be like paredit
- ("M-<backspace>" . sp-backward-kill-word)     ;; this should be like paredit
- ("M-s-<backspace>" . backward-kill-word)     ;; this should be like paredit
- ([remap sp-backward-kill-word] . backward-kill-word)
-
- ("M-[" . sp-backward-unwrap-sexp)
- ("M-]" . sp-unwrap-sexp)
- ("M-s-[" . sp-rewrap-sexp)
-
- ("C-x C-t" . sp-transpose-hybrid-sexp)
-
- ("C-c ("  . wrap-with-parens)
- ("C-c ["  . wrap-with-brackets)
- ("C-c {"  . wrap-with-braces)
- ("C-c '"  . wrap-with-single-quotes)
- ("C-c \"" . wrap-with-double-quotes)
- ("C-c _"  . wrap-with-underscores)
- ("C-c `"  . wrap-with-back-quotes))
+(defun toggle-comment-on-line ()
+  "comment or uncomment current line"
+  (interactive)
+  (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
+(global-set-key (kbd "C-;") 'toggle-comment-on-line)
 #+END_SRC
-**** key-chord
+
+* Development Environments
+** Compilation
 #+BEGIN_SRC emacs-lisp
-;; Key bindings
-(key-chord-define-global "8a" 'sp-beginning-of-sexp)
-(key-chord-define-global "8e" 'sp-end-of-sexp)
+(global-set-key (kbd "<f5>") (lambda ()
+                               (interactive)
+                               (setq-local compilation-read-command nil)
+                               (call-interactively 'compile)))
+;; Setup GDB
+(setq gdb-many-windows t
+ ;; Non-nil means display source file containing the main routine at startup
+ gdb-show-main t)
+#+END_SRC
 
-(key-chord-define-global "4k" 'sp-down-sexp)
-(key-chord-define-global "4i"   'sp-up-sexp)
-(key-chord-define-global "4j" 'sp-backward-down-sexp)
-(key-chord-define-global "4l"   'sp-backward-up-sexp)
+** Projectile
+#+BEGIN_SRC emacs-lisp
+;; Package: projectile
+(require 'projectile)
+(projectile-global-mode)
+(setq projectile-enable-caching t)
+(require 'helm-projectile)
+(helm-projectile-on)
+(setq projectile-completion-system 'helm)
+(setq projectile-indexing-method 'alien)
+;; Package: tramp
+(setq tramp-default-method "ssh")
+#+END_SRC
 
-(key-chord-define-global "8f" 'sp-forward-sexp)
-(key-chord-define-global "8b" 'sp-backward-sexp)
-
-(key-chord-define-global "4n" 'sp-next-sexp)
-(key-chord-define-global "4p" 'sp-previous-sexp)
-
-(key-chord-define-global "4h" 'sp-forward-symbol)
-(key-chord-define-global "8g" 'sp-backward-symbol)
-
-(key-chord-define-global "8t" 'sp-forward-slurp-sexp)
-(key-chord-define-global "8w" 'sp-forward-barf-sexp)
-(key-chord-define-global "8r"  'sp-backward-slurp-sexp)
-(key-chord-define-global "8q"  'sp-backward-barf-sexp)
-
-(key-chord-define-global "4t" 'sp-transpose-sexp)
-(key-chord-define-global "4k" 'sp-kill-sexp)
-(key-chord-define-global "4h" 'sp-kill-hybrid-sexp)
-(key-chord-define-global "4j" 'sp-backward-kill-sexp)
-(key-chord-define-global "4w" 'sp-copy-sexp)
-
-(key-chord-define-global "8d" 'sp-delete-sexp)        ;; this function doesnt exist?
-
-;("<backspace>" . sp-backward-delete-char)
-;("C-<backspace>" . backward-delete-char)     ;; this should be like paredit
-;("M-<backspace>" . sp-backward-kill-word)     ;; this should be like paredit
-;("M-s-<backspace>" . backward-kill-word)     ;; this should be like paredit
-;([remap sp-backward-kill-word] . backward-kill-word)
-
-(key-chord-define-global "u9" 'sp-backward-unwrap-sexp)
-(key-chord-define-global "u0" 'sp-unwrap-sexp)
-(key-chord-define-global "90" 'sp-rewrap-sexp) ; this is probably a poor choice, but whatever.
-
-(key-chord-define-global "r9"  'wrap-with-parens)
-(key-chord-define-global "r["  'wrap-with-brackets)
-(key-chord-define-global "r{"  'wrap-with-braces)
-(key-chord-define-global "r'"  'wrap-with-single-quotes)
-(key-chord-define-global "r\"" 'wrap-with-double-quotes)
-(key-chord-define-global "r_"  'wrap-with-underscores)
-(key-chord-define-global "r`"  'wrap-with-back-quotes)
-#+END_SRC 
-
-** Lisp Editing
+** Languages
+*** TO BE DIVIDED AMONG LISPS
 
 #+BEGIN_SRC emacs-lisp
 ;(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
@@ -1216,8 +955,8 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 #+END_SRC
 
-*** Emacs Lisp 
-**** die-tabs
+**** Emacs Lisp 
+***** die-tabs
 #+BEGIN_SRC emacs-lisp
 (defun die-tabs ()
 "use 2 spaces for tabs"
@@ -1227,7 +966,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
   (untabify (region-beginning) (region-end))
   (keyboard-quit))
 #+END_SRC
-**** prelude-move-beginning-of-line
+***** prelude-move-beginning-of-line
 #+BEGIN_SRC emacs-lisp
 ;; Customized functions
 (defun prelude-move-beginning-of-line (arg)
@@ -1256,7 +995,7 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key (kbd "C-a") 'prelude-move-beginning-of-line)
 #+END_SRC
 
-**** defadvice kill-ring-save
+***** defadvice kill-ring-save
 #+BEGIN_SRC emacs-lisp 
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single
@@ -1268,7 +1007,7 @@ line instead."
            (line-beginning-position 2)))))
 #+END_SRC
 
-**** defadvice kill-region
+***** defadvice kill-region
 #+BEGIN_SRC emacs-lisp 
 (defadvice kill-region (before slick-cut activate compile)
   "When called interactively with no active region, kill a single
@@ -1279,7 +1018,7 @@ line instead."
            (line-beginning-position 2)))))
 #+END_SRC
 
-**** defadvice kill-line
+***** defadvice kill-line
 #+BEGIN_SRC emacs-lisp 
 ;; kill a line, including whitespace characters until next non-whiepsace character
 ;; of next line
@@ -1293,7 +1032,7 @@ line instead."
                  (just-one-space 0)
                  (backward-char 1)))))
 #+END_SRC
-**** variables
+***** variables
 yank-indent-modes
 #+BEGIN_SRC emacs-lisp 
 ;; taken from prelude-editor.el
@@ -1325,7 +1064,7 @@ yank-advised-indent-function
       (indent-region beg end nil)))
 #+END_SRC
 
-**** defadvice yank
+***** defadvice yank
 #+BEGIN_SRC emacs-lisp 
 (defadvice yank (after yank-indent activate)
   "If current mode is one of 'yank-indent-modes,
@@ -1338,7 +1077,7 @@ indent yanked text (with prefix arg don't indent)."
         (yank-advised-indent-function (region-beginning) (region-end)))))
 #+END_SRC
 
-**** defadvice yank-pop
+***** defadvice yank-pop
 #+BEGIN_SRC emacs-lisp 
 (defadvice yank-pop (after yank-pop-indent activate)
   "If current mode is one of `yank-indent-modes',
@@ -1351,7 +1090,7 @@ indent yanked text (with prefix arg don't indent)."
       (yank-advised-indent-function (region-beginning) (region-end)))))
 #+END_SRC
 
-**** indent-buffer
+***** indent-buffer
 #+BEGIN_SRC emacs-lisp
 ;; prelude-core.el
 (defun indent-buffer ()
@@ -1360,7 +1099,7 @@ indent yanked text (with prefix arg don't indent)."
   (indent-region (point-min) (point-max)))
 #+END_SRC
 
-**** prelude-indent-sensitive-modes
+***** prelude-indent-sensitive-modes
 #+BEGIN_SRC emacs-lisp 
 ;; prelude-editing.el
 (defcustom prelude-indent-sensitive-modes
@@ -1369,7 +1108,7 @@ indent yanked text (with prefix arg don't indent)."
   :type 'list)
 #+END_SRC
 
-**** indent-region-or-buffer
+***** indent-region-or-buffer
 #+BEGIN_SRC emacs-lisp 
 (defun indent-region-or-buffer ()
   "Indent a region if selected, otherwise the whole buffer."
@@ -1388,7 +1127,7 @@ indent yanked text (with prefix arg don't indent)."
 (global-set-key (kbd "C-c i") 'indent-region-or-buffer)
 #+END_SRC
 
-**** prelude-get-positions-of-line-or-region
+***** prelude-get-positions-of-line-or-region
 #+BEGIN_SRC emacs-lisp 
 ;; add duplicate line function from Prelude. taken from prelude-core.el.
 (defun prelude-get-positions-of-line-or-region ()
@@ -1404,7 +1143,7 @@ or region."
     (cons beg end)))
 #+END_SRC
 
-**** prelude-smart-open-line
+***** prelude-smart-open-line
 
 smart openline
 
@@ -1421,7 +1160,7 @@ With a prefix ARG open line above the current line."
       (newline-and-indent))))
 #+END_SRC
 
-**** prelude-smart-open-line-above
+***** prelude-smart-open-line-above
 #+BEGIN_SRC emacs-lisp 
 (defun prelude-smart-open-line-above ()
   "Insert an empty line above the current line.
@@ -1440,19 +1179,321 @@ Position the cursor at it's beginning, according to the current mode."
             (lambda ()
               (set (make-local-variable 'company-backends) '(company-elisp))))
 #+END_SRC
-* projectile
+
+*** Clojure
+**** clojure-mode
 #+BEGIN_SRC emacs-lisp
-;; Package: projectile
-(require 'projectile)
-(projectile-global-mode)
-(setq projectile-enable-caching t)
-(require 'helm-projectile)
-(helm-projectile-on)
-(setq projectile-completion-system 'helm)
-(setq projectile-indexing-method 'alien)
-;; Package: tramp
-(setq tramp-default-method "ssh")
+;; This is useful for working with camel-case tokens, like names of
+;; Java classes (e.g. JavaClassName)
+(add-hook 'clojure-mode-hook 'subword-mode)
+
+;; A little more syntax highlighting
+(require 'clojure-mode-extra-font-locking)
+
+
+;;;;;;;;;; MIDJE ???? ;;;;;;;;;;;;;;
+;; syntax hilighting for midje
+(add-hook 'clojure-mode-hook
+          (lambda ()
+            (setq inferior-lisp-program "lein repl")
+            (font-lock-add-keywords
+             nil
+             '(("(\\(facts?\\)"
+                (1 font-lock-keyword-face))
+               ("(\\(background?\\)"
+                (1 font-lock-keyword-face))))
+            (define-clojure-indent (fact 1))
+            (define-clojure-indent (facts 1))))
 #+END_SRC
+**** CIDER
+#+BEGIN_SRC emacs-lisp 
+;; provides minibuffer documentation for the code you're typing into the repl
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+
+;; go right to the REPL buffer when it's finished connecting
+;;;;;;;;;;;;;;;;;;; HOW CAN I MAKE IT SPLIT IN VERTICAL? ;;;;;;;;;;;;;;;;;
+(setq cider-repl-pop-to-buffer-on-connect t)
+
+;; When there's a cider error, show its buffer and switch to it
+(setq cider-show-error-buffer nil)
+(setq cider-auto-select-error-buffer t)
+
+(global-set-key (kbd "C-' 1") 'cider-visit-error-buffer)
+
+;; Where to store the cider history.
+(setq cider-repl-history-file "~/.emacs.d/cider-history")
+
+;; Wrap when navigating history.
+(setq cider-repl-wrap-history t)
+
+;; Use clojure mode for other extensions
+(add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
+
+
+;; key bindings
+#+END_SRC
+**** Functions
+#+BEGIN_SRC emacs-lisp 
+;; these help with development of web apps
+(defun cider-start-http-server ()
+  (interactive)
+  (cider-load-current-buffer)
+  (let ((ns (cider-current-ns)))
+    (cider-repl-set-ns ns)
+    (cider-interactive-eval (format "(println '(def server (%s/start))) (println 'server)" ns))
+    (cider-interactive-eval (format "(def server (%s/start)) (println server)" ns))))
+
+
+(defun cider-refresh ()
+  (interactive)
+  (cider-interactive-eval (format "(user/reset)")))
+
+(defun cider-user-ns ()
+  (interactive)
+  (cider-repl-set-ns "user"))
+
+(eval-after-load 'cider
+  '(progn
+     (define-key clojure-mode-map (kbd "C-c C-v") 'cider-start-http-server)
+     (define-key clojure-mode-map (kbd "C-c r") 'cider-refresh)
+     (define-key clojure-mode-map (kbd "C-c u") 'cider-user-ns)
+     (define-key cider-mode-map (kbd "C-c u") 'cider-user-ns)
+     (define-key cider-mode-map (kbd "C-`") 'cider-jack-in)))
+#+END_SRC
+
+*** Python
+#+BEGIN_SRC emacs-lisp
+(require 'elpy)
+
+(add-hook 'python-mode-hook
+          (lambda ()
+            (elpy-mode)
+            (elpy-enable)))
+
+(provide 'setup-python)
+#+END_SRC
+*** Emacs Lisp
+*** C and C++
+**** cedet
+#+BEGIN_SRC emacs-lisp
+(require 'cc-mode)
+(require 'semantic)
+
+
+(global-semanticdb-minor-mode 1)
+
+(global-semantic-idle-scheduler-mode 1)
+(global-semantic-stickyfunc-mode 1)
+
+
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(set-default 'semantic-case-fold t)
+
+(semantic-mode 1)
+
+(defun dwc-cedet-hook ()
+  (local-set-key "\C-c\C-j" 'semantic-ia-fast-jump)
+  (local-set-key "\C-c\C-j" 'semantic-ia-fast-jump)
+  (local-set-key "\C-c\C-s" 'semantic-ia-show-summary))
+
+(add-hook 'c-mode-common-hook 'dodge-cedet-hook)
+(add-hook 'c-mode-hook 'dodge-cedet-hook)
+(add-hook 'c++-mode-hook 'dodge-cedet-hook)
+
+
+;; add include paths for semantic
+;; remove "c++-mode" to make path available to both c and c++ modes
+                                        ;(semantic-add-system-include '/path/to/library' 'c++-mode)
+
+(require 'function-args)
+(fa-config-default)
+(define-key c-mode-map  [("C-c C-f C-h")] 'moo-complete)
+(define-key c++-mode-map  [(control tab)] 'moo-complete)
+(define-key c-mode-map (kbd "C-c M-o s")  'fa-show)
+(define-key c++-mode-map (kbd "C-c M-o s")  'fa-show)
+
+
+
+;; please don't ask me if I really want to compile
+(global-set-key (kbd "<f5>") (lambda ()
+                               (interactive)
+                               (setq-local compilation-read-command nil)
+                               (call-interactively 'compile)))
+
+
+
+;; Enable EDE only in C/C++
+(require 'ede)
+(global-ede-mode)
+#+END_SRC
+
+* Organization and Version Control
+** magit
+#+BEGIN_SRC  emacs-lisp
+(global-set-key (kbd "C-c m s") 'magit-status)
+#+END_SRC
+*** backup specifics
+#+BEGIN_SRC emacs-lisp
+;; Backup function to target when called.
+(defun dwc-backup-specifics (file target)
+"Copy file to target and apply function"
+    (if (not (file-exists-p file))
+      (write-region "" nil file)) ; create file
+    (if (file-exists-p target)
+      (delete-file target))
+    (copy-file file target))
+#+END_SRC
+*** On magit-push
+#+BEGIN_SRC emacs-lisp
+;; Advise magit-push to backup specifics.el to a backup file in home
+(advice-add 'magit-push :around #'(lambda (push &rest args)
+    (dwc-backup-specifics "specifics.el" "~/.emacsSpecificsBackup.el")
+    (apply push args)))
+#+END_SRC)
+** Org Mode
+#+BEGIN_SRC emacs-lisp
+(defun my-org-mode-hook ()
+  (toggle-truncate-lines)
+  (abbrev-mode 1)
+  (toggle-word-wrap))
+
+(add-hook 'org-mode-hook 'my-org-mode-hook)
+
+(setq org-src-fontify-natively t)
+#+END_SRC
+*** column editing
+#+BEGIN_SRC emacs-lisp
+;(add-hook 'org-mode-hook 'my-org-mode-hook)
+(global-set-key (kbd "C-c o k") 'org-mode-delete-column)
+(global-set-key (kbd "C-c o i") 'org-mode-insert-column)
+(global-set-key (kbd "C-c o j") 'org-mode-move-column-left)
+(global-set-key (kbd "C-c o l") 'org-mode-move-column-right)
+
+(global-set-key (kbd "C-c o RET") 'org-mode-todo-heading)
+#+END_SRC
+*** org-path-completion
+#+BEGIN_SRC emacs-lisp
+(setq org-goto-interface 'outline-path-completion
+      org-goto-max-level 10)
+#+END_SRC
+*** org-capture
+org-capture allows you to take a note anywhere, which it will write to the org-default-notes-file.
+#+BEGIN_SRC emacs-lisp
+;; this is set in ~/.emacs.d/custom/setup-specifics.el
+(global-set-key (kbd "C-c c") 'org-capture)
+#+END_SRC
+*** org-back-to-top-level-heading
+#+BEGIN_SRC elisp
+;; move point to top-level heading
+(defun org-back-to-top-level-heading ()
+  "Go back to the current top level heading."
+  (interactive)
+  (or (re-search-backward "^\* " nil t)
+      (goto-char (point-min))))
+
+;; make todo's check recursively when determining the number of todo's under it
+(setq org-hierarchical-todo-statistics nil)
+#+END_SRC
+*** org-summary-todo
+This is for making sure that the top-level todo automatically is marked DONE if all sub-levels are DONE. 
+TODO otherwise.
+#+BEGIN_SRC elisp
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  (let (org-log-done org-log-states)   ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+#+END_SRC
+*** jump-to-org-agenda
+This is a snippet from John Wiegley. 
+It shows org agenda after emacs has been idle for a certain amount of time.
+#+BEGIN_SRC elisp
+(defun jump-to-org-agenda ()
+  (interactive)
+  (let ((buf (get-buffer "*Org Agenda*"))
+        wind)
+    (if buf
+        (if (setq wind (get-buffer-window buf))
+            (select-window wind)
+          (if (called-interactively-p)
+              (progn
+                (select-window (display-buffer buf t t))
+                (org-fit-window-to-buffer)
+                ;; (org-agenda-redo)
+                )
+            (with-selected-window (display-buffer buf)
+              (org-fit-window-to-buffer)
+              ;; (org-agenda-redo)
+              )))
+      (call-interactively 'org-agenda-list)))
+  ;;(let ((buf (get-buffer "*Calendar*")))
+  ;;  (unless (get-buffer-window buf)
+  ;;    (org-agenda-goto-calendar)))
+  )
+(run-with-idle-timer 600 t 'jump-to-org-agenda)
+#+END_SRC
+
+
+* Emacs as an Internet Interface
+** Edit With Emacs (Google Chrome extension)
+#+BEGIN_SRC emacs-lisp
+;; Edit With Emacs (Google Chrome Extension)
+(add-to-list 'load-path "~/.emacs.d/edit-with-emacs")
+(require 'edit-server)
+(edit-server-start)
+#+END_SRC
+** IRC
+* company
+#+BEGIN_SRC  emacs-lisp
+(require 'company)
+
+(add-hook 'after-init-hook 'global-company-mode)
+(setq company-backends (delete 'company-semantic company-backends))
+
+(define-key c-mode-map  [(control tab)] 'company-complete)
+(define-key c++-mode-map  [(control tab)] 'company-complete)
+
+(global-set-key (kbd "C-c <tab>") 'helm-company)
+
+;; company-c-headers
+;(add-to-list 'company-c-headers-path-system "/usr/include/c++/4.8/")
+(add-to-list 'company-backends 'company-c-headers)
+(eval-after-load 'company
+  '(add-to-list 'company-backends 'company-irony))
+;; (optional) adds CC special commands to `company-begin-commands' in order to
+;; trigger completion at interesting places, such as after scope operator std::|
+(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
+
+;; hs-minor-mode for folding source code
+(add-hook 'c-mode-common-hook 'hs-minor-mode)
+
+
+;; *********** Available C style: ***************
+;; “gnu”:    The default style for GNU projects
+;; “k&r”:    What Kernighan and Ritchie, the authors of C used in their book
+;; “bsd”:    What BSD developers use, aka “Allman style” after Eric Allman.
+;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
+;; “stroustrup”: What Stroustrup, the author of C++ used in his book
+;; “ellemtel”:  Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,”
+;;             Erik Nyquist and Mats Henricson, Ellemtel
+;; “linux”:  What the Linux developers use for kernel development
+;; “python”:What Python developers use for extension modules
+;; “java”:  The default style for java-mode (see below)
+;; “user”:  When you want to define your own style
+;; **********************************************
+(setq
+ c-default-style "linux" ;; set style to "linux"
+ )
+
+(provide 'setup-company)
+;;; setup-company.el ends here
+
+#+END_SRC
+
 * rgrep
 #+BEGIN_SRC emacs-lisp 
 (defun rgrep-fullscreen (regexp &optional files dir confirm)
@@ -1573,13 +1614,6 @@ Position the cursor at it's beginning, according to the current mode."
   '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
 #+END_SRC
 
-* Edit With Emacs (Google Chrome extension)
-#+BEGIN_SRC emacs-lisp
-;; Edit With Emacs (Google Chrome Extension)
-(add-to-list 'load-path "~/.emacs.d/edit-with-emacs")
-(require 'edit-server)
-(edit-server-start)
-#+END_SRC
 * misc
 ** functions
 *** remove-headers
@@ -1601,21 +1635,6 @@ Position the cursor at it's beginning, according to the current mode."
 
 
 #+END_SRC
-*** backup specifics
-#+BEGIN_SRC emacs-lisp
-;; Backup function to target when called.
-(defun dwc-backup-specifics (file target)
-"Copy file to target and apply function"
-    (if (not (file-exists-p file))
-      (write-region "" nil file)) ; create file
-    (if (file-exists-p target)
-      (delete-file target))
-    (copy-file file target))
 
-;; Advise magit-push to backup specifics.el to a backup file in home
-(advice-add 'magit-push :around #'(lambda (function &rest args)
-    (dwc-backup-specifics "specifics.el" "~/.emacsSpecificsBackup.el")
-    (apply function args)))
-#+END_SRC)
 
 
