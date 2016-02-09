@@ -1520,8 +1520,21 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (edit-server-start)
 #+END_SRC
 ** IRC
-* rgrep
+** Functions
+*** remove-headers
+#+BEGIN_SRC emacs-lisp
+(defun my/remove-headers ()
+  (goto-char (point-min))
+  (re-search-forward "^$")
+  (goto-char (+ 1 (point)))
+  (delete-region (point) (point-min)))
+#+END_SRC
+
+* Other Tools
+** rgrep
 #+BEGIN_SRC emacs-lisp 
+(require 'dash)
+
 (defun rgrep-fullscreen (regexp &optional files dir confirm)
   "Open grep in full screen, saving windows."
   (interactive
@@ -1544,19 +1557,25 @@ It shows org agenda after emacs has been idle for a certain amount of time.
   (switch-to-buffer "*grep*")
   (delete-other-windows)
   (beginning-of-buffer))
+#+end_src
 
+#+begin_src emacs-lisp
 (defun rgrep-quit-window ()
   (interactive)
   (kill-buffer)
   (jump-to-register ?$))
+#+end_src
 
+#+begin_src emacs-lisp
 (defun rgrep-goto-file-and-close-rgrep ()
   (interactive)
   (compile-goto-error)
   (kill-buffer "*grep*")
   (delete-other-windows)
   (message "Type C-x r j $ to return to pre-rgrep windows."))
+#+end_src
 
+#+begin_src emacs-lisp
 (defvar git-grep-switches "--extended-regexp -I -n"
   "Switches to pass to `git grep'.")
 
@@ -1583,7 +1602,9 @@ It shows org agenda after emacs has been idle for a certain amount of time.
     (switch-to-buffer "*grep*")
     (delete-other-windows)
     (beginning-of-buffer)))
+#+end_src
 
+#+begin_src emacs-lisp
 (eval-after-load "grep"
   '(progn
      ;; Don't recurse into some directories
@@ -1598,11 +1619,9 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 
      ;; Use same keybinding as occur
      (setq wgrep-enable-key "e")))
+#+end_src
 
-;; Command to add cursor to all matches in wgrep
-
-(require 'dash)
-
+#+begin_src emacs-lisp
 (defvar grep-match-positions nil)
 (make-variable-buffer-local 'grep-match-positions)
 
@@ -1624,8 +1643,10 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (eval-after-load "grep"
   '(defadvice grep-mode (after grep-register-match-positions activate)
      (add-hook 'compilation-filter-hook 'grep-register-match-positions nil t)))
+#+end_src
 
-(defun mc/add-cursors-to-all-matches ()
+#+begin_src emacs-lisp
+(defun add-cursors-to-all-matches ()
   (interactive)
   (--each grep-match-positions
     (unless (= 0 it-index)
@@ -1639,26 +1660,4 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (eval-after-load "wgrep"
   '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
 #+END_SRC
-
-* misc
-** functions
-*** remove-headers
-#+BEGIN_SRC emacs-lisp
-(defun my/remove-headers ()
-  (goto-char (point-min))
-  (re-search-forward "^$")
-  (goto-char (+ 1 (point)))
-  (delete-region (point) (point-min)))
-#+END_SRC
-*** my-find-file-other-frame
-#+BEGIN_SRC emacs-lisp
-;; this works, but only because of  (message "") hack
-(defun my/find-file-other-frame (file)
-  (interactive "find file: ")
-  (find-file-other-frame file)
-  (toggle-scroll-bar)
-  (message ""))
-#+END_SRC
-
-
 
