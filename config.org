@@ -564,21 +564,22 @@ Transpose two windows:
 #+END_SRC
 
 ** Smartparens
+*use-package smartparents*
 #+BEGIN_SRC emacs-lisp
-(use-package smartparens)
+(use-package smartparens
+  :init
+  (setq sp-base-key-bindings 'paredit)
+  (setq sp-autoskip-closing-pair 'always)
+  (setq sp-hybrid-kill-entire-symbol nil)
+  (setq sp-backward-delete-char 'paredit-backward-delete)
+  (sp-use-paredit-bindings)
 
-(require 'smartparens-config)
-(setq sp-base-key-bindings 'paredit)
-(setq sp-autoskip-closing-pair 'always)
-(setq sp-hybrid-kill-entire-symbol nil)
-(setq sp-backward-delete-char 'paredit-backward-delete)
-(sp-use-paredit-bindings)
+  (show-smartparens-global-mode +1)
+  (smartparens-global-mode 1)
 
-(show-smartparens-global-mode +1)
-(smartparens-global-mode 1)
-
-(add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
-(add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+  (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
+  (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+)
 #+END_SRC
 *** TODO sp-delete-sexp
     SCHEDULED: <2016-02-07 Sun>        
@@ -701,10 +702,10 @@ Transpose two windows:
 (key-chord-define-global "r`"  'wrap-with-back-quotes)
 #+END_SRC 
 
-** Packages
+** Other Packages
 *** hippie-expand
 #+BEGIN_SRC emacs-lisp 
-;; Hippie expand
+;; Hippie expand-file-name
 (global-set-key (kbd "M-/") 'hippie-expand)
 ;; Lisp-friendly hippie expand
 (setq hippie-expand-try-functions-list
@@ -716,60 +717,74 @@ Transpose two windows:
 #+END_SRC
 
 *** volatile-highlights
-#+BEGIN_SRC emacs-lisp 
-(use-package volatile-highlights)
-
-(require 'volatile-highlights)
-(volatile-highlights-mode t)
-
-
+#+BEGIN_SRC emacs-lisp
+(use-package volatile-highlights
+  :config
+  (volatile-highlights-mode t))
 #+END_SRC
-*** clean-aindent-mode
-#+BEGIN_SRC emacs-lisp 
-(use-package clean-aindent-mode)
-(require 'clean-aindent-mode)
-(add-hook 'prog-mode-hook 'clean-aindent-mode)
-
-
+*** clean-auto-indent-mode
+#+BEGIN_SRC emacs-lisp
+(use-package clean-aindent-mode
+  :commands clean-aindent-mode
+  :init
+  (add-hook 'prog-mode-hook 'clean-aindent-mode))
 #+END_SRC
 *** dtrt-indent
 #+BEGIN_SRC emacs-lisp 
-(use-package dtrt-indent)
-(require 'dtrt-indent)
-(dtrt-indent-mode 1)
-(setq dtrt-indent-verbosity 0)
+(use-package dtrt-indent
+  :init
+  (dtrt-indent-mode 1)
+  (setq dtrt-indent-verbosity 0))
 #+END_SRC
 *** ws-butler
 #+BEGIN_SRC emacs-lisp 
-(use-package ws-butler)
-(require 'ws-butler)
-(add-hook 'c-mode-common-hook 'ws-butler-mode)
-(add-hook 'text-mode 'ws-butler-mode)
-(add-hook 'fundamental-mode 'ws-butler-mode)
-(add-hook 'prog-mode-hook 'ws-butler-mode)
-
-
+(use-package ws-butler
+  :commands ws-butler
+  :init
+  (add-hook 'c-mode-common-hook 'ws-butler-mode)
+  (add-hook 'text-mode 'ws-butler-mode)
+  (add-hook 'fundamental-mode 'ws-butler-mode)
+  (add-hook 'prog-mode-hook 'ws-butler-mode))
 #+END_SRC
 *** undo-tree
 #+BEGIN_SRC emacs-lisp 
-(use-package undo-tree)
-(require 'undo-tree)
-(global-undo-tree-mode)
-
-
-
+(use-package undo-tree
+  :init
+  (global-undo-tree-mode))
 #+END_SRC
+
 *** yasnippet
 #+BEGIN_SRC emacs-lisp 
-(use-package yasnippet)
+(use-package yasnippet
+  :commands
+  (yas/exit-all-snippets
+   yas/goto-end-of-active-field    ;; Defined below
+   yas/goto-start-of-active-field  ;; Defined below
+   yas-expand)
+  :init
+  (yas-global-mode 1)
+  ;; Bindings
+  (bind-key "<return>" 'yas/exit-all-snippets yas-keymap)
+  (bind-key "C-e" 'yas/goto-end-of-active-field yas-keymap)
+  (bind-key "C-a" 'yas/goto-start-of-active-field yas-keymap)
+  (bind-key [(tab)] 'nil yas-minor-mode-map)
+  (bind-key (kbd "TAB") 'nil yas-minor-mode-map)
+  (bind-key (kbd "C-<tab>") 'yas-expand yas-minor-mode-map)
+  :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
+  :config
+  (progn
+    (setq yas-verbosity 1) ;; No need to be so verbose
+    (setq yas-wrap-around-region t) ;; Wrap around region
+    (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
+    (defun my/yas-term-hook ()
+      (setq yas-dont-activate t))
+    (add-hook 'term-mode-hook 'my/yas-term-hook))
+  )
+#+end_src
 
-(require 'yasnippet)
-(yas-global-mode 1)
-
-;; Jump to end of snippet definition
-(define-key yas-keymap (kbd "<return>") 'yas/exit-all-snippets) 
-
-;; Inter-field navigation
+Inter-field navigation:
+#+being_src emacs-lisp
+;; Go to end of active field
 (defun yas/goto-end-of-active-field ()
   (interactive)
   (let* ((snippet (car (yas--snippets-at-point)))
@@ -778,6 +793,7 @@ Transpose two windows:
         (move-end-of-line 1)
       (goto-char position))))
 
+;; Go to start of active field
 (defun yas/goto-start-of-active-field ()
   (interactive)
   (let* ((snippet (car (yas--snippets-at-point)))
@@ -785,58 +801,46 @@ Transpose two windows:
     (if (= (point) position)
         (move-beginning-of-line 1)
       (goto-char position))))
-
-(define-key yas-keymap (kbd "C-e") 'yas/goto-end-of-active-field)
-(define-key yas-keymap (kbd "C-a") 'yas/goto-start-of-active-field)
-;; (define-key yas-minor-mode-map [(tab)] nil)
-;; (define-key yas-minor-mode-map (kbd "TAB") nil)
-;; (define-key yas-minor-mode-map (kbd "C-<tab>") 'yas-expand)
-;; No dropdowns please, yas
-(setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
-
-;; No need to be so verbose
-(setq yas-verbosity 1)
-
-;; Wrap around region
-(setq yas-wrap-around-region t)
-
-(add-hook 'term-mode-hook (lambda() (setq yas-dont-activate t)))
-
-
-#+END_SRC
+#+end_src
 *** anzu
 #+BEGIN_SRC emacs-lisp 
-(use-package anzu)
-(require 'anzu)
-(global-anzu-mode)
-(global-set-key (kbd "M-%") 'anzu-query-replace)
-(global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp)
+(use-package anzu
+  :commands
+  (anzu-query-replace
+   anzu-query-replace-regexp)
+  :init
+  ;; Bindings
+  (bind-key "M-%" 'anzu-query-replace)
+  (bind-key "C-M-%" 'anzu-query-replace-regexp)
+  :config
+  (global-anzu-mode)
+  )
 #+END_SRC
 *** iedit
 #+BEGIN_SRC emacs-lisp 
-(use-package iedit)
-(setq iedit-toggle-key-default nil)
-(require 'iedit)
-(global-set-key (kbd "C-;") 'iedit-mode)
-
-#+END_SRC
-*** clean-auto-indent
-#+BEGIN_SRC emacs-lisp
-(require 'clean-aindent-mode)
-(add-hook 'prog-mode-hook 'clean-aindent-mode)
+(use-package iedit
+  :commands iedit-mode
+  :init
+  (bind-key "C-;" 'iedit-mode)
+  :config
+  (setq iedit-toggle-key-default nil)
+  )
 #+END_SRC
 *** expand-region
 #+BEGIN_SRC emacs-lisp 
-(use-package expand-region)
-(require 'expand-region)
-(key-chord-define-global ";l" 'er/expand-region)
-
+(use-package expand-region
+  :commands er/expand-region
+  :init
+  (key-chord-define-global ";l" 'er/expand-region)
+ )
 #+END_SRC
 *** duplicate-thing
 #+BEGIN_SRC emacs-lisp 
-(use-package duplicate-thing)
-(require 'duplicate-thing)
-(global-set-key (kbd "M-c") 'duplicate-thing)
+(use-package duplicate-thing
+  :commands duplicate-thing
+  :init
+  (bind-key "M-c" 'duplicate-thing)
+ )
 #+END_SRC 
 
 ** Functions
@@ -1065,12 +1069,13 @@ Position the cursor at it's beginning, according to the current mode."
 #+END_SRC
 
 *** toggle-comment-on-line
-#+BEGIN_SRC emacs-lisp 
+Comment out a line:
+#+BEGIN_SRC emacs-lisp
 (defun toggle-comment-on-line ()
   "comment or uncomment current line"
   (interactive)
   (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
-(global-set-key (kbd "C-;") 'toggle-comment-on-line)
+(key-chord-define-global ";'" 'toggle-comment-on-line)
 #+END_SRC
 
 * Development Environments
