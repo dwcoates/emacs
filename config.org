@@ -1382,9 +1382,10 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 * Organization and Version Control
 ** Magit
 #+BEGIN_SRC  emacs-lisp
-(use-package magit)
-
-(global-set-key (kbd "C-c m s") 'magit-status)
+(use-package magit
+  :commands magit-status
+  :init
+  (bind "C-c m s" 'magit-status))
 #+END_SRC
 *** backup specifics
 #+BEGIN_SRC emacs-lisp
@@ -1493,9 +1494,10 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 #+BEGIN_SRC emacs-lisp
 ;; Edit With Emacs (Google Chrome Extension)
 (add-to-list 'load-path "~/.emacs.d/edit-with-emacs")
-(use-package edit-server)
-(require 'edit-server)
-(edit-server-start)
+(use-package edit-server
+  :config
+  (edit-server-start))
+
 #+END_SRC
 ** IRC
 ** Functions
