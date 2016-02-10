@@ -135,7 +135,7 @@ key chords consist of keys adjacent to one another.
   :ensure t
   :init
   (progn
-    (setq key-chord-one-key-delay 0.035)
+    (setq key-chord-two-key-delay .35)
     (key-chord-mode 1))
 )
 #+END_SRC
@@ -148,29 +148,30 @@ This variables must be set before loading helm-gtags
 *use-package Helm*
 #+BEGIN_SRC emacs-lisp
 (use-package helm
-  :commands (helm-grep helm-eshell)
-  :bind (("M-x" . helm-M-x)
-         ("M-y" . helm-show-kill-ring)
-         ("C-h SPC" . helm-all-mark-rings)
-         ("C-x b" . helm-mini)
-         ("C-x C-f" . helm-find-files)
-         ("C-h SPC" . helm-all-mark-rings)
-         ("C-c s o" . helm-occur))
-  :init (progn
-	  (require 'helm-config)
-	  (setq
-	   helm-scroll-amount 4              ; scroll 4 lines other window using M-<next>/M-<prior>
-	   helm-ff-search-library-in-sexp t  ; search for library in `require' and `declare-function' sexp.
-	   helm-split-window-in-side-p t     ; open helm buffer inside current window, not occupy whole other window
-	   helm-candidate-number-limit 500   ; limit the number of displayed canidates
-	   helm-ff-file-name-history-use-recentf t
-	   helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
-	   helm-buffers-fuzzy-matching t)      ; fuzzy matching buffer names when non-nil
-	  (helm-mode 1))
-  :config (progn
-	    (require 'helm-grep)
-	    (require 'helm-eshell)
-	    ))
+  :bind
+  (("M-x" . helm-M-x)
+   ("M-y" . helm-show-kill-ring)
+   ("C-h SPC" . helm-all-mark-rings)
+   ("C-x b" . helm-mini)
+   ("C-x C-f" . helm-find-files)
+   ("C-h SPC" . helm-all-mark-rings)
+   ("C-c s o" . helm-occur))
+  :init
+  (progn
+    (require 'helm-config)
+    (setq
+     helm-scroll-amount 4       ; scroll 4 lines other window using M-<next>/M-<prior>
+     helm-ff-search-library-in-sexp t  ; search for library in `require' and `declare-function' sexp.
+     helm-split-window-in-side-p t   ; open helm buffer inside current window, not occupy whole other window
+     helm-candidate-number-limit 500   ; limit the number of displayed canidates
+     helm-ff-file-name-history-use-recentf t
+     helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
+     helm-buffers-fuzzy-matching t)   ; fuzzy matching buffer names when non-nil
+    (helm-mode 1))
+  :config
+  (require 'helm-grep)
+  (require 'helm-eshell)
+  )
 #+END_SRC
 *** Basic Settings
 Helm size
@@ -191,7 +192,6 @@ Helm size
 (define-key helm-grep-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
 (define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
 (define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
-
 
 
 (when (executable-find "curl")
@@ -342,16 +342,14 @@ Jump quickly to any word using just two key strokes with ace-jump-mode:
 (use-package ace-jump-mode
   :commands ace-jump-mode
   :init
-  (key-chord-define-global "cj" 'ace-jump-mode)
-  )
+  (key-chord-define-global "cj" 'ace-jump-mode))
 #+END_SRC
 *** rainbow-delimiters
 Automatically color parentheses pairs different colors with rainbow-delimiters:
 #+BEGIN_SRC emacs-lisp
 (use-package rainbow-delimiters
   :init
-  (rainbow-delimiters-mode)
-  )
+  (rainbow-delimiters-mode))
 #+END_SRC
 *** ace-window
 Jump quickly between windows and frames using just two key strokes with ace-window:
@@ -359,8 +357,7 @@ Jump quickly between windows and frames using just two key strokes with ace-wind
 (use-package ace-window
   :commands ace-window
   :init
-  (key-chord-define-global "xo" 'ace-window)
-  )
+  (key-chord-define-global "xo" 'ace-window))
 #+END_SRC
 *** golden-ratio
 Automatically resize buffers to "optimal" size when they gain focus. Turned off by default.
@@ -373,7 +370,6 @@ Automatically resize buffers to "optimal" size when they gain focus. Turned off 
   :config
   (progn
     ;; List of buffers to not be resized by golden-ratio.
-    (golden-)
     (setq golden-ratio-exclude-buffer-names
           '("*Flycheck errors*"
             "*SPEEDBAR*"))
@@ -393,8 +389,7 @@ Automatically resize buffers to "optimal" size when they gain focus. Turned off 
 *** zygospore
 #+BEGIN_SRC emacs-lisp 
 (use-package zygospore
-  :bind ("C-x 1" . zygospore-toggle-delete-other-window)
-  )
+  :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
 #+END_SRC
 ** Functions
 Switch between the two most recently visited buffers:
@@ -567,7 +562,7 @@ Transpose two windows:
 *use-package smartparents*
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens
-  :init
+  :config
   (setq sp-base-key-bindings 'paredit)
   (setq sp-autoskip-closing-pair 'always)
   (setq sp-hybrid-kill-entire-symbol nil)
