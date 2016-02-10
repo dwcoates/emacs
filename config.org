@@ -121,6 +121,7 @@ https://github.com/purcell/exec-path-from-shell
 (powerline-default-theme)
 #+END_SRC
 
+** Bind-key
 ** Key-Command Interface
 *** Key Chords
 $key-chord-one-key-delay$ defines the max time delay between two key presses to be considered a key chord. 
@@ -143,7 +144,8 @@ This variables must be set before loading helm-gtags
 #+BEGIN_SRC emacs-lisp
 (setq helm-gtags-prefix-key "\C-cg")
 #+END_SRC
-*use-package helm*
+
+*use-package Helm*
 #+BEGIN_SRC emacs-lisp
 (use-package helm
   :commands (helm-grep helm-eshell)
@@ -170,7 +172,7 @@ This variables must be set before loading helm-gtags
 	    (require 'helm-eshell)
 	    ))
 #+END_SRC
-*** Basic Configuration and Commands
+*** Basic Settings
 Helm size
 #+BEGIN_SRC emacs-lisp
 (helm-autoresize-mode t)
@@ -240,13 +242,16 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 #+END_SRC
 * Navigation and Interface
 ** Basic Settings
+Quickly move the cursor to the first instance of a character with iy-go-to-char:
 #+begin_src emacs-lisp
-(use-package iy-go-to-char)
+(use-package iy-go-to-char
+  :init (progn
+          (key-chord-define-global "fg" 'iy-go-to-char)
+          (key-chord-define-global "df" 'iy-go-to-char-backward))
+  )
+#+end_src
 
-(key-chord-define-global "fg" 'iy-go-to-char)
-(key-chord-define-global "df" 'iy-go-to-char-backward)
-
-;; find-file-at-point
+#+begin_src emacs-lisp
 (key-chord-define-global "fp" 'find-file-at-point)
 
 (global-unset-key (kbd "C-x 5 0"))
@@ -255,149 +260,154 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 (global-unset-key (kbd "C-x 0"))
 (global-set-key (kbd "C-x DEL") 'delete-window)
 #+end_src
-
 ** Helm-swoop
+*use-package helm-swoop*
 #+BEGIN_SRC emacs-lisp
-(use-package helm-swoop)
-(require 'helm-swoop)
-
-(global-set-key (kbd "C-c s s") 'helm-swoop)
-(global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
-
-;; When doing isearch, hand the word over to helm-swoop
-(define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-
-;; From helm-swoop to helm-multi-swoop-all
-(define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-
-;; Save buffer when helm-multi-swoop-edit complete
-(setq helm-multi-swoop-edit-save t)
-;; If this value is t, split window inside the current window
-
-(setq helm-swoop-split-with-multiple-windows t)
-;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-
-(setq helm-swoop-split-direction 'split-window-vertically)
-;; If nil, you can slightly boost invoke speed in exchange for text color
-
-(setq helm-swoop-speed-or-color t) 
+(use-package helm-swoop
+  :init (progn
+          (global-set-key (kbd "C-c s s") 'helm-swoop)
+          (global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
+        )
+  :config (progn
+            ; When doing isearch, hand the word over to helm-swoop
+            (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+            ; From helm-swoop to helm-multi-swoop-all
+            (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+            ; Save buffer when helm-multi-swoop-edit complete
+            (setq helm-multi-swoop-edit-save t))
+            ; If this value is t, split window inside the current window
+            (setq helm-swoop-split-with-multiple-windows t)
+            ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+            (setq helm-swoop-split-direction 'split-window-vertically)
+            ;; If nil, you can slightly boost invoke speed in exchange for text color
+            (setq helm-swoop-speed-or-color t)
+  )
 #+END_SRC
-
 ** Flycheck
+*use-package Flycheck*
 #+BEGIN_SRC emacs-lisp 
-(use-package flycheck)
-(require 'flycheck)
-
-(add-hook 'after-init-hook #'global-flycheck-mode)
-
-(global-set-key (kbd "C-c ! n") 'flycheck-next-error)
-(global-set-key (kbd "C-c ! p") 'flycheck-previous-error)
-(global-set-key (kbd "C-c ! h") 'helm-flycheck)
+(use-package flycheck
+  :init (progn
+          (add-hook 'after-init-hook #'global-flycheck-mode))
+  :bind (("C-c ! n" . flycheck-next-error)
+         ("C-c ! p" . flycheck-previous-error)
+         ("C-c ! h" . helm-flycheck)))
 #+END_SRC
 
-** Company 
+** Company
+*use-package Company*
 #+begin_src emacs-lisp
 (use-package company
-   :ensure helm-company)
-(require 'company)
-
-(add-hook 'after-init-hook 'global-company-mode)
-(setq company-backends (delete 'company-semantic company-backends))
-
-(global-set-key (kbd "C-c <tab>") 'helm-company)
+  :init
+  (add-hook 'after-init-hook 'global-company-mode)
+  :config (progn
+            (setq company-backends (delete 'company-semantic company-backends))
+            (use-package helm-company
+              :bind ("C-c <tab>" . helm-company)))
+  )
 #+end_src
-
-** Packages
+** Other Packages
 *** guide-key
+Display possible key binding completions automatically in a small pop-up buffer with guide-key:
 #+BEGIN_SRC emacs-lisp
-(use-package guide-key)
-;; guide-key, displays possible key binding completions
-(require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +"))
-(guide-key-mode 1)
-(setq guide-key/recursive-key-sequence-flag t)
-(setq guide-key/popup-window-position 'bottom)
+(use-package guide-key
+  :init
+  (guide-key-mode 1)
+  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +"))
+  (setq guide-key/recursive-key-sequence-flag t)
+  (setq guide-key/popup-window-position 'bottom)
+)
 #+END_SRC
 *** windmove
+Navigate windows directionally with wind-move:
 #+BEGIN_SRC emacs-lisp
-;; Set keys to move between windows
-(global-set-key (kbd "C-x w j") 'windmove-left)
-(global-set-key (kbd "C-x w l") 'windmove-right)
-(global-set-key (kbd "C-x w i") 'windmove-up)
-(global-set-key (kbd "C-x w k") 'windmove-down)
-;; corresponding key-chord configs
-(key-chord-define-global "wj" 'windmove-left)
-(key-chord-define-global "wl" 'windmove-right)
-(key-chord-define-global "wi" 'windmove-up)
-(key-chord-define-global "wk" 'windmove-down)
+(use-package windmove
+  :commands
+  ;; This is here because alternative commands (key chords) do not trigger package autoload.
+  (windmove-left windmove-right windmove-up windmove-down)
+  :init
+  (bind-key "C-x w j" 'windmove-left)
+  (bind-key "C-x w l" 'windmove-right)
+  (bind-key "C-x w i" 'windmove-up)
+  (bind-key "C-x w k" 'windmove-down)
+  (key-chord-define-global "wj" 'windmove-left)
+  (key-chord-define-global "wl" 'windmove-right)
+  (key-chord-define-global "wi" 'windmove-up)
+  (key-chord-define-global "wk" 'windmove-down)
+  )
 #+END_SRC
-*** ace-jump
+*** ace-jump-mode
+Jump quickly to any word using just two key strokes with ace-jump-mode:
 #+BEGIN_SRC emacs-lisp
-(use-package ace-jump-mode)
-(require 'ace-jump-mode)
-(key-chord-define-global "cj" 'ace-jump-mode)
+(use-package ace-jump-mode
+  :commands ace-jump-mode
+  :init
+  (key-chord-define-global "cj" 'ace-jump-mode)
+  )
 #+END_SRC
 *** rainbow-delimiters
+Automatically color parentheses pairs different colors with rainbow-delimiters:
 #+BEGIN_SRC emacs-lisp
-(use-package rainbow-delimiters)
-
-(require 'rainbow-delimiters)
-(rainbow-delimiters-mode)
+(use-package rainbow-delimiters
+  :init
+  (rainbow-delimiters-mode)
+  )
 #+END_SRC
 *** ace-window
+Jump quickly between windows and frames using just two key strokes with ace-window:
 #+BEGIN_SRC emacs-lisp
-(use-package ace-window)
-(require 'ace-window)
-(key-chord-define-global "xo" 'ace-window)
+(use-package ace-window
+  :commands ace-window
+  :init
+  (key-chord-define-global "xo" 'ace-window)
+  )
 #+END_SRC
 *** golden-ratio
+Automatically resize buffers to "optimal" size when they gain focus. Turned off by default.
 #+BEGIN_SRC emacs-lisp
-(use-package golden-ratio)
-;; Package: golden ratio
-(require 'golden-ratio)
-;; ensure golden-ratio compatibility with helm.
-(defun pl/helm-alive-p ()
-  (if (boundp 'helm-alive-p)
-      (symbol-value 'helm-alive-p)))
-(add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p)
-;; list of buffers to not be resized by golden-ratio.
-(setq golden-ratio-exclude-buffer-names
-	  '("*Flycheck errors*"
-		"*SPEEDBAR*"))
-;; turn on golden ratio
-(global-set-key (kbd "C-x w g SPC") 'golden-ratio)
-(global-set-key (kbd "C-x w g m") 'golden-ratio-mode)
+(use-package golden-ratio
+  :commands golden-ratio golden-ratio-mode
+  :init
+  (bind-key "C-x w g SPC" 'golden-ratio)    ;; Resize buffers according to golden-ratio
+  (bind-key "C-x w g m" 'golden-ratio-mode) ;; Enable/disable golden-ratio-mode
+  :config
+  (progn
+    ;; List of buffers to not be resized by golden-ratio.
+    (golden-)
+    (setq golden-ratio-exclude-buffer-names
+          '("*Flycheck errors*"
+            "*SPEEDBAR*"))
+    ;; Ensure golden-ratio compatibility with helm.
+    (defun pl/helm-alive-p ()
+      (if (boundp 'helm-alive-p)
+          (symbol-value 'helm-alive-p)))
+    (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p))
+  )
 #+END_SRC
 *** speedbar
 #+BEGIN_SRC emacs-lisp
-;; Package: speedbar
-(setq speedbar-show-unknown-files t)
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
+(use-package sr-speedbar)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;   Functions;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;(setq speedbar-show-unknown-files t)
 #+END_SRC
 *** zygospore
 #+BEGIN_SRC emacs-lisp 
-(use-package zygospore)
-
-(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-window)
+(use-package zygospore
+  :bind ("C-x 1" . zygospore-toggle-delete-other-window)
+  )
 #+END_SRC
-
-** Functions 
+** Functions
+Switch between the two most recently visited buffers:
 #+BEGIN_SRC emacs-lisp
-;; function for switching between two most recently visited buffers
 (defun switch-to-other-buffer ()
   "Switch to last visited buffer."
   (interactive)
   (switch-to-buffer (other-buffer) (current-buffer) 1))
 (global-set-key (kbd "C-c b") 'switch-to-other-buffer)
+#+END_SRC
 
-
+Maximize the current buffer:
+#+BEGIN_SRC emacs-lisp
 (defun toggle-maximize-buffer ()
   "Maximize/minimize buffer"
        (interactive)
@@ -407,8 +417,10 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
            (window-configuration-to-register '_)
            (delete-other-windows))))
 (key-chord-define-global "xm" 'toggle-maximize-buffer)
+#+END_SRC
 
-
+Transpose two windows:
+#+BEGIN_SRC emacs-lisp
 (defun transpose-windows (arg)
   "Transpose the buffers shown in two windows."
   (interactive "p")
@@ -422,7 +434,6 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
       (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
 (global-set-key (kbd "C-x w t") 'transpose-windows)
 #+END_SRC
-
 * Editing
 ** Basic Settings
 #+BEGIN_SRC emacs-lisp
@@ -573,7 +584,6 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
     SCHEDULED: <2016-02-07 Sun>        
     - Note taken on [2016-02-06 Sat 16:09] \\
       Currently broken.
-
 #+BEGIN_SRC emacs-lisp
 (defun sp-delete-sexp ()
 "Deletes sexp at point. Does not save to kill ring."
