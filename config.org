@@ -1,5 +1,6 @@
 This is my emacs config file.
 
+
 * Init
 #+BEGIN_SRC emacs-lisp
 ;; This must come before configurations of installed packages.  
@@ -121,7 +122,6 @@ https://github.com/purcell/exec-path-from-shell
 (powerline-default-theme)
 #+END_SRC
 
-** Bind-key
 ** Key-Command Interface
 *** Key Chords
 $key-chord-one-key-delay$ defines the max time delay between two key presses to be considered a key chord. 
@@ -135,10 +135,15 @@ key chords consist of keys adjacent to one another.
   :ensure t
   :init
   (progn
-    (setq key-chord-two-key-delay .35)
+    (setq key-chord-two-keys-delay 0.35)
     (key-chord-mode 1))
 )
 #+END_SRC
+*** Hydra
+#+begin_src emacs-lisp
+  (use-package hydra
+    :ensure t)
+#+end_src
 ** Helm
 This variables must be set before loading helm-gtags
 #+BEGIN_SRC emacs-lisp
@@ -430,7 +435,7 @@ Transpose two windows:
 (global-set-key (kbd "C-x w t") 'transpose-windows)
 #+END_SRC
 * Editing
-** Basic Settings
+** Basic Setti ngs
 #+BEGIN_SRC emacs-lisp
 (show-paren-mode 1)
 
