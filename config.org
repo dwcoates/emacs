@@ -726,10 +726,10 @@ Transpose two windows:
 #+END_SRC
 *** dtrt-indent
 #+BEGIN_SRC emacs-lisp 
-(use-package dtrt-indent
-  :init
+(use-package dtrt-indent  
+  :config
+  (setq dtrt-indent-verbosity 0)
   (dtrt-indent-mode 1)
-  (setq dtrt-indent-verbosity 0))
 #+END_SRC
 *** ws-butler
 #+BEGIN_SRC emacs-lisp 
@@ -744,10 +744,9 @@ Transpose two windows:
 *** undo-tree
 #+BEGIN_SRC emacs-lisp 
 (use-package undo-tree
-  :init
+  :config
   (global-undo-tree-mode))
 #+END_SRC
-
 *** yasnippet
 #+BEGIN_SRC emacs-lisp 
 (use-package yasnippet
@@ -1380,7 +1379,7 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 (use-package magit
   :commands magit-status
   :init
-  (bind "C-c m s" 'magit-status))
+  (bind-key "C-c m s" 'magit-status))
 #+END_SRC
 *** backup specifics
 #+BEGIN_SRC emacs-lisp
