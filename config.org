@@ -729,7 +729,7 @@ Transpose two windows:
 (use-package dtrt-indent  
   :config
   (setq dtrt-indent-verbosity 0)
-  (dtrt-indent-mode 1)
+  (dtrt-indent-mode 1))
 #+END_SRC
 *** ws-butler
 #+BEGIN_SRC emacs-lisp 
@@ -1495,21 +1495,21 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 #+END_SRC
 ** IRC
 *** ERC
-    #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 (use-package erc
   :ensure t :defer t
   :init
   (defun my/erc-mode-hook ()
-    ((if word-wrap nil)
-     toggle-word-wrap))  
+    (if (equal word-wrap nil)
+     (toggle-word-wrap)))  
   :config
-  (add-hook erc-mode-hook 'my/erc-mode-hook)
+  (add-hook 'erc-mode-hook 'my/erc-mode-hook)
   (setq erc-hide-list '("PART" "QUIT" "JOIN"))
   (setq erc-autojoin-channels-alist '(("freenode.net"
                                        "#org-mode"
                                        "#emacs"))
         erc-server "irc.freenode.net"
-        erc-nick "dodge")
+        erc-nick "dwc1")
   (defun erc-cmd-DEOPME ()
     "Deop myself from current channel."
     (erc-cmd-DEOP (format "%s" (erc-current-nick))))
