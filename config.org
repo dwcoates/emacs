@@ -1,6 +1,5 @@
 This is my emacs config file.
 
-
 * Init
 #+BEGIN_SRC emacs-lisp
 ;; This must come before configurations of installed packages.  
