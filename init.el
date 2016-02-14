@@ -7,3 +7,4 @@
                    user-emacs-directory))
 
 (load "~/.emacs.d/specifics.el")
+(put 'narrow-to-region 'disabled nil)

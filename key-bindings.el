@@ -11,6 +11,9 @@
 
 (defconst my/search-alpha-key "y")
 (defconst my/search-beta-key "n")
+
+(defconst my/bigger-key ">")
+(defconst my/smaller-key "<")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;; EDITING GENERICS ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -24,11 +27,12 @@
 ;;;;;;;;;;;;;;;;;;;;
 ;;;; NAVIGATION ;;;;
 ;;;;;;;;;;;;;;;;;;;;
-(defconst my/kill-line-key "a")
-(defconst my/kill-region-key "f")
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;;;;   EDITING   ;;;;
 ;;;;;;;;;;;;;;;;;;;;;
+(defconst my/kill-line-key "a")
+(defconst my/kill-region-key "f")
 
 ;; Bind general namespace keys (C-?, M-? where '?' is any single character)
 (bind-keys
@@ -43,12 +47,20 @@
 
  ((concat "M-" my/backward-key) . backward-word)
  ((concat "M-" my/forward-key) . forward-word)
+
  ((concat "M-" my/downward-key) . scroll-up-command)
  ((concat "M-" my/upward-key) . scroll-down-command)
+ ((concat "M-S" my/backward-key) . scroll-left)
 
- ((concat "M-" my/upward-key) . scroll-down-command)
- ((concat "M-" my/upward-key) . scroll-down-command)
+ ((concat "M-S" my/forward-key) . scroll-right)
 
+ ((concat "M-" my/forward-key) . forward-to-indentation)
+ ((concat "M-" my/backward-key) . backward-to-indentation)
+ ;; VIEW CHANGE
+ ((concat "C-" "'") . recenter-top-bottom)
+ ((concat "C-" my/smaller-key) . narrow-to-region)
+ ((concat "C-M" my/smaller-key) . narrow-to-page)
+ ((concat "C-" my/bigger-key) . widen)
  ;; END/BEG
  ((concat "C-" my/beginning-key) . beginning-of-line)
  ((concat "C-" my/end-key) . end-of-line)
@@ -68,7 +80,10 @@
  ((concat "M-" my/kill-line-key) . kill-sentence)
  ((concat "M-" my/kill-region-key) . kill-ring-save)
 
- ((concat "C-" my/kill-region-key) . zap-to-char)
+ ((concat "C-" "z") . zap-to-char)
+
+ ((concat "C-" "v") . delete-horizontal-space)
+ ((concat "M-" "v") . delete-indentation)
  ;; TRANSPOSE
  ((concat "C-" my/transpose-key) . transpose-chars)
  ((concat "M-" my/transpose-key) . transpose-words)
@@ -78,7 +93,6 @@
  ((concat "C-S-" my/upward-key) . upcase-region)
  ((concat "C-S-" my/downward-key) . downcase-region)
  )
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;; KEY CHORDS ;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -87,10 +101,9 @@
 
 
 
-
-
-(bind-key* "C-w N" 'beginning-of-buffer)
-(bind-key* "C-S-p" 'beginning-of-buffer)
+;;;; example usage of bind-key
+;(bind-key* "C-w N" 'beginning-of-buffer)
+;bind-key* "C-S-p" 'beginning-of-buffer)
 
 ;; Bind window manipulation keys (Prefix 'C-w')
 (bind-keys*
@@ -104,10 +117,13 @@
  (my/upward-key . windmove-up)
  (my/downward-key . windmove-down)
 
+ ((upcase-word my/upward-key) . scroll-other-window)
+ ((upcase-word my/downward-key) . scroll-other-window-down)
+
+
  ("p" . other-window)
  ("o" . other-frame)
 
- ()
  ;; navigate buffers
  (my/search-alpha-key . helm-buffers-list)
  ;;;;;;;;;;;;;;;;;;;;;

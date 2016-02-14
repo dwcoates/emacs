@@ -1376,7 +1376,7 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 
 (global-ede-mode)
 #+END_SRC
-
+ 
 * Organization and Version Control
 ** Magit
 #+BEGIN_SRC  emacs-lisp
