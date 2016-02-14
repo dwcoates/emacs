@@ -21,18 +21,17 @@
 (defconst my/transpose-key "r")
 (defconst my/yank-key "t")
 
+(defconst my/kill-big-key "a")
+(defconst my/kill-or-save-key "f")
 
 
 
-;;;;;;;;;;;;;;;;;;;;
-;;;; NAVIGATION ;;;;
-;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;
-;;;;   EDITING   ;;;;
-;;;;;;;;;;;;;;;;;;;;;
-(defconst my/kill-line-key "a")
-(defconst my/kill-region-key "f")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;  GENERAL NAMESPACE  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Bind general namespace keys (C-?, M-? where '?' is any single character)
 (bind-keys
@@ -47,26 +46,30 @@
 
  ((concat "M-" my/backward-key) . backward-word)
  ((concat "M-" my/forward-key) . forward-word)
+ ((concat "M-" my/downward-key) . forward-paragraph)
+ ((concat "M-" my/upward-key) . backward-paragraph)
 
- ((concat "M-" my/downward-key) . scroll-up-command)
- ((concat "M-" my/upward-key) . scroll-down-command)
- ((concat "M-S" my/backward-key) . scroll-left)
+ ((concat "C-S-" my/backward-key) . scroll-left)
+ ((concat "C-S-" my/forward-key) . scroll-right)
+ ((concat "C-S" my/downward-key) . scroll-up-command)
+ ((concat "C-S" my/upward-key) . scroll-down-command)
 
- ((concat "M-S" my/forward-key) . scroll-right)
-
- ((concat "M-" my/forward-key) . forward-to-indentation)
- ((concat "M-" my/backward-key) . backward-to-indentation)
- ;; VIEW CHANGE
- ((concat "C-" "'") . recenter-top-bottom)
- ((concat "C-" my/smaller-key) . narrow-to-region)
- ((concat "C-M" my/smaller-key) . narrow-to-page)
- ((concat "C-" my/bigger-key) . widen)
+ ((concat "M-S-" my/downward-key) . scroll-other-window-down)
+ ((concat "M-S-" my/upward-key) . scroll-other-window)
  ;; END/BEG
  ((concat "C-" my/beginning-key) . beginning-of-line)
  ((concat "C-" my/end-key) . end-of-line)
 
- ((concat "M-" my/beginning-key) . beginning-of-buffer)
- ((concat "M-" my/end-key) . end-of-buffer)
+ ((concat "M-" my/end-key) . forward-to-indentation)
+ ((concat "M-" my/beginning-key) . backward-to-indentation)
+
+ ((concat "C-M-" my/beginning-key) . beginning-of-buffer)
+ ((concat "C-M-" my/end-key) . end-of-buffer)
+ ;; VIEW CHANGE
+ ((concat "C-" "'") . recenter-top-bottom)
+ ((concat "C-" my/smaller-key) . narrow-to-region)
+ ((concat "C-M-" my/smaller-key) . narrow-to-page)
+ ((concat "C-" my/bigger-key) . widen)
  ;; SEARCHING
  ((concat "C-" my/search-alpha-key) . isearch-forward)
  ((concat "C-" my/search-beta-key) . isearch-backward)
@@ -74,11 +77,11 @@
  ;;;;   EDITING   ;;;;
  ;;;;;;;;;;;;;;;;;;;;;
  ;; COPY and KILL
- ((concat "C-" my/kill-line-key) . kill-line)
- ((concat "C-" my/kill-region-key) . kill-region)
+ ((concat "C-" my/kill-big-key) . kill-line)
+ ((concat "C-" my/kill-or-save-key) . kill-region)
 
- ((concat "M-" my/kill-line-key) . kill-sentence)
- ((concat "M-" my/kill-region-key) . kill-ring-save)
+ ((concat "M-" my/kill-big-key) . kill-sentence)
+ ((concat "M-" my/kill-or-save-key) . kill-ring-save)
 
  ((concat "C-" "z") . zap-to-char)
 
@@ -89,7 +92,7 @@
  ((concat "M-" my/transpose-key) . transpose-words)
  ;; YANK
  ((concat "C-" my/yank-key) . yank)
- ;; MODIFY
+F ;; MODIFY
  ((concat "C-S-" my/upward-key) . upcase-region)
  ((concat "C-S-" my/downward-key) . downcase-region)
  )
@@ -101,9 +104,11 @@
 
 
 
-;;;; example usage of bind-key
-;(bind-key* "C-w N" 'beginning-of-buffer)
-;bind-key* "C-S-p" 'beginning-of-buffer)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;  WINDOW NAMESPACE  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Bind window manipulation keys (Prefix 'C-w')
 (bind-keys*
@@ -119,33 +124,57 @@
 
  ((upcase-word my/upward-key) . scroll-other-window)
  ((upcase-word my/downward-key) . scroll-other-window-down)
-
-
- ("p" . other-window)
- ("o" . other-frame)
-
- ;; navigate buffers
+ ;; NAVIGATE BUFFERS/WINDOWS
+ ((concat "M-" my/forward-key) . next-buffer)
+ ((concat "M-" my/backward-key) . previous-buffer)
+ ("U" . switch-to-buffer-other-window)
+ ("u" . switch-to-buffer)
+ ("o" . other-window)
+ ("p" . other-frame)
+ ;; SEARCH
  (my/search-alpha-key . helm-buffers-list)
+ ;; DIRED
+ ("/" . dired-jump)
+ ("?" . dired-jump-other-window)
+
  ;;;;;;;;;;;;;;;;;;;;;
  ;;;;   EDITING   ;;;;
  ;;;;;;;;;;;;;;;;;;;;;
- ;; find file
- (my/yank-key . find-file)
- ((concat "C-" my/yank-key) . find-file-other-window)
- ((upcase-word my/yank-key) . find-file-other-frame)
+ ;; FIND
+ (my/search-alpha-key . find-file-other-window)
+ ((concat "C-" my/search-alpha-key) . find-file)
+ ((upcase-word my/search-alpha-key) . find-file-other-frame)
 
+ (my/search-beta-key . ido-find-file-other-window)
+ ((concat "C-" my/search-beta-key) . ido-find-file)
+ ((upcase-word my/search-beta-key) . ido-find-file-other-frame)
+ ;; TRANSPOSE
  (my/transpose-key . transpose-windows)
+ ;; RESIZE
+ (my/bigger-key . enlarge-window-horizontally)
+ (my/smaller-key . shrink-window-horizontally)
+ ((concat "C-" my/bigger-key) . enlarge-window)
+ ((concat "C-" my/smaller-key) . shrink-window)
+ ("b" . balance-windows)
+ ("B" . shrink-window-if-larger-than-buffer)
+ ("v" . golden-ratio)
+ ("V" . golden-ratio-mode)
+ ;; SPLIT
+ ((upcase my/forward-key) . 'split-window-right)
+ ((upcase my/backward-key) . 'split-window-left)
+ ((upcase my/upward-key) . 'split-window-up)
+ ((upcase my/downward-key) . 'splite-window-down)
+ ;; KILL
+ (my/kill-element-key . delete-window)
+ ((concat "3 " (upcase-region my/kill-element-key)) . delete-other-frame)
+ ((concat "3 " (concat "C-" my/kill-element-key)) . delete-other-frames)
+
+ ((upcase-region my/kill-element-key) . kill-buffer)
+ ((concat "C-" my/kill-element-key) . kill-buffer-and-window)
+ ;; SAVE
+ (("C-" my/kill-or-save-key) . 'save-buffer)
+ ((upcase my/kill-or-save-key) . 'write-file)
+ ((concat "M-" my/kill-or-save-key) . 'save-some-buffer)
 
  ("z" . suspend-frame)
  )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defconst my/other-window-key "C-k")
-(defconst my/other-n "C-k")
-
-;; FILE NAVIGATION
-(defconst my/other-buffer "C-k")
-(defconst my/helm-buffer-list-key "C-k")

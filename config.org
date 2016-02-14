@@ -1659,5 +1659,3 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (eval-after-load "wgrep"
   '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
 #+END_SRC
-
- 
