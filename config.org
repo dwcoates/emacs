@@ -1,7 +1,5 @@
 This is my emacs config file.
 
-
-* Init
 #+BEGIN_SRC emacs-lisp
 ;; This must come before configurations of installed packages.  
 (package-initialize)
@@ -12,7 +10,7 @@ This is my emacs config file.
 
 (require 'package)
 #+END_SRC
-** Add repositories
+Add repositories to search for required packages:
 #+BEGIN_SRC emacs-lisp
 ;; setup package repos
 (add-to-list 'package-archives 
@@ -36,7 +34,6 @@ versions of all packages, and makes them available for download.
 (when (not package-archive-contents)
   (package-refresh-contents))
 #+END_SRC
-** OSX compatibility snippet
 I run linux, but this may be useful for those who use OSX. Description:
 
    On OS X, an Emacs instance started from the graphical user
@@ -52,7 +49,7 @@ https://github.com/purcell/exec-path-from-shell
   (unless (package-installed-p 'exec-path-from-shell)
     (package-install 'exec-path-from-shell)))
 #+END_SRC
-** Setup use-packages
+Setup use-packages so that required packages will be installed when needed:
 #+BEGIN_SRC emacs-lisp
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
