@@ -250,49 +250,7 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 #+BEGIN_SRC emacs-lisp
 (setq helm-lisp-fuzzy-completion t)
 #+END_SRC
-* Navigation and Interface
-** Basic Settings
-Quickly move the cursor to the first instance of a character with iy-go-to-char:
-#+begin_src emacs-lisp
-(use-package iy-go-to-char
-  :init (progn
-          (key-chord-define-global "fg" 'iy-go-to-char)
-          (key-chord-define-global "df" 'iy-go-to-char-backward))
-  )
-#+end_src
-
-#+begin_src emacs-lisp
-(key-chord-define-global "fp" 'find-file-at-point)
-
-(global-unset-key (kbd "C-x 5 0"))
-(global-set-key (kbd "C-x 5 DEL") 'delete-frame)
-
-(global-unset-key (kbd "C-x 0"))
-(global-set-key (kbd "C-x DEL") 'delete-window)
-#+end_src
-** Helm-swoop
-*use-package helm-swoop*
-#+BEGIN_SRC emacs-lisp
-(use-package helm-swoop
-  :init (progn
-          (global-set-key (kbd "C-c s s") 'helm-swoop)
-          (global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
-        )
-  :config (progn
-            ; When doing isearch, hand the word over to helm-swoop
-            (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-            ; From helm-swoop to helm-multi-swoop-all
-            (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-            ; Save buffer when helm-multi-swoop-edit complete
-            (setq helm-multi-swoop-edit-save t))
-            ; If this value is t, split window inside the current window
-            (setq helm-swoop-split-with-multiple-windows t)
-            ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-            (setq helm-swoop-split-direction 'split-window-vertically)
-            ;; If nil, you can slightly boost invoke speed in exchange for text color
-            (setq helm-swoop-speed-or-color t)
-  )
-#+END_SRC
+* Interface
 ** Flycheck
 *use-package Flycheck*
 #+BEGIN_SRC emacs-lisp 
@@ -316,6 +274,31 @@ Quickly move the cursor to the first instance of a character with iy-go-to-char:
               :bind ("C-c <tab>" . helm-company)))
   )
 #+end_src
+
+** Helm-swoop
+*use-package helm-swoop*
+#+BEGIN_SRC emacs-lisp
+(use-package helm-swoop
+  :init (progn
+          (global-set-key (kbd "C-c s s") 'helm-swoop)
+          (global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
+        )
+  :config (progn
+            ; When doing isearch, hand the word over to helm-swoop
+            (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+            ; From helm-swoop to helm-multi-swoop-all
+            (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+            ; Save buffer when helm-multi-swoop-edit complete
+            (setq helm-multi-swoop-edit-save t))
+            ; If this value is t, split window inside the current window
+            (setq helm-swoop-split-with-multiple-windows t)
+            ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+            (setq helm-swoop-split-direction 'split-window-vertically)
+            ;; If nil, you can slightly boost invoke speed in exchange for text color
+            (setq helm-swoop-speed-or-color t)
+  )
+#+END_SRC
+
 ** Other Packages
 *** guide-key
 Display possible key binding completions automatically in a small pop-up buffer with guide-key:
@@ -328,6 +311,71 @@ Display possible key binding completions automatically in a small pop-up buffer 
   (setq guide-key/popup-window-position 'bottom)
 )
 #+END_SRC
+
+*** rainbow-delimiters
+Automatically color parentheses pairs different colors with rainbow-delimiters:
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-delimiters
+  :init
+  (rainbow-delimiters-mode))
+#+END_SRC
+
+*** golden-ratio
+Automatically resize buffers to "optimal" size when they gain focus. Turned off by default.
+#+BEGIN_SRC emacs-lisp
+(use-package golden-ratio
+  :commands golden-ratio golden-ratio-mode
+  :init
+  (bind-key "C-x w g SPC" 'golden-ratio)    ;; Resize buffers according to golden-ratio
+  (bind-key "C-x w g m" 'golden-ratio-mode) ;; Enable/disable golden-ratio-mode
+  :config
+  (progn
+    ;; List of buffers to not be resized by golden-ratio.
+    (setq golden-ratio-exclude-buffer-names
+          '("*Flycheck errors*"
+            "*SPEEDBAR*"))
+    ;; Ensure golden-ratio compatibility with helm.
+    (defun pl/helm-alive-p ()
+      (if (boundp 'helm-alive-p)
+          (symbol-value 'helm-alive-p)))
+    (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p))
+  )
+#+END_SRC
+
+*** speedbar
+#+BEGIN_SRC emacs-lisp
+(use-package sr-speedbar)
+
+;(setq speedbar-show-unknown-files t)
+#+END_SRC
+
+*** zygospore
+#+BEGIN_SRC emacs-lisp 
+(use-package zygospore
+  :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
+#+END_SRC
+
+* Navigation
+** Basic Settings
+Quickly move the cursor to the first instance of a character with iy-go-to-char:
+#+begin_src emacs-lisp
+(use-package iy-go-to-char
+  :init (progn
+          (key-chord-define-global "fg" 'iy-go-to-char)
+          (key-chord-define-global "df" 'iy-go-to-char-backward))
+  )
+#+end_src
+General navigation bindings:
+#+begin_src emacs-lisp
+(key-chord-define-global "fp" 'find-file-at-point)
+
+(global-unset-key (kbd "C-x 5 0"))
+(global-set-key (kbd "C-x 5 DEL") 'delete-frame)
+
+(global-unset-key (kbd "C-x 0"))
+(global-set-key (kbd "C-x DEL") 'delete-window)
+#+end_src
+** Other Packages
 *** windmove
 Navigate windows directionally with wind-move:
 #+BEGIN_SRC emacs-lisp
@@ -354,13 +402,6 @@ Jump quickly to any word using just two key strokes with ace-jump-mode:
   :init
   (key-chord-define-global "cj" 'ace-jump-mode))
 #+END_SRC
-*** rainbow-delimiters
-Automatically color parentheses pairs different colors with rainbow-delimiters:
-#+BEGIN_SRC emacs-lisp
-(use-package rainbow-delimiters
-  :init
-  (rainbow-delimiters-mode))
-#+END_SRC
 *** ace-window
 Jump quickly between windows and frames using just two key strokes with ace-window:
 #+BEGIN_SRC emacs-lisp
@@ -368,38 +409,6 @@ Jump quickly between windows and frames using just two key strokes with ace-wind
   :commands ace-window
   :init
   (key-chord-define-global "xo" 'ace-window))
-#+END_SRC
-*** golden-ratio
-Automatically resize buffers to "optimal" size when they gain focus. Turned off by default.
-#+BEGIN_SRC emacs-lisp
-(use-package golden-ratio
-  :commands golden-ratio golden-ratio-mode
-  :init
-  (bind-key "C-x w g SPC" 'golden-ratio)    ;; Resize buffers according to golden-ratio
-  (bind-key "C-x w g m" 'golden-ratio-mode) ;; Enable/disable golden-ratio-mode
-  :config
-  (progn
-    ;; List of buffers to not be resized by golden-ratio.
-    (setq golden-ratio-exclude-buffer-names
-          '("*Flycheck errors*"
-            "*SPEEDBAR*"))
-    ;; Ensure golden-ratio compatibility with helm.
-    (defun pl/helm-alive-p ()
-      (if (boundp 'helm-alive-p)
-          (symbol-value 'helm-alive-p)))
-    (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p))
-  )
-#+END_SRC
-*** speedbar
-#+BEGIN_SRC emacs-lisp
-(use-package sr-speedbar)
-
-;(setq speedbar-show-unknown-files t)
-#+END_SRC
-*** zygospore
-#+BEGIN_SRC emacs-lisp 
-(use-package zygospore
-  :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
 #+END_SRC
 ** Functions
 Switch between the two most recently visited buffers:
@@ -410,7 +419,6 @@ Switch between the two most recently visited buffers:
   (switch-to-buffer (other-buffer) (current-buffer) 1))
 (global-set-key (kbd "C-c b") 'switch-to-other-buffer)
 #+END_SRC
-
 Maximize the current buffer:
 #+BEGIN_SRC emacs-lisp
 (defun toggle-maximize-buffer ()
@@ -423,7 +431,6 @@ Maximize the current buffer:
            (delete-other-windows))))
 (key-chord-define-global "xm" 'toggle-maximize-buffer)
 #+END_SRC
-
 Transpose two windows:
 #+BEGIN_SRC emacs-lisp
 (defun transpose-windows (arg)
