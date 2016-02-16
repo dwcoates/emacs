@@ -121,27 +121,198 @@ https://github.com/purcell/exec-path-from-shell
 (powerline-default-theme)
 #+END_SRC
 
-** Key-Command Interface
+** Key-Command Interfaces
+Turn on ido
+#+begin_src emacs-lisp
+(ido-mode t)
+#+end_src
 *** Key Chords
-$key-chord-one-key-delay$ defines the max time delay between two key presses to be considered a key chord. 
-I have this set to be very short, short enough that to trigger the command, the keys pretty much have to 
-be pressed as one motion, and not in sequence. For example, with this setting, I can't (realistically) trigger 
-a command assigned to "we" key chord by pressing 'w' and 'e' in sequence as I would typing them in a word 
-naturally. This makes two-handed keys chords slightly unreliable, at least without practice. So generally, my
-key chords consist of keys adjacent to one another.
+$key-chord-one-key-delay$ defines the max time delay between two key
+presses to be considered a key chord.  I have this set to be very
+short, short enough that to trigger the command, the keys pretty much
+have to be pressed as one motion, and not in sequence. For example,
+with this setting, I can't (realistically) trigger a command assigned
+to "we" key chord by pressing 'w' and 'e' in sequence as I would
+typing them in a word naturally. This makes two-handed keys chords
+slightly unreliable, at least without practice. So generally, my key
+chords consist of keys adjacent to one another.
 #+BEGIN_SRC emacs-lisp
-(use-package key-chord
-  :ensure t
-  :init
-  (progn
-    (setq key-chord-two-keys-delay 0.35)
-    (key-chord-mode 1))
-)
+  (use-package key-chord
+    :ensure t
+    :init
+    (setq key-chord-two-keys-delay 0.1)
+    (setq key-chord-one-key-delay 0.1)
+    (key-chord-mode 1)
+  )
 #+END_SRC
 *** Hydra
 #+begin_src emacs-lisp
   (use-package hydra
     :ensure t)
+#+end_src
+*** dwc-key-bindings
+This allows for the mapping to C-i without remapping <tab> as well. This
+happens otherwise because C-i and <tab> share the same ascii code. 
+Regard "H-i" as "C-i" in the dwc-key-bindings.
+#+begin_src emacs-lisp
+(keyboard-translate ?\C-i ?\H-i)
+#+end_src
+**** Generics
+#+begin_src emacs-lisp
+(defconst use-dwc-key-bindings nil)
+#+end_src
+Navigation generics:
+#+begin_src emacs-lisp
+(defconst my/backward-key "j")
+(defconst my/forward-key "l")
+(defconst my/downward-key "k")
+(defconst my/upward-key "i")
+(defconst my/beginning-key "o")
+(defconst my/end-key "p")
+
+(defconst my/search-alpha-key "y")
+(defconst my/search-beta-key "n")
+
+(defconst my/bigger-key ">")
+(defconst my/smaller-key "<")
+#+end_src
+Editing generics:
+#+begin_src emacs-lisp
+(defconst my/kill-element-key "d")
+(defconst my/transpose-key "t")
+(defconst my/yank-key "f")
+
+(defconst my/kill-big-key "a")
+(defconst my/kill-or-save-key "s")
+#+end_src
+
+These are the general bindings for dwc-key-bindings. Does not include
+bindings for major modes, minor-modes or other packages.
+**** Intra-Buffer
+Navigation:
+#+begin_src emacs-lisp
+  (if use-dwc-key-bindings
+      (bind-keys*
+       ;; DIRECTION
+       ((concat "C-" my/backward-key) . backward-char)
+       ((concat "C-" my/forward-key) . forward-char)
+       ((concat "H-" my/upward-key) . previous-line)
+       ((concat "C-" my/downward-key) . next-line)
+
+       ((concat "M-" my/backward-key) . backward-word)
+       ((concat "M-" my/forward-key) . forward-word)
+       ((concat "M-" my/downward-key) . forward-paragraph)
+       ((concat "M-" my/upward-key) . backward-paragraph)
+
+       ((concat "C-S-" my/forward-key) . scroll-left)
+       ((concat "C-S-" my/backward-key) . scroll-right)
+       ((concat "C-S-" my/upward-key) . scroll-down-command)
+       ((concat "C-S-" my/downward-key) . scroll-up-command)
+
+       ((concat "C-M-" my/upward-key) . scroll-other-window-down)
+       ((concat "C-M-" my/downward-key) . scroll-other-window)
+       ;; end/beg
+       ((concat "C-" my/beginning-key) . beginning-of-line)
+       ((concat "C-" my/end-key) . end-of-line)
+
+       ((concat "M-" my/end-key) . forward-to-indentation)
+       ((concat "M-" my/beginning-key) . backward-to-indentation)
+
+       ((concat "C-M-" my/beginning-key) . beginning-of-buffer)
+       ((concat "C-M-" my/end-key) . end-of-buffer)
+       ;; view change
+       ((concat "C-" "'") . recenter-top-bottom)
+       ((concat "C-" my/smaller-key) . narrow-to-region)
+       ((concat "M-" my/smaller-key) . narrow-to-page)
+       ((concat "C-" my/bigger-key) . widen)
+       ;; searching
+       ((concat "C-" my/search-alpha-key) . isearch-forward)
+       ((concat "C-" my/search-beta-key) . isearch-backward)))
+#+end_src
+Editing:
+#+begin_src emacs-lisp
+  (if use-dwc-key-bindings
+      (bind-keys*
+       ;; copy and kill
+       ((concat "C-" my/kill-big-key) . kill-line)
+       ((concat "C-" my/kill-or-save-key) . kill-region)
+
+       ((concat "M-" my/kill-big-key) . kill-sentence)
+       ((concat "M-" my/kill-or-save-key) . kill-ring-save)
+
+       ((concat "C-" "z") . zap-to-char)
+
+       ((concat "C-" "v") . delete-horizontal-space)
+       ((concat "M-" "v") . delete-indentation)
+       ;; transpose
+       ((concat "C-" my/transpose-key) . transpose-chars)
+       ((concat "M-" my/transpose-key) . transpose-words)
+       ;; yank
+       ((concat "C-" my/yank-key) . yank)
+       ;; modify
+       ((concat "C-S-M-" my/upward-key) . upcase-region)
+       ((concat "C-S-M-" my/downward-key) . downcase-region)))
+#+end_src
+**** Inter-Buffer
+Navigation:
+#+begin_src emacs-lisp
+  (if use-dwc-key-bindings
+      (bind-keys*
+       :prefix-map global-map
+       :prefix "C-w"
+       (my/forward-key . next-buffer)
+       (my/backward-key . previous-buffer)
+
+       ("U" . switch-to-buffer-other-window)
+       ("u" . switch-to-buffer)
+       ("C-u" . helm-buffers-list)
+
+       ("o" . other-frame)
+       ("O" . other-window)
+       ;; DIRED
+       ("/" . dired-jump)
+       ("?" . dired-jump-other-window)
+       ))
+#+end_src
+Editing:
+#+begin_src emacs-lisp
+  (if use-dwc-key-bindings
+      (bind-keys
+       :prefix-map global-map
+       :prefix "C-w"
+       ;; FIND FILE
+       (my/search-alpha-key . ido-find-file)
+       ((concat "C-" my/search-alpha-key) . ido-find-file-other-window)
+       ((upcase my/search-alpha-key) . ido-find-file-other-frame)
+       ;; RESIZE
+       (my/bigger-key . enlarge-window-horizontally)
+       (my/smaller-key . shrink-window-horizontally)
+       ((concat "C-" my/bigger-key) . enlarge-window)
+       ((concat "M-" my/smaller-key) . shrink-window)
+
+       ("b" . balance-windows)
+       ("B" . shrink-window-if-larger-than-buffer)
+       ("v" . golden-ratio)
+       ("V" . golden-ratio-mode)
+
+       ("z" . suspend-frame)
+       ;; SPLIT
+       ((upcase my/forward-key) . split-window-right)
+       ((upcase my/backward-key) . split-horizontally)
+       ((upcase my/upward-key) . split-window-vertically)
+       ((upcase my/downward-key) . split-window-below)
+       ;; KILL
+       (my/kill-element-key . kill-buffer-and-window)
+       ((upcase my/kill-element-key) . kill-some-buffers)
+       ((concat "C-" my/kill-element-key) . kill-buffer)
+
+       ((concat "3 " (upcase my/kill-element-key)) . delete-other-frames)
+       ((concat "3 " my/kill-element-key) . delete-frame)
+       ;; SAVE
+       ((concat "C-" my/kill-or-save-key) . save-buffer)
+       ((upcase my/kill-or-save-key) . write-file)
+       ((concat "M-" my/kill-or-save-key) . save-some-bueffer)
+       ))
 #+end_src
 ** Helm
 This variables must be set before loading helm-gtags
@@ -151,31 +322,45 @@ This variables must be set before loading helm-gtags
 
 *use-package Helm*
 #+BEGIN_SRC emacs-lisp
-(use-package helm
-  :bind
-  (("M-x" . helm-M-x)
-   ("M-y" . helm-show-kill-ring)
-   ("C-h SPC" . helm-all-mark-rings)
-   ("C-x b" . helm-mini)
-   ("C-x C-f" . helm-find-files)
-   ("C-h SPC" . helm-all-mark-rings)
-   ("C-c s o" . helm-occur))
-  :init
-  (progn
-    (require 'helm-config)
+  (use-package helm
+    :init
+    (if use-dwc-key-bindings
+        (bind-keys
+         (my/search-beta-key . helm-find-files)
+         ((concat "C-" my/search-beta-key) . helm-find-file-other-window)
+         ((upcase my/search-beta-key) . helm-find-file-other-frame))
+      (bind-keys
+       ("M-x" . helm-M-x)
+       ("M-y" . helm-show-5ill-ring)
+       ("C-h SPC" . helm-all-mark-rings)
+       ("C-x b" . helm-mini)
+       ("C-x C-f" . helm-find-files)
+       ("C-h SPC" . helm-all-mark-rings)
+       ("C-c s o" . helm-occur)))
+
     (setq
-     helm-scroll-amount 4       ; scroll 4 lines other window using M-<next>/M-<prior>
-     helm-ff-search-library-in-sexp t  ; search for library in `require' and `declare-function' sexp.
-     helm-split-window-in-side-p t   ; open helm buffer inside current window, not occupy whole other window
-     helm-candidate-number-limit 500   ; limit the number of displayed canidates
+     helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
+     helm-ff-search-library-in-sexp t ; search for library in `require' and
+                                          ; declare-function' sexp.
+     helm-split-window-in-side-p t ; open helm buffer inside current window, not
+                                          ; occupy whole other window
+     helm-candidate-number-limit 500  ; limit the number of displayed canidates
      helm-ff-file-name-history-use-recentf t
-     helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
+     helm-move-to-line-cycle-in-source t ; move to end or beginning of source when
+                                          ; reaching top or bottom of source.
      helm-buffers-fuzzy-matching t)   ; fuzzy matching buffer names when non-nil
-    (helm-mode 1))
-  :config
-  (require 'helm-grep)
-  (require 'helm-eshell)
-  )
+
+    (helm-mode 1)
+    :config
+    (if use-dwc-key-bindings
+        (bind-keys
+         :map helm-map
+         ((concat "C-" my/downward-key) . helm-next-line)
+         ((concat "C-" my/upward-key) . helm-previous-line))
+      )
+    (require 'helm-grep)
+    (require 'helm-eshell)
+    )
 #+END_SRC
 *** Basic Settings
 Helm size
@@ -317,7 +502,7 @@ Display possible key binding completions automatically in a small pop-up buffer 
 (use-package guide-key
   :init
   (guide-key-mode 1)
-  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +"))
+  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +" "C-w" "C-e"))
   (setq guide-key/recursive-key-sequence-flag t)
   (setq guide-key/popup-window-position 'bottom)
 )
@@ -325,20 +510,28 @@ Display possible key binding completions automatically in a small pop-up buffer 
 *** windmove
 Navigate windows directionally with wind-move:
 #+BEGIN_SRC emacs-lisp
-(use-package windmove
-  :commands
-  ;; This is here because alternative commands (key chords) do not trigger package autoload.
-  (windmove-left windmove-right windmove-up windmove-down)
-  :init
-  (bind-key "C-x w j" 'windmove-left)
-  (bind-key "C-x w l" 'windmove-right)
-  (bind-key "C-x w i" 'windmove-up)
-  (bind-key "C-x w k" 'windmove-down)
-  (key-chord-define-global "wj" 'windmove-left)
-  (key-chord-define-global "wl" 'windmove-right)
-  (key-chord-define-global "wi" 'windmove-up)
-  (key-chord-define-global "wk" 'windmove-down)
-  )
+  (use-package windmove
+    :commands
+    ;; Here because alternative commands (key chords) do not trigger package autoload.
+    (windmove-left windmove-right windmove-up windmove-down)
+    :init
+    (if use-dwc-key-bindings
+        (bind-keys
+         :prefix-map global-map
+         :prefix "C-w"
+         ((concat "C-" my/forward-key) . windmove-right)
+         ((concat "C-" my/backward-key) . windmove-left)
+         ((concat "C-" my/upward-key) . windmove-up)
+         ((concat "C-" my/downward-key) . windmove-down))
+      (bind-keys
+       ("C-x w j" . windmove-left)
+       ("C-x w l" . windmove-right)
+       ("C-x w i" . windmove-up)
+       ("C-x w k" . windmove-down)))
+    (key-chord-define-global "wj" 'windmove-left)
+    (key-chord-define-global "wl" 'windmove-right)
+    (key-chord-define-global "wi" 'windmove-up)q
+    (key-chord-define-global "wk" 'windmove-down))
 #+END_SRC
 *** ace-jump-mode
 Jump quickly to any word using just two key strokes with ace-jump-mode:
@@ -366,23 +559,31 @@ Jump quickly between windows and frames using just two key strokes with ace-wind
 *** golden-ratio
 Automatically resize buffers to "optimal" size when they gain focus. Turned off by default.
 #+BEGIN_SRC emacs-lisp
-(use-package golden-ratio
-  :commands golden-ratio golden-ratio-mode
-  :init
-  (bind-key "C-x w g SPC" 'golden-ratio)    ;; Resize buffers according to golden-ratio
-  (bind-key "C-x w g m" 'golden-ratio-mode) ;; Enable/disable golden-ratio-mode
-  :config
-  (progn
-    ;; List of buffers to not be resized by golden-ratio.
-    (setq golden-ratio-exclude-buffer-names
-          '("*Flycheck errors*"
-            "*SPEEDBAR*"))
-    ;; Ensure golden-ratio compatibility with helm.
-    (defun pl/helm-alive-p ()
-      (if (boundp 'helm-alive-p)
-          (symbol-value 'helm-alive-p)))
-    (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p))
-  )
+  (use-package golden-ratio
+    :commands golden-ratio golden-ratio-mode
+    :init
+    (if use-dwc-key-bindings
+        (bind-keys
+         :prefix-map global-map
+         :prefix "C-w"
+         ("v" . golden-ratio)
+         ("V" . golden-ratio-mode))
+      (bind-keys
+       ("C-x w g SPC" . golden-ratio) ; Resize buffers according to golden-ratio
+       ("C-x w g m" . golden-ratio-mode) ;; Enable/disable golden-ratio-mode
+       ))
+    :config
+    (progn
+      ;; List of buffers to not be resized by golden-ratio.
+      (setq golden-ratio-exclude-buffer-names
+            '("*Flycheck errors*"
+              "*SPEEDBAR*"))
+      ;; Ensure golden-ratio compatibility with helm.
+      (defun pl/helm-alive-p ()
+        (if (boundp 'helm-alive-p)
+            (symbol-value 'helm-alive-p)))
+      (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p))
+    )
 #+END_SRC
 *** speedbar
 #+BEGIN_SRC emacs-lisp
@@ -567,6 +768,8 @@ Transpose two windows:
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens
   :config
+  (sp-pair "'" nil :unless '(sp-point-after-word-p) :actions nil)
+
   (setq sp-base-key-bindings 'paredit)
   (setq sp-autoskip-closing-pair 'always)
   (setq sp-hybrid-kill-entire-symbol nil)
@@ -1404,6 +1607,22 @@ Enable Emacs Development Environment (EDE) only in C/C++:
     (apply push args)))
 #+END_SRC)
 ** Org Mode
+Edit source code in org-mode:
+#+begin_src emacs-lisp
+  (bind-keys
+   :map org-src-mode-map
+   ("<C-return>" . org-edit-src-exit))
+#+end_src
+dwc-key-bindings:
+#+begin_src emacs-lisp
+  (if use-dwc-key-bindings
+      (bind-keys
+       :map org-mode-map
+       ((concat "C-" my/kill-big-key) . org-kill-line)
+       ((concat "C-" my/yank-key) . org-yank)
+       ))
+#+end_src
+
 #+BEGIN_SRC emacs-lisp
 (defun my-org-mode-hook ()
   (toggle-truncate-lines)
