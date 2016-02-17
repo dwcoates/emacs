@@ -65,6 +65,9 @@ https://github.com/purcell/exec-path-from-shell
 (setq use-package-always-ensure t)
 #+END_SRC
 * General
+#+begin_src emacs-lisp
+(defconst use-dwc-key-bindings nil)
+#+end_src
 ** Basic Settings
 #+BEGIN_SRC emacs-lisp 
 ;; setup default window size
@@ -88,8 +91,8 @@ https://github.com/purcell/exec-path-from-shell
 
 ;; set font
 (add-to-list 'default-frame-alist
-         '(font .  "Ubuntu Mono-13"))
-(set-face-attribute 'default t :font  "Ubuntu Mono-13")
+         '(font .  "Ubuntu Mono-12"))
+(set-face-attribute 'default t :font  "Ubuntu Mono-12")
 
 ;; disables tool bar
 (tool-bar-mode -1)
@@ -151,6 +154,12 @@ chords consist of keys adjacent to one another.
     :ensure t)
 #+end_src
 *** dwc-key-bindings
+Prefixes for major modes and inter-buffer navigation/editing:
+#+begin_src emacs-lisp
+(defconst dwc-major-prefix "C-e")
+(defconst dwc-inter-buffer-prefix "C-w")
+#+end_src
+
 This allows for the mapping to C-i without remapping <tab> as well. This
 happens otherwise because C-i and <tab> share the same ascii code. 
 Regard "H-i" as "C-i" in the dwc-key-bindings.
@@ -158,9 +167,6 @@ Regard "H-i" as "C-i" in the dwc-key-bindings.
 (keyboard-translate ?\C-i ?\H-i)
 #+end_src
 **** Generics
-#+begin_src emacs-lisp
-(defconst use-dwc-key-bindings nil)
-#+end_src
 Navigation generics:
 #+begin_src emacs-lisp
 (defconst my/backward-key "j")
@@ -258,60 +264,56 @@ Navigation:
 #+begin_src emacs-lisp
   (if use-dwc-key-bindings
       (bind-keys*
-       :prefix-map global-map
-       :prefix "C-w"
-       (my/forward-key . next-buffer)
-       (my/backward-key . previous-buffer)
+       ((concat dwc-inter-buffer-prefix " " my/forward-key) . next-buffer)
+       ((concat dwc-inter-buffer-prefix " " my/backward-key) . previous-buffer)
 
-       ("U" . switch-to-buffer-other-window)
-       ("u" . switch-to-buffer)
-       ("C-u" . helm-buffers-list)
+       ((concat dwc-inter-buffer-prefix " " "U") . switch-to-buffer-other-window)
+       ((concat dwc-inter-buffer-prefix " " "u") . switch-to-buffer)
+       ((concat dwc-inter-buffer-prefix " " "C-u") . helm-buffers-list)
 
-       ("o" . other-frame)
-       ("O" . other-window)
+       ((concat dwc-inter-buffer-prefix " " "o") . other-frame)
+       ((concat dwc-inter-buffer-prefix " " "O") . other-window)
        ;; DIRED
-       ("/" . dired-jump)
-       ("?" . dired-jump-other-window)
+       ((concat dwc-inter-buffer-prefix " " "/") . dired-jump)
+       ((concat dwc-inter-buffer-prefix " " "?") . dired-jump-other-window)
        ))
 #+end_src
 Editing:
 #+begin_src emacs-lisp
   (if use-dwc-key-bindings
-      (bind-keys
-       :prefix-map global-map
-       :prefix "C-w"
+      (bind-keys*
        ;; FIND FILE
-       (my/search-alpha-key . ido-find-file)
-       ((concat "C-" my/search-alpha-key) . ido-find-file-other-window)
-       ((upcase my/search-alpha-key) . ido-find-file-other-frame)
+       ((concat dwc-inter-buffer-prefix " " my/search-alpha-key) . ido-find-file)
+       ((concat dwc-inter-buffer-prefix " " (concat "C-" my/search-alpha-key)) . ido-find-file-other-window)
+       ((concat dwc-inter-buffer-prefix " " (upcase my/search-alpha-key)) . ido-find-file-other-frame)
        ;; RESIZE
-       (my/bigger-key . enlarge-window-horizontally)
-       (my/smaller-key . shrink-window-horizontally)
-       ((concat "C-" my/bigger-key) . enlarge-window)
-       ((concat "M-" my/smaller-key) . shrink-window)
+       ((concat dwc-inter-buffer-prefix " " my/bigger-key) . enlarge-window-horizontally)
+       ((concat dwc-inter-buffer-prefix " " my/smaller-key) . shrink-window-horizontally)
+       ((concat dwc-inter-buffer-prefix " " (concat "C-" my/bigger-key)) . enlarge-window)
+       ((concat dwc-inter-buffer-prefix " " (concat "M-" my/smaller-key)) . shrink-window)
 
-       ("b" . balance-windows)
-       ("B" . shrink-window-if-larger-than-buffer)
-       ("v" . golden-ratio)
-       ("V" . golden-ratio-mode)
+       ((concat dwc-inter-buffer-prefix " " "b") . balance-windows)
+       ((concat dwc-inter-buffer-prefix " " "B") . shrink-window-if-larger-than-buffer)
+       ((concat dwc-inter-buffer-prefix " " "v") . golden-ratio)
+       ((concat dwc-inter-buffer-prefix " " "V") . golden-ratio-mode)
 
-       ("z" . suspend-frame)
+       ((concat dwc-inter-buffer-prefix " " "z") . suspend-frame)
        ;; SPLIT
-       ((upcase my/forward-key) . split-window-right)
-       ((upcase my/backward-key) . split-horizontally)
-       ((upcase my/upward-key) . split-window-vertically)
-       ((upcase my/downward-key) . split-window-below)
+       ((concat dwc-inter-buffer-prefix " " (upcase my/forward-key)) . split-window-right)
+       ((concat dwc-inter-buffer-prefix " " (upcase my/backward-key)) . split-horizontally)
+       ((concat dwc-inter-buffer-prefix " " (upcase my/upward-key)) . split-window-vertically)
+       ((concat dwc-inter-buffer-prefix " " (upcase my/downward-key)) . split-window-below)
        ;; KILL
-       (my/kill-element-key . kill-buffer-and-window)
-       ((upcase my/kill-element-key) . kill-some-buffers)
-       ((concat "C-" my/kill-element-key) . kill-buffer)
+       ((concat dwc-inter-buffer-prefix " " my/kill-element-key) . kill-buffer-and-window)
+       ((concat dwc-inter-buffer-prefix " " (upcase my/kill-element-key)) . kill-some-buffers)
+       ((concat dwc-inter-buffer-prefix " " (concat "C-" my/kill-element-key)) . kill-buffer)
 
-       ((concat "3 " (upcase my/kill-element-key)) . delete-other-frames)
-       ((concat "3 " my/kill-element-key) . delete-frame)
+       ((concat dwc-inter-buffer-prefix " " (concat "3 " (upcase my/kill-element-key))) . delete-other-frames)
+       ((concat dwc-inter-buffer-prefix " " (concat "3 " my/kill-element-key)) . delete-frame)
        ;; SAVE
-       ((concat "C-" my/kill-or-save-key) . save-buffer)
-       ((upcase my/kill-or-save-key) . write-file)
-       ((concat "M-" my/kill-or-save-key) . save-some-bueffer)
+       ((concat dwc-inter-buffer-prefix " " (concat "C-" my/kill-or-save-key)) . save-buffer)
+       ((concat dwc-inter-buffer-prefix " " (upcase my/kill-or-save-key)) . write-file)
+       ((concat dwc-inter-buffer-prefix " " (concat "M-" my/kill-or-save-key)) . save-some-bueffer)
        ))
 #+end_src
 ** Helm
@@ -516,13 +518,11 @@ Navigate windows directionally with wind-move:
     (windmove-left windmove-right windmove-up windmove-down)
     :init
     (if use-dwc-key-bindings
-        (bind-keys
-         :prefix-map global-map
-         :prefix "C-w"
-         ((concat "C-" my/forward-key) . windmove-right)
-         ((concat "C-" my/backward-key) . windmove-left)
-         ((concat "C-" my/upward-key) . windmove-up)
-         ((concat "C-" my/downward-key) . windmove-down))
+        (bind-keys*
+         ((concat dwc-inter-buffer-prefix " " my/forward-key) . windmove-right)
+         ((concat dwc-inter-buffer-prefix " " my/backward-key) . windmove-left)
+         ((concat dwc-inter-buffer-prefix " " my/upward-key) . windmove-up)
+         ((concat dwc-inter-buffer-prefix " " my/downward-key) . windmove-down))
       (bind-keys
        ("C-x w j" . windmove-left)
        ("C-x w l" . windmove-right)
@@ -530,7 +530,7 @@ Navigate windows directionally with wind-move:
        ("C-x w k" . windmove-down)))
     (key-chord-define-global "wj" 'windmove-left)
     (key-chord-define-global "wl" 'windmove-right)
-    (key-chord-define-global "wi" 'windmove-up)q
+    (key-chord-define-global "wi" 'windmove-up)
     (key-chord-define-global "wk" 'windmove-down))
 #+END_SRC
 *** ace-jump-mode
@@ -1356,21 +1356,80 @@ Comment out a line:
   )
 #+END_SRC
 ** Lisps
+Define general Lisp dwc-key-bindings:
+#+begin_src emacs-lisp
+(if use-dwc-key-bindings
+  (bind-keys
+   :prefix-map dwc-general-lisp-map
+   :prefix dwc-major-prefix
+   :map lisp-mode-shared-map
+   ;; Beg/End
+   (my/beginning-key . sp-beginning-of-sexp)
+   (my/end-key . sp-end-of-sexp)
+   ;; Upward/Downward
+   (my/downward-key . sp-down-sexp)
+   (my/upward-key . sp-up-sexp)
+   ((concat "C-" my/downward-key) . sp-backward-down-sexp)
+   ((concat "C-" my/upward-key) . sp-backward-up-sexp)
+   ;; Forward/Backward
+   (my/forward-key . sp-forward-sexp)
+   (my/backward-key . sp-backward-sexp)
+   ((concat "C-" my/forward-key)  . sp-forward-symbol)
+   ((concat "C-" my/backward-key) . sp-backward-symbol)
+   ((concat "C-" (upcase my/forward-key)) . sp-next-sexp)
+   ((concat "C-" (upcase my/backward-key)) . sp-previous-sexp)
+   ;; Slurp/Barf
+
+   ("e" . sp-forward-slurp-sexp)
+   ("r" . sp-forward-barf-sexp)
+   ("w"  . sp-backward-slurp-sexp)
+   ("q"  . sp-backward-barf-sexp)
+   ;; Transpose
+   (my/transpose-key . sp-transpose-sexp)
+   ((concat "C-" my/transpose-key) . sp-transpose-hybrid-sexp)
+   ;; Kill and Save
+   (my/kill-element-key . sp-kill-sexp)
+   ((concat "C-" my/kill-element-key) . sp-kill-hybrid-sexp)
+   ((concat "C-" (upcase my/kill-element-key)) . sp-backward-kill-sexp)
+   ((concat "M-" my/kill-element-key) . sp-copy-sexp)
+   ;("d" . sp-delete-sexp)        ;; this function snt exist
+   ))
+#+end_src
+Define hooks:
+General Lisp hook:
+#+begin_src emacs-lisp
+  (defun my/general-lisp-hook ()
+    (rainbow-delimiters-mode-enable)
+    )
+#+end_src
+Emacs Lisp hook:
+#+begin_src emacs-lisp
+  (defun my/emacs-lisp-hook ()
+        (my/general-lisp-hook)
+        (turn-on-eldoc-mode)
+        )
+#+end_src
+Add hooks:
+#+begin_src emacs-lisp
+(add-hook 'emacs-lisp-mode-hook 'my/emacs-lisp-hook)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+#+end_src
+Enable rainbow-delimiters for lisp modes
 #+BEGIN_SRC emacs-lisp
 ;(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
-(add-hook 'emacs-lisp-mode-hook       #'rainbow-delimiters-mode-enable)
-(add-hook 'eval-expression-minibuffer-setup-hook #'rainbow-delimiters-mode-enable)
-(add-hook 'ielm-mode-hook             #'rainbow-delimiters-mode-enable)
-(add-hook 'lisp-mode-hook             #'rainbow-delimiters-mode-enable)
-(add-hook 'lisp-interaction-mode-hook #'rainbow-delimiters-mode-enable)
-(add-hook 'clojure-mode-hook          #'rainbow-delimiters-mode-enable)
-(add-hook 'scheme-mode-hook           #'rainbow-delimiters-mode-enable)
+(add-hook 'eval-expression-minibuffer-setup-hook 'my/general-lisp-hook)
+(add-hook 'ielm-mode-hook             'my/general-lisp-hook)
+(add-hook 'lisp-mode-hook            'my/general-lisp-hook)
+(add-hook 'scheme-mode-hook           'my/general-lisp-hook)
+;; pretty sure this isnt necessary
+;(add-hook 'lisp-interaction-mode-hook (lambda () (my/general-lisp-hook))) 
 
+#+end_src
+Enable eldoc-mode in appropriate emacs lisp hooks
+#+begin_src emacs-lisp
 ;; eldoc-mode shows documentation in the minibuffer when writing code
 ;; http://www.emacswiki.org/emacs/ElDoc
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 #+END_SRC
 *** Emacs Lisp
 #+begin_src emacs-lisp
@@ -1408,58 +1467,99 @@ Display possible symbol completions in a helm buffer:
 #+END_SRC
 *** Clojure
 **** clojure-mode
+Set up clojure-mode keymap:
+#+begin_src emacs-lisp
+    (if use-dwc-key-bindings
+        (progn
+          (define-prefix-command 'clojure-mode-map)
+          (global-set-key (kbd dwc-major-prefix) 'clojure-mode-map)
+          (set-keymap-parent clojure-mode-map lisp-mode-shared-map))
+      )
+#+end_src
+My clojure-mode hook
+#+begin_src emacs-lisp
+  (defun my/clojure-mode-hook ()
+    (my/general-lisp-hook)
+    (subword-mode)
+    (setq inferior-lisp-program "lein repl")
+    (font-lock-add-keywords
+     nil
+     '(("(\\(facts?\\)"
+        (1 font-lock-keyword-face))
+       ("(\\(background?\\)"
+        (1 font-lock-keyword-face))
+       ))
+    (define-clojure-indent (fact 1))
+    (define-clojure-indent (facts 1))
+    )
+#+end_src
+
 #+BEGIN_SRC emacs-lisp
-(use-package clojure-mode
-  :mode "\\.clj\\'"
-  :init
-  ;; Use clojure-mode for other file-name extensions
-  (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
-  :config
-  (use-package clojure-mode-extra-font-locking)
-  (use-package flycheck-clojure)
-  ;; A little more syntax highlighting
-  (require 'clojure-mode-extra-font-locking)
-  ;(use-package clj-refactor)
-  ;; This is useful for working with camel-case tokens
-  (add-hook 'clojure-mode-hook 'subword-mode)
-  (add-hook 'clojure-mode-hook
-            (lambda ()
-              (setq inferior-lisp-program "lein repl")
-              (font-lock-add-keywords
-               nil
-               '(("(\\(facts?\\)"
-                  (1 font-lock-keyword-face))
-                 ("(\\(background?\\)"
-                  (1 font-lock-keyword-face))))
-              (define-clojure-indent (fact 1))
-              (define-clojure-indent (facts 1))))
-  )
+  (use-package clojure-mode
+    :mode "\\.clj\\'"
+    :init
+    ;; Use clojure-mode for other file-name extensions
+    (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
+    ;; Define the clojure-mode-map prefix
+    :config
+    (progn
+      (use-package clojure-mode-extra-font-locking)
+      (use-package flycheck-clojure)
+      ;; A little more syntax highlighting
+      (require 'clojure-mode-extra-font-locking)
+                                          ;(use-package clj-refactor)
+                                          ;allow clojure to have access to lisp-mode-shared-map key-bindings
+      (set-keymap-parent clojure-mode-map lisp-mode-shared-map)
+      (add-hook 'clojure-mode-hook 'my/clojure-mode-hook))
+    )
 #+END_SRC
 **** CIDER
 #+BEGIN_SRC emacs-lisp 
-(use-package cider
-  :commands cider-mode
-  :functions (cider-start-http-server cider-refresh cider-user-ns)
-  :bind
-  ("C-' 1" . cider-visit-error-buffer)
-  :config
-  ;; Provides minibuffer documentation for the code you're typing into the repl
-  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  (setq cider-repl-pop-to-buffer-on-connect t) ;; Go right to the REPL buffer when it's finished connecting
-  (setq cider-show-error-buffer nil) ;; When there's a cider error, show its buffer and switch to it
-  (setq cider-auto-select-error-buffer t)
-  (setq cider-repl-history-file "~/.emacs.d/cider-history") ;; Where to store the cider history.
-  (setq cider-repl-wrap-history t) ;; Wrap when navigating history.
-  ;; CIDER and clojure-mode specific bindings:
-  (bind-key "C-c C-v" 'cider-start-http-server clojure-mode-map)
-  (bind-key "C-c r" 'cider-refresh clojure-mode-map)
-  (bind-key "C-c u" 'cider-user-ns clojure-mode-map)
-  (bind-key "C-c u" 'cider-user-ns cider-mode-map)
-  (bind-key "C-`" 'cider-jack-in cider-mode-map)
-  )
+  (use-package cider
+    :commands cider-mode
+    :functions (cider-start-http-server cider-refresh cider-user-ns)
+    :config
+    (require 'clojure-mode-extra-font-locking)
+    (if use-dwc-key-bindings
+        (progn
+          (bind-keys
+           :map clojure-mode-map
+           ((concat dwc-major-prefix " " "z") . cider-start-http-server)
+           ((concat dwc-major-prefix " " "x") . cider-refresh)
+           ((concat dwc-major-prefix " " "c") . cider-user-ns)
+           )
+          (bind-keys
+           :map cider-mode-map
+           ((concat dwc-major-prefix " " "C-c u") . cider-user-ns)
+           ((concat dwc-major-prefix " " "C-`") . cider-jack-in)
+         ))
+      (progn
+        (bind-keys
+         ("C-' 1" . cider-visit-error-buffer))
+        (bind-keys
+         :map clojure-mode-map
+         ("C" . cider-start-http-server)
+         ( "C-c r" . cider-refresh)
+         ("C-c u" . cider-user-ns))
+        (bind-keys
+         :map cider-mode-map
+         ("C-c u" . cider-user-ns)
+         ("C-`" . cider-jack-in)))
+      ;; Provides minibuffer documentation for the code you're typing into the repl
+      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+      (setq cider-repl-pop-to-buffer-on-connect t) ;; Go right to the REPL buffer when
+      ;; it's finished connecting
+      (setq cider-show-error-buffer nil) ;; When there's a cider error, show its buffer
+      ;; and switch to it
+      (setq cider-auto-select-error-buffer t)
+      (setq cider-repl-history-file "~/.emacs.d/cider-history") ;; Where to store the
+      ;; cider history.
+      (setq cider-repl-wrap-history t) ;; Wrap when navigating history.
+      ;; CIDER and clojure-mode specific bindings:
+      ))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
