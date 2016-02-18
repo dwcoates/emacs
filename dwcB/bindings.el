@@ -1,3 +1,5 @@
+<<<<<<< Updated upstream:dwcB/bindings.el
+<<<<<<< Updated upstream:dwcB/bindings.el
 (defconst dwc-major-prefix "C-e")
 (defconst dwc-inter-buffer-prefix "C-w")
 
@@ -30,7 +32,15 @@
 ;; Transpose
 (defconst dwc-transpose-key "t")
 
-(setq dwc-global-keymap (make-sparse-keymap))
+
+
+
+(defvar dwc-global-keymap (make-keymap)
+  "dwc-bindings-mode keymap for inter-buffer and general intra-buffer editing and navigation.")
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;; INTRA-BUFFER ;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -96,9 +106,14 @@
 (define-key dwc-global-keymap (kbd (concat "M-" dwc-transpose-key)) 'transpose-words)
 ;; Yank
 (define-key dwc-global-keymap (kbd (concat "C-" dwc-yank-key)) 'yank)
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;; INTER-BUFFER ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (define-prefix-command 'dwc-inter-buffer-keymap)
 (define-key dwc-global-keymap (kbd dwc-inter-buffer-prefix) 'dwc-inter-buffer-keymap)
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -151,13 +166,52 @@
 (define-key dwc-inter-buffer-keymap (kbd (concat "C-" dwc-kill-or-save-key)) 'save-buffer)
 (define-key dwc-inter-buffer-keymap (kbd (upcase dwc-kill-or-save-key)) 'write-file)
 (define-key dwc-inter-buffer-keymap (kbd (concat "M-" dwc-kill-or-save-key)) 'save-some-bueffer)
+=======
+>>>>>>> Stashed changes:dwc-bindings.el
+=======
+>>>>>>> Stashed changes:dwc-bindings.el
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;; GENERAL LISP ;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-minor-mode dwc-bindings-mode
-  "Organized alternative bindings to Emacs default."
-  :lighter " dwcB"
-  :global t
-  :keymap dwc-global-keymap
-  )
+(use-package smartparens
+  :ensure t)
+
+(if  use-dwc-key-bindings
+  (bind-keys
+   :prefix-map lisp-mode-shared-map
+   :prefix dwc-major-prefix
+   ;; Beg/End
+   (my/beginning-key . sp-beginning-of-sexp)
+   (my/end-key . sp-end-of-sexp)
+   ;; Upward/Downward
+   (my/downward-key . sp-down-sexp)
+   (my/upward-key . sp-up-sexp)
+   ((concat "C-" my/downward-key) . sp-backward-down-sexp)
+   ((concat "C-" my/upward-key) . sp-backward-up-sexp)
+   ;; Forward/Backward
+   (my/forward-key . sp-forward-sexp)
+   (my/backward-key . sp-backward-sexp)
+   ((concat "C-" my/forward-key)  . sp-forward-symbol)
+   ((concat "C-" my/backward-key) . sp-backward-symbol)
+   ((concat "C-" (upcase my/forward-key)) . sp-next-sexp)
+   ((concat "C-" (upcase my/backward-key)) . sp-previous-sexp)
+   ;; Slurp/Barf
+
+   ("e" . sp-forward-slurp-sexp)
+   ("r" . sp-forward-barf-sexp)
+   ("w"  . sp-backward-slurp-sexp)
+   ("q"  . sp-backward-barf-sexp)
+   ;; Transpose
+   (my/transpose-key . sp-transpose-sexp)
+   ((concat "C-" my/transpose-key) . sp-transpose-hybrid-sexp)
+   ;; Kill and Save
+   (my/kill-element-key . sp-kill-sexp)
+   ((concat "C-" my/kill-element-key) . sp-kill-hybrid-sexp)
+   ((concat "C-" (upcase my/kill-element-key)) . sp-backward-kill-sexp)
+   ((concat "M-" my/kill-element-key) . sp-copy-sexp)
+   ;("d" . sp-delete-sexp)        ;; this function snt exist
+   ))
