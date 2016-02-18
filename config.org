@@ -447,7 +447,7 @@ Transpose two windows:
 (global-set-key (kbd "C-x w t") 'transpose-windows)
 #+END_SRC
 * Editing
-** Basic Setti ngs
+** Basic Settings
 #+BEGIN_SRC emacs-lisp
 (show-paren-mode 1)
 
@@ -1514,7 +1514,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 *** ERC
 #+begin_src emacs-lisp
 (use-package erc
-  :ensure t :defer t
+  :defer t
   :init
   (defun my/erc-mode-hook ()
     (if (equal word-wrap nil)
