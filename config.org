@@ -127,6 +127,7 @@ Turn on ido
 (ido-mode t)
 #+end_src
 
+Custom key-binding scheme encapsulated in a minor mode called dwcB-mode so that it can be turned off and on easily:
 #+begin_src emacs-lisp
   (add-to-list 'load-path "~/.emacs.d/dwcB/")
 
@@ -359,18 +360,17 @@ Navigate windows directionally with wind-move:
     ;; Here because alternative commands (key chords) do not trigger package autoload.
     (windmove-left windmove-right windmove-up windmove-down)
     :init
-;    (if use-dwc-key-bindings
- ;       (bind-keys*
-;         ((concat dwc-inter-buffer-prefix " " my/forward-key) . windmove-right)
-;         ((concat dwc-inter-buffer-prefix " " my/backward-key) . windmove-left)
-;         ((concat dwc-inter-buffer-prefix " " my/upward-key) . windmove-up)
-;         ((concat dwc-inter-buffer-prefix " " my/downward-key) . windmove-down))
-      (bind-keys
-       ("C-x w j" . windmove-left)
-       ("C-x w l" . windmove-right)
-       ("C-x w i" . windmove-up)
-       ("C-x w k" . windmove-down))
-;)
+    (bind-keys
+     :map dwcB-inter-buffer-map
+     ((concat "C-" dwcB-forward-key) . windmove-right)
+     ((concat "C-" dwcB-backward-key) . windmove-left)
+     ((concat "C-" dwcB-upward-key) . windmove-up)
+     ((concat "C-" downward-key) . windmove-down))
+    (bind-keys
+     ("C-x w j" . windmove-left)
+     ("C-x w l" . windmove-right)
+     ("C-x w i" . windmove-up)
+     ("C-x w k" . windmove-down))
     (key-chord-define-global "wj" 'windmove-left)
     (key-chord-define-global "wl" 'windmove-right)
     (key-chord-define-global "wi" 'windmove-up)
@@ -406,9 +406,14 @@ Automatically resize buffers to "optimal" size when they gain focus. Turned off 
     :commands golden-ratio golden-ratio-mode
     :init
     (bind-keys
+     :map dwcB-inter-buffer-map
+     ("b" . golden-ratio)
+     ("B" . golden-ratio-mode))
+    (bind-keys
      ("C-x w g SPC" . golden-ratio) ; Resize buffers according to golden-ratio
      ("C-x w g m" . golden-ratio-mode) ;; Enable/disable golden-ratio-mode
      )
+    :config
     (progn
       ;; List of buffers to not be resized by golden-ratio.
       (setq golden-ratio-exclude-buffer-names
@@ -471,7 +476,7 @@ Transpose two windows:
 (global-set-key (kbd "C-x w t") 'transpose-windows)
 #+END_SRC
 * Editing
-** Basic Setti ngs
+** Basic Settings
 #+BEGIN_SRC emacs-lisp
 (show-paren-mode 1)
 
