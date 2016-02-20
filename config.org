@@ -126,6 +126,13 @@ Turn on ido
 #+begin_src emacs-lisp
 (ido-mode t)
 #+end_src
+
+#+begin_src emacs-lisp
+  (add-to-list 'load-path "~/.emacs.d/dwcB/")
+
+  (require 'dwc-bindings)
+#+end_src
+
 *** Key Chords
 $key-chord-one-key-delay$ defines the max time delay between two key
 presses to be considered a key chord.  I have this set to be very
@@ -160,11 +167,11 @@ This variables must be set before loading helm-gtags
 #+BEGIN_SRC emacs-lisp
   (use-package helm
     :init
-    (if use-dwc-key-bindings
-        (bind-keys
-         (my/search-beta-key . helm-find-files)
-         ((concat "C-" my/search-beta-key) . helm-find-file-other-window)
-         ((upcase my/search-beta-key) . helm-find-file-other-frame))
+;    (if use-dwc-key-bindings
+ ;       (bind-keys
+;         (my/search-beta-key . helm-find-files)
+;         ((concat "C-" my/search-beta-key) . helm-find-file-other-window)
+;         ((upcase my/search-beta-key) . helm-find-file-other-frame))
       (bind-keys
        ("M-x" . helm-M-x)
        ("M-y" . helm-show-5ill-ring)
@@ -172,7 +179,8 @@ This variables must be set before loading helm-gtags
        ("C-x b" . helm-mini)
        ("C-x C-f" . helm-find-files)
        ("C-h SPC" . helm-all-mark-rings)
-       ("C-c s o" . helm-occur)))
+       ("C-c s o" . helm-occur))
+;)
 
     (setq
      helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
@@ -188,12 +196,12 @@ This variables must be set before loading helm-gtags
 
     (helm-mode 1)
     :config
-    (if use-dwc-key-bindings
-        (bind-keys
-         :map helm-map
-         ((concat "C-" my/downward-key) . helm-next-line)
-         ((concat "C-" my/upward-key) . helm-previous-line))
-      )
+;    (if use-dwc-key-bindings
+ ;       (bind-keys
+;         :map helm-map
+;         ((concat "C-" my/downward-key) . helm-next-line)
+;         ((concat "C-" my/upward-key) . helm-previous-line))
+;      )
     (require 'helm-grep)
     (require 'helm-eshell)
     )
@@ -351,17 +359,18 @@ Navigate windows directionally with wind-move:
     ;; Here because alternative commands (key chords) do not trigger package autoload.
     (windmove-left windmove-right windmove-up windmove-down)
     :init
-    (if use-dwc-key-bindings
-        (bind-keys*
-         ((concat dwc-inter-buffer-prefix " " my/forward-key) . windmove-right)
-         ((concat dwc-inter-buffer-prefix " " my/backward-key) . windmove-left)
-         ((concat dwc-inter-buffer-prefix " " my/upward-key) . windmove-up)
-         ((concat dwc-inter-buffer-prefix " " my/downward-key) . windmove-down))
+;    (if use-dwc-key-bindings
+ ;       (bind-keys*
+;         ((concat dwc-inter-buffer-prefix " " my/forward-key) . windmove-right)
+;         ((concat dwc-inter-buffer-prefix " " my/backward-key) . windmove-left)
+;         ((concat dwc-inter-buffer-prefix " " my/upward-key) . windmove-up)
+;         ((concat dwc-inter-buffer-prefix " " my/downward-key) . windmove-down))
       (bind-keys
        ("C-x w j" . windmove-left)
        ("C-x w l" . windmove-right)
        ("C-x w i" . windmove-up)
-       ("C-x w k" . windmove-down)))
+       ("C-x w k" . windmove-down))
+;)
     (key-chord-define-global "wj" 'windmove-left)
     (key-chord-define-global "wl" 'windmove-right)
     (key-chord-define-global "wi" 'windmove-up)
@@ -396,17 +405,10 @@ Automatically resize buffers to "optimal" size when they gain focus. Turned off 
   (use-package golden-ratio
     :commands golden-ratio golden-ratio-mode
     :init
-    (if use-dwc-key-bindings
-        (bind-keys
-         :prefix-map global-map
-         :prefix "C-w"
-         ("v" . golden-ratio)
-         ("V" . golden-ratio-mode))
-      (bind-keys
-       ("C-x w g SPC" . golden-ratio) ; Resize buffers according to golden-ratio
-       ("C-x w g m" . golden-ratio-mode) ;; Enable/disable golden-ratio-mode
-       ))
-    :config
+    (bind-keys
+     ("C-x w g SPC" . golden-ratio) ; Resize buffers according to golden-ratio
+     ("C-x w g m" . golden-ratio-mode) ;; Enable/disable golden-ratio-mode
+     )
     (progn
       ;; List of buffers to not be resized by golden-ratio.
       (setq golden-ratio-exclude-buffer-names
@@ -1191,7 +1193,6 @@ Comment out a line:
 #+END_SRC
 ** Lisps
 *** General Lisp Settings
-Define general Lisp dwc-key-bindings:
 Define hooks:
 General Lisp hook:
 #+begin_src emacs-lisp
@@ -1264,15 +1265,6 @@ Display possible symbol completions in a helm buffer:
 #+END_SRC
 *** Clojure
 **** clojure-mode
-Set up clojure-mode keymap:
-#+begin_src emacs-lisp
-    (if use-dwc-key-bindings
-        (progn
-          (define-prefix-command 'clojure-mode-map)
-          (global-set-key (kbd dwc-major-prefix) 'clojure-mode-map)
-          (set-keymap-parent clojure-mode-map lisp-mode-shared-map))
-      )
-#+end_src
 My clojure-mode hook
 #+begin_src emacs-lisp
   (defun my/clojure-mode-hook ()
@@ -1302,17 +1294,12 @@ My clojure-mode hook
     (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
     ;; Define the clojure-mode-map prefix
     :config
-    (progn
-      (if use-dwc-key-bindings 
-       (define-prefix-command 'clojure-mode-map)
-       (global-set-key (kbd dwc-major-prefix) 'clojure-mode-map)
-       (set-keymap-parent clojure-mode-map lisp-mode-shared-map))
       (use-package clojure-mode-extra-font-locking)
       (use-package flycheck-clojure)
       ;; A little more syntax highlighting
       (require 'clojure-mode-extra-font-locking)
                                           ;(use-package clj-refactor)
-      (add-hook 'clojure-mode-hook 'my/clojure-mode-hook))
+      (add-hook 'clojure-mode-hook 'my/clojure-mode-hook)
     )
 #+END_SRC
 **** CIDER
@@ -1322,21 +1309,21 @@ My clojure-mode hook
     :functions (cider-start-http-server cider-refresh cider-user-ns)
     :config
     (require 'clojure-mode-extra-font-locking)
-    (if use-dwc-key-bindings
-        (progn
-          (define-prefix-command 'cider-mode-map)
-          (global-set-key (kbd dwc-major-prefix) 'cider-mode-map)
-          (set-keymap-parent cider-mode-map lisp-mode-shared-map)
-          (bind-keys
-           :map cider-mode-map
-           ("C-c u" . cider-user-ns)
-           ("C-`" . cider-jack-in))
-          (bind-keys
-           :map clojure-mode-map
-           ("z" . cider-start-http-server)
-           ("x" . cider-refresh)
-           ("c" . cider-user-ns))
-         )
+;    (if use-dwc-key-bindings
+ ;       (progn
+  ;        (define-prefix-command 'cider-mode-map)
+;          (global-set-key (kbd dwc-major-prefix) 'cider-mode-map)
+;          (set-keymap-parent cider-mode-map lisp-mode-shared-map)
+;          (bind-keys
+ ;          :map cider-mode-map
+;           ("C-c u" . cider-user-ns)
+;           ("C-`" . cider-jack-in))
+;          (bind-keys
+;           :map clojure-mode-map
+;           ("z" . cider-start-http-server)
+;           ("x" . cider-refresh)
+;           ("c" . cider-user-ns))
+;         )
       (progn
         (bind-keys
          ("C-' 1" . cider-visit-error-buffer))
@@ -1348,7 +1335,8 @@ My clojure-mode hook
         (bind-keys
          :map cider-mode-map
          ("C-c u" . cider-user-ns)
-         ("C-`" . cider-jack-in)))
+         ("C-`" . cider-jack-in))
+      ;)
       ;; Provides minibuffer documentation for the code you're typing into the repl
       (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
       (setq cider-repl-pop-to-buffer-on-connect t) ;; Go right to the REPL buffer when
@@ -1514,16 +1502,6 @@ Edit source code in org-mode:
    :map org-src-mode-map
    ("<C-return>" . org-edit-src-exit))
 #+end_src
-dwc-key-bindings:
-#+begin_src emacs-lisp
-  (if use-dwc-key-bindings
-      (bind-keys
-       :map org-mode-map
-       ((concat "C-" my/kill-big-key) . org-kill-line)
-       ((concat "C-" my/yank-key) . org-yank)
-       ))
-#+end_src
-
 #+BEGIN_SRC emacs-lisp
 (defun my-org-mode-hook ()
   (toggle-truncate-lines)
