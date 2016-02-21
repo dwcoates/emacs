@@ -1,6 +1,6 @@
 This is my emacs config file.
 
-* Init
+* Package Management
 #+BEGIN_SRC emacs-lisp
 ;; This must come before configurations of installed packages.  
 (package-initialize)
@@ -1603,7 +1603,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (run-with-idle-timer 600 t 'jump-to-org-agenda)
 #+END_SRC
 
-* Emacs as an Internet Interface
+* Emacs as an Web Interface
 ** Edit With Emacs (Google Chrome extension)
 #+BEGIN_SRC emacs-lisp
 ;; Edit With Emacs (Google Chrome Extension)
