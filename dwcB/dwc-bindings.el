@@ -47,18 +47,25 @@
   )
 
 
-
-(defun dwcB-add-minor-map (MINOR-MODE KEYMAP &optional inactive)
-  "Add minor mode, MINOR-MODE's, dwcB keymap, KEYMAP, to be used iff the minor mode is active."
-  (if (keymapp KEYMAP)
-      (progn
-        (add-to-list 'dwcB-minor-mode-alist (cons MINOR-MODE KEYMAP))
-         (if (not inactive)
-             (dwcB-activate-minor-binding MINOR-MODE)
-           ))
-    (error "KEYMAP must be a keymap.")
+(defun dwcB-create-map (KEYMAP BASE &optional PARENT)
+  "Create a new keymap composed of KEYMAP and BASE, and that inherits from PARENT. If PARENT is nil,
+created map will not inherit any bindings."
+  (let ((dwcB-keymap (or (append KEYMAP BASE) (make-sparse-keymap))))
+    (set-keymap-parent dwcB-keymap PARENT)
+    dwcB-keymap
     )
   )
+
+
+(defun dwcB-add-minor-map (MINOR-MODE KEYMAP BASE &optional PARENT)
+  "Add minor mode, MINOR-MODE's, dwcB keymap, KEYMAP, to be used iff the minor mode is active."
+  (let ((keymap (cons MINOR-MODE (dwcB-create-map KEYMAP BASE PARENT))))
+    (add-to-list 'dwcB-minor-mode-alist keymap)
+    (dwcB-activate-minor-binding (car keymap))
+    )
+  )
+
+
 
 (defun dwcB-activate-minor-map (MINOR-MODE)
   (let ((mode-map (assoc MINOR-MODE dwcB-minor-mode-alist)))
@@ -78,25 +85,18 @@
   )
 
 
-;; check to see if major-mode already has dwcB keymap for it
-;; if it does, replace it.
-;; if it doesnt, add it and record the current major map so that it can be restored
-(defun dwcB-add-major-map (MAJOR-MODE KEYMAP &optional inactive)
-  (let ((mode-map (assoc MAJOR-MODE dwcB-major-mode-alist)))
+(defun dwcB-add-major-map (MAJOR-MODE KEYMAP BASE &optional PARENT)
+  "Create and add a dwcB major mode keymap to the dwcB-major-mode-alist."
+  (let ((mode-map (assoc MAJOR-MODE dwcB-major-mode-alist))
+        (keymap (dwcB-create-map KEYMAP BASE PARENT)))
     (if (equal mode-map nil)
-        (add-to-list 'dwcB-major-mode-alist (cons MAJOR-MODE (cons (current-local-map) KEYMAP)))
-      (setf (cdr (cdr mode-map)) KEYMAP)
-      )
+        (add-to-list
+         'dwcB-major-mode-alist
+         (cons MAJOR-MODE (cons (current-local-map) keymap))) ; remember major's default local-map
+      (setf (cdr (cdr mode-map)) keymap))
     )
-  (if dwcB-mode
-      (dwcB-update-major-map))
+    (dwcB-update-major-map)
   )
-
-;; receives major-mode, keymap, prefix-map, parent. returns dwcB-keymap created for major-mode
-;; question: how do create parents this way.
-;; (defun dwcB-create-major-map (MAJOR-MODE GENERAL-MAP PREFIX-MAP &optional PARENT)
-;;   ()
-;;   )
 
 (defun dwcB-update-major-map ()
   "When dwcB-mode is on, switch to corresponding dwcB keymap for the current major mode."
@@ -105,8 +105,7 @@
           (if dwcB-mode
               (use-local-map (cdr (cdr mode-map)))  ; set to major-mode dwcB keymap
             (use-local-map (car (cdr mode-map)))    ; reset to major-mode original keymap
-            )
-        )
+            ))
       )
     )
 

@@ -411,8 +411,7 @@ General navigation bindings:
 (global-unset-key (kbd "C-x 0"))
 (global-set-key (kbd "C-x DEL") 'delete-window)
 #+end_src
-** Other Packages
-*** windmove
+** windmove
 Navigate windows directionally with wind-move:
 #+BEGIN_SRC emacs-lisp
   (use-package windmove
@@ -436,7 +435,7 @@ Navigate windows directionally with wind-move:
     (key-chord-define-global "wi" 'windmove-up)
     (key-chord-define-global "wk" 'windmove-down))
 #+END_SRC
-*** ace-jump-mode
+** ace-jump-mode
 Jump quickly to any word using just two key strokes with ace-jump-mode:
 #+BEGIN_SRC emacs-lisp
 (use-package ace-jump-mode
@@ -444,7 +443,7 @@ Jump quickly to any word using just two key strokes with ace-jump-mode:
   :init
   (key-chord-define-global "cj" 'ace-jump-mode))
 #+END_SRC
-*** ace-window
+** ace-window
 Jump quickly between windows and frames using just two key strokes with ace-window:
 #+BEGIN_SRC emacs-lisp
 (use-package ace-window

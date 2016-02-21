@@ -173,10 +173,8 @@
 
 (setq dwcB-lisp-mode-shared-map (make-sparse-keymap))
 (set-keymap-parent dwcB-lisp-mode-shared-map lisp-mode-shared-map) ;; should be done by dwcB-add-major-map
-
 (setq dwcB-lisp-mode-shared-prefix-map (make-sparse-keymap))
 (define-key dwcB-lisp-mode-shared-map (kbd "C-e") dwcB-lisp-mode-shared-prefix-map)
-
 
    ;; Beg/End
 (define-key dwcB-lisp-mode-shared-prefix-map
