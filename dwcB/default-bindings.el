@@ -175,6 +175,7 @@
   "Keymap from which most lisp maps should derive in the dwcB scheme."
  )
 
+
  ;; should be done by dwcB-add-major-map
 (setq dwcB-lisp-mode-shared-prefix-map (make-sparse-keymap))
 (define-key dwcB-lisp-mode-shared-map (kbd "C-e") dwcB-lisp-mode-shared-prefix-map)
@@ -250,26 +251,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;; ORG MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar dwcB-org-mode-map
-  (dwcB-add-major-map 'org-mode nil org-mode-map (keymap-parent org-mode-map))
-  "Keymap used by dwcB for org-mode buffers."
-  )
+;; (defvar dwcB-org-mode-map
+;;   (dwcB-add-major-map 'org-mode nil 'org-mode-map (keymap-parent org-mode-map))
+;;   "Keymap used by dwcB for org-mode buffers."
+;;   )
 
 
-(define-key dwcB-org-mode-map
-  (kbd (concat "C-" dwcB-downward-key))  nil)
-(define-key dwcB-org-mode-map
-  (kbd (concat "C-" dwcB-upward-key))  nil)
-(define-key dwcB-org-mode-map
-  (kbd (concat "C-" dwcB-backward-key))  nil)
-(define-key dwcB-org-mode-map
-  (kbd (concat "C-" dwcB-forward-key))  nil)
-
-
-
-(setq dwcB-org-mode-prefix-map (make-sparse-keymap))
-(define-key dwcB-org-mode-map (kbd dwcB-major-prefix) dwcB-org-mode-prefix-map)
+;; (define-key dwcB-org-mode-map
+;;   (kbd (concat "C-" dwcB-downward-key))  nil)
+;; (define-key dwcB-org-mode-map
+;;   (kbd (concat "C-" dwcB-upward-key))  nil)
+;; (define-key dwcB-org-mode-map
+;;   (kbd (concat "C-" dwcB-backward-key))  nil)
+;; (define-key dwcB-org-mode-map
+;;   (kbd (concat "C-" dwcB-forward-key))  nil)
 
 
 
-(provide 'bindings)
+;; (setq dwcB-org-mode-prefix-map (make-sparse-keymap))
+;; (define-key dwcB-org-mode-map (kbd dwcB-major-prefix) dwcB-org-mode-prefix-map)
+
+
+
+(provide 'default-bindings)

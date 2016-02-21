@@ -61,7 +61,7 @@ created map will not inherit any bindings."
   "Add minor mode, MINOR-MODE's, dwcB keymap, KEYMAP, to be used iff the minor mode is active."
   (let ((keymap (cons MINOR-MODE (dwcB-create-map KEYMAP BASE PARENT))))
     (add-to-list 'dwcB-minor-mode-alist keymap)
-    (dwcB-activate-minor-binding (car keymap))
+    (dwcB-activate-minor-map (car keymap))
     )
   )
 
@@ -73,7 +73,9 @@ created map will not inherit any bindings."
         (add-to-list 'minor-mode-overriding-map-alist mode-map)
       (message "No dwcB-minor-mode-map for %s; Must be first added with dwcB-add-minor-map"
               MINOR-MODE)
-      ))
+      )
+    (cdr mode-map)
+    )
   )
 
 (defun dwcB-deactivate-minor-map (MINOR-MODE)
@@ -110,6 +112,9 @@ created map will not inherit any bindings."
       )
     )
 
+
 (require 'default-bindings)
+
+
 
 (provide 'dwc-bindings)
