@@ -94,8 +94,9 @@ created map will not inherit any bindings."
          'dwcB-major-mode-alist
          (cons MAJOR-MODE (cons (current-local-map) keymap))) ; remember major's default local-map
       (setf (cdr (cdr mode-map)) keymap))
-    )
     (dwcB-update-major-map)
+    keymap
+    )
   )
 
 (defun dwcB-update-major-map ()
@@ -109,6 +110,6 @@ created map will not inherit any bindings."
       )
     )
 
-(require 'bindings)
+(require 'default-bindings)
 
 (provide 'dwc-bindings)

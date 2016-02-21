@@ -170,9 +170,12 @@
 (use-package smartparens
    :ensure t)
 
+(defvar dwcB-lisp-mode-shared-map
+  (dwcB-create-map nil lisp-mode-shared-map (keymap-parent lisp-mode-shared-map))
+  "Keymap from which most lisp maps should derive in the dwcB scheme."
+ )
 
-(setq dwcB-lisp-mode-shared-map (make-sparse-keymap))
-(set-keymap-parent dwcB-lisp-mode-shared-map lisp-mode-shared-map) ;; should be done by dwcB-add-major-map
+ ;; should be done by dwcB-add-major-map
 (setq dwcB-lisp-mode-shared-prefix-map (make-sparse-keymap))
 (define-key dwcB-lisp-mode-shared-map (kbd "C-e") dwcB-lisp-mode-shared-prefix-map)
 
@@ -200,9 +203,9 @@
 (define-key dwcB-lisp-mode-shared-prefix-map
   (kbd (concat "C-" dwcB-backward-key))  'sp-backward-symbol)
 (define-key dwcB-lisp-mode-shared-prefix-map
-  (kbd (concat "C-" (upcase dwcB-forward-key)))  'sp-next-sexp)
+  (kbd (concat "C-" (upcase dwcB-forward-key))) 'sp-next-sexp)
 (define-key dwcB-lisp-mode-shared-prefix-map
-  (kbd (concat "C-" (upcase dwcB-backward-key)))  'sp-previous-sexp)
+  (kbd (concat "C-" (upcase dwcB-backward-key))) 'sp-previous-sexp)
    ;; Slurp/Barf
 (define-key dwcB-lisp-mode-shared-prefix-map
   (kbd "e")  'sp-forward-slurp-sexp)
@@ -229,19 +232,43 @@
 ;;;;;; EMACS LISP ;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq dwcB-emacs-lisp-mode-map (make-sparse-keymap))
-(set-keymap-parent dwcB-emacs-lisp-mode-map dwcB-lisp-mode-shared-map)
+(defvar dwcB-emacs-lisp-mode-map
+  (dwcB-add-major-map 'emacs-lisp-mode nil nil dwcB-lisp-mode-shared-map)
+  "Keymap used by dwcB for emacs-lisp-mode buffers."
+  )
 
-;; (setq dwcB-emacs-lisp-mode-prefix-map (make-sparse-keymap))
-;; (define-key dwcB-emacs-lisp-mode-map (kbd dwcB-major-prefix) dwcB-emacs-lisp-mode-prefix-map)
+;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;; CLOJURE ;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;
 
-(dwcB-add-major-map 'emacs-lisp-mode dwcB-emacs-lisp-mode-map)
-
-
+(defvar dwcB-clojure-mode-map
+  (dwcB-add-major-map 'clojure-mode nil nil dwcB-lisp-mode-shared-map)
+  "Keymap used by dwcB for clojure-mode buffers."
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;; ORG MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar dwcB-org-mode-map
+  (dwcB-add-major-map 'org-mode nil org-mode-map (keymap-parent org-mode-map))
+  "Keymap used by dwcB for org-mode buffers."
+  )
+
+
+(define-key dwcB-org-mode-map
+  (kbd (concat "C-" dwcB-downward-key))  nil)
+(define-key dwcB-org-mode-map
+  (kbd (concat "C-" dwcB-upward-key))  nil)
+(define-key dwcB-org-mode-map
+  (kbd (concat "C-" dwcB-backward-key))  nil)
+(define-key dwcB-org-mode-map
+  (kbd (concat "C-" dwcB-forward-key))  nil)
+
+
+
+(setq dwcB-org-mode-prefix-map (make-sparse-keymap))
+(define-key dwcB-org-mode-map (kbd dwcB-major-prefix) dwcB-org-mode-prefix-map)
 
 
 
