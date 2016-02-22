@@ -208,24 +208,10 @@ This variables must be set before loading helm-gtags
     (setq dwcB-helm-map (dwcB-add-major-map 'helm-mode nil helm-map (keymap-parent helm-map)))
     (bind-keys
      :map dwcB-helm-map
-      ((concat "C-" dwcB-downward-key) . helm-next-line)
+      ((concat "H-" dwcB-downward-key) . helm-next-line)
       ((concat "C-" dwcB-upward-key) . helm-previous-line)
      )
-    (require 'helm-grep)
-    (require 'helm-eshell)
- )
-(defun test (test-sym) 
-  (print test-sym)
-  ;(symbol-value test-sym)
 )
-(setq my-sym '(a b d))
-(test 'my-sym)
-(setq my-other-sym (test my-sym))
-(add-to-list 'my-sym 'g)
-(print my-other-sym)
-
-(pp dwcB-major-mode-alist)
-
 #+END_SRC
 *** Basic Settings
 Helm size
