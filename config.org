@@ -139,9 +139,9 @@ approach:
 
 Custom key-binding scheme encapsulated in a minor mode called dwcB-mode so that it can be turned off and on easily:
 #+begin_src emacs-lisp
-  (add-to-list 'load-path "~/.emacs.d/dwcB/")
+  (add-to-list 'load-path "~/workspace/emacs/dwcB/")
 
-  (require 'dwc-bindings)
+  (require 'dwcB)
 #+end_src
 
 *** Key Chords
@@ -178,11 +178,11 @@ This variables must be set before loading helm-gtags
 #+BEGIN_SRC emacs-lisp
   (use-package helm
     :init
-      (bind-keys
-       :map dwcB-inter-buffer-map
-       (dwcB-search-beta-key . helm-find-files)
-       ((concat "C-" dwcB-search-beta-key) . helm-find-file-other-window)
-       ((upcase dwcB-search-beta-key) . helm-find-file-other-frame))
+      ;(bind-keys
+      ; :map dwcB-inter-buffer-map
+      ; (dwcB-search-beta-key . helm-find-files)
+      ; ((concat "C-" dwcB-search-beta-key) . helm-find-file-other-window)
+      ; ((upcase dwcB-search-beta-key) . helm-find-file-other-frame))
       (bind-keys
        ("M-x" . helm-M-x)
        ("M-y" . helm-show-5ill-ring)
@@ -205,12 +205,12 @@ This variables must be set before loading helm-gtags
 
     (helm-mode 1)
     :config
-    (setq dwcB-helm-map (dwcB-add-major-map 'helm-mode nil helm-map (keymap-parent helm-map)))
-    (bind-keys
-     :map dwcB-helm-map
-      ((concat "H-" dwcB-downward-key) . helm-next-line)
-      ((concat "C-" dwcB-upward-key) . helm-previous-line)
-     )
+    ;(setq dwcB-helm-map (dwcB-add-major-map 'helm-mode nil helm-map (keymap-parent helm-map)))
+    ;(bind-keys
+    ; :map dwcB-helm-map
+    ;  ((concat "H-" dwcB-downward-key) . helm-next-line)
+    ;  ((concat "C-" dwcB-upward-key) . helm-previous-line)
+    ; )
 )
 #+END_SRC
 *** Basic Settings
@@ -355,10 +355,10 @@ Automatically resize buffers to "optimal" size when they gain focus. Turned off 
   (use-package golden-ratio
     :commands golden-ratio golden-ratio-mode
     :init
-    (bind-keys
-     :map dwcB-inter-buffer-map
-     ("b" . golden-ratio)
-     ("B" . golden-ratio-mode))
+    ;(bind-keys
+    ; :map dwcB-inter-buffer-map
+    ; ("b" . golden-ratio)
+    ; ("B" . golden-ratio-mode))
     (bind-keys
      ("C-x w g SPC" . golden-ratio) ; Resize buffers according to golden-ratio
      ("C-x w g m" . golden-ratio-mode) ;; Enable/disable golden-ratio-mode
@@ -418,12 +418,12 @@ Navigate windows directionally with wind-move:
     ;; Here because alternative commands (key chords) do not trigger package autoload.
     (windmove-left windmove-right windmove-up windmove-down)
     :init
-    (bind-keys
-     :map dwcB-inter-buffer-map
-     ((concat "C-" dwcB-forward-key) . windmove-right)
-     ((concat "C-" dwcB-backward-key) . windmove-left)
-     ((concat "C-" dwcB-upward-key) . windmove-up)
-     ((concat "C-" dwcB-downward-key) . windmove-down))
+    ;(bind-keys
+    ; :map dwcB-inter-buffer-map
+    ; ((concat "C-" dwcB-forward-key) . windmove-right)
+    ; ((concat "C-" dwcB-backward-key) . windmove-left)
+    ; ((concat "C-" dwcB-upward-key) . windmove-up)
+    ; ((concat "C-" dwcB-downward-key) . windmove-down))
     (bind-keys
      ("C-x w j" . windmove-left)
      ("C-x w l" . windmove-right)
@@ -1773,3 +1773,9 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (eval-after-load "wgrep"
   '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
 #+END_SRC
+
+
+   #+begin_src emacs-lisp
+(defun foo () 
+(cool))
+   #+end_src
