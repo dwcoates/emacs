@@ -136,14 +136,6 @@ approach:
 
 (bind-key* "C-x C-f" 'ido-find-file)
 #+end_src
-
-Custom key-binding scheme encapsulated in a minor mode called dwcB-mode so that it can be turned off and on easily:
-#+begin_src emacs-lisp
-  (add-to-list 'load-path "~/workspace/emacs/dwcB/")
-
-  (require 'dwcB)
-#+end_src
-
 *** Key Chords
 $key-chord-one-key-delay$ defines the max time delay between two key
 presses to be considered a key chord.  I have this set to be very
@@ -178,11 +170,6 @@ This variables must be set before loading helm-gtags
 #+BEGIN_SRC emacs-lisp
   (use-package helm
     :init
-      ;(bind-keys
-      ; :map dwcB-inter-buffer-map
-      ; (dwcB-search-beta-key . helm-find-files)
-      ; ((concat "C-" dwcB-search-beta-key) . helm-find-file-other-window)
-      ; ((upcase dwcB-search-beta-key) . helm-find-file-other-frame))
       (bind-keys
        ("M-x" . helm-M-x)
        ("M-y" . helm-show-5ill-ring)
@@ -204,13 +191,6 @@ This variables must be set before loading helm-gtags
      helm-buffers-fuzzy-matching t)   ; fuzzy matching buffer names when non-nil
 
     (helm-mode 1)
-    :config
-    ;(setq dwcB-helm-map (dwcB-add-major-map 'helm-mode nil helm-map (keymap-parent helm-map)))
-    ;(bind-keys
-    ; :map dwcB-helm-map
-    ;  ((concat "H-" dwcB-downward-key) . helm-next-line)
-    ;  ((concat "C-" dwcB-upward-key) . helm-previous-line)
-    ; )
 )
 #+END_SRC
 *** Basic Settings
@@ -282,6 +262,7 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 #+END_SRC
 * Interface
 ** Flycheck
+
 *use-package Flycheck*
 #+BEGIN_SRC emacs-lisp 
 (use-package flycheck
@@ -355,10 +336,6 @@ Automatically resize buffers to "optimal" size when they gain focus. Turned off 
   (use-package golden-ratio
     :commands golden-ratio golden-ratio-mode
     :init
-    ;(bind-keys
-    ; :map dwcB-inter-buffer-map
-    ; ("b" . golden-ratio)
-    ; ("B" . golden-ratio-mode))
     (bind-keys
      ("C-x w g SPC" . golden-ratio) ; Resize buffers according to golden-ratio
      ("C-x w g m" . golden-ratio-mode) ;; Enable/disable golden-ratio-mode
@@ -418,12 +395,6 @@ Navigate windows directionally with wind-move:
     ;; Here because alternative commands (key chords) do not trigger package autoload.
     (windmove-left windmove-right windmove-up windmove-down)
     :init
-    ;(bind-keys
-    ; :map dwcB-inter-buffer-map
-    ; ((concat "C-" dwcB-forward-key) . windmove-right)
-    ; ((concat "C-" dwcB-backward-key) . windmove-left)
-    ; ((concat "C-" dwcB-upward-key) . windmove-up)
-    ; ((concat "C-" dwcB-downward-key) . windmove-down))
     (bind-keys
      ("C-x w j" . windmove-left)
      ("C-x w l" . windmove-right)
@@ -1273,21 +1244,6 @@ My clojure-mode hook
     :functions (cider-start-http-server cider-refresh cider-user-ns)
     :config
     (require 'clojure-mode-extra-font-locking)
-;    (if use-dwc-key-bindings
- ;       (progn
-  ;        (define-prefix-command 'cider-mode-map)
-;          (global-set-key (kbd dwc-major-prefix) 'cider-mode-map)
-;          (set-keymap-parent cider-mode-map lisp-mode-shared-map)
-;          (bind-keys
- ;          :map cider-mode-map
-;           ("C-c u" . cider-user-ns)
-;           ("C-`" . cider-jack-in))
-;          (bind-keys
-;           :map clojure-mode-map
-;           ("z" . cider-start-http-server)
-;           ("x" . cider-refresh)
-;           ("c" . cider-user-ns))
-;         )
       (progn
         (bind-keys
          ("C-' 1" . cider-visit-error-buffer))
