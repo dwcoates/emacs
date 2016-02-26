@@ -399,11 +399,7 @@ Navigate windows directionally with wind-move:
      ("C-x w j" . windmove-left)
      ("C-x w l" . windmove-right)
      ("C-x w i" . windmove-up)
-     ("C-x w k" . windmove-down))
-    (key-chord-define-global "wj" 'windmove-left)
-    (key-chord-define-global "wl" 'windmove-right)
-    (key-chord-define-global "wi" 'windmove-up)
-    (key-chord-define-global "wk" 'windmove-down))
+     ("C-x w k" . windmove-down)))
 #+END_SRC
 ** ace-jump-mode
 Jump quickly to any word using just two key strokes with ace-jump-mode:
