@@ -125,9 +125,8 @@ Set up mode line:
 (display-time-mode t)
 ;; set modeline to powerline
 (use-package powerline)
-(powerline-default-theme)
+;(powerline-default-theme)
 #+END_SRC
-
 ** Key-Command Interfaces
 Turn on ido. I prefer Ido's approach to find-file over helm's
 approach:
@@ -178,6 +177,8 @@ This variables must be set before loading helm-gtags
        ;("C-x C-f" . helm-find-files)
        ("C-h SPC" . helm-all-mark-rings)
        ("C-c s o" . helm-occur))
+    (helm-mode 1)
+    :config
     (setq
      helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
      helm-ff-search-library-in-sexp t ; search for library in `require' and
@@ -189,8 +190,7 @@ This variables must be set before loading helm-gtags
      helm-move-to-line-cycle-in-source t ; move to end or beginning of source when
                                           ; reaching top or bottom of source.
      helm-buffers-fuzzy-matching t)   ; fuzzy matching buffer names when non-nil
-
-    (helm-mode 1)
+    (diminish 'helm-mode)
 )
 #+END_SRC
 *** Basic Settings
@@ -261,6 +261,11 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 (setq helm-lisp-fuzzy-completion t)
 #+END_SRC
 * Interface
+** Themes
+Load wilson theme:
+#+begin_src emacs-lisp
+(load "~/.emacs.d/wilson.el")
+#+end_src
 ** Flycheck
 
 *use-package Flycheck*
@@ -271,6 +276,8 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
   :bind (("C-c ! n" . flycheck-next-error)
          ("C-c ! p" . flycheck-previous-error)
          ("C-c ! h" . helm-flycheck)))
+  :config
+  (diminish 'flycheck-mode)
 #+END_SRC
 
 ** Company
@@ -283,6 +290,7 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
             (setq company-backends (delete 'company-semantic company-backends))
             (use-package helm-company
               :bind ("C-c <tab>" . helm-company)))
+  (diminish 'company-mode)
   )
 #+end_src
 
@@ -320,6 +328,7 @@ Display possible key binding completions automatically in a small pop-up buffer 
   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +" "C-w" "C-e"))
   (setq guide-key/recursive-key-sequence-flag t)
   (setq guide-key/popup-window-position 'bottom)
+  (diminish 'guide-key-mode)
 )
 #+END_SRC
 *** rainbow-delimiters
@@ -600,6 +609,8 @@ Transpose two windows:
 
   (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
   (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+
+  (diminish 'smartparens-mode)
 )
 #+END_SRC
 *** sp-delete-sexp and sp-backward-delete-sexp
@@ -693,7 +704,8 @@ Backward delete sexp:
 #+BEGIN_SRC emacs-lisp
 (use-package volatile-highlights
   :config
-  (volatile-highlights-mode t))
+  (volatile-highlights-mode t)
+  (diminish 'volatile-highlights-mode))
 #+END_SRC
 *** clean-auto-indent-mode
 #+BEGIN_SRC emacs-lisp
@@ -723,7 +735,8 @@ Backward delete sexp:
 #+BEGIN_SRC emacs-lisp 
 (use-package undo-tree
   :config
-  (global-undo-tree-mode))
+  (global-undo-tree-mode)
+  (diminish 'undo-tree-mode))
 #+END_SRC
 *** yasnippet
 #+BEGIN_SRC emacs-lisp 
@@ -1083,7 +1096,8 @@ Comment out a line:
 (use-package projectile
   :config
   (projectile-global-mode)
-  (setq projectile-enable-caching t))
+  (setq projectile-enable-caching t)
+  (diminish 'projectile-mode "projectile"))
 
 (use-package helm-projectile
   :config
