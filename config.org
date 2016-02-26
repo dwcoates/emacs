@@ -606,21 +606,25 @@ Transpose two windows:
   (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 )
 #+END_SRC
-*** TODO sp-delete-sexp
-    SCHEDULED: <2016-02-07 Sun>        
-    - Note taken on [2016-02-06 Sat 16:09] \\
-      Currently broken.
+*** sp-delete-sexp and sp-backward-delete-sexp
+Delete sexp:
 #+BEGIN_SRC emacs-lisp
-(defun sp-delete-sexp ()
-"Deletes sexp at point. Does not save to kill ring."
+  (defun sp-delete-sexp ()
+    "Deletes sexp at point. Does not save to kill ring."
     (interactive)
-    (sp-forward-sexp)
-    (sp-backward-sexp)
-    (mark)
-    (sp-forward-sexp)
-  (delete-region (point) (mark)))
+    (sp-kill-sexp)
+    (pop kill-ring)
+    )
 #+END_SRC
-
+Backward delete sexp:
+#+BEGIN_SRC emacs-lisp
+  (defun sp-backward-delete-sexp ()
+    "Deletes sexp at point. Does not save to kill ring."
+    (interactive)
+    (sp-backward-kill-sexp)
+    (pop kill-ring)
+    )
+#+END_SRC
 *** bind-keys
 #+BEGIN_SRC emacs-lisp 
 (bind-keys
