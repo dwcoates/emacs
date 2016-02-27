@@ -18,7 +18,7 @@
  '(custom-enabled-themes nil)
  '(custom-safe-themes
    (quote
-    ("1af615aabe926740357c6b6c3a611470054efd3bdee28dae6a1bd054d0b43f7d" "7630f2ea026c651a07239948bba7450bc73ec0fa247bc3d123ba4558fab6818a" "422662ca327aec391aaee6e36836af1a489e44b2ead0ad6ad5f22775fa2b0c06" "930a202ae41cb4417a89bc3a6f969ebb7fcea5ffa9df6e7313df4f7a2a631434" "b8c99a002227c98b796605d479bcca6fe71c1c20f22fe68fb9d65b91a9373563" "c87cc60d01cf755375759d165c1d60d9586c6a31f0b5437a0378c2a93cfc8407" default)))
+    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "1af615aabe926740357c6b6c3a611470054efd3bdee28dae6a1bd054d0b43f7d" "7630f2ea026c651a07239948bba7450bc73ec0fa247bc3d123ba4558fab6818a" "422662ca327aec391aaee6e36836af1a489e44b2ead0ad6ad5f22775fa2b0c06" "930a202ae41cb4417a89bc3a6f969ebb7fcea5ffa9df6e7313df4f7a2a631434" "b8c99a002227c98b796605d479bcca6fe71c1c20f22fe68fb9d65b91a9373563" "c87cc60d01cf755375759d165c1d60d9586c6a31f0b5437a0378c2a93cfc8407" default)))
  '(fci-rule-color "#151515")
  '(fringe-mode (quote (4 . 4)) nil (fringe))
  '(org-default-notes-file "/home/dodge/personal/everything.org")
@@ -33,7 +33,8 @@
     (tagedit smex clojure-mode-extra-font-locking geiser ztree rainbow-delimiters jedi epc powerline nyan-mode nyan-prompt magit helm company flycheck-clojure clj-refactor cider px latex-preview-pane company-c-headers company-irony zygospore yasnippet ws-butler volatile-highlights undo-tree smartparens light-soap-theme iedit helm-swoop helm-projectile helm-gtags helm-company guide-key golden-ratio ggtags function-args flycheck duplicate-thing dtrt-indent dash-functional dash-at-point comment-dwim-2 clean-aindent-mode anzu)))
  '(python-shell-prompt-input-regexps
    (quote
-    ("$ " "\\.\\.\\. " "In \\[[0-9]+\\]: " "In : " "\\.\\.\\.: "))))
+    ("$ " "\\.\\.\\. " "In \\[[0-9]+\\]: " "In : " "\\.\\.\\.: ")))
+ '(sml/theme (quote dark)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -56,7 +57,10 @@
  '(helm-candidate-number ((t (:background "salmon2" :foreground "black"))))
  '(helm-selection ((t (:background "sienna"))))
  '(highlight ((t (:background "gray37"))))
+ '(mode-line ((t (:background "burlywood4" :foreground "#44443C" :inverse-video nil :box nil))))
  '(mode-line-buffer-id ((t (:foreground "aquamarine" :weight bold))))
+ '(mode-line-highlight ((t (:box (:line-width 2 :color "yellow" :style released-button)))))
+ '(mode-line-inactive ((t (:background "gray20" :foreground "gray52" :inverse-video nil :box nil))))
  '(org-block-background ((t (:background "gray17"))))
  '(org-block-begin-line ((t (:foreground "gray28"))) t)
  '(org-block-end-line ((t (:foreground "gray28"))) t)
@@ -76,4 +80,8 @@
  '(rainbow-delimiters-depth-7-face ((t (:foreground "violet red"))))
  '(rainbow-delimiters-depth-8-face ((t (:foreground "SeaGreen2"))))
  '(rainbow-delimiters-depth-9-face ((t (:foreground "chocolate"))))
- '(rainbow-delimiters-unmatched-face ((t (:foreground "red")))))
+ '(rainbow-delimiters-unmatched-face ((t (:foreground "red"))))
+ '(sml/filename ((t (:inherit sml/global :foreground "lemon chiffon" :weight bold))))
+ '(sml/global ((t (:foreground "gray21" :inverse-video nil))))
+ '(sml/modes ((t (:inherit sml/global :foreground "black"))))
+ '(sml/prefix ((t (:inherit sml/global :foreground "IndianRed4")))))

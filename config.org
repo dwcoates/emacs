@@ -28,7 +28,6 @@ Add repositories to search for required packages:
              '("elpy" . "https://jorgenschaefer.github.io/packages/"))
 (package-initialize)
 #+END_SRC
-
 Download the ELPA archive description if needed. This informs Emacs about the latest 
 versions of all packages, and makes them available for download.
 #+BEGIN_SRC emacs-lisp
@@ -65,6 +64,10 @@ Setup use-packages so that required packages will be installed when needed:
 #+END_SRC
 * General
 ** Basic Settings
+Load wilson theme:
+#+begin_src emacs-lisp
+(load "~/.emacs.d/wilson.el")
+#+end_src
 Setup default window size:
 #+BEGIN_SRC emacs-lisp 
 (add-to-list 'default-frame-alist '(height . 40))
@@ -113,7 +116,7 @@ I prefer a non-blinking cursor:
 #+begin_src emacs-lisp
 (blink-cursor-mode 0)
 #+end_src
-Faintly highlight current line:
+Highlight current line:
 #+begin_src emacs-lisp
 (global-hl-line-mode 1)
 (set-face-background 'hl-line "#3b3b3b")
@@ -121,11 +124,27 @@ Faintly highlight current line:
 #+end_src
 Set up mode line:
 #+begin_src emacs-lisp
-;; display time in mode linep
+;; display time in mode line
 (display-time-mode t)
+
+;; display laptop batter level in mode line
+;(require 'battery)
+;(when (and battery-status-function
+;       (not (string-match-p "N/A" 
+;                (battery-format "%B"
+;                        (funcall battery-status-function)))))
+;  (display-battery-mode 1))
+ 
 ;; set modeline to powerline
-(use-package powerline)
-;(powerline-default-theme)
+(use-package powerline
+ :defer t
+ :config 
+ (powerline-default-theme))
+;; smart-mode-line
+(use-package smart-mode-line
+ :init
+ (setq sml/theme 'dark)
+ (sml/setup))
 #+END_SRC
 ** Key-Command Interfaces
 Turn on ido. I prefer Ido's approach to find-file over helm's
@@ -261,11 +280,6 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 (setq helm-lisp-fuzzy-completion t)
 #+END_SRC
 * Interface
-** Themes
-Load wilson theme:
-#+begin_src emacs-lisp
-(load "~/.emacs.d/wilson.el")
-#+end_src
 ** Flycheck
 
 *use-package Flycheck*
@@ -277,7 +291,7 @@ Load wilson theme:
          ("C-c ! p" . flycheck-previous-error)
          ("C-c ! h" . helm-flycheck)))
   :config
-  (diminish 'flycheck-mode)
+  (diminish 'flycheck-mode) 
 #+END_SRC
 
 ** Company
@@ -1109,7 +1123,7 @@ Comment out a line:
   :config
   (projectile-global-mode)
   (setq projectile-enable-caching t)
-  (diminish 'projectile-mode "projectile"))
+  (diminish 'projectile-mode))
 
 (use-package helm-projectile
   :config
@@ -1121,7 +1135,6 @@ Comment out a line:
 #+BEGIN_SRC emacs-lisp
 (setq tramp-default-method "ssh")
 #+END_SRC
- 
 *** Gtags
 #+BEGIN_SRC emacs-lisp
 (use-package helm-gtags
