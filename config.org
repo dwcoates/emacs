@@ -144,6 +144,7 @@ Set up mode line:
 (use-package smart-mode-line
  :init
  (setq sml/theme 'dark)
+ (setq sml/name-width 16)
  (sml/setup))
 #+END_SRC
 ** Key-Command Interfaces
@@ -289,9 +290,9 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
           (add-hook 'after-init-hook #'global-flycheck-mode))
   :bind (("C-c ! n" . flycheck-next-error)
          ("C-c ! p" . flycheck-previous-error)
-         ("C-c ! h" . helm-flycheck)))
+         ("C-c ! h" . helm-flycheck))
   :config
-  (diminish 'flycheck-mode) 
+  (diminish 'flycheck-mode))
 #+END_SRC
 
 ** Company
