@@ -134,7 +134,7 @@ Set up mode line:
 ;                (battery-format "%B"
 ;                        (funcall battery-status-function)))))
 ;  (display-battery-mode 1))
- 
+
 ;; set modeline to powerline
 (use-package powerline
  :defer t
@@ -1568,7 +1568,6 @@ It shows org agenda after emacs has been idle for a certain amount of time.
   (add-hook 'erc-mode-hook 'my/erc-mode-hook)
   (setq erc-hide-list '("PART" "QUIT" "JOIN"))
   (setq erc-autojoin-channels-alist '(("freenode.net"
-                                       "#org-mode"
                                        "#emacs"))
         erc-server "irc.freenode.net"
         erc-nick "dwc1")
