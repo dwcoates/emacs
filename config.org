@@ -66,7 +66,7 @@ Setup use-packages so that required packages will be installed when needed:
 ** Basic Settings
 Load wilson theme:
 #+begin_src emacs-lisp
-(load "~/.emacs.d/wilson.el")
+(load "~/.emacs.d/wilson-theme.el")
 #+end_src
 Setup default window size:
 #+BEGIN_SRC emacs-lisp 
@@ -1449,15 +1449,13 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 "Copy file to target and apply function"
     (if (not (file-exists-p file))
       (write-region "" nil file)) ; create file
-    (if (file-exists-p target)
-      (delete-file target))
-    (copy-file file target))
+    (copy-file file target t))
 #+END_SRC
 *** On magit-push
 #+BEGIN_SRC emacs-lisp
 ;; Advise magit-push to backup specifics.el to a backup file in home
 (advice-add 'magit-push :around (lambda (push &rest args)
-    (my/backup-specifics "specifics.el" "~/.emacsSpecificsBackup.el")
+    (my/backup-specifics "~/.emacs.d/specifics.el" "~/.emacsSpecificsBackup.el")
     (apply push args)))
 #+END_SRC)
 ** Org Mode
