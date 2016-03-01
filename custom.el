@@ -63,7 +63,7 @@
  '(mode-line-inactive ((t (:background "gray22" :foreground "gray52" :inverse-video nil :box nil))))
  '(org-block-background ((t (:background "gray17"))))
  '(org-block-begin-line ((t (:foreground "gray14"))) t)
- '(org-block-end-line ((t (:foreground "gray28"))) t)
+ '(org-block-end-line ((t (:foreground "gray14"))) t)
  '(org-level-1 ((t (:foreground "olive drab"))))
  '(org-level-2 ((t (:foreground "light coral"))))
  '(org-level-4 ((t (:inherit outline-4))))

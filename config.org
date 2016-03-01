@@ -147,6 +147,11 @@ Set up mode line:
  (setq sml/name-width 16)
  (sml/setup))
 #+END_SRC
+Dont ask me if I want to use these features before I do:
+#+begin_src emacs-lisp
+(put 'narrow-to-region 'disabled nil)
+(put 'scroll-left 'disabled nil)
+#+end_src
 ** Key-Command Interfaces
 Turn on ido. I prefer Ido's approach to find-file over helm's
 approach:
@@ -557,10 +562,10 @@ Transpose two windows:
 ;; activate whitespace-mode to view all whitespace characters
 (global-set-key (kbd "C-c w") 'whitespace-mode)
 
-(key-chord-define-global "rk" 'delete-whitespace-rectangle)
+;(key-chord-define-global "rk" 'delete-whitespace-rectangle)
 
-(key-chord-define-global ";/" 'comment-region)
-(key-chord-define-global "/." 'uncomment-region)
+;(key-chord-define-global ";/" 'comment-region)
+;(key-chord-define-global "" 'uncomment-region)
 #+END_SRC
 
 #+END_SRC
@@ -1716,9 +1721,3 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (eval-after-load "wgrep"
   '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
 #+END_SRC
-
-
-   #+begin_src emacs-lisp
-(defun foo () 
-(cool))
-   #+end_src
