@@ -5,5 +5,3 @@
 (org-babel-load-file
  (expand-file-name "config.org"
                    user-emacs-directory))
-
-(load "~/.emacs.d/specifics.el")

@@ -419,11 +419,11 @@ General navigation bindings:
 Key bindings for other files:
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-c o e")
-                (lambda () (interactive) (find-file "~/workspace/organization/everything.org")))
+                (lambda () (interactive) (find-file "~/personal/everything.org")))
 (global-set-key (kbd "C-c o C-e")
                 (lambda ()
                   (interactive)
-                  (find-file-other-window "~/workspace/organization/everything.org")))
+                  (find-file-other-window "~/personal/everything.org")))
 
 (global-set-key (kbd "C-c o f e")
                 (lambda ()
@@ -437,13 +437,20 @@ Key bindings for other files:
                   (interactive)
                   (find-file-other-window "~/.emacs.d/custom/")))
 
-
 (global-set-key (kbd "C-c o i")
                 (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
 (global-set-key (kbd "C-c o C-i")
                 (lambda ()
                   (interactive)
                   (find-file-other-window "~/.emacs.d/init.el")))
+
+(global-set-key (kbd "C-c o c")
+                (lambda () (interactive) (find-file "~/.emacs.d/config.org")))
+(global-set-key (kbd "C-c o C-c")
+                (lambda ()
+                  (interactive)
+                  (find-file-other-window "~/.emacs.d/config.org")))
+
 #+end_src
 
 ** windmove
