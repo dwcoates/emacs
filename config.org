@@ -94,9 +94,9 @@ No splash screen:
 #+end_src
 Set font:
 #+begin_src emacs-lisp
-(add-to-list 'default-frame-alist
-         '(font .  "Ubuntu Mono-12"))
-(set-face-attribute 'default t :font  "Ubuntu Mono-12")
+;(add-to-list 'default-frame-alist
+;         '(font .  "Ubuntu Mono-12"))
+;(set-face-attribute 'default t :font  "Ubuntu Mono-12")
 #+end_src
 Get rid of UI clutter:
 #+begin_src emacs-lisp
@@ -1514,7 +1514,7 @@ Edit source code in org-mode:
 #+END_SRC
 Set default notes file:
 #+begin_src emacs-lisp
-(setq org-default-notes-file "~/workspace/organization/everything.org")
+(setq org-default-notes-file "~/personal/everything.org")
 #+end_src
 *** column editing
 #+BEGIN_SRC emacs-lisp
@@ -1765,7 +1765,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (defun on-emacs-startup ()
   (interactive)
   ;; FRAME 1
-  (find-file "~/workspace/organization/everything.org")
+  (find-file "~/personal/everything.org")
   (org-agenda nil "L")
   (delete-window)  ; this is here because for whatever reason, org-agenda insists on opening horizontal
   (split-window-horizontally)
