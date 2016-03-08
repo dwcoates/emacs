@@ -64,94 +64,14 @@ Setup use-packages so that required packages will be installed when needed:
 #+END_SRC
 * General
 ** Basic Settings
-Load wilson theme:
-#+begin_src emacs-lisp
-(load "~/.emacs.d/wilson-theme.el")
-#+end_src
-Setup default window size:
-#+BEGIN_SRC emacs-lisp 
-(add-to-list 'default-frame-alist '(height . 40))
-(add-to-list 'default-frame-alist '(width . 160))
-#+end_src
-Get rid of annoying stuff:
-#+begin_src emacs-lisp
-(setq gc-cons-threshold 100000000)
-(setq inhibit-startup-message t)
-#+end_src
-Use 'y' instead of "yes" and 'n' instead of "no" at prompt.
-#+begin_src emacs-lisp
-(defalias 'yes-or-no-p 'y-or-n-p)
-#+end_src
-Save point position between sessions:
-#+begin_src emacs-lisp
-(require 'saveplace)
-(setq-default save-place t)
-(setq save-place-file (expand-file-name ".places" user-emacs-directory))
-#+end_src
-No splash screen:
-#+begin_src emacs-lisp
-(setq inhibit-startup-screen t)
-#+end_src
-Set font:
-#+begin_src emacs-lisp
-;(add-to-list 'default-frame-alist
-;         '(font .  "Ubuntu Mono-12"))
-;(set-face-attribute 'default t :font  "Ubuntu Mono-12")
-#+end_src
-Get rid of UI clutter:
-#+begin_src emacs-lisp
-;; disables tool bar
-(tool-bar-mode -1)
-;; disables pmenu bar, can re-enable as a popub with 'C-mouse-3'
-(menu-bar-mode -99)
-;; no scroll bar please
-(toggle-scroll-bar -1)
-#+end_src
-Dont truncate lines:
-#+begin_src emacs-lisp
-(toggle-truncate-lines)
-(global-set-key (kbd "C-c ; t") 'toggle-truncate-lines)
-#+end_src
-I prefer a non-blinking cursor:
-#+begin_src emacs-lisp
-(blink-cursor-mode 0)
-#+end_src
-Highlight current line:
-#+begin_src emacs-lisp
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "#3b3b3b")
-(set-face-foreground 'highlight nil)
-#+end_src
-Set up mode line:
-#+begin_src emacs-lisp
-;; display time in mode line
-(display-time-mode t)
-
-;; display laptop batter level in mode line
-;(require 'battery)
-;(when (and battery-status-function
-;       (not (string-match-p "N/A" 
-;                (battery-format "%B"
-;                        (funcall battery-status-function)))))
-;  (display-battery-mode 1))
-
-;; set modeline to powerline
-(use-package powerline
- :defer t
- :config 
- (powerline-default-theme))
+#+being_src emacs-lisp
 ;; smart-mode-line
 (use-package smart-mode-line
  :init
  (setq sml/theme 'dark)
  (setq sml/name-width 16)
  (sml/setup))
-#+END_SRC
-Dont ask me if I want to use these features before I do:
-#+begin_src emacs-lisp
-(put 'narrow-to-region 'disabled nil)
-(put 'scroll-left 'disabled nil)
-#+end_src
+#+end_src 
 ** Key-Command Interfaces
 Turn on ido. I prefer Ido's approach to find-file over helm's
 approach:
