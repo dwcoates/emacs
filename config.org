@@ -64,13 +64,13 @@ Setup use-packages so that required packages will be installed when needed:
 #+END_SRC
 * General
 ** Basic Settings
-#+being_src emacs-lisp
-;; smart-mode-line
+#+begin_src emacs-lisp
 (use-package smart-mode-line
  :init
  (setq sml/theme 'dark)
  (setq sml/name-width 16)
- (sml/setup))
+ (sml/setup)
+ (smart-mode-line-enable))
 #+end_src 
 ** Key-Command Interfaces
 Turn on ido. I prefer Ido's approach to find-file over helm's
@@ -1682,33 +1682,39 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 #+END_SRC
 * On Startup
 #+begin_src emacs-lisp
-(defun on-emacs-startup ()
-  (interactive)
-  ;; FRAME 1
-  (find-file "~/personal/everything.org")
-  (org-agenda nil "L")
-  (delete-window)  ; this is here because for whatever reason, org-agenda insists on opening horizontal
-  (split-window-horizontally)
-  (windmove-right)
-  (switch-to-buffer "*Org Agenda*")
-  (windmove-left)
-  (enlarge-window-horizontally 10)
-  ;; FRAME 2
-  )
-
-
-(defun smart-open-in-horizontal (filename)
-  (interactive)
-  (if (=  (length 'window-list) 1)
-      (if (not (= buffer-file-name "/home/dodge/workspace/organization/everything.org"))
-          '(split-window-horizontally
-           find-file "~/workspace/organization/everything.org")             )
-    (if (= (get-buffer-window "everything.org") nil)
-        (switch-to-buffer "everything.org")
-      (next-multiframe-window)
-        )
+  (defun  org-frame () 
+    (find-file "~/personal/everything.org")
+    (org-agenda nil "L")
+    (delete-window)  ; this is here because for whatever reason, org-agenda insists on opening horizontal
+    (split-window-horizontally)
+    (windmove-right)
+    (switch-to-buffer "*Org Agenda*")
+    (windmove-left)
+    (enlarge-window-horizontally 10)
     )
-  (previous-buffer))
 
-(on-emacs-startup)
+    (defun on-emacs-startup ()
+      (interactive)
+      ;; FRAME 1
+      (org-frame)
+      ;; FRAME 2
+    )
+
+
+  (defun smart-open-in-horizontal (filename)
+    (interactive)
+    (if (=  (length 'window-list) 1)
+        (if (not (= buffer-file-name "~/workspace/organization/everything.org"))
+            '(split-window-horizontally
+             find-file "~/workspace/organization/everything.org")             )
+      (if (= (get-buffer-window "everything.org") nil)
+          (switch-to-buffer "everything.org")
+        (next-multiframe-window)
+          )
+      )
+    (previous-buffer))
+
+  (on-emacs-startup)
+
+  (load "~/.emacs.d/exclusive/exclusive.el")
 #+end_src
