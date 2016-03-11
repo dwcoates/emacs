@@ -1716,5 +1716,5 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 
   (on-emacs-startup)
 
-  (load "~/.emacs.d/exclusive/exclusive.el")
+  (load "~/.emacs.d/exclusive/post.el")
 #+end_src
