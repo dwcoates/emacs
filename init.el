@@ -2,7 +2,7 @@
 (defconst emacs-start-time (current-time))
 
 ;; load system-specific settings best loaded first
-(load "~/.emacs.d/exclusive/pre.el")
+(load "~/personal/exclusive/pre.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;; PRE-LOAD APPEARANCE SETTINGS ;;;;;;;;;
