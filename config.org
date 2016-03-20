@@ -1438,82 +1438,53 @@ Set default notes file:
 #+end_src
 *** Capture
 #+begin_src emacs-lisp
-    (defconst basic-task-template  "* TODO %^{Task:}
+  (defvar basic-task-template "* TODO %^{Task:}
   DEADLINE: %^t
 
-  %?
+    %?
 
-  Captured on %t by %(system-name)"
-      "Org capture template for general tasks."
-      )
-    (defconst school-task-template "* TODO %^{Task:}
-  DEADLINE: %^t
+  Captured on %U by %(system-name)"
+    "Org capture template for general tasks."
+    )
+  (defvar basic-nugget-template "* %^{Task:}
+  SCHEDULED: %T
 
-  %?
+    %?
 
-  Captured on %t by %(system-name)"
-      "Org capture template for general tasks."
-      )
+  Captured on %U by %(system-name)"
+    "Org capture template for general tasks."
+    )
 
-    (setq org-capture-templates
-          `(("e"
-             "Emacs stuff"
-             entry
-             (id "fab86373-6ea8-4a71-8a2f-b8339b4aede7")
-             ,basic-task-template
-             )
-            ("t"
-             "A short-term task for today"
-             entry
-             (id "8a63b75e-fd83-4aa9-8812-0c886301148f")
-             ,basic-task-template
-             )
+  (defvar basic-task-template-with-source (concat basic-task-template "\nfrom %h")
+    "Org capture template for general tasks. Includes a link to file from which capture was initiated."
+    )
 
-            ("s" "School captures for current semester")
-            ("si"
-             "Inventions"
-             entry
-             (id "a7cc4933-6bc2-4e98-9f73-062c5fe9ea12")
-             ,school-task-template
-             )
-            ("so"
-             "Operating Systems"
-             entry
-             (id "3d8c6417-7dbf-4f46-9703-65aa0323c0fb")
-             ,school-task-template
-             )
-            ("sc"
-             "Chemistry"
-             entry
-             (id "2084f707-5cae-442f-834c-5d8e8daec6ab")
-             ,school-task-template
-             )
-            ("sn"
-             "Numanal"
-             entry
-             (id "4b0c2c9b-6655-4d4a-aef6-a31888826e51")
-             ,school-task-template
-             )
-            ("sl"
-             "Classics"
-             entry
-             (id "0c9ef8c2-8141-4a22-87c8-664ab7381b46")
-             ,school-task-template
-             )
-            ("ss"
-             "Tasks for next semester preparation"
-             entry
-             (id "b1f29a2c-a919-4fa1-aae0-f550ad8b44e3")
-             ,school-task-template
-             )
+      (setq org-capture-templates
+            `(("e"
+               "Emacs stuff"
+               entry
+               (id "fab86373-6ea8-4a71-8a2f-b8339b4aede7")
+               ,basic-task-template
+               )
+              ("t"
+               "A short-term task for today"
+               entry
+               (id "8a63b75e-fd83-4aa9-8812-0c886301148f")
+               ,basic-task-template
+               )
+              ("T"
+               "A short-term task to include link to file where captured"
+               (id "8a63b75e-fd83-4aa9-8812-0c886301148f")
+               ,basic-task-template-with-source
+               )
 
-            ("m" "Math thoughts, questions, and tasks")
-            ("mq"
-             "Questions"
-             entry
-             (id "03f60724-f7aa-4eaa-b854-3c2e4874502e")
-             ,basic-task-template)
-            ))
+              ("m" "Math thoughts, questions, and tasks")
+              ("mq"
+               "Questions"
+               entry
+               (id "03f60724-f7aa-4eaa-b854-3c2e4874502e")
+               ,basic-task-template)
+              ))
 #+end_src
 *** Functions
 **** column editing
