@@ -1436,7 +1436,58 @@ Set default notes file:
 #+begin_src emacs-lisp
 (setq org-default-notes-file "~/personal/everything.org")
 #+end_src
-*** column editing
+*** Capture
+#+begin_src emacs-lisp
+  (defvar basic-task-template "* TODO %^{Task:}
+  DEADLINE: %^t
+
+    %?
+
+  Captured on %U by %(system-name)"
+    "Org capture template for general tasks."
+    )
+  (defvar basic-nugget-template "* %^{Task:}
+  SCHEDULED: %T
+
+    %?
+
+  Captured on %U by %(system-name)"
+    "Org capture template for general tasks."
+    )
+
+  (defvar basic-task-template-with-source (concat basic-task-template "\nfrom %h")
+    "Org capture template for general tasks. Includes a link to file from which capture was initiated."
+    )
+
+      (setq org-capture-templates
+            `(("e"
+               "Emacs stuff"
+               entry
+               (id "fab86373-6ea8-4a71-8a2f-b8339b4aede7")
+               ,basic-task-template
+               )
+              ("t"
+               "A short-term task for today"
+               entry
+               (id "8a63b75e-fd83-4aa9-8812-0c886301148f")
+               ,basic-task-template
+               )
+              ("T"
+               "A short-term task to include link to file where captured"
+               (id "8a63b75e-fd83-4aa9-8812-0c886301148f")
+               ,basic-task-template-with-source
+               )
+
+              ("m" "Math thoughts, questions, and tasks")
+              ("mq"
+               "Questions"
+               entry
+               (id "03f60724-f7aa-4eaa-b854-3c2e4874502e")
+               ,basic-task-template)
+              ))
+#+end_src
+*** Functions
+**** column editing
 #+BEGIN_SRC emacs-lisp
 ;(add-hook 'org-mode-hook 'my-org-mode-hook)
 (global-set-key (kbd "C-c o k") 'org-mode-delete-column)
@@ -1446,18 +1497,18 @@ Set default notes file:
 
 (global-set-key (kbd "C-c o RET") 'org-mode-todo-heading)
 #+END_SRC
-*** org-path-completion
+**** org-path-completion
 #+BEGIN_SRC emacs-lisp
 (setq org-goto-interface 'outline-path-completion
       org-goto-max-level 10)
 #+END_SRC
-*** org-capture
+**** org-capture
 org-capture allows you to take a note anywhere, which it will write to the org-default-notes-file.
 #+BEGIN_SRC emacs-lisp
 ;; this is set in ~/.emacs.d/custom/setup-specifics.el
 (global-set-key (kbd "C-c c") 'org-capture)
 #+END_SRC
-*** org-back-to-top-level-heading
+**** org-back-to-top-level-heading
 #+BEGIN_SRC elisp
 ;; move point to top-level heading
 (defun org-back-to-top-level-heading ()
@@ -1469,7 +1520,7 @@ org-capture allows you to take a note anywhere, which it will write to the org-d
 ;; make todo's check recursively when determining the number of todo's under it
 (setq org-hierarchical-todo-statistics nil)
 #+END_SRC
-*** org-summary-todo
+**** org-summary-todo
 This is for making sure that the top-level todo automatically is marked DONE if all sub-levels are DONE. 
 TODO otherwise.
 #+BEGIN_SRC elisp
@@ -1480,7 +1531,7 @@ TODO otherwise.
 
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 #+END_SRC
-*** jump-to-org-agenda
+**** jump-to-org-agenda
 This is a snippet from John Wiegley. 
 It shows org agenda after emacs has been idle for a certain amount of time.
 #+BEGIN_SRC elisp
