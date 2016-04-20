@@ -1296,17 +1296,32 @@ My clojure-mode hook
 #+END_SRC
 
 ** Python
+elpy
 #+BEGIN_SRC emacs-lisp
-(use-package elpy
-  :commands (elpy-mode elpy-enable)
-  :init
-  (defun elpy-on-python-mode ()
-    (elpy-mode)
-    (elpy-enable))
-  (add-hook 'python-mode-hook
-            'elpy-on-python-mode)
-  )
+  (use-package elpy
+    :commands (elpy-mode elpy-enable)
+    :init
+    (when (require 'flycheck nil t)
+      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+      (add-hook 'elpy-mode-hook 'flycheck-mode))
+    (use-package py-autopep8
+      :init
+      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+    (defun elpy-on-python-mode ()
+      (elpy-mode)
+      (elpy-enable))
+    (add-hook 'python-mode-hook
+              'elpy-on-python-mode)
+    )
 #+END_SRC
+jedi 
+#+begin_src emacs-lisp
+  (use-package company-jedi
+    :init
+    (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
+    )
+#+end_src
+
 ** C/C++
 Company-C-Headers enables the completion of C/C++ header file names using company-mode:
 #+begin_src emacs-lisp
