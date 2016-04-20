@@ -328,7 +328,7 @@ Quickly move the cursor to the first instance of a character with iy-go-to-char:
 #+end_src
 General navigation bindings:
 #+begin_src emacs-lisp
-(key-chord-define-global "fp" 'find-file-at-point)
+;(key-chord-define-global "fp" 'find-file-at-point)
 
 (global-unset-key (kbd "C-x 5 0"))
 (global-set-key (kbd "C-x 5 DEL") 'delete-frame)
@@ -422,7 +422,7 @@ Maximize the current buffer:
          (progn
            (window-configuration-to-register '_)
            (delete-other-windows))))
-(key-chord-define-global "xm" 'toggle-maximize-buffer)
+;(key-chord-define-global "xm" 'toggle-maximize-buffer)
 #+END_SRC
 Transpose two windows:
 #+BEGIN_SRC emacs-lisp
@@ -510,8 +510,8 @@ Transpose two windows:
 (global-set-key (kbd "C-x n d") 'narrow-to-defun)
 (global-set-key (kbd "C-x n r") 'narrow-to-region)
 (global-set-key (kbd "C-x n w") 'widen)
-(key-chord-define-global "m," 'narrow-to-region)
-(key-chord-define-global ",." 'widen)
+;(key-chord-define-global "m," 'narrow-to-region)
+;(key-chord-define-global ",." 'widen)
 
 ; automatically indent when press RET
 (global-set-key (kbd "RET") 'newline-and-indent)
@@ -557,7 +557,7 @@ Transpose two windows:
 (use-package char-menu)
 
 (require 'char-menu)
-(key-chord-define-global "cm" 'char-menu)
+;(key-chord-define-global "cm" 'char-menu)
 (setq char-menu '("—" "‘’" "“”" "…" "«»" "–"
                         ("Typography" "•" "©" "†" "‡" "°" "·" "§" "№" "★")
                         ("Math"       "≈" "≡" "≠" "∞" "×" "±" "∓" "÷" "√")
