@@ -1,4 +1,4 @@
-This is my emacs config file.
+oThis is my emacs config file.
 
 * Package Management
 #+BEGIN_SRC emacs-lisp
@@ -1316,10 +1316,12 @@ elpy
 #+END_SRC
 jedi 
 #+begin_src emacs-lisp
-  (use-package company-jedi
-    :init
-    (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
-    )
+    (use-package company-jedi
+      :init
+      (add-hook 'python-mode-hook (lambda ()
+                                    (add-to-list 'company-backends 'company-jedi)
+                                    (company-jedi)))
+      )
 #+end_src
 
 ** C/C++
