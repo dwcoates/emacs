@@ -1764,9 +1764,26 @@ It shows org agenda after emacs has been idle for a certain amount of time.
     (defun on-emacs-startup ()
       (interactive)
       ;; FRAME 1
-      (org-frame)
+      ;;(org-frame)
+      (leven-frames)
       ;; FRAME 2
     )
+
+    (defun leven-frames ()
+      (find-file "~/workspace/leven-squash/levenshtein/compression.py")
+      (split-window-horizontally)
+      (windmove-right)
+      (find-file "~/workspace/leven-squash/tests/compression_tests.py")
+      (split-window-below)
+      (windmove-down)
+      (eshell)
+
+      (find-file-other-frame "~/workspace/leven-squash/project.org")
+      (toggle-frame-fullscreen)
+      (split-window-horizontally)
+      (windmove-right)
+      ;; insert a new pythong shell, i guess
+      )
 
 
   (defun smart-open-in-horizontal (filename)
