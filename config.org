@@ -198,7 +198,7 @@ Use Helm to list eshell history:
 #+BEGIN_SRC emacs-lisp
 (add-hook 'eshell-mode-hook
           (lambda ()
-              (local-set-key 'eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))
+              (local-set-key (kbd "C-c C-l") 'helm-eshell-history)))
 #+END_SRC 
 
 Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "find-file" as one of the possible completions.
@@ -559,10 +559,10 @@ Transpose two windows:
 (require 'char-menu)
 ;(key-chord-define-global "cm" 'char-menu)
 (setq char-menu '("—" "‘’" "“”" "…" "«»" "–"
-                        ("Typography" "•" "©" "†" "‡" "°" "·" "§" "№" "★")
-                        ("Math"       "≈" "≡" "≠" "∞" "×" "±" "∓" "÷" "√")
-                        ("Arrows"     "←" "→" "↑" "↓" "⇐" "⇒" "⇑" "⇓")
-                        ("Greek"      "α" "β" "Y" "δ" "ε" "ζ" "η" "θ" "ι" "κ" "λ" "μ"
+                        (" Typography" "•" "©" "†" "‡" "°" "·" "§" "№" "★")
+                        (" Math"       "≈" "≡" "≠" "∞" "×" "±" "∓" "÷" "√" "≤" "≥")
+                        (" Arrows"     "←" "→" "↑" "↓" "⇐" "⇒" "⇑" "⇓")
+                        (" Greek"      "α" "β" "Y" "δ" "ε" "ζ" "η" "θ" "ι" "κ" "λ" "μ"
                          "ν" "ξ" "ο" "π" "ρ" "σ" "τ" "υ" "φ" "χ" "ψ" "ω")))
 
 
@@ -1300,7 +1300,7 @@ elpy
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
     :commands (elpy-mode elpy-enable)
-    :init
+    :config
     (when (require 'flycheck nil t)
       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
       (add-hook 'elpy-mode-hook 'flycheck-mode))
@@ -1319,8 +1319,7 @@ jedi
     (use-package company-jedi
       :init
       (add-hook 'python-mode-hook (lambda ()
-                                    (add-to-list 'company-backends 'company-jedi)
-                                    (company-jedi)))
+                                    (add-to-list 'company-backends 'company-jedi)))
       )
 #+end_src
 
@@ -1782,9 +1781,8 @@ It shows org agenda after emacs has been idle for a certain amount of time.
       (toggle-frame-fullscreen)
       (split-window-horizontally)
       (windmove-right)
-      ;; insert a new pythong shell, i guess
+      ;; insert a new python shell, i guess
       )
-
 
   (defun smart-open-in-horizontal (filename)
     (interactive)
