@@ -96,7 +96,7 @@ chords consist of keys adjacent to one another.
     :init
     (setq key-chord-two-keys-delay 0.1)
     (setq key-chord-one-key-delay 0.1)
-    (key-chord-mode 1)
+    (key-chord-mode 0)
   )
 #+END_SRC
 *** Hydra
@@ -731,7 +731,7 @@ Backward delete sexp:
   (bind-key "C-a" 'yas/goto-start-of-active-field yas-keymap)
   (bind-key [(tab)] 'nil yas-minor-mode-map)
   (bind-key (kbd "TAB") 'nil yas-minor-mode-map)
-  (bind-key (kbd "C-<tab>") 'yas-expand yas-minor-mode-map)
+  (bind-key (kbd "C-c k") 'yas-expand yas-minor-mode-map) ;; this is redefined because an elpy bug breaks yas-expand with tab
   :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
   :config
   (progn
