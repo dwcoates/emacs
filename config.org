@@ -1299,7 +1299,11 @@ My clojure-mode hook
 #+end_src
 python-mode
 #+begin_src emacs-lisp
-(setenv "PYTHONPATH" "/usr/bin/python:$HOME/.local/bin/")
+(setenv "PYTHONPATH" 
+        (format 
+         "/usr/bin/python:%s/.local/bin/:%s/workspace/leven-squash"
+         (getenv "HOME") (getenv "HOME"))
+)
 #+end_src
 elpy
 #+BEGIN_SRC emacs-lisp
