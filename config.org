@@ -1,4 +1,4 @@
-oThis is my emacs config file.
+This is my emacs config file.
 
 * Package Management
 #+BEGIN_SRC emacs-lisp
@@ -1304,6 +1304,8 @@ python-mode
          "/usr/bin/python:%s/.local/bin/:%s/workspace/leven-squash"
          (getenv "HOME") (getenv "HOME"))
 )
+
+(setq python-shell-enable-font-lock nil)
 #+end_src
 elpy
 #+BEGIN_SRC emacs-lisp
@@ -1437,6 +1439,8 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 ** Org Mode
 Edit source code in org-mode:
 #+begin_src emacs-lisp
+(setq org-src-fontify-natively t)
+
   (bind-keys
    :map org-src-mode-map
    ("<C-return>" . org-edit-src-exit))
@@ -1786,42 +1790,29 @@ It shows org agenda after emacs has been idle for a certain amount of time.
     (delete-other-windows)
     (dwc-org-frame "~/personal/everything.org"))
 
-    (defun leven-frames ()
-      ;; dev frame
-      (find-file "~/workspace/leven-squash/levenshtein/")
-      (split-window-horizontally)
-      (windmove-right)
-      (find-file "~/workspace/leven-squash/tests/")
-      (split-window-below)
-      (windmove-down)
-      (eshell)
-      (shrink-window 10)
+  (defun leven-frames ()
+    ;; dev frame
+    (find-file "~/workspace/leven-squash/levenshtein/")
+    (split-window-horizontally)
+    (windmove-right)
+    (find-file "~/workspace/leven-squash/tests/")
+    (split-window-below)
+    (windmove-down)
+    (eshell)
+    (shrink-window 10)
 
-      ;; org frame
-      (dwc-create-org-frame "~/workspace/leven-squash/project.org")
-      )
+    ;; org frame
+    (dwc-create-org-frame "~/personal/project.org")
+    )
 
   (defun on-emacs-startup ()
     "Default frame scheme on startup."
     (interactive)
     ;; FRAME 1
-    ;;(org-frame)
-    (leven-frames)
+    (dwc-create-org-frame "~/personal/everything.org")
+    ;(leven-frames)
     ;; FRAME 2
     )
-
-  (defun smart-open-in-horizontal (filename)
-    (interactive)
-    (if (=  (length 'window-list) 1)
-        (if (not (= buffer-file-name "~/workspace/organization/everything.org"))
-            '(split-window-horizontally
-             find-file "~/workspace/organization/everything.org")             )
-      (if (= (get-buffer-window "everything.org") nil)
-          (switch-to-buffer "everything.org")
-        (next-multiframe-window)
-          )
-      )
-    (previous-buffer))
 
   (on-emacs-startup)
 
