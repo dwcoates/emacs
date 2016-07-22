@@ -1790,31 +1790,8 @@ It shows org agenda after emacs has been idle for a certain amount of time.
     (delete-other-windows)
     (dwc-org-frame "~/personal/everything.org"))
 
-  (defun leven-frames ()
-    ;; dev frame
-    (find-file "~/workspace/leven-squash/levenshtein/")
-    (split-window-horizontally)
-    (windmove-right)
-    (find-file "~/workspace/leven-squash/tests/")
-    (split-window-below)
-    (windmove-down)
-    (eshell)
-    (shrink-window 10)
-
-    ;; org frame
-    (dwc-create-org-frame "~/personal/project.org")
-    )
-
-  (defun on-emacs-startup ()
-    "Default frame scheme on startup."
-    (interactive)
-    ;; FRAME 1
-    (dwc-create-org-frame "~/personal/everything.org")
-    ;(leven-frames)
-    ;; FRAME 2
-    )
-
-  (on-emacs-startup)
+  ;; `(on-startup)' defined and called in "exclusive/post.el"
+  
 
   (load "~/personal/exclusive/post.el")
 #+end_src
