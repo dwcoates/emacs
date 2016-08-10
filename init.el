@@ -77,3 +77,5 @@
 (org-babel-load-file
  (expand-file-name "config.org"
                    user-emacs-directory))
+
+(load "~/personal/exclusive/post.el")
