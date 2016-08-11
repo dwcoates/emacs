@@ -1437,6 +1437,11 @@ Enable Emacs Development Environment (EDE) only in C/C++:
     (apply push args)))
 #+END_SRC)
 ** Org Mode
+Allow conversion to markdown. Useful for working with project readmes, etc., in org-mode.
+#+begin_src python
+(eval-after-load "org"
+  '(require 'ox-md nil t))
+#+end_src
 Edit source code in org-mode:
 #+begin_src emacs-lisp
 (setq org-src-fontify-natively t)
