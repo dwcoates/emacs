@@ -2,7 +2,10 @@
 (defconst emacs-start-time (current-time))
 
 ;; load system-specific settings best loaded first
-(load "~/personal/exclusive/pre.el")
+(let ((pre "~/personal/exclusive/pre.el"))
+  (if (file-exists-p pre)
+      (load pre)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;; PRE-LOAD APPEARANCE SETTINGS ;;;;;;;;;
@@ -78,4 +81,6 @@
  (expand-file-name "config.org"
                    user-emacs-directory))
 
-(load "~/personal/exclusive/post.el")
+(let ((post "~/personal/exclusive/post.el"))
+  (if (file-exists-p post)
+      (load post)))
