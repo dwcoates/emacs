@@ -1776,14 +1776,15 @@ It shows org agenda after emacs has been idle for a certain amount of time.
     (enlarge-window-horizontally 10)
     )
 
-  (defun dwc-create-frame (filename)
+  (defun dwc-create-frame (&optional filename)
     "Find file and get rid of annoying frame defaults."
-    (find-file-other-frame filename)
+    (if filename 
+      (find-file-other-frame filename))
     (toggle-frame-fullscreen)
     (toggle-scroll-bar -1)
     )
 
-  (defun  dwc-create-org-frame (org-filename)
+  (defun  dwc-org-frame (org-filename)
     "Open an org file and split frame so that one window contains the corresponding agenda"
     (dwc-create-frame org-filename)
     (open-org-agenda-hack)
@@ -1796,7 +1797,4 @@ It shows org agenda after emacs has been idle for a certain amount of time.
     (dwc-org-frame "~/personal/everything.org"))
 
   ;; `(on-startup)' defined and called in "exclusive/post.el"
-  
-
-  (load "~/personal/exclusive/post.el")
 #+end_src
