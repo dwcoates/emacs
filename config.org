@@ -1778,9 +1778,11 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 
   (defun dwc-create-frame (&optional filename)
     "Find file and get rid of annoying frame defaults."
-    (interactive)
+    (interactive "P")
     (if filename 
-      (find-file-other-frame filename))
+      (find-file-other-frame filename)
+     (make-frame)
+     (other-frame 1))
     (toggle-frame-fullscreen)
     (toggle-scroll-bar -1)
     )
