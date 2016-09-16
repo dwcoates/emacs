@@ -1611,6 +1611,7 @@ Host repo
 #+begin_src emacs lisp
 (setq tramp-default-method "ssh")
 #+end_src
+
 * Other Tools
 ** rgrep
 #+BEGIN_SRC emacs-lisp 
