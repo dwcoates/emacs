@@ -1599,6 +1599,18 @@ It shows org agenda after emacs has been idle for a certain amount of time.
   (delete-region (point) (point-min)))
 #+END_SRC
 
+* SSH
+** Tramp
+I edit ~/.ssh/config to add the following
+Host repo
+     HostName mygitserverdomain.com
+     Port 22
+     User repository
+
+`C-x C-f /ssh:repo/some/path/to/a/file' will ssh via tramp mode corresponding the path in user@host (in this case repository@mygitserverdomain.com:22/some/path/to/a/file). 
+#+begin_src emacs lisp
+(setq tramp-default-method "ssh")
+#+end_src
 * Other Tools
 ** rgrep
 #+BEGIN_SRC emacs-lisp 
