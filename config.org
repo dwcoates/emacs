@@ -1743,7 +1743,10 @@ Host repo
   '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
 #+END_SRC
 * On Startup
-  SCHEDULED: <2016-06-06 Mon>
+This launches an emacs server. Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn emacs sessions (nearly) instantly. There is a single overhead cost of typical startup timen (~2 seconds) on login, but it means means I can now use emacs for quick edits. I bind `emacsclient -c -a emacs' to a keyboard shortcut.  
+#+begin_src emacs-lisp
+(server-start)
+#+end_src
 #+begin_src emacs-lisp
   (defun open-org-agenda-hack ()
     "Splits frame horizontally and switches to left window to open an

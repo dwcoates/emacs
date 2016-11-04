@@ -56,7 +56,7 @@
  '(helm-M-x-key ((t (:foreground "red3" :underline t))))
  '(helm-candidate-number ((t (:background "salmon2" :foreground "black"))))
  '(helm-selection ((t (:background "sienna"))))
- '(highlight ((t (:background "gray37"))))
+ '(highlight ((t (:background "light goldenrod"))))
  '(mode-line ((t (:background "burlywood4" :foreground "gray60" :inverse-video nil :box nil))))
  '(mode-line-buffer-id ((t (:foreground "aquamarine" :weight bold))))
  '(mode-line-highlight ((t (:box (:line-width 2 :color "yellow" :style released-button)))))
