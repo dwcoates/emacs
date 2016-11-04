@@ -1464,6 +1464,11 @@ Set default notes file:
 #+begin_src emacs-lisp
 (setq org-default-notes-file "~/personal/everything.org")
 #+end_src
+*** Commands
+#+begin_src emacs-lisp 
+(define-key org-mode-map (kbd "C-M-<return>") 'org-insert-subheading)
+#+end_src
+
 *** Capture
 org-capture-template is set in a private file. Look up the documention for org-capture-template (and org-capture in general) to see how it might look.
 #+begin_src emacs-lisp
@@ -1558,7 +1563,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 (run-with-idle-timer 600 t 'jump-to-org-agenda)
 #+END_SRC
 
-* Emacs as an Web Interface
+* Emacs as a auxiliary interface
 ** Edit With Emacs (Google Chrome extension)
 #+BEGIN_SRC emacs-lisp
 ;; Edit With Emacs (Google Chrome Extension)
@@ -1589,20 +1594,10 @@ It shows org agenda after emacs has been idle for a certain amount of time.
     (erc-cmd-DEOP (format "%s" (erc-current-nick))))
   )
 #+end_src
-** Functions
-*** remove-headers
-#+BEGIN_SRC emacs-lisp
-(defun my/remove-headers ()
-  (goto-char (point-min))
-  (re-search-forward "^$")
-  (goto-char (+ 1 (point)))
-  (delete-region (point) (point-min)))
-#+END_SRC
-
-* SSH
-** Tramp
-I edit ~/.ssh/config to add the following
-Host repo
+** SSH
+*** Tramp
+I edit ~/.ssh/config to add something like the following
+Host my-repo
      HostName mygitserverdomain.com
      Port 22
      User repository
@@ -1742,6 +1737,16 @@ Host repo
 (eval-after-load "wgrep"
   '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
 #+END_SRC
+** Functions
+*** remove-headers
+#+BEGIN_SRC emacs-lisp
+(defun my/remove-headers ()
+  (goto-char (point-min))
+  (re-search-forward "^$")
+  (goto-char (+ 1 (point)))
+  (delete-region (point) (point-min)))
+#+END_SRC
+
 * On Startup
   SCHEDULED: <2016-06-06 Mon>
 #+begin_src emacs-lisp
