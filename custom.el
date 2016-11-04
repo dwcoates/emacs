@@ -57,6 +57,7 @@
  '(helm-candidate-number ((t (:background "salmon2" :foreground "black"))))
  '(helm-selection ((t (:background "sienna"))))
  '(highlight ((t (:background "gray37"))))
+ '(linum ((t (:background "DarkGoldenrod4" :foreground "black"))))
  '(mode-line ((t (:background "burlywood4" :foreground "gray60" :inverse-video nil :box nil))))
  '(mode-line-buffer-id ((t (:foreground "aquamarine" :weight bold))))
  '(mode-line-highlight ((t (:box (:line-width 2 :color "yellow" :style released-button)))))
