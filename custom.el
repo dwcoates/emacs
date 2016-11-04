@@ -56,7 +56,12 @@
  '(helm-M-x-key ((t (:foreground "red3" :underline t))))
  '(helm-candidate-number ((t (:background "salmon2" :foreground "black"))))
  '(helm-selection ((t (:background "sienna"))))
+<<<<<<< HEAD
  '(highlight ((t (:background "light goldenrod"))))
+=======
+ '(highlight ((t (:background "gray37"))))
+ '(linum ((t (:background "DarkGoldenrod4" :foreground "black"))))
+>>>>>>> 49e573da5bea5724bd4e4f2c309ae2570a248b98
  '(mode-line ((t (:background "burlywood4" :foreground "gray60" :inverse-video nil :box nil))))
  '(mode-line-buffer-id ((t (:foreground "aquamarine" :weight bold))))
  '(mode-line-highlight ((t (:box (:line-width 2 :color "yellow" :style released-button)))))
