@@ -1570,6 +1570,16 @@ It shows org agenda after emacs has been idle for a certain amount of time.
 #+END_SRC
 
 * Emacs as a auxiliary interface
+** Terminal
+#+begin_src emacs-lisp
+(defun dwc-spawn-terminal ()
+  (interactive)
+  (dwc-create-frame nil nil)
+  (term "/bin/bash")
+ )
+
+(define-key global-map (kbd "C-x t") 'dwc-spawn-terminal)
+#+end_src
 ** Edit With Emacs (Google Chrome extension)
 #+BEGIN_SRC emacs-lisp
 ;; Edit With Emacs (Google Chrome Extension)
