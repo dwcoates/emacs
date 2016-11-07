@@ -1464,6 +1464,12 @@ Set default notes file:
 #+begin_src emacs-lisp
 (setq org-default-notes-file "~/personal/everything.org")
 #+end_src
+*** Agenda
+#+begin_src emacs-lisp
+(custom-set-variables
+ '(org-agenda-files (quote ("~/personal/everything.org"))))
+#+end_src
+
 *** Commands
 #+begin_src emacs-lisp 
 (define-key org-mode-map (kbd "C-M-<return>") 'org-insert-subheading)
@@ -1748,39 +1754,42 @@ Host my-repo
 #+END_SRC
 
 * On Startup
-This launches an emacs server. Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn emacs sessions (nearly) instantly. There is a single overhead cost of typical startup timen (~2 seconds) on login, but it means means I can now use emacs for quick edits. I bind `emacsclient -c -a emacs' to a keyboard shortcut.  
+** Extremely fast emacs startup with emacs server
+Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn emacs sessions (nearly) instantly. There is a single overhead cost of typical startup timen (~2 seconds) on login, but it means means I can now use emacs for quick edits. I bind `emacsclient -c -a emacs' to a keyboard shortcut.  
+** Custom Frames
 #+begin_src emacs-lisp
-(server-start)
-#+end_src
-#+begin_src emacs-lisp
-  (defun open-org-agenda-hack ()
-    "Splits frame horizontally and switches to left window to open an
+(defun open-org-agenda-hack ()
+  "Splits frame horizontally and switches to left window to open an
   agenda buffer. This is here because for whatever reason, org-agenda
   insists on opening horizontal and I can't be bothered to figure it
   out."
-    (org-agenda nil "L")
+  (unless (get-buffer "*Org Agenda*")
+    (org-agenda nil "a")
     (delete-window)
-    (split-window-horizontally)
-    (windmove-right)
-    (switch-to-buffer "*Org Agenda*")
-    (windmove-left)
-    (enlarge-window-horizontally 10)
     )
+  (split-window-horizontally)
+  (windmove-right)
+  (switch-to-buffer "*Org Agenda*")
+  (windmove-left)
+  (enlarge-window-horizontally 10)
+  )
 
-  (defun dwc-create-frame (&optional filename)
+  (defun dwc-create-frame (&optional filename fullscreen)
     "Find file and get rid of annoying frame defaults."
     (interactive)
     (if filename 
       (find-file-other-frame filename)
      (make-frame)
      (other-frame 1))
-    (toggle-frame-fullscreen)
+    (if fullscreen
+      (toggle-frame-fullscreen)
+     )
     (toggle-scroll-bar -1)
     )
 
-  (defun  dwc-org-frame (org-filename)
+  (defun  dwc-org-frame (org-filename &optional fullscreen)
     "Open an org file and split frame so that one window contains the corresponding agenda"
-    (dwc-create-frame org-filename)
+    (dwc-create-frame org-filename fullscreen)
     (open-org-agenda-hack)
     )
 
