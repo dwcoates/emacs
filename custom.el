@@ -22,12 +22,14 @@
  '(fci-rule-color "#151515")
  '(fringe-mode (quote (4 . 4)) nil (fringe))
  '(org-agenda-files (quote ("~/personal/everything.org")))
+ '(org-deadline-warning-days 2)
  '(org-default-notes-file "/home/dodge/personal/everything.org")
  '(org-directory "~/personal/")
  '(org-footnote-section nil)
  '(org-from-is-user-regexp "\\<Dodge Coates\\>")
  '(org-goto-interface (quote outline-path-completion))
  '(org-goto-max-level 10)
+ '(org-scheduled-delay-days 0)
  '(org-src-fontify-natively t)
  '(package-selected-packages
    (quote
@@ -91,4 +93,5 @@
  '(sml/global ((t (:foreground "DarkOrange4" :inverse-video nil))))
  '(sml/modes ((t (:inherit sml/global :foreground "black"))))
  '(sml/prefix ((t (:inherit sml/global :foreground "IndianRed4"))))
- '(sml/time ((t (:inherit sml/modes)))))
+ '(sml/time ((t (:inherit sml/modes))))
+ '(sp-pair-overlay-face ((t (:inherit highlight :foreground "black")))))
