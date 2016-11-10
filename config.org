@@ -1588,8 +1588,23 @@ It shows org agenda after emacs has been idle for a certain amount of time.
   ;;  (unless (get-buffer-window buf)
   ;;    (org-agenda-goto-calendar)))
   )
-(run-with-idle-timer 600 t 'jump-to-org-agenda)
+(run-with-idle-timer 300 t 'jump-to-org-agenda)
 #+END_SRC
+
+**** create-tasks-heading
+Insert a new Task heading. These are used by org-capture. ID is saved in kill ring.
+#+begin_src emacs-lisp
+(defun create-tasks-heading ()
+  (interactive)
+  (save-excursion
+    (org-insert-subheading nil)
+    (insert "TODO [/]")
+    (backward-char)
+    (org-ctrl-c-ctrl-c)
+    (kill-new (org-id-get-create))
+    )
+  )
+#+end_src
 
 * Emacs as a auxiliary interface
 ** Terminal
