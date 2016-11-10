@@ -1499,7 +1499,7 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 *** Capture
 org-capture-template is set in a private file. Look up the documention for org-capture-template (and org-capture in general) to see how it might look.
 #+begin_src emacs-lisp
-  (defvar basic-task-template "* TODO [%^{Priority:C|A|B|C|D|E}] %^{Task:}
+  (defvar basic-task-template "* TODO [#%^{Priority:C|A|B|C|D|E}] %^{Task:}
   DEADLINE: %^t
 
     %?
@@ -1508,7 +1508,7 @@ org-capture-template is set in a private file. Look up the documention for org-c
     "Org capture template for general tasks."
     )
 
-  (defvar basic-nugget-template "* [%^{Priority:E|A|B|C|D|E}] %^{Task:}
+  (defvar basic-nugget-template "* [#%^{Priority:E|A|B|C|D|E}] %^{Task:}
   SCHEDULED: %T
 
     %?
