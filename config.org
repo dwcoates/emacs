@@ -1469,6 +1469,19 @@ Set default notes file:
 (custom-set-variables
  '(org-agenda-files (quote ("~/personal/everything.org"))))
 #+end_src
+Function to put spaces to delimit priorities in the org-agenda-list buffer.
+#+begin_src emacs-lisp
+  (defun my-custom-agenda-fn ()
+    (save-excursion
+      (goto-char (point-min))
+      (dolist
+          (priority '("\\[#A\\]" "\\[#B\\]" "\\[#C\\]" "\\[#D\\]" "\\[#E\\]"))
+        (when (re-search-forward priority nil t)
+          (goto-char (point-at-bol)) (insert "---------------------\n")))
+      ))
+
+  (add-hook 'org-agenda-finalize-hook 'my-custom-agenda-fn)
+#+end_src
 
 *** Commands
 #+begin_src emacs-lisp 
