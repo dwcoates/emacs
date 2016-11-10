@@ -77,7 +77,7 @@
  '(org-level-7 ((t (:foreground "yellow green"))))
  '(org-scheduled ((t (:foreground "yellow3"))))
  '(org-scheduled-today ((t (:foreground "dark orange" :weight bold))))
- '(org-upcoming-deadline ((t (:foreground "yellow3"))))
+ '(org-upcoming-deadline ((t (:foreground "yellow3" :weight bold))))
  '(org-warning ((t (:foreground "red3" :weight bold))))
  '(rainbow-delimiters-depth-1-face ((t (:foreground "indian red"))))
  '(rainbow-delimiters-depth-2-face ((t (:foreground "light sea green"))))
