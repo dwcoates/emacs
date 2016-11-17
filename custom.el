@@ -25,6 +25,7 @@
  '(org-deadline-warning-days 2)
  '(org-default-notes-file "/home/dodge/personal/everything.org")
  '(org-directory "~/personal/")
+ '(org-extend-today-until 4)
  '(org-footnote-section nil)
  '(org-from-is-user-regexp "\\<Dodge Coates\\>")
  '(org-goto-interface (quote outline-path-completion))

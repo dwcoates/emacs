@@ -1,6 +1,8 @@
 ;; Keep track of loading time
 (defconst emacs-start-time (current-time))
 
+(package-initialize)
+
 ;; load system-specific settings best loaded first
 (let ((pre "~/personal/exclusive/pre.el"))
   (if (file-exists-p pre)
