@@ -1659,6 +1659,16 @@ Host my-repo
 #+begin_src emacs lisp
 (setq tramp-default-method "ssh")
 #+end_src
+Get autocompletions in tramp:
+#+begin_src emacs-lisp
+(setq my-tramp-ssh-completions
+      '((tramp-parse-sconfig "~/.ssh/config")
+        (tramp-parse-shosts "~/.ssh/known_hosts")))
+(mapc (lambda (method)
+        (tramp-set-completion-function method my-tramp-ssh-completions))
+      '("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh"))
+#+end_src
+
 
 * Other Tools
 ** rgrep
