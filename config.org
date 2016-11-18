@@ -1179,9 +1179,12 @@ Enable eldoc-mode in appropriate emacs lisp hooks
 (define-key Apropos-Prefix (kbd "v")   'apropos-variable)
 (define-key Apropos-Prefix (kbd "C-v") 'apropos-value)
 #+end_src
-
+Turn on emacs lisp documentation
 #+begin_src emacs-lisp
 (eldoc-mode 1)
+#+end_src
+#+begin_src emacs-lisp
+(use-package persistent-scratch)
 #+end_src
 
 #+begin_src emacs-lisp
