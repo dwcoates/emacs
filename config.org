@@ -1518,6 +1518,21 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 *** Capture
 org-capture-template is set in a private file. Look up the documention for org-capture-template (and org-capture in general) to see how it might look.
 #+begin_src emacs-lisp
+(defun dwc-template/make-task-prompt (&optional task-type)
+    (unless task-type
+      (setq task-type "Task"))
+  (concat "%^{" task-type ":}\n")
+  )
+
+(defconst dwc-template/star-todo "* TODO ")
+(defconst dwc-template/star "* ")
+(defconst dwc-template/star-todo "* TODO ")
+(defconst dwc-template/dash "- ")
+(defconst dwc-template/deadline "DEADLINE: %^t\n\n")
+(defconst dwc-template/deadline "SCHEDULED: %^t\n\n")
+(defconst dwc-template/meta-data "\n\nCaptured on %T by %(system-name)")
+#+end_src
+#+begin_src emacs-lisp
   (defvar basic-task-template "* TODO [#%^{Priority:C|A|B|C|D|E}] %^{Task:}
   %^{Condition|SCHEDULED|DEADLINE}: %^t
 
@@ -1687,7 +1702,6 @@ Get autocompletions in tramp:
         (tramp-set-completion-function method my-tramp-ssh-completions))
       '("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh"))
 #+end_src
-
 
 * Other Tools
 ** rgrep
