@@ -439,6 +439,22 @@ Transpose two windows:
       (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
 (global-set-key (kbd "C-x w t") 'transpose-windows)
 #+END_SRC
+Return a list of regex matches within a string
+#+begin_src emacs-lisp
+(defun re-seq (regexp dwc-str)
+  "Get a list of all regexp matches in a string"
+  (save-match-data
+    (let ((pos 0)
+          matches)
+      (while (string-match regexp dwc-str pos)
+        (push (match-string 0 dwc-str) matches)
+        (setq pos (match-end 0))
+        )
+      matches)
+    )
+  )
+#+end_src
+
 * Editing
 ** Basic Settings
 #+BEGIN_SRC emacs-lisp
