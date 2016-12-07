@@ -44,7 +44,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:background nil))))
+ '(default ((t (:inherit nil :stipple nil :background "#222222" :foreground "light gray" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 128 :width normal :foundry "unknown" :family "Ubuntu Mono"))))
  '(button ((t (:inherit link))))
  '(company-preview ((t (:background "gray12" :foreground "wheat"))))
  '(company-preview-common ((t (:inherit company-preview :foreground "navajo white"))))
@@ -78,7 +78,7 @@
  '(org-level-7 ((t (:foreground "yellow green"))))
  '(org-scheduled ((t (:foreground "yellow3"))))
  '(org-scheduled-today ((t (:foreground "dark orange" :weight bold))))
- '(org-upcoming-deadline ((t (:foreground "yellow3" :weight bold))))
+ '(org-upcoming-deadline ((t (:foreground "gray" :weight bold))))
  '(org-warning ((t (:foreground "red3" :weight bold))))
  '(rainbow-delimiters-depth-1-face ((t (:foreground "indian red"))))
  '(rainbow-delimiters-depth-2-face ((t (:foreground "light sea green"))))
