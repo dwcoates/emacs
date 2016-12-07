@@ -454,7 +454,33 @@ Return a list of regex matches within a string
     )
   )
 #+end_src
+Return the current line as a substring
+#+begin_src emacs-lisp
+  (require 'subr-x)
 
+  (defun dwc/get-line (&optional trim-left trim-right)
+    (interactive)
+    "Return current line as a string. Option to trim whitespace from beginning and end of string"
+    (save-excursion
+      (let ((string (buffer-substring-no-properties (progn (beginning-of-line) (point))
+                                                    (progn (end-of-line) (point)))))
+        (when trim-left
+          (setq (string-trim-left string)))
+        (when trim-right
+          (setq (string-trim-right string)))
+        string
+          )))
+#+end_src
+#+begin_src emacs-lisp
+(require 'hi-lock)        
+
+(defun unhighlight-all-in-buffer ()
+  "Remove all highlights made by `hi-lock' from the current buffer.
+The same result can also be be achieved by \\[universal-argument] \\[unhighlight-regexp]."
+  (interactive)
+  (unhighlight-regexp t))
+(define-key search-map "hU" #'my/unhighlight-all-in-buffer)
+#+end_src
 * Editing
 ** Basic Settings
 #+BEGIN_SRC emacs-lisp
