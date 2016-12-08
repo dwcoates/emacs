@@ -234,6 +234,11 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
   )
 #+end_src
 
+** Autocomplete
+#+begin_src emacs-lisp
+(use-package auto-complete)
+#+end_src
+
 ** Helm-swoop
 *use-package helm-swoop*
 #+BEGIN_SRC emacs-lisp
