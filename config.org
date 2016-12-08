@@ -1342,7 +1342,7 @@ My clojure-mode hook
 
 ** Python
 #+end_src
-python-mode
+*** python-mode
 #+begin_src emacs-lisp
 (setenv "PYTHONPATH" 
         (format 
@@ -1352,7 +1352,7 @@ python-mode
 
 (setq python-shell-enable-font-lock nil)
 #+end_src
-elpy
+*** elpy
 #+BEGIN_SRC emacs-lisp
   (setq elpy-rpc-backend "rope")
   (use-package elpy
@@ -1373,6 +1373,20 @@ elpy
       (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
     )
 #+END_SRC
+*** ein
+Ein is an emacs front end for jupyter notebook.
+#+begin_src emacs-lisp
+(use-package ein)
+
+(setq url-proxy-services '(("no_proxy" . "127.0.0.1")
+                           ("http" . "myproxy.com:8080")))
+
+(add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
+
+(custom-set-faces
+   '(mumamo-background-chunk-major
+     ((((class color) (min-colors 88) (background dark)) nil))))
+#+end_src
 ** C/C++
 Company-C-Headers enables the completion of C/C++ header file names using company-mode:
 #+begin_src emacs-lisp
