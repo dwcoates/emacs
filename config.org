@@ -1383,6 +1383,11 @@ Ein is an emacs front end for jupyter notebook.
 
 (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
 
+(setq ein:use-auto-complete t)
+
+(add-hook 'ein:notebook-multilang-mode 'auto-complete-mode)
+(add-hook 'ein:notebook-python-mode 'auto-complete-mode)
+
 (custom-set-faces
    '(mumamo-background-chunk-major
      ((((class color) (min-colors 88) (background dark)) nil))))
