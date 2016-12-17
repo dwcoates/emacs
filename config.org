@@ -205,6 +205,18 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 #+BEGIN_SRC emacs-lisp
 (setq helm-lisp-fuzzy-completion t)
 #+END_SRC
+** Functions
+*** delete-frames
+#+begin_src emacs-lisp
+(defun delete-frames ()
+  (let ((frames (frame-list)))
+    (while frames
+      (let ((frame (pop frames)))
+        (delete-frame frame)
+        ))
+    ))
+#+end_src
+
 * Interface
 ** Flycheck
 
@@ -238,7 +250,6 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 #+begin_src emacs-lisp
 (use-package auto-complete)
 #+end_src
-
 ** Helm-swoop
 *use-package helm-swoop*
 #+BEGIN_SRC emacs-lisp
@@ -853,6 +864,19 @@ Inter-field navigation:
 #+END_SRC 
 
 ** Functions
+*** just-one-space
+#+begin_src emacs-lisp
+(defun just-one-space-in-region (beg end)
+  "replace all whitespace in the region with single spaces"
+  (interactive "r")
+  (save-excursion
+    (save-restriction
+      (narrow-to-region beg end)
+      (goto-char (point-min))
+      (while (re-search-forward "\\s-+" nil t)
+        (replace-match " ")))))
+#+end_src
+
 *** unfill-paragraph
 #+begin_src emacs-lisp
   ;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph    
@@ -1346,6 +1370,27 @@ My clojure-mode hook
 #+END_SRC
 
 ** Python
+#+begin_src emacs-lisp
+;(setq-default py-shell-name "jupyter")
+
+(setq-default py-which-bufname "IPython")
+;; use the wx backend, for both mayavi and matplotlib
+(setq py-python-command-args
+  '("--gui=qt4" "--pylab=wx" "-colors" "Linux"))
+(setq py-force-py-shell-name-p t)
+
+;; switch to the interpreter after executing code
+(setq py-shell-switch-buffers-on-execute-p t)
+;(setq py-switch-buffers-on-execute-p t)
+;; don't split windows
+(setq py-split-windows-on-execute-p nil)
+;; try to automagically figure out indentation
+;(setq py-smart-indentation t)
+
+; see http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0
+; for explanation.
+(setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args "--simple-prompt --pprint")
 #+end_src
 *** python-mode
 #+begin_src emacs-lisp
@@ -1366,6 +1411,7 @@ My clojure-mode hook
     (defun elpy-on-python-mode ()
       (elpy-mode)
       (elpy-enable)    
+      ;(elpy-use-ipython)
     )
     (add-hook 'python-mode-hook
               'elpy-on-python-mode)
@@ -1376,26 +1422,39 @@ My clojure-mode hook
     (use-package py-autopep8
       :init
       (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+;    (run-python "ipython --simple-prompt --pprint")
     )
 #+END_SRC
 *** ein
 Ein is an emacs front end for jupyter notebook.
 #+begin_src emacs-lisp
-(use-package ein)
+      (use-package ein
+        :config
+        (setq url-proxy-services '(("no_proxy" . "127.0.0.1")
+                                   ("http" . "myproxy.com:8080")))
 
-(setq url-proxy-services '(("no_proxy" . "127.0.0.1")
-                           ("http" . "myproxy.com:8080")))
+        (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
 
-(add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
+        (setq ein:use-auto-complete-supe t)
 
-(setq ein:use-auto-complete t)
+        (add-hook 'ein:notebook-multilang-mode (lambda ()
+                                                 (company-mode -1)
+                                                 (auto-complete-mode)))
+        (add-hook 'ein:notebook-python-mode (lambda ()
+                                              (company-mode -1)
+                                              (auto-complete-mode)))
 
-(add-hook 'ein:notebook-multilang-mode 'auto-complete-mode)
-(add-hook 'ein:notebook-python-mode 'auto-complete-mode)
+        (custom-set-faces
+         '(mumamo-background-chunk-major
+           ((((class color) (min-colors 88) (background dark)) nil))))
 
-(custom-set-faces
-   '(mumamo-background-chunk-major
-     ((((class color) (min-colors 88) (background dark)) nil))))
+        (ein:enable-enable-autosaves)
+
+        ;; (defun switch-color ()
+        ;;   "Switch default bg for ipython notebook."
+        ;;   (face-remap-add-relative 'default '((:background "white"))))
+        ;; (add-hook 'ein:notebook-multilang-mode-hook 'switch-color)
+        )
 #+end_src
 ** C/C++
 Company-C-Headers enables the completion of C/C++ header file names using company-mode:
