@@ -217,6 +217,17 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
     ))
 #+end_src
 
+** Emacs
+Make sure emacs gets my bashrc environment variable
+#+begin_src emacs-lisp
+(let ((path (shell-command-to-string ". ~/.bashrc; echo -n $PATH")))
+  (setenv "PATH" path)
+  (setq exec-path 
+        (append
+         (split-string-and-unquote path ":")
+         exec-path)))
+#+end_src
+
 * Interface
 ** Flycheck
 
@@ -1370,27 +1381,33 @@ My clojure-mode hook
 #+END_SRC
 
 ** Python
+*** iPython
 #+begin_src emacs-lisp
 ;(setq-default py-shell-name "jupyter")
 
-(setq-default py-which-bufname "IPython")
+(setenv "JUPYTER_CONSOLE_TEST" "1")
+(run-python "jupyter-console --existing ~/workspace/craig-politics/.connection_info" 1)
+(setq python-shell-interpreter "/home/dodge/.local/anaconda2/bin/jupyter-console")
+
+;(setq-default py-which-bufname "IPython")
 ;; use the wx backend, for both mayavi and matplotlib
-(setq py-python-command-args
-  '("--gui=qt4" "--pylab=wx" "-colors" "Linux"))
+(setq py-python-command-args '("--matplotlib" "--colors" "LightBG"))
+;(setq python-shell-interpreter-args "--existing kernel-7967.json")
+;(setq python-shell-interpreter-args "--matplotlib --gui=qt4")
+; "--colors" "LightBG" "Linux" "--pylab=wx"
 (setq py-force-py-shell-name-p t)
 
 ;; switch to the interpreter after executing code
 (setq py-shell-switch-buffers-on-execute-p t)
-;(setq py-switch-buffers-on-execute-p t)
+(setq py-switch-buffers-on-execute-p t)
 ;; don't split windows
 (setq py-split-windows-on-execute-p nil)
 ;; try to automagically figure out indentation
-;(setq py-smart-indentation t)
+(setq py-smart-indentation t)
+
 
 ; see http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0
 ; for explanation.
-(setq python-shell-interpreter "ipython"
-      python-shell-interpreter-args "--simple-prompt --pprint")
 #+end_src
 *** python-mode
 #+begin_src emacs-lisp
@@ -1411,7 +1428,6 @@ My clojure-mode hook
     (defun elpy-on-python-mode ()
       (elpy-mode)
       (elpy-enable)    
-      ;(elpy-use-ipython)
     )
     (add-hook 'python-mode-hook
               'elpy-on-python-mode)
@@ -1422,7 +1438,7 @@ My clojure-mode hook
     (use-package py-autopep8
       :init
       (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
-;    (run-python "ipython --simple-prompt --pprint")
+;      (elpy-use-ipython)
     )
 #+END_SRC
 *** ein
@@ -1540,6 +1556,15 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 (global-ede-mode)
 #+END_SRC
  
+** R (statistics)
+This is not downloaded via use-package and the package manager because
+I was having some problems with it throwing errors.
+#+begin_src emacs-lisp
+ (add-to-list 'load-path "~/.emacs.d/ess-16.10/lisp/")
+ (load "ess-site")
+
+#+end_src
+
 * Organization and Version Control
 ** Magit
 #+BEGIN_SRC  emacs-lisp
@@ -1642,6 +1667,12 @@ org-capture-template is set in a private file. Look up the documention for org-c
 (defconst dwc-template/meta-data "\n\nCaptured on %T by %(system-name)")
 #+end_src
 #+begin_src emacs-lisp
+  (defvar basic-note-template "* %^{Note:}
+
+    %?
+
+  Captured on %U by %(system-name)")
+
   (defvar basic-task-template "* TODO [#%^{Priority:C|A|B|C|D|E}] %^{Task:}
   %^{Condition|SCHEDULED|DEADLINE}: %^t
 
