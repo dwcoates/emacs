@@ -14,10 +14,8 @@ This is my emacs config file.
 Add repositories to search for required packages:
 #+BEGIN_SRC emacs-lisp
 ;; setup package repos
-(add-to-list 'package-archives 
-             '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives
              '("melpa-stable" . "http://melpa-stable.org/packages/") t)
 (add-to-list 'package-archives
@@ -788,14 +786,14 @@ Backward delete sexp:
 #+BEGIN_SRC emacs-lisp 
 (use-package yasnippet
   :commands
-  (yas/exit-all-snippets
+  (yas-exit-all-snippets
    yas/goto-end-of-active-field    ;; Defined below
    yas/goto-start-of-active-field  ;; Defined below
    yas-expand)
   :init
   (yas-global-mode 1)
   ;; Bindings
-  (bind-key "<return>" 'yas/exit-all-snippets yas-keymap)
+  (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
   (bind-key "C-e" 'yas/goto-end-of-active-field yas-keymap)
   (bind-key "C-a" 'yas/goto-start-of-active-field yas-keymap)
   (bind-key [(tab)] 'nil yas-minor-mode-map)
@@ -812,9 +810,8 @@ Backward delete sexp:
     (add-hook 'term-mode-hook 'my/yas-term-hook))
   )
 #+end_src
-
 Inter-field navigation:
-#+being_src emacs-lisp
+#+begin_src emacs-lisp
 ;; Go to end of active field
 (defun yas/goto-end-of-active-field ()
   (interactive)
@@ -1383,27 +1380,29 @@ My clojure-mode hook
 ** Python
 *** iPython
 #+begin_src emacs-lisp
+(setq python-shell-prompt-detect-failure-warning nil)
 ;(setq-default py-shell-name "jupyter")
 
-(setenv "JUPYTER_CONSOLE_TEST" "1")
-(run-python "jupyter-console --existing ~/workspace/craig-politics/.connection_info" 1)
-(setq python-shell-interpreter "/home/dodge/.local/anaconda2/bin/jupyter-console")
+;(setenv "JUPYTER_CONSOLE_TEST" "1")
+;(setq python-shell-interpreter "/home/dodge/.local/anaconda2/bin/jupyter-console"
+;      python-shell-interpreter-interactive-arg "--existing")
+
 
 ;(setq-default py-which-bufname "IPython")
 ;; use the wx backend, for both mayavi and matplotlib
-(setq py-python-command-args '("--matplotlib" "--colors" "LightBG"))
+;(setq py-python-command-args '("--matplotlib" "--colors" "LightBG"))
 ;(setq python-shell-interpreter-args "--existing kernel-7967.json")
 ;(setq python-shell-interpreter-args "--matplotlib --gui=qt4")
 ; "--colors" "LightBG" "Linux" "--pylab=wx"
-(setq py-force-py-shell-name-p t)
+;(setq py-force-py-shell-name-p t)
 
 ;; switch to the interpreter after executing code
-(setq py-shell-switch-buffers-on-execute-p t)
-(setq py-switch-buffers-on-execute-p t)
+;(setq py-shell-switch-buffers-on-execute-p t)
+;(setq py-switch-buffers-on-execute-p t)
 ;; don't split windows
-(setq py-split-windows-on-execute-p nil)
+;(setq py-split-windows-on-execute-p nil)
 ;; try to automagically figure out indentation
-(setq py-smart-indentation t)
+;(setq py-smart-indentation t)
 
 
 ; see http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0
@@ -1414,64 +1413,66 @@ My clojure-mode hook
 (setenv "PYTHONPATH" 
         (format 
          "/usr/bin/python:%s/.local/bin/:%s/workspace/leven-squash"
-         (getenv "HOME") (getenv "HOME"))
-)
+         (getenv "HOME") (getenv "HOME")))
 
 (setq python-shell-enable-font-lock nil)
 #+end_src
 *** elpy
 #+BEGIN_SRC emacs-lisp
-  (setq elpy-rpc-backend "rope")
-  (use-package elpy
-    :commands (elpy-mode elpy-enable)
-    :init
-    (defun elpy-on-python-mode ()
-      (elpy-mode)
-      (elpy-enable)    
-    )
-    (add-hook 'python-mode-hook
-              'elpy-on-python-mode)
-    :config
-    (when (require 'flycheck nil t)
-      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-      (add-hook 'elpy-mode-hook 'flycheck-mode))
-    (use-package py-autopep8
-      :init
-      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
-;      (elpy-use-ipython)
-    )
+  ;; (setq elpy-rpc-backend "rope")
+  ;; (use-package elpy
+  ;;   :commands (elpy-mode elpy-enable)
+  ;;   :init
+  ;;   (defun elpy-on-python-mode ()
+  ;;     (elpy-mode)
+  ;;     (elpy-enable)
+  ;;   )
+  ;;   (add-hook 'python-mode-hook
+  ;;             'elpy-on-python-mode)
+  ;;   :config
+  ;;   (when (require 'flycheck nil t)
+  ;;     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  ;;     (add-hook 'elpy-mode-hook 'flycheck-mode))
+  ;;   (use-package py-autopep8
+  ;;     :init
+  ;;     (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+  ;;   )
 #+END_SRC
 *** ein
 Ein is an emacs front end for jupyter notebook.
 #+begin_src emacs-lisp
-      (use-package ein
-        :config
-        (setq url-proxy-services '(("no_proxy" . "127.0.0.1")
-                                   ("http" . "myproxy.com:8080")))
+  ;; (use-package ein
+  ;;   :config
+  ;;   (setq url-proxy-services '(("no_proxy" . "127.0.0.1")))
 
-        (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
+  ;;   (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
 
-        (setq ein:use-auto-complete-supe t)
+  ;;   (setq ein:use-auto-complete-supe t)
 
-        (add-hook 'ein:notebook-multilang-mode (lambda ()
-                                                 (company-mode -1)
-                                                 (auto-complete-mode)))
-        (add-hook 'ein:notebook-python-mode (lambda ()
-                                              (company-mode -1)
-                                              (auto-complete-mode)))
+  ;;   (add-hook 'ein:notebook-multilang-mode (lambda ()
+  ;;                                            (company-mode -1)
+  ;;                                            (auto-complete-mode)))
+  ;;   (add-hook 'ein:notebook-python-mode (lambda ()
+  ;;                                         (company-mode -1)
+  ;;                                         (auto-complete-mode)))
 
-        (custom-set-faces
-         '(mumamo-background-chunk-major
-           ((((class color) (min-colors 88) (background dark)) nil))))
+  ;;   (custom-set-faces
+  ;;    '(mumamo-background-chunk-major
+  ;;      ((((class color) (min-colors 88) (background dark)) nil))))
 
-        (ein:enable-enable-autosaves)
+  ;;   (ein:enable-enable-autosaves)
 
-        ;; (defun switch-color ()
-        ;;   "Switch default bg for ipython notebook."
-        ;;   (face-remap-add-relative 'default '((:background "white"))))
-        ;; (add-hook 'ein:notebook-multilang-mode-hook 'switch-color)
-        )
+  ;;   ;; (defun switch-color ()
+  ;;   ;;   "Switch default bg for ipython notebook."
+  ;;   ;;   (face-remap-add-relative 'default '((:background "white"))))
+  ;;   ;; (add-hook 'ein:notebook-multilang-mode-hook 'switch-color)
+  ;;   )
 #+end_src
+*** ob-ipython
+#+begin_src emacs-lisp
+
+#+end_src
+
 ** C/C++
 Company-C-Headers enables the completion of C/C++ header file names using company-mode:
 #+begin_src emacs-lisp
@@ -1590,6 +1591,7 @@ I was having some problems with it throwing errors.
     (apply push args)))
 #+END_SRC)
 ** Org Mode
+
 Allow conversion to markdown. Useful for working with project readmes, etc., in org-mode.
 #+begin_src python
 (eval-after-load "org"
@@ -1616,6 +1618,33 @@ Edit source code in org-mode:
 Set default notes file:
 #+begin_src emacs-lisp
 (setq org-default-notes-file "~/personal/everything.org")
+#+end_src
+*** tea-time
+#+begin_src emacs-lisp
+  (use-package tea-time
+    :init
+    (setq org-clock-sound t)
+    (global-set-key (kbd "C-c C-t C-n") 'tea-show-remaining-time)
+    (global-set-key (kbd "C-c C-t C-s") 'tea-time))
+#+end_src
+
+*** babel
+This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
+#+begin_src emacs-lisp
+(load "~/.emacs.d/f.el")
+(require 'dash-functional)
+(require 'ob-ipython)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ipython . t)))
+#+end_src
+Stop asking me if I want to evaluate code
+#+begin_src emacs-lisp
+(setq org-confirm-babel-evaluate nil)
+#+end_src
+Display images in the results section of the org buffer (like a normal notebook)
+#+begin_src emacs-lisp
+(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append) 
 #+end_src
 *** Agenda
 #+begin_src emacs-lisp
