@@ -1207,6 +1207,11 @@ Comment out a line:
    helm-gtags-suggested-key-mapping t)
   )
 #+END_SRC
+*** Comint
+#+begin_src emacs-lisp
+(define-key comint-mode-map (kbd "M-r") 'comint-history-isearch-backward)
+#+end_src
+
 ** Lisps
 *** General Lisp Settings
 Define hooks:
@@ -1624,8 +1629,8 @@ Set default notes file:
   (use-package tea-time
     :init
     (setq org-clock-sound t)
-    (global-set-key (kbd "C-c C-t C-n") 'tea-show-remaining-time)
-    (global-set-key (kbd "C-c C-t C-s") 'tea-time))
+    (global-set-key (kbd "C-c C-x s") 'tea-show-remaining-time)
+    (global-set-key (kbd "C-c C-x n") 'tea-time))
 #+end_src
 
 *** babel
