@@ -1556,11 +1556,11 @@ I was having some problems with it throwing errors.
 (advice-add 'magit-push :around (lambda (push &rest args)
     (my/backup-specifics "~/.emacs.d/specifics.el" "~/.emacsSpecificsBackup.el")
     (apply push args)))
-#+END_SRC)
+#+END_SRC
 ** Org Mode
 
 Allow conversion to markdown. Useful for working with project readmes, etc., in org-mode.
-#+begin_src python
+#+begin_src emacs-lisp
 (eval-after-load "org"
   '(require 'ox-md nil t))
 #+end_src
