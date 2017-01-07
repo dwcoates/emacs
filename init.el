@@ -74,15 +74,22 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;; Load config.org and save its elisp to config.el ;;;;;;;;;;
+;;;;;;;; LOAD CONFIG.ORG AND SAVE ITS ELISP TO CONFIG.EL ;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'org)
+;; This is here to ensure that the correct, up-to-date version of org
+;; installed, along with all its subpackages
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(use-package org
+  :mode (("\\.org$" . org-mode))
+  :ensure org-plus-contrib)
+
+;; Make a .el file out of the code in config.org, then run it.
 (org-babel-load-file
  (expand-file-name "config.org"
                    user-emacs-directory))
 
-;; load system-specific settings best loaded last
+;; Load system-specific settings best loaded last
 (let ((post "~/personal/exclusive/post.el"))
   (if (file-exists-p post)
       (load post)))
