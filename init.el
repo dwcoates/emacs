@@ -77,14 +77,33 @@
 ;;;;;;;; LOAD CONFIG.ORG AND SAVE ITS ELISP TO CONFIG.EL ;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; This is here to ensure that the correct, up-to-date version of org
-;; installed, along with all its subpackages
+;; use-package is a core package in modern emacs. At least if you have
+;; A lark config that you want to be managable as a plug-and-play release.
+;; It's at least awesome. The following installs it if not already installed,
+;; so it can be used to install most recent org-mode, which will handle the
+;; rest of the config.
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
+;; Configure use-package
+(setq use-package-verbose t)
+(require 'use-package)
+(use-package auto-compile
+  :ensure t
+  :config (auto-compile-on-load-mode))
+(setq load-prefer-newer t)
+(setq use-package-always-ensure t)
+
+;; This use-package call will  ensure that the correct, up-to-date version of
+;; org installed, along with all its subpackages (that's the "contrib" bit).
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 (use-package org
   :mode (("\\.org$" . org-mode))
   :ensure org-plus-contrib)
 
 ;; Make a .el file out of the code in config.org, then run it.
+;; This bit of code is responsible for the loading other 2k+ lines of
+;; code for this config.
 (org-babel-load-file
  (expand-file-name "config.org"
                    user-emacs-directory))
