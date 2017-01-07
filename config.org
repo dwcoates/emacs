@@ -1650,6 +1650,16 @@ Display images in the results section of the org buffer (like a normal notebook)
 #+begin_src emacs-lisp
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append) 
 #+end_src
+#+begin_src emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((shell . t)
+   (js . t)
+   (clojure . t)
+   (python . t)
+   (org . t)))
+#+end_src
+
 *** Agenda
 #+begin_src emacs-lisp
 (custom-set-variables
