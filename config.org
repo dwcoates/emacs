@@ -2069,6 +2069,10 @@ Get autocompletions in tramp:
       '("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh"))
 #+end_src
 
+** StackExchange
+#+begin_src emacs-lisp
+(use-package sx)
+#+end_src
 * Other Tools
 ** rgrep
 #+BEGIN_SRC emacs-lisp
