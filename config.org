@@ -1,37 +1,12 @@
 This is my emacs config file.
 
 * Package Management
-#+BEGIN_SRC emacs-lisp
-;; This must come before configurations of installed packages.  
-(package-initialize)
-
+#+begin_src emacs-lisp
 ;; Keep emacs-generated custom settings in a separate file so they don't pollute init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file)
+#+end_src
 
-(require 'package)
-#+END_SRC
-Add repositories to search for required packages:
-#+BEGIN_SRC emacs-lisp
-;; setup package repos
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa-stable" . "http://melpa-stable.org/packages/") t)
-(add-to-list 'package-archives
-             '("tromey" . "http://tromey.com/elpa/") t)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives
-             '("elpy" . "https://jorgenschaefer.github.io/packages/"))
-(package-initialize)
-#+END_SRC
-Download the ELPA archive description if needed. This informs Emacs about the latest 
-versions of all packages, and makes them available for download.
-#+BEGIN_SRC emacs-lisp
-(when (not package-archive-contents)
-  (package-refresh-contents))
-#+END_SRC
 I run linux, but this may be useful for those who use OSX. Description:
 
    On OS X, an Emacs instance started from the graphical user
@@ -42,6 +17,7 @@ calling external utilities like make from Emacs.
 This library works around this problem by copying important
 environment variables from the user's shell.
 https://github.com/purcell/exec-path-from-shell
+
 #+BEGIN_SRC emacs-lisp
 (if (eq system-type 'darwin)
   (unless (package-installed-p 'exec-path-from-shell)
