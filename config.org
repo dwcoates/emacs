@@ -32,7 +32,7 @@ https://github.com/purcell/exec-path-from-shell
  (setq sml/name-width 16)
  (sml/setup)
  (smart-mode-line-enable))
-#+end_src 
+#+end_src
 ** Key-Command Interfaces
 Turn on ido. I prefer Ido's approach to find-file over helm's
 approach:
@@ -160,7 +160,7 @@ Use Helm to list eshell history:
 (add-hook 'eshell-mode-hook
           (lambda ()
               (local-set-key (kbd "C-c C-l") 'helm-eshell-history)))
-#+END_SRC 
+#+END_SRC
 
 Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "find-file" as one of the possible completions.
 #+BEGIN_SRC emacs-lisp
@@ -183,7 +183,7 @@ Make sure emacs gets my bashrc environment variable
 #+begin_src emacs-lisp
 (let ((path (shell-command-to-string ". ~/.bashrc; echo -n $PATH")))
   (setenv "PATH" path)
-  (setq exec-path 
+  (setq exec-path
         (append
          (split-string-and-unquote path ":")
          exec-path)))
@@ -193,7 +193,7 @@ Make sure emacs gets my bashrc environment variable
 ** Flycheck
 
 *use-package Flycheck*
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (use-package flycheck
   :init (progn
           (add-hook 'after-init-hook #'global-flycheck-mode))
@@ -299,7 +299,7 @@ Automatically resize buffers to "optimal" size when they gain focus. Turned off 
 #+END_SRC
 
 *** zygospore
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (use-package zygospore
   :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
 #+END_SRC
@@ -460,7 +460,7 @@ Return the current line as a substring
           )))
 #+end_src
 #+begin_src emacs-lisp
-(require 'hi-lock)        
+(require 'hi-lock)
 
 (defun unhighlight-all-in-buffer ()
   "Remove all highlights made by `hi-lock' from the current buffer.
@@ -521,7 +521,7 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 (setq-default tab-width 4)
 #+END_SRC
 *** Key commands
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 ;; delete region command is useful sometimes where <delete> doesnt work
 (global-set-key (kbd "C-c <delete>") 'delete-region)
 
@@ -557,7 +557,7 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 
 #+END_SRC
 ** UTF-8
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-language-environment "UTF-8")
@@ -583,7 +583,7 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 (abbrev-mode 1)
 #+END_SRC
 *** char-menu
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (use-package char-menu)
 
 (require 'char-menu)
@@ -640,7 +640,7 @@ Backward delete sexp:
     )
 #+END_SRC
 *** bind-keys
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (bind-keys
  :map smartparens-mode-map
  ("C-' a" . sp-beginning-of-sexp)
@@ -695,7 +695,7 @@ Backward delete sexp:
 #+END_SRC
 ** Other Packages
 *** hippie-expand
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 ;; Hippie expand-file-name
 (global-set-key (kbd "M-/") 'hippie-expand)
 ;; Lisp-friendly hippie expand
@@ -722,14 +722,14 @@ Backward delete sexp:
   (add-hook 'prog-mode-hook 'clean-aindent-mode))
 #+END_SRC
 *** dtrt-indent
-#+BEGIN_SRC emacs-lisp 
-(use-package dtrt-indent  
+#+BEGIN_SRC emacs-lisp
+(use-package dtrt-indent
   :config
   (setq dtrt-indent-verbosity 0)
   (dtrt-indent-mode 1))
 #+END_SRC
 *** ws-butler
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (use-package ws-butler
   :commands ws-butler
   :init
@@ -739,14 +739,14 @@ Backward delete sexp:
   (add-hook 'prog-mode-hook 'ws-butler-mode))
 #+END_SRC
 *** undo-tree
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (use-package undo-tree
   :config
   (global-undo-tree-mode)
   (diminish 'undo-tree-mode))
 #+END_SRC
 *** yasnippet
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (use-package yasnippet
   :commands
   (yas-exit-all-snippets
@@ -794,7 +794,7 @@ Inter-field navigation:
       (goto-char position))))
 #+end_src
 *** anzu
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (use-package anzu
   :commands
   (anzu-query-replace
@@ -808,7 +808,7 @@ Inter-field navigation:
   )
 #+END_SRC
 *** iedit
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (use-package iedit
   :commands iedit-mode
   :init
@@ -818,7 +818,7 @@ Inter-field navigation:
   )
 #+END_SRC
 *** expand-region
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (use-package expand-region
   :commands er/expand-region
   :init
@@ -826,13 +826,13 @@ Inter-field navigation:
  )
 #+END_SRC
 *** duplicate-thing
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (use-package duplicate-thing
   :commands duplicate-thing
   :init
   (bind-key "M-c" 'duplicate-thing)
  )
-#+END_SRC 
+#+END_SRC
 
 ** Functions
 *** just-one-space
@@ -850,7 +850,7 @@ Inter-field navigation:
 
 *** unfill-paragraph
 #+begin_src emacs-lisp
-  ;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph    
+  ;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph
   (defun unfill-paragraph (&optional region)
     "Takes a multi-line paragraph and makes it into a single line of text."
     (interactive (progn (barf-if-buffer-read-only) '(t)))
@@ -900,7 +900,7 @@ point reaches the beginning or end of the buffer, stop there."
 #+END_SRC
 
 *** defadvice kill-ring-save
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single
 line instead."
@@ -912,7 +912,7 @@ line instead."
 #+END_SRC
 
 *** defadvice kill-region
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (defadvice kill-region (before slick-cut activate compile)
   "When called interactively with no active region, kill a single
   line instead."
@@ -923,7 +923,7 @@ line instead."
 #+END_SRC
 
 *** defadvice kill-line
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 ;; kill a line, including whitespace characters until next non-whiepsace character
 ;; of next line
 (defadvice kill-line (before check-position activate)
@@ -938,7 +938,7 @@ line instead."
 #+END_SRC
 *** variables
 yank-indent-modes
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 ;; taken from prelude-editor.el
 ;; automatically indenting yanked text if in programming-modes
 (defvar yank-indent-modes
@@ -948,20 +948,20 @@ Only modes that don't derive from `prog-mode' should be listed here.")
 #+END_SRC
 
 yank-indent-blacklisted-modes
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (defvar yank-indent-blacklisted-modes
   '(python-mode slim-mode haml-mode)
   "Modes for which auto-indenting is suppressed.")
 #+END_SRC
 
 yank-advised-indent-threshol
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (defvar yank-advised-indent-threshold 1000
   "Threshold (# chars) over which indentation does not automatically occur.")
 #+END_SRC
 
 yank-advised-indent-function
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (defun yank-advised-indent-function (beg end)
   "Do indentation, as long as the region isn't too large."
   (if (<= (- end beg) yank-advised-indent-threshold)
@@ -969,7 +969,7 @@ yank-advised-indent-function
 #+END_SRC
 
 *** defadvice yank
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (defadvice yank (after yank-indent activate)
   "If current mode is one of 'yank-indent-modes,
 indent yanked text (with prefix arg don't indent)."
@@ -982,7 +982,7 @@ indent yanked text (with prefix arg don't indent)."
 #+END_SRC
 
 *** defadvice yank-pop
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (defadvice yank-pop (after yank-pop-indent activate)
   "If current mode is one of `yank-indent-modes',
 indent yanked text (with prefix arg don't indent)."
@@ -1004,7 +1004,7 @@ indent yanked text (with prefix arg don't indent)."
 #+END_SRC
 
 *** prelude-indent-sensitive-modes
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 ;; prelude-editing.el
 (defcustom prelude-indent-sensitive-modes
   '(coffee-mode python-mode slim-mode haml-mode yaml-mode)
@@ -1013,7 +1013,7 @@ indent yanked text (with prefix arg don't indent)."
 #+END_SRC
 
 *** indent-region-or-buffer
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (defun indent-region-or-buffer ()
   "Indent a region if selected, otherwise the whole buffer."
   (interactive)
@@ -1032,7 +1032,7 @@ indent yanked text (with prefix arg don't indent)."
 #+END_SRC
 
 *** prelude-get-positions-of-line-or-region
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 ;; add duplicate line function from Prelude. taken from prelude-core.el.
 (defun prelude-get-positions-of-line-or-region ()
   "Return positions (beg . end) of the current line
@@ -1051,7 +1051,7 @@ or region."
 
 smart openline
 
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (defun prelude-smart-open-line (arg)
   "Insert an empty line after the current line.
 Position the cursor at its beginning, according to the current mode.
@@ -1065,7 +1065,7 @@ With a prefix ARG open line above the current line."
 #+END_SRC
 
 *** prelude-smart-open-line-above
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (defun prelude-smart-open-line-above ()
   "Insert an empty line above the current line.
 Position the cursor at it's beginning, according to the current mode."
@@ -1204,7 +1204,7 @@ Enable rainbow-delimiters for lisp modes
 (add-hook 'lisp-mode-hook            'my/general-lisp-hook)
 (add-hook 'scheme-mode-hook           'my/general-lisp-hook)
 ;; pretty sure this isnt necessary
-;(add-hook 'lisp-interaction-mode-hook (lambda () (my/general-lisp-hook))) 
+;(add-hook 'lisp-interaction-mode-hook (lambda () (my/general-lisp-hook)))
 
 #+end_src
 Enable eldoc-mode in appropriate emacs lisp hooks
@@ -1290,7 +1290,7 @@ My clojure-mode hook
     )
 #+END_SRC
 **** CIDER
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
   (use-package cider
     :commands cider-mode
     :functions (cider-start-http-server cider-refresh cider-user-ns)
@@ -1377,8 +1377,8 @@ My clojure-mode hook
 #+end_src
 *** python-mode
 #+begin_src emacs-lisp
-(setenv "PYTHONPATH" 
-        (format 
+(setenv "PYTHONPATH"
+        (format
          "/usr/bin/python:%s/.local/bin/:%s/workspace/leven-squash"
          (getenv "HOME") (getenv "HOME")))
 
@@ -1493,7 +1493,7 @@ Company-C-Headers enables the completion of C/C++ header file names using compan
 (add-hook 'c++-mode-hook 'my/cedet-hook)
 
 (add-hook 'c-mode-common-hook 'hs-minor-mode)
-#+end_src 
+#+end_src
 
 #+begin_src emacs-lisp
 (use-package function-args
@@ -1523,7 +1523,7 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 
 (global-ede-mode)
 #+END_SRC
- 
+
 ** R (statistics)
 This is not downloaded via use-package and the package manager because
 I was having some problems with it throwing errors.
@@ -1610,7 +1610,7 @@ Stop asking me if I want to evaluate code
 #+end_src
 Display images in the results section of the org buffer (like a normal notebook)
 #+begin_src emacs-lisp
-(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append) 
+(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 #+end_src
 #+begin_src emacs-lisp
 (org-babel-do-load-languages
@@ -1650,7 +1650,7 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 #+end_src
 
 *** Commands
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (define-key org-mode-map (kbd "C-M-<return>") 'org-insert-subheading)
 #+end_src
 
@@ -1731,7 +1731,7 @@ org-capture allows you to take a note anywhere, which it will write to the org-d
 (setq org-hierarchical-todo-statistics nil)
 #+END_SRC
 **** org-summary-todo
-This is for making sure that the top-level todo automatically is marked DONE if all sub-levels are DONE. 
+This is for making sure that the top-level todo automatically is marked DONE if all sub-levels are DONE.
 TODO otherwise.
 #+BEGIN_SRC elisp
 (defun org-summary-todo (n-done n-not-done)
@@ -1742,7 +1742,7 @@ TODO otherwise.
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 #+END_SRC
 **** jump-to-org-agenda
-This is a snippet from John Wiegley. 
+This is a snippet from John Wiegley.
 It shows org agenda after emacs has been idle for a certain amount of time.
 #+BEGIN_SRC elisp
 (defun jump-to-org-agenda ()
@@ -1787,7 +1787,7 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 
 *** HTML
 #+begin_src emacs-lisp
-(setq org-html-table-default-attributes 
+(setq org-html-table-default-attributes
       '(:border "2" :cellspacing "0" :cellpadding "6" :rules "all" :frame
                "all"))
 
@@ -1796,7 +1796,7 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 #+end_src
 **** Lots of html
 #+begin_src emacs-lisp
-(setq org-html-style-default 
+(setq org-html-style-default
 "<style type=\"text/css\">
   html{font-family:sans-serif;
        -ms-text-size-adjust:100%;
@@ -2034,7 +2034,7 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
   :init
   (defun my/erc-mode-hook ()
     (if (equal word-wrap nil)
-     (toggle-word-wrap)))  
+     (toggle-word-wrap)))
   :config
   (add-hook 'erc-mode-hook 'my/erc-mode-hook)
   (setq erc-hide-list '("PART" "QUIT" "JOIN"))
@@ -2055,7 +2055,7 @@ Host my-repo
      Port 22
      User repository
 
-`C-x C-f /ssh:repo/some/path/to/a/file' will ssh via tramp mode corresponding the path in user@host (in this case repository@mygitserverdomain.com:22/some/path/to/a/file). 
+`C-x C-f /ssh:repo/some/path/to/a/file' will ssh via tramp mode corresponding the path in user@host (in this case repository@mygitserverdomain.com:22/some/path/to/a/file).
 #+begin_src emacs lisp
 (setq tramp-default-method "ssh")
 #+end_src
@@ -2071,7 +2071,7 @@ Get autocompletions in tramp:
 
 * Other Tools
 ** rgrep
-#+BEGIN_SRC emacs-lisp 
+#+BEGIN_SRC emacs-lisp
 (require 'dash)
 
 (defun rgrep-fullscreen (regexp &optional files dir confirm)
@@ -2211,7 +2211,7 @@ Get autocompletions in tramp:
 
 * On Startup
 ** Extremely fast emacs startup with emacs server
-Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn emacs sessions (nearly) instantly. There is a single overhead cost of typical startup timen (~2 seconds) on login, but it means means I can now use emacs for quick edits. I bind `emacsclient -c -a emacs' to a keyboard shortcut.  
+Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn emacs sessions (nearly) instantly. There is a single overhead cost of typical startup timen (~2 seconds) on login, but it means means I can now use emacs for quick edits. I bind `emacsclient -c -a emacs' to a keyboard shortcut.
 ** Custom Frames
 #+begin_src emacs-lisp
 (defun open-org-agenda-hack ()
@@ -2233,7 +2233,7 @@ Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn e
   (defun dwc-create-frame (&optional filename fullscreen)
     "Find file and get rid of annoying frame defaults."
     (interactive)
-    (if filename 
+    (if filename
       (find-file-other-frame filename)
      (make-frame)
      (other-frame 1))
