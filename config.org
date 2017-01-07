@@ -1636,8 +1636,8 @@ Set default notes file:
 This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
 #+begin_src emacs-lisp
 (load "~/.emacs.d/f.el")
-(require 'dash-functional)
-(require 'ob-ipython)
+(use-package dash-functional)
+(use-package ob-ipython)
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((ipython . t)))
