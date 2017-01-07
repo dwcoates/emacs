@@ -1566,9 +1566,8 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 This is not downloaded via use-package and the package manager because
 I was having some problems with it throwing errors.
 #+begin_src emacs-lisp
- (add-to-list 'load-path "~/.emacs.d/ess-16.10/lisp/")
- (load "ess-site")
-
+(add-to-list 'load-path "~/ess/lisp/")
+(load "ess-site")
 #+end_src
 
 * Organization and Version Control
