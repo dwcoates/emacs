@@ -383,6 +383,15 @@ Jump quickly to any word using just two key strokes with ace-jump-mode:
   :init
   (key-chord-define-global "cj" 'ace-jump-mode))
 #+END_SRC
+** ace-isearch
+This is a mix of ace, isearch, and helm swoop. Pretty cool. If only
+one key is searched, it will use ace, if more than one and less than 6
+are serached, it will use good ol' isearch, if more than 6 are
+searched, it will use helm-swoop. Nice idea.
+#+begin_src emacs-lisp
+(use-package ace-isearch)
+#+end_src
+
 ** ace-window
 Jump quickly between windows and frames using just two key strokes with ace-window:
 #+BEGIN_SRC emacs-lisp
