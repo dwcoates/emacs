@@ -1529,39 +1529,44 @@ I was having some problems with it throwing errors.
     (apply push args)))
 #+END_SRC
 ** Org Mode
-
-Allow conversion to markdown. Useful for working with project readmes, etc., in org-mode.
+Please truncate lines in org-mode. The last thing I want to see is a
+wrapped table, and everything should be paragraphed, anyway (M-q).
+#+begin_src emacs-lisp
+(setq org-startup-truncated t)
+#+end_src
+Allow conversion to markdown. Useful for working with project readmes,
+etc., in org-mode.
 #+begin_src emacs-lisp
 (eval-after-load "org"
   '(require 'ox-md nil t))
 #+end_src
+Now can use the :ignore: tag to ignore just headings (not their
+content) on export.
+#+begin_src emacs-lisp
+  (require 'ox-extra)
+  (ox-extras-activate '(ignore-headlines))
+#+end_src
+
 Edit source code in org-mode:
 #+begin_src emacs-lisp
-(setq org-src-fontify-natively t)
-
+  (setq org-src-fontify-natively t)    # syntax highlighting in source blocks
+  (setq org-src-tab-acts-natively t)   # expected tabbing in source block
   (bind-keys
-   :map org-src-mode-map
-   ("<C-return>" . org-edit-src-exit))
+     :map org-src-mode-map
+     ("<C-return>" . org-edit-src-exit))
 #+end_src
+Org-mode hook.
 #+BEGIN_SRC emacs-lisp
 (defun my-org-mode-hook ()
   (abbrev-mode 1)
-  (toggle-word-wrap))
+  (toggle-word-wrap)
+  (setq org-src-fontify-natively t))
 
 (add-hook 'org-mode-hook 'my-org-mode-hook)
-
-(setq org-src-fontify-natively t)
-
-(setq org-startup-truncated t)
 #+END_SRC
 Set default notes file:
 #+begin_src emacs-lisp
 (setq org-default-notes-file "~/personal/everything.org")
-#+end_src
-
-#+begin_src emacs-lisp
-(setq org-src-tab-acts-natively t)
-#+end_src
 
 *** tea-time
 #+begin_src emacs-lisp
