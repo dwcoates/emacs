@@ -210,6 +210,14 @@ Make sure emacs gets my bashrc environment variable
 (use-package company
   :init
   (add-hook 'after-init-hook 'global-company-mode)
+  ;; provides a little popup for documentation
+  (use-package company-quickhelp
+    :init
+    (company-quickhelp-mode 1)    
+    :config
+    (setq company-quickhelp-max-lines 10)
+    (setq company-quickhelp-delay 0)
+    (bind-key "M-h" 'company-quickhelp-manual-begin))
   :config (progn
             (setq company-backends (delete 'company-semantic company-backends))
             (use-package helm-company
@@ -217,7 +225,6 @@ Make sure emacs gets my bashrc environment variable
   (diminish 'company-mode)
   )
 #+end_src
-
 ** Autocomplete
 #+begin_src emacs-lisp
 (use-package auto-complete)
@@ -607,7 +614,7 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 
 #+END_SRC
 
-** Smartparens
+** smartparens
 *use-package smartparents*
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens
@@ -702,6 +709,55 @@ Backward delete sexp:
  ("C-c _"  . wrap-with-underscores)
  ("C-c `"  . wrap-with-back-quotes))
 #+END_SRC
+** yasnippet
+#+BEGIN_SRC emacs-lisp
+(use-package yasnippet
+  :commands
+  (yas-exit-all-snippets
+   yas/goto-end-of-active-field    ;; Defined below
+   yas/goto-start-of-active-field  ;; Defined below
+   yas-expand)
+  :init
+  (yas-global-mode 1)
+  ;; Bindings
+  (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
+  (bind-key "C-e" 'yas/goto-end-of-active-field yas-keymap)
+  (bind-key "C-a" 'yas/goto-start-of-active-field yas-keymap)
+  (bind-key [(tab)] 'nil yas-minor-mode-map)
+  (bind-key (kbd "TAB") 'nil yas-minor-mode-map)
+  (bind-key (kbd "C-c k") 'yas/expand yas-minor-mode-map) ;; this is redefined because an elpy bug breaks yas-expand with tab
+  :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
+  :config
+  (progn
+    (setq yas-verbosity 1) ;; No need to be so verbose
+    (setq yas-wrap-around-region t) ;; Wrap around region
+    (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
+    (defun my/yas-term-hook ()
+      (setq yas-dont-activate t))
+    (add-hook 'term-mode-hook 'my/yas-term-hook))
+  )
+#+end_src
+Inter-field navigation:
+#+begin_src emacs-lisp
+;; Go to end of active field
+(defun yas/goto-end-of-active-field ()
+  (interactive)
+  (let* ((snippet (car (yas--snippets-at-point)))
+         (position (yas--field-end (yas--snippet-active-field snippet))))
+    (if (= (point) position)
+        (move-end-of-line 1)
+      (goto-char position))))
+
+;; Go to start of active field
+(defun yas/goto-start-of-active-field ()
+  (interactive)
+  (let* ((snippet (car (yas--snippets-at-point)))
+         (position (yas--field-start (yas--snippet-active-field snippet))))
+    (if (= (point) position)
+        (move-beginning-of-line 1)
+      (goto-char position))))
+#+end_src
+
 ** Other Packages
 *** hippie-expand
 #+BEGIN_SRC emacs-lisp
@@ -754,54 +810,6 @@ Backward delete sexp:
   (global-undo-tree-mode)
   (diminish 'undo-tree-mode))
 #+END_SRC
-*** yasnippet
-#+BEGIN_SRC emacs-lisp
-(use-package yasnippet
-  :commands
-  (yas-exit-all-snippets
-   yas/goto-end-of-active-field    ;; Defined below
-   yas/goto-start-of-active-field  ;; Defined below
-   yas-expand)
-  :init
-  (yas-global-mode 1)
-  ;; Bindings
-  (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
-  (bind-key "C-e" 'yas/goto-end-of-active-field yas-keymap)
-  (bind-key "C-a" 'yas/goto-start-of-active-field yas-keymap)
-  (bind-key [(tab)] 'nil yas-minor-mode-map)
-  (bind-key (kbd "TAB") 'nil yas-minor-mode-map)
-  (bind-key (kbd "C-c k") 'yas-expand yas-minor-mode-map) ;; this is redefined because an elpy bug breaks yas-expand with tab
-  :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
-  :config
-  (progn
-    (setq yas-verbosity 1) ;; No need to be so verbose
-    (setq yas-wrap-around-region t) ;; Wrap around region
-    (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
-    (defun my/yas-term-hook ()
-      (setq yas-dont-activate t))
-    (add-hook 'term-mode-hook 'my/yas-term-hook))
-  )
-#+end_src
-Inter-field navigation:
-#+begin_src emacs-lisp
-;; Go to end of active field
-(defun yas/goto-end-of-active-field ()
-  (interactive)
-  (let* ((snippet (car (yas--snippets-at-point)))
-         (position (yas--field-end (yas--snippet-active-field snippet))))
-    (if (= (point) position)
-        (move-end-of-line 1)
-      (goto-char position))))
-
-;; Go to start of active field
-(defun yas/goto-start-of-active-field ()
-  (interactive)
-  (let* ((snippet (car (yas--snippets-at-point)))
-         (position (yas--field-start (yas--snippet-active-field snippet))))
-    (if (= (point) position)
-        (move-beginning-of-line 1)
-      (goto-char position))))
-#+end_src
 *** anzu
 #+BEGIN_SRC emacs-lisp
 (use-package anzu
@@ -1395,24 +1403,24 @@ My clojure-mode hook
 #+end_src
 *** elpy
 #+BEGIN_SRC emacs-lisp
-  ;; (setq elpy-rpc-backend "rope")
-  ;; (use-package elpy
-  ;;   :commands (elpy-mode elpy-enable)
-  ;;   :init
-  ;;   (defun elpy-on-python-mode ()
-  ;;     (elpy-mode)
-  ;;     (elpy-enable)
-  ;;   )
-  ;;   (add-hook 'python-mode-hook
-  ;;             'elpy-on-python-mode)
-  ;;   :config
-  ;;   (when (require 'flycheck nil t)
-  ;;     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  ;;     (add-hook 'elpy-mode-hook 'flycheck-mode))
-  ;;   (use-package py-autopep8
-  ;;     :init
-  ;;     (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
-  ;;   )
+  (setq elpy-rpc-backend "rope")
+  (use-package elpy
+    :commands (elpy-mode elpy-enable)
+    :init
+    (defun elpy-on-python-mode ()
+      (elpy-mode)
+      (elpy-enable)
+    )
+    (add-hook 'python-mode-hook
+              'elpy-on-python-mode)
+    :config
+    (when (require 'flycheck nil t)
+      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+      (add-hook 'elpy-mode-hook 'flycheck-mode))
+    (use-package py-autopep8
+      :init
+      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+    )
 #+END_SRC
 *** ein
 Ein is an emacs front end for jupyter notebook.
@@ -1537,8 +1545,9 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 This is not downloaded via use-package and the package manager because
 I was having some problems with it throwing errors.
 #+begin_src emacs-lisp
-(add-to-list 'load-path "~/ess/lisp/")
-(load "ess-site")
+  (add-to-list 'load-path "~/ess/lisp/")
+  (load "ess-site")
+  (use-package ess)
 #+end_src
 
 * Organization and Version Control
@@ -1628,7 +1637,8 @@ Display images in the results section of the org buffer (like a normal notebook)
    (js . t)
    (clojure . t)
    (python . t)
-   (org . t)))
+   (org . t)
+   (R . t)))
 #+end_src
 
 *** Agenda
@@ -2213,6 +2223,27 @@ Get autocompletions in tramp:
   '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
 #+END_SRC
 ** Functions
+*** random string
+#+begin_src emacs-lisp
+(defun rand-alphanum (length &optional prefix suffix)
+  "Generate a random character of some length"
+  (let
+      ((alpha-num (cdr (split-string
+                        "1234567890abcdefghijklmnopqrstyvwxyzABCDEFGHIJKLMNOPQRSTYVWXYZ"
+                        "")))
+       ret)
+    (dotimes (i length)
+      (push (elt alpha-num (random (length alpha-num))) ret))
+    (concat prefix (mapconcat 'identity ret "") suffix)))
+
+(defun insert-rand-alphanum (length &optional prefix suffix)
+  (interactive)
+  (insert (rand-alphanum length prefix suffix))
+  )
+#+end_src
+
+
+
 *** remove-headers
 #+BEGIN_SRC emacs-lisp
 (defun my/remove-headers ()
