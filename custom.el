@@ -34,7 +34,7 @@
  '(org-src-fontify-natively t)
  '(package-selected-packages
    (quote
-    (ace-isearch pyvenv sx edit-server ob-ipython tea-time clojure-mode persistent-scratch projectile expand-region char-menu ace-window ace-jump-mode iy-go-to-char sr-speedbar auto-complete hydra key-chord tagedit smex clojure-mode-extra-font-locking geiser ztree rainbow-delimiters jedi epc powerline nyan-mode nyan-prompt magit helm company flycheck-clojure clj-refactor cider px latex-preview-pane company-c-headers company-irony zygospore yasnippet ws-butler volatile-highlights undo-tree smartparens light-soap-theme iedit helm-swoop helm-projectile helm-gtags helm-company guide-key golden-ratio ggtags function-args flycheck duplicate-thing dtrt-indent dash-functional dash-at-point comment-dwim-2 clean-aindent-mode anzu)))
+    (elpy company-quickhelp-mode company-quickhelp ess py-autopep8 xkcd ace-isearch pyvenv sx edit-server ob-ipython tea-time clojure-mode persistent-scratch projectile expand-region char-menu ace-window ace-jump-mode iy-go-to-char sr-speedbar auto-complete hydra key-chord tagedit smex clojure-mode-extra-font-locking geiser ztree rainbow-delimiters jedi epc powerline nyan-mode nyan-prompt magit helm company flycheck-clojure clj-refactor cider px latex-preview-pane company-c-headers company-irony zygospore yasnippet ws-butler volatile-highlights undo-tree smartparens light-soap-theme iedit helm-swoop helm-projectile helm-gtags helm-company guide-key golden-ratio ggtags function-args flycheck duplicate-thing dtrt-indent dash-functional dash-at-point comment-dwim-2 clean-aindent-mode anzu)))
  '(python-shell-prompt-input-regexps
    (quote
     ("$ " "\\.\\.\\. " "In \\[[0-9]+\\]: " "In : " "\\.\\.\\.: ")))
