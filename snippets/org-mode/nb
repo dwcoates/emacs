@@ -2,6 +2,6 @@
 # name: ipython block
 # key: nb
 # --
-#+BEGIN_SRC ipython :session ${1::file ${2:$$(let ((temporary-file-directory "./")) (make-temp-file "py" nil ".png"))} }:exports ${3:both}
+#+BEGIN_SRC ipython :session ${1::file ${2:`(rand-alphanum 6 "./img/py_" ".png")`} } :exports ${3:both} ${2::results ${3::output org drawer :noweb yes} }
 $0
 #+END_SRC
