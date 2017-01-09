@@ -2207,23 +2207,23 @@ Get autocompletions in tramp:
 ** Functions
 *** random string
 #+begin_src emacs-lisp
-(defun rand-alphanum (length &optional prefix suffix)
-  "Generate a random character of some length"
-  (let
-      ((alpha-num (cdr (split-string
-                        "1234567890abcdefghijklmnopqrstyvwxyzABCDEFGHIJKLMNOPQRSTYVWXYZ"
-                        "")))
-       ret)
-    (dotimes (i length)
-      (push (elt alpha-num (random (length alpha-num))) ret))
-    (concat prefix (mapconcat 'identity ret "") suffix)))
+  (defun rand-alphanum (length &optional prefix suffix)
+    "Generate a random character of some length"
+    (let
+        ((alpha-num (cdr (split-string
+                          "1234567890abcdefghijklmnopqrstyvwxyzABCDEFGHIJKLMNOPQRSTYVWXYZ"
+                          "")))
+         ret)
+      (dotimes (i length)
+        (push (elt alpha-num (random (length alpha-num))) ret))
+      (concat prefix (mapconcat 'identity ret "") suffix)))
 
-(defun insert-rand-alphanum (length &optional prefix suffix)
-  (interactive)
-  (insert (rand-alphanum length prefix suffix))
-  )
+  (defun insert-rand-alphanum (&optional length prefix suffix)
+    (interactive)
+    (let ((length (or length 6)))
+      (insert (rand-alphanum length prefix suffix))
+      ))
 #+end_src
-
 
 
 *** remove-headers
