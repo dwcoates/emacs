@@ -190,8 +190,8 @@
   )
 
 ;; load up the theme
-(require 'doom-themes)
-(add-hook 'after-init-hook (lambda () (load-theme 'doom-molokai t)))
+(load-file (concat user-emacs-directory "dood-theme/dood-themes.el"))
+(add-hook 'after-init-hook (lambda () (load-theme 'dood-molokai t)))
 
 ;; brighter source buffers
 (add-hook 'find-file-hook 'doom-buffer-mode)
