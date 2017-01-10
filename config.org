@@ -377,7 +377,7 @@ another window.
 ** Diffs
 *** git-gutter
 #+begin_src emacs-lisp
-      (use-package git-gutter
+      (use-package git-gutter+
         :commands 
         git-gutter-mode
         :init
@@ -1548,7 +1548,7 @@ My clojure-mode hook
     ;(setq-default py-shell-name "jupyter")
 
     ;(setenv "JUPYTER_CONSOLE_TEST" "1")
-    ;(setq python-shell-interpreter "/home/dodge/.local/anaconda2/bin/jupyter-console"
+    ;(setq python-shell-interpreter "~/.local/anaconda2/bin/jupyter-console"
     ;      python-shell-interpreter-interactive-arg "--existing")
 
 
@@ -1849,7 +1849,7 @@ Set default notes file:
 #+begin_src emacs-lisp
   (setq org-agenda-files '("~/personal/everything.org")
         org-deadline-warning-days 2 
-        org-default-notes-file "/home/dodge/personal/everything.org"
+        org-default-notes-file "~/personal/everything.org"
         org-directory "~/personal/"
         org-extend-today-until 4
         org-footnote-section nil
