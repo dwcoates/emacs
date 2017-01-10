@@ -27,15 +27,16 @@ https://github.com/purcell/exec-path-from-shell
 
 * General
 ** Basic Settings
+** Basic Appearance
+*** isearch
 #+begin_src emacs-lisp
-(use-package smart-mode-line
- :init
- (setq sml/theme 'dark)
- (setq sml/name-width 16)
- (sml/setup)
- (smart-mode-line-enable))
 #+end_src
-
+*** linum
+#+begin_src emacs-lisp
+;  (set-face-attribute 'linum-mode nil 
+;                      :background "gray16" 
+;                      :foreground "dim gray")
+#+end_src
 ** Key-Command Interfaces
 Turn on ido. I prefer Ido's approach to find-file over helm's
 approach:
@@ -73,6 +74,35 @@ chords consist of keys adjacent to one another.
     :ensure t)
 #+end_src
 
+** Functions
+*** delete-frames
+#+begin_src emacs-lisp
+(defun delete-frames ()
+  (let ((frames (frame-list)))
+    (while frames
+      (let ((frame (pop frames)))
+        (delete-frame frame)
+        ))
+    ))
+#+end_src
+
+** Emacs
+Make sure emacs gets my bashrc environment variable
+#+begin_src emacs-lisp
+(let ((path (shell-command-to-string ". ~/.bashrc; echo -n $PATH")))
+  (setenv "PATH" path)
+  (setq exec-path
+        (append
+         (split-string-and-unquote path ":")
+         exec-path)))
+#+end_src
+
+* Interface
+** General appearance
+*** Fringe
+#+begin_src emacs-lisp
+  (setq fringe-mode '(4 . 4))
+#+end_src
 ** Helm
 This variables must be set before loading helm-gtags
 #+BEGIN_SRC emacs-lisp
@@ -82,32 +112,38 @@ This variables must be set before loading helm-gtags
 
 *use-package Helm*
 #+BEGIN_SRC emacs-lisp
-  (use-package helm
-    :init
+    (use-package helm
+      :init
       (bind-keys
        ("M-x" . helm-M-x)
        ("M-y" . helm-show-5ill-ring)
        ("C-h SPC" . helm-all-mark-rings)
        ("C-x b" . helm-mini)
-       ;("C-x C-f" . helm-find-files)
+                                            ;("C-x C-f" . helm-find-files)
        ("C-h SPC" . helm-all-mark-rings)
        ("C-c s o" . helm-occur))
-    (helm-mode 1)
-    :config
-    (setq
-     helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
-     helm-ff-search-library-in-sexp t ; search for library in `require' and
-                                          ; declare-function' sexp.
-     helm-split-window-in-side-p t ; open helm buffer inside current window, not
-                                          ; occupy whole other window
-     helm-candidate-number-limit 500  ; limit the number of displayed canidates
-     helm-ff-file-name-history-use-recentf t
-     helm-move-to-line-cycle-in-source t ; move to end or beginning of source when
-                                          ; reaching top or bottom of source.
-     helm-buffers-fuzzy-matching t)   ; fuzzy matching buffer names when non-nil
-    (diminish 'helm-mode)
-)
+      (helm-mode 1)
+      :config
+      (setq
+       helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
+       helm-ff-search-library-in-sexp t ; search for library in `require' and
+                                            ; declare-function' sexp.
+       helm-split-window-in-side-p t ; open helm buffer inside current window, not
+                                            ; occupy whole other window
+       helm-candidate-number-limit 500  ; limit the number of displayed canidates
+       helm-ff-file-name-history-use-recentf t
+       helm-move-to-line-cycle-in-source t ; move to end or beginning of source when
+                                            ; reaching top or bottom of source.
+       helm-buffers-fuzzy-matching t)   ; fuzzy matching buffer names when non-nil
+      (diminish 'helm-mode)
+      (set-face-attribute 'helm-candidate-number nil 
+                          :background "salmon2" 
+                          :foreground "black")
+      )
 #+END_SRC
+#+begin_src emacs-lisp
+
+#+end_src
 
 
 *** Basic Settings
@@ -183,30 +219,6 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 (setq helm-lisp-fuzzy-completion t)
 #+END_SRC
 
-** Functions
-*** delete-frames
-#+begin_src emacs-lisp
-(defun delete-frames ()
-  (let ((frames (frame-list)))
-    (while frames
-      (let ((frame (pop frames)))
-        (delete-frame frame)
-        ))
-    ))
-#+end_src
-
-** Emacs
-Make sure emacs gets my bashrc environment variable
-#+begin_src emacs-lisp
-(let ((path (shell-command-to-string ". ~/.bashrc; echo -n $PATH")))
-  (setenv "PATH" path)
-  (setq exec-path
-        (append
-         (split-string-and-unquote path ":")
-         exec-path)))
-#+end_src
-
-* Interface
 ** Error finding
 *** Flycheck
 
@@ -293,9 +305,20 @@ Display possible key binding completions automatically in a small pop-up buffer 
 *** rainbow-delimiters
 Automatically color parentheses pairs different colors with rainbow-delimiters:
 #+BEGIN_SRC emacs-lisp
-(use-package rainbow-delimiters
-  :init
-  (rainbow-delimiters-mode))
+  (use-package rainbow-delimiters
+    :init
+    (rainbow-delimiters-mode)
+    :config
+    (set-face-attribute 'rainbow-delimiters-depth-1-face nil :foreground "indian red")
+    (set-face-attribute 'rainbow-delimiters-depth-2-face nil :foreground "light sea green")
+    (set-face-attribute 'rainbow-delimiters-depth-3-face nil :foreground "orchid")
+    (set-face-attribute 'rainbow-delimiters-depth-4-face nil :foreground "goldenrod")
+    (set-face-attribute 'rainbow-delimiters-depth-5-face nil :foreground "olive drab")
+    (set-face-attribute 'rainbow-delimiters-depth-6-face nil :foreground "deep sky blue")
+    (set-face-attribute 'rainbow-delimiters-depth-7-face nil :foreground "violet red")
+    (set-face-attribute 'rainbow-delimiters-depth-8-face nil :foreground "SeaGreen2")
+    (set-face-attribute 'rainbow-delimiters-depth-9-face nil :foreground "chocolate")
+    (set-face-attribute 'rainbow-delimiters-unmatched-face nil :foreground "red"))
 #+END_SRC
 
 
@@ -1517,33 +1540,37 @@ My clojure-mode hook
 ** Python
 *** iPython
 #+begin_src emacs-lisp
-(setq python-shell-prompt-detect-failure-warning nil)
-;(setq-default py-shell-name "jupyter")
+    (setq python-shell-prompt-detect-failure-warning nil
+          python-shell-prompt-input-regexps '("$ " "\\.\\.\\. " 
+                                              "In \\[[0-9]+\\]: " 
+                                              "In : " "\\.\\.\\.: "))
 
-;(setenv "JUPYTER_CONSOLE_TEST" "1")
-;(setq python-shell-interpreter "/home/dodge/.local/anaconda2/bin/jupyter-console"
-;      python-shell-interpreter-interactive-arg "--existing")
+    ;(setq-default py-shell-name "jupyter")
 
-
-;(setq-default py-which-bufname "IPython")
-;; use the wx backend, for both mayavi and matplotlib
-;(setq py-python-command-args '("--matplotlib" "--colors" "LightBG"))
-;(setq python-shell-interpreter-args "--existing kernel-7967.json")
-;(setq python-shell-interpreter-args "--matplotlib --gui=qt4")
-; "--colors" "LightBG" "Linux" "--pylab=wx"
-;(setq py-force-py-shell-name-p t)
-
-;; switch to the interpreter after executing code
-;(setq py-shell-switch-buffers-on-execute-p t)
-;(setq py-switch-buffers-on-execute-p t)
-;; don't split windows
-;(setq py-split-windows-on-execute-p nil)
-;; try to automagically figure out indentation
-;(setq py-smart-indentation t)
+    ;(setenv "JUPYTER_CONSOLE_TEST" "1")
+    ;(setq python-shell-interpreter "/home/dodge/.local/anaconda2/bin/jupyter-console"
+    ;      python-shell-interpreter-interactive-arg "--existing")
 
 
-; see http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0
-; for explanation.
+    ;(setq-default py-which-bufname "IPython")
+    ;; use the wx backend, for both mayavi and matplotlib
+    ;(setq py-python-command-args '("--matplotlib" "--colors" "LightBG"))
+    ;(setq python-shell-interpreter-args "--existing kernel-7967.json")
+    ;(setq python-shell-interpreter-args "--matplotlib --gui=qt4")
+    ; "--colors" "LightBG" "Linux" "--pylab=wx"
+    ;(setq py-force-py-shell-name-p t)
+
+    ;; switch to the interpreter after executing code
+    ;(setq py-shell-switch-buffers-on-execute-p t)
+    ;(setq py-switch-buffers-on-execute-p t)
+    ;; don't split windows
+    ;(setq py-split-windows-on-execute-p nil)
+    ;; try to automagically figure out indentation
+    ;(setq py-smart-indentation t)
+
+
+    ; see http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0
+    ; for explanation.
 #+end_src
 
 *** python-mode
@@ -1762,8 +1789,8 @@ I was having some problems with it throwing errors.
     (apply push args)))
 #+END_SRC
 
-
 ** Org Mode
+*** General
 Please truncate lines in org-mode. The last thing I want to see is a
 wrapped table, and everything should be paragraphed, anyway (M-q).
 #+begin_src emacs-lisp
@@ -1811,7 +1838,31 @@ Set default notes file:
 (setq org-default-notes-file "~/personal/everything.org")
 #+end_src
 
+*** Appearance
+**** General
+#+begin_src emacs-lisp
+; org warnings
+(set-face-attribute 'org-warning nil :foreground "red3" :weight 'bold)
+#+end_src
 
+*** Agenda
+#+begin_src emacs-lisp
+  (setq org-agenda-files '("~/personal/everything.org")
+        org-deadline-warning-days 2 
+        org-default-notes-file "/home/dodge/personal/everything.org"
+        org-directory "~/personal/"
+        org-extend-today-until 4
+        org-footnote-section nil
+        org-from-is-user-regexp "\\<Dodge Coates\\>"
+        org-goto-interface 'outline-path-completion
+        org-goto-max-level 10
+        org-scheduled-delay-days 0
+        org-src-fontify-natively t)
+
+  (set-face-attribute 'org-agenda-done nil
+                      :foreground "olive drab" 
+                      :weight 'ultra-light)
+#+end_src
 *** tea-time
 #+begin_src emacs-lisp
   (use-package tea-time
@@ -1820,7 +1871,6 @@ Set default notes file:
     (global-set-key (kbd "C-c C-x s") 'tea-show-remaining-time)
     (global-set-key (kbd "C-c C-x n") 'tea-time))
 #+end_src
-
 
 *** babel
 This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
@@ -1864,7 +1914,6 @@ Editting source code
 (define-key org-src-mode-map (kbd "C-c k") 'org-exit-src-code)
 #+end_src
 
-
 *** Agenda
 #+begin_src emacs-lisp
 (custom-set-variables
@@ -1894,12 +1943,10 @@ Function to visually delimit priorities in the org-agenda-list buffer.
   (add-hook 'org-agenda-finalize-hook 'my-custom-agenda-fn)
 #+end_src
 
-
 *** Commands
 #+begin_src emacs-lisp
 (define-key org-mode-map (kbd "C-M-<return>") 'org-insert-subheading)
 #+end_src
-
 
 *** Capture
 org-capture-template is set in a private file. Look up the documention for org-capture-template (and org-capture in general) to see how it might look.
@@ -1946,109 +1993,8 @@ org-capture-template is set in a private file. Look up the documention for org-c
     )
 #+end_src
 
-
-*** Functions
-**** column editing
-#+BEGIN_SRC emacs-lisp
-;(add-hook 'org-mode-hook 'my-org-mode-hook)
-(global-set-key (kbd "C-c o k") 'org-mode-delete-column)
-(global-set-key (kbd "C-c o i") 'org-mode-insert-column)
-(global-set-key (kbd "C-c o j") 'org-mode-move-column-left)
-(global-set-key (kbd "C-c o l") 'org-mode-move-column-right)
-
-(global-set-key (kbd "C-c o RET") 'org-mode-todo-heading)
-#+END_SRC
-
-
-**** org-path-completion
-#+BEGIN_SRC emacs-lisp
-(setq org-goto-interface 'outline-path-completion
-      org-goto-max-level 10)
-#+END_SRC
-
-
-**** org-capture
-org-capture allows you to take a note anywhere, which it will write to the org-default-notes-file.
-#+BEGIN_SRC emacs-lisp
-;; this is set in ~/.emacs.d/custom/setup-specifics.el
-(global-set-key (kbd "C-c c") 'org-capture)
-#+END_SRC
-
-
-**** org-back-to-top-level-heading
-#+BEGIN_SRC elisp
-;; move point to top-level heading
-(defun org-back-to-top-level-heading ()
-  "Go back to the current top level heading."
-  (interactive)
-  (or (re-search-backward "^\* " nil t)
-      (goto-char (point-min))))
-
-;; make todo's check recursively when determining the number of todo's under it
-(setq org-hierarchical-todo-statistics nil)
-#+END_SRC
-
-
-**** org-summary-todo
-This is for making sure that the top-level todo automatically is marked DONE if all sub-levels are DONE.
-TODO otherwise.
-#+BEGIN_SRC elisp
-(defun org-summary-todo (n-done n-not-done)
-  "Switch entry to DONE when all subentries are done, to TODO otherwise."
-  (let (org-log-done org-log-states)   ; turn off logging
-    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
-
-(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
-#+END_SRC
-
-
-**** jump-to-org-agenda
-This is a snippet from John Wiegley.
-It shows org agenda after emacs has been idle for a certain amount of time.
-#+BEGIN_SRC elisp
-(defun jump-to-org-agenda ()
-  (interactive)
-  (let ((buf (get-buffer "*Org Agenda*"))
-        wind)
-    (if buf
-        (if (setq wind (get-buffer-window buf))
-            (select-window wind)
-          (if (called-interactively-p)
-              (progn
-                (select-window (display-buffer buf t t))
-                (org-fit-window-to-buffer)
-                ;; (org-agenda-redo)
-                )
-            (with-selected-window (display-buffer buf)
-              (org-fit-window-to-buffer)
-              ;; (org-agenda-redo)
-              )))
-      (call-interactively 'org-agenda-list)))
-  ;;(let ((buf (get-buffer "*Calendar*")))
-  ;;  (unless (get-buffer-window buf)
-  ;;    (org-agenda-goto-calendar)))
-  )
-(run-with-idle-timer 300 t 'jump-to-org-agenda)
-#+END_SRC
-
-
-**** create-tasks-heading
-Insert a new Task heading. These are used by org-capture. ID is saved in kill ring.
-#+begin_src emacs-lisp
-(defun create-tasks-heading ()
-  (interactive)
-  (save-excursion
-    (org-insert-subheading nil)
-    (insert "TODO [/]")
-    (backward-char)
-    (org-ctrl-c-ctrl-c)
-    (kill-new (org-id-get-create))
-    )
-  )
-#+end_src
-
-
-*** HTML
+*** Exports
+**** html
 #+begin_src emacs-lisp
 (setq org-html-table-default-attributes
       '(:border "2" :cellspacing "0" :cellpadding "6" :rules "all" :frame
@@ -2279,6 +2225,106 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
   #bibliography table{width:100%}
   .creator{display:block}@media (min-width:769px){.creator{display:inline;
                                                            float:right}}</style>")
+#+end_src
+
+*** Functions
+**** column editing
+#+BEGIN_SRC emacs-lisp
+;(add-hook 'org-mode-hook 'my-org-mode-hook)
+(global-set-key (kbd "C-c o k") 'org-mode-delete-column)
+(global-set-key (kbd "C-c o i") 'org-mode-insert-column)
+(global-set-key (kbd "C-c o j") 'org-mode-move-column-left)
+(global-set-key (kbd "C-c o l") 'org-mode-move-column-right)
+
+(global-set-key (kbd "C-c o RET") 'org-mode-todo-heading)
+#+END_SRC
+
+
+**** org-path-completion
+#+BEGIN_SRC emacs-lisp
+(setq org-goto-interface 'outline-path-completion
+      org-goto-max-level 10)
+#+END_SRC
+
+
+**** org-capture
+org-capture allows you to take a note anywhere, which it will write to the org-default-notes-file.
+#+BEGIN_SRC emacs-lisp
+;; this is set in ~/.emacs.d/custom/setup-specifics.el
+(global-set-key (kbd "C-c c") 'org-capture)
+#+END_SRC
+
+
+**** org-back-to-top-level-heading
+#+BEGIN_SRC elisp
+;; move point to top-level heading
+(defun org-back-to-top-level-heading ()
+  "Go back to the current top level heading."
+  (interactive)
+  (or (re-search-backward "^\* " nil t)
+      (goto-char (point-min))))
+
+;; make todo's check recursively when determining the number of todo's under it
+(setq org-hierarchical-todo-statistics nil)
+#+END_SRC
+
+
+**** org-summary-todo
+This is for making sure that the top-level todo automatically is marked DONE if all sub-levels are DONE.
+TODO otherwise.
+#+BEGIN_SRC elisp
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  (let (org-log-done org-log-states)   ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+#+END_SRC
+
+
+**** jump-to-org-agenda
+This is a snippet from John Wiegley.
+It shows org agenda after emacs has been idle for a certain amount of time.
+#+BEGIN_SRC elisp
+(defun jump-to-org-agenda ()
+  (interactive)
+  (let ((buf (get-buffer "*Org Agenda*"))
+        wind)
+    (if buf
+        (if (setq wind (get-buffer-window buf))
+            (select-window wind)
+          (if (called-interactively-p)
+              (progn
+                (select-window (display-buffer buf t t))
+                (org-fit-window-to-buffer)
+                ;; (org-agenda-redo)
+                )
+            (with-selected-window (display-buffer buf)
+              (org-fit-window-to-buffer)
+              ;; (org-agenda-redo)
+              )))
+      (call-interactively 'org-agenda-list)))
+  ;;(let ((buf (get-buffer "*Calendar*")))
+  ;;  (unless (get-buffer-window buf)
+  ;;    (org-agenda-goto-calendar)))
+  )
+(run-with-idle-timer 300 t 'jump-to-org-agenda)
+#+END_SRC
+
+
+**** create-tasks-heading
+Insert a new Task heading. These are used by org-capture. ID is saved in kill ring.
+#+begin_src emacs-lisp
+(defun create-tasks-heading ()
+  (interactive)
+  (save-excursion
+    (org-insert-subheading nil)
+    (insert "TODO [/]")
+    (backward-char)
+    (org-ctrl-c-ctrl-c)
+    (kill-new (org-id-get-create))
+    )
+  )
 #+end_src
 
 * Emacs as a auxiliary interface

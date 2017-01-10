@@ -176,6 +176,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;; THEMES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Set default face (used for background, normal text, etc)
+(set-face-attribute 'default nil
+                    :background "#222222"
+                    :foreground "light gray"
+                    :height 128
+                    :foundry "unknown"
+                    :family "Ubuntu Mono")
+
 ;; Useful function for loading icons
 (defun load-directory (dir)
   (let ((load-it (lambda (f)
@@ -189,14 +197,23 @@
   (load-directory (concat user-emacs-directory "neotree_fonts"))
   )
 
+(use-package smart-mode-line
+  :init
+  (setq sml/name-width 16)
+  (setq sml/no-confirm-load-theme t))
+
 ;; load up the theme
 (load-file (concat user-emacs-directory "dood-theme/dood-themes.el"))
 (add-hook 'after-init-hook (lambda () (load-theme 'dood-molokai t)))
-
 ;; brighter source buffers
-(add-hook 'find-file-hook 'doom-buffer-mode)
+(add-hook 'find-file-hook 'dood-buffer-mode)
 ;; brighter minibuffer when active
-(add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
+(add-hook 'minibuffer-setup-hook 'dood-brighten-minibuffer)
+(add-hook 'after-init-hook 'smart-mode-line-enable)
+
+
+(sml/setup)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;; SET UP PACKAGE MANAGEMENT AND USE-PACKAGE ;;;;;;;;;;;;;
