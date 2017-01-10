@@ -407,21 +407,69 @@ another window.
 #+end_src
 
 ** Directories
+*** dood-neotree
+This goes before neotree configuration
+#+begin_src emacs-lisp
+;      (require 'dood-neotree)
+;      (setq dood-neotree-file-icons nil
+;            dood-neotree-folder-size 0.5
+;            dood-neotree-chevron-size 0.5
+;            doom-neotree-enable-file-icons nil)
+
+#+end_src
+
 *** neotree
 #+begin_src emacs-lisp
   (use-package neotree
     :init
     (setq neo-create-file-auto-open t
-      neo-auto-indent-point nil
-      neo-mode-line-type 'none
-      neo-persist-show nil
-      neo-window-width 25
-      neo-show-updir-line nil
-      neo-theme 'nerd ; fallback
-      neo-banner-message nil
-      neo-smart-open t)
+          neo-auto-indent-point nil
+          neo-mode-line-type 'none
+          neo-persist-show nil
+          neo-window-width 25
+          neo-show-updir-line nil
+          neo-theme 'ascii ; fallback
+          neo-banner-message nil
+          neo-smart-open t)
     :config
-    (setq neo-theme (if (display-graphic-p) 'ascii 'ascii)))
+    (setq neo-theme 'ascii)
+    (defun neotree-project-dir ()
+      "Open NeoTree using the git root."
+      (interactive)
+      (let ((project-dir (ffip-project-root))
+            (file-name (buffer-file-name)))
+        (if project-dir
+            (progn
+              (neotree-dir project-dir)
+              (neotree-find file-name))
+          (message "Could not find git project root."))))
+    (define-key map (kbd "C-c C-p") 'neotree-project-dir)
+
+
+                                          ;        (defun display-buffer-neotree ()
+                                          ;          (interactive)
+                                          ;          (let ((buf-name (current-buffer))
+                                          ;                (buf-filename (buffer-file-name (current-buffer)))
+                                          ;       (neo-toggle-window-keep-p t)
+                                          ;   )
+    ;; display neo-tree if looking at a file
+                                          ;            (when buf-filename
+                                          ;              (neotree))
+                                          ;            ))
+                                          ;        (defun neo-new-view-advise (func &rest args)
+                                          ;          (let ((res (apply func args)))
+                                          ;            (display-buffer-neotree)
+                                          ;          res)
+                                          ;          )
+                                          ;(advice-add 'other-buffer :around 'neo-new-view-advise)
+                                          ;(advice-add 'find-file :around 'neo-new-view-advise)
+    )
+  ;; Don't go to neotree buffer with other-window
+  (add-hook 'after-init-hook 
+            (lambda () 
+              (set-window-parameter 
+               (get-buffer-window neo-buffer-name) 
+               'no-other-window t)))
 #+end_src
 
 * Navigation

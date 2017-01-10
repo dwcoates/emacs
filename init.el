@@ -226,17 +226,20 @@
 (use-package smart-mode-line
   :init
   (setq sml/name-width 16)
-  (setq sml/no-confirm-load-theme t))
+  (setq sml/no-confirm-load-theme t)
+  (add-hook 'after-init-hook 'smart-mode-line-enable))
 
 ;; load up the theme
-(load-file (concat user-emacs-directory "dood-theme/dood-themes.el"))
-(add-hook 'after-init-hook (lambda () (load-theme 'dood-molokai t)))
-;; brighter source buffers
-(add-hook 'find-file-hook 'dood-buffer-mode)
-;; brighter minibuffer when active
-(add-hook 'minibuffer-setup-hook 'dood-brighten-minibuffer)
-(add-hook 'after-init-hook 'smart-mode-line-enable)
-
+(add-to-list 'load-path (concat user-emacs-directory "dood-theme"))
+(use-package dood-themes :ensure nil
+  :init
+  (add-hook 'after-init-hook (lambda () (load-theme 'dood-molokai t)))
+  :config
+  ;; brighten source code buffers
+  (add-hook 'find-file-hook 'dood-buffer-mode)
+  ;; brighten minibuffers (does this even work??)
+  (add-hook 'minibuffer-setup-hook 'dood-brighten-minibuffer)
+  )
 
 (sml/setup)
 
