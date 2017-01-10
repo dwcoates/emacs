@@ -1,12 +1,43 @@
 ;; Keep track of loading time
 (defconst emacs-start-time (current-time))
 
+(setq package-enable-at-startup nil)
 (package-initialize)
 
 ;; load system-specific settings best loaded first
 (let ((pre "~/personal/exclusive/pre.el"))
   (if (file-exists-p pre)
       (load pre)))
+
+;;
+;; USE-PACKAGE
+;;
+;; use-package is a core package in modern emacs (at least if you have
+;; a large config that you want to be managable as a plug-and-play
+;; release). The following installs it if not already installed. It's
+;; done here so it can be used to insall org-mode, which is used for
+;; organizing the rest of this emacs config. The last several lines of
+;; this file call an org function that handles that.
+;;
+;;
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
+;; Configure use-package
+(setq use-package-verbose t)
+(require 'use-package)
+(use-package auto-compile
+  :ensure t
+  :config (auto-compile-on-load-mode))
+(setq load-prefer-newer t)
+(setq use-package-always-ensure t)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;; PRE-LOAD APPEARANCE SETTINGS ;;;;;;;;;
@@ -18,60 +49,154 @@
 ; be preserved. I got tired of seeing ugly emacs on failure.
 
 ;; Load wilson theme:
-(load "~/.emacs.d/wilson-theme.el")
+;(load "~/.emacs.d/wilson-theme.el")
+
+(defvar saveplace-dir (concat user-emacs-directory "saveplace")
+  "Where all the saves go (stuff like cursor position, autosaves, etc).")
+
+;;
+;; Some basic editing and appearance defaults
+;; Things like tab width, word-wrapping, cursor blinking, etc.
+;;
+(setq-default
+ ;; Formatting
+ delete-trailing-lines nil
+ fill-column 70
+ ;; Spaces, not tabs
+ indent-tabs-mode nil
+ require-final-newline t
+ tab-always-indent t
+ tab-width 4
+ ;; Wrapping
+ truncate-lines t
+ truncate-partial-width-windows 50
+ visual-fill-column-center-text nil
+ word-wrap t
+ ;; Scrolling
+ hscroll-margin 1
+ hscroll-step 1
+ scroll-conservatively 1001
+ scroll-margin 0
+ scroll-preserve-screen-position t
+ ;; Regions
+ shift-select-mode t
+ ;; Whitespace
+ tabify-regexp "^\t* [ \t]+"
+ whitespace-line-column fill-column
+ whitespace-style '(face tabs tab-mark
+                         trailing indentation lines-tail)
+ whitespace-display-mappings
+ '((tab-mark ?\t [?› ?\t])
+   (newline-mark 10 [36 10]))
+ ;;          INTERFACE
+ ;; don't garbage collect too much, please
+ gc-cons-threshold 100000000
+ ;; no splash message
+ inhibit-startup-message t
+ blink-cursor-mode 0
+ ;; highlight current line
+ global-hl-line-mode 1
+ display-time-mode t
+ ;; current display column number in modeline
+ column-number-mode t
+ )
+
+;; no scroll bar
+(toggle-scroll-bar -1)
+;; no toolbar
+(tool-bar-mode -1)
+
+;; set transparency
+(set-frame-parameter (selected-frame) 'alpha '(96 85))
+(add-to-list 'default-frame-alist '(alpha 96 85))
+
+;; key binding for turning the menu bar on and off
+(defun toggle-menu-bar ()
+  (interactive)
+  (if menu-bar-mode
+      (menu-bar-mode 0)
+    (menu-bar-mode 1)))
+(global-set-key (kbd "C-x m") 'toggle-menu-bar)
+
 
 ;; Setup default window size:
 (add-to-list 'default-frame-alist '(height . 40))
 (add-to-list 'default-frame-alist '(width . 160))
 
-;; Get rid of annoying stuff:
-(setq gc-cons-threshold 100000000)
-(setq inhibit-startup-message t)
-
 ;; Use 'y' instead of "yes" and 'n' instead of "no" at prompt.
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Save point position between sessions:
-(require 'saveplace)
-(setq-default save-place t)
-(setq save-place-file (expand-file-name ".places" user-emacs-directory))
-
-;; No splash screen:
-(setq inhibit-startup-screen t)
-
-;; Set font:
-;(add-to-list 'default-frame-alist
-;         '(font .  "Ubuntu Mono-12"))
-;(set-face-attribute 'default t :font  "Ubuntu Mono-12")
-
-
-; disables tool bar
-(tool-bar-mode -1)
-; disables pmenu bar, can re-enable as a popub with 'C-mouse-3'
-(menu-bar-mode -99)
-; no scroll bar please
-(toggle-scroll-bar -1)
-
-;; Dont truncate lines:
-(toggle-truncate-lines)
 (global-set-key (kbd "C-c ; t") 'toggle-truncate-lines)
 
-;; I prefer a non-blinking cursor:
-(blink-cursor-mode 0)
-
 ;; Highlight current line:
-(global-hl-line-mode 1)
+(require 'hl-line)
 (set-face-background 'hl-line "#3b3b3b")
 (set-face-foreground 'highlight nil)
-
-;; Set up mode line:
-;; display time in mode line
-(display-time-mode t)
 
 ;; Dont ask me if I want to use these features before I do:
 (put 'narrow-to-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
 
+;; Save point across sessions
+(require 'saveplace)
+(setq-default
+ save-place-file (expand-file-name "places_" user-emacs-directory)
+ save-place t)
+(when (>= emacs-major-version 25)
+  (save-place-mode +1))
+
+;; Save history across sessions
+(require 'savehist)
+(setq savehist-file (expand-file-name "hist_" saveplace-dir)
+      savehist-additional-variables
+      '(kill-ring search-ring regexp-search-ring))
+(savehist-mode 1)
+
+;; Keep track of recently opened files
+(require 'recentf)
+(setq recentf-save-file (expand-file-name "recent_" saveplace-dir)
+      recentf-exclude '("/tmp/" "/ssh:" "\\.?ido\\.last$" "\\.revive$" "/TAGS$"
+                        "emacs\\.d/private/cache/.+" "emacs\\.d/workgroups/.+$"
+                        "wg-default" "/company-statistics-cache.el$"
+                        "^/var/folders/.+$" "^/tmp/.+")
+      recentf-max-menu-items 0
+      recentf-max-saved-items 250
+      recentf-auto-cleanup 600
+      recentf-filename-handlers '(abbreviate-file-name))
+(recentf-mode 1)
+
+;; window config undo/redo winner is a minor-mode for undoing and
+;; redoing window configuration changes.
+(setq winner-dont-bind-my-keys t)
+(use-package winner)
+(winner-mode 1)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;; THEMES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Useful function for loading icons
+(defun load-directory (dir)
+  (let ((load-it (lambda (f)
+                   (load-file (concat (file-name-as-directory dir) f)))
+                 ))
+    (mapc load-it (directory-files dir nil "\\.el$"))))
+
+;; Get some pretty icons to use
+(use-package all-the-icons
+  :init
+  (load-directory (concat user-emacs-directory "neotree_fonts"))
+  )
+
+;; load up the theme
+(require 'doom-themes)
+(add-hook 'after-init-hook (lambda () (load-theme 'doom-molokai t)))
+
+;; brighter source buffers
+(add-hook 'find-file-hook 'doom-buffer-mode)
+;; brighter minibuffer when active
+(add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;; SET UP PACKAGE MANAGEMENT AND USE-PACKAGE ;;;;;;;;;;;;;
@@ -99,41 +224,21 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-;;
-;; USE-PACKAGE
-;;
-;; use-package is a core package in modern emacs. At least if you have
-;; A lark config that you want to be managable as a plug-and-play release.
-;; It's at least awesome. The following installs it if not already installed,
-;; so it can be used to install most recent org-mode, which will handle the
-;; rest of the config.
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
-;; Configure use-package
-(setq use-package-verbose t)
-(require 'use-package)
-(use-package auto-compile
-  :ensure t
-  :config (auto-compile-on-load-mode))
-(setq load-prefer-newer t)
-(setq use-package-always-ensure t)
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;; LOAD CONFIG.ORG AND SAVE ITS ELISP TO CONFIG.EL ;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; This use-package call will  ensure that the correct, up-to-date version of
-;; org installed, along with all its subpackages (that's the "contrib" bit).
+;; This use-package call will ensure that the correct, up-to-date
+;; version of org installed, along with all its subpackages (that's
+;; the "contrib" bit).
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 (use-package org
   :mode (("\\.org$" . org-mode))
   :ensure org-plus-contrib)
 
-;; Make a .el file out of the code in config.org, then run it.
-;; This bit of code is responsible for the loading other 2k+ lines of
-;; code for this config.
+;; Make a .el file out of the code in config.org, then run it.  This
+;; bit of code is responsible for the loading other 2k+ lines of code
+;; for this config.
 (org-babel-load-file
  (expand-file-name "config.org"
                    user-emacs-directory))

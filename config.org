@@ -25,7 +25,6 @@ https://github.com/purcell/exec-path-from-shell
     (package-install 'exec-path-from-shell)))
 #+END_SRC
 
-
 * General
 ** Basic Settings
 #+begin_src emacs-lisp
@@ -36,7 +35,6 @@ https://github.com/purcell/exec-path-from-shell
  (sml/setup)
  (smart-mode-line-enable))
 #+end_src
-
 
 ** Key-Command Interfaces
 Turn on ido. I prefer Ido's approach to find-file over helm's
@@ -74,7 +72,6 @@ chords consist of keys adjacent to one another.
   (use-package hydra
     :ensure t)
 #+end_src
-
 
 ** Helm
 This variables must be set before loading helm-gtags
@@ -186,7 +183,6 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 (setq helm-lisp-fuzzy-completion t)
 #+END_SRC
 
-
 ** Functions
 *** delete-frames
 #+begin_src emacs-lisp
@@ -199,7 +195,6 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
     ))
 #+end_src
 
-
 ** Emacs
 Make sure emacs gets my bashrc environment variable
 #+begin_src emacs-lisp
@@ -211,76 +206,74 @@ Make sure emacs gets my bashrc environment variable
          exec-path)))
 #+end_src
 
-
 * Interface
-** Flycheck
+** Error finding
+*** Flycheck
 
-*use-package Flycheck*
-#+BEGIN_SRC emacs-lisp
-(use-package flycheck
-  :init (progn
-          (add-hook 'after-init-hook #'global-flycheck-mode))
-  :bind (("C-c ! n" . flycheck-next-error)
-         ("C-c ! p" . flycheck-previous-error)
-         ("C-c ! h" . helm-flycheck))
-  :config
-  (diminish 'flycheck-mode))
-#+END_SRC
+ *use-package Flycheck*
+ #+BEGIN_SRC emacs-lisp
+ (use-package flycheck
+   :init (progn
+           (add-hook 'after-init-hook #'global-flycheck-mode))
+   :bind (("C-c ! n" . flycheck-next-error)
+          ("C-c ! p" . flycheck-previous-error)
+          ("C-c ! h" . helm-flycheck))
+   :config
+   (diminish 'flycheck-mode))
+ #+END_SRC
 
+** Auto completion
+*** Company
+ *use-package Company*
+ #+begin_src emacs-lisp
+ (use-package company 
+   :init
+   (add-hook 'after-init-hook 'global-company-mode)
+   ;; provides a little popup for documentation
+   (use-package company-quickhelp
+     :init
+     (company-quickhelp-mode 1)    
+     :config
+     (setq company-quickhelp-max-lines 10)
+     (setq company-quickhelp-delay nil)
+     (bind-key "M-h" 'company-quickhelp-manual-begin))
+   :config (progn
+             (setq company-backends (delete 'company-semantic company-backends))
+             (use-package helm-company
+               :bind ("C-c <tab>" . helm-company)))
+   (diminish 'company-mode)
+   )
+ #+end_src
 
-** Company
-*use-package Company*
-#+begin_src emacs-lisp
-(use-package company 
-  :init
-  (add-hook 'after-init-hook 'global-company-mode)
-  ;; provides a little popup for documentation
-  (use-package company-quickhelp
-    :init
-    (company-quickhelp-mode 1)    
-    :config
-    (setq company-quickhelp-max-lines 10)
-    (setq company-quickhelp-delay nil)
-    (bind-key "M-h" 'company-quickhelp-manual-begin))
-  :config (progn
-            (setq company-backends (delete 'company-semantic company-backends))
-            (use-package helm-company
-              :bind ("C-c <tab>" . helm-company)))
-  (diminish 'company-mode)
-  )
-#+end_src
+*** Autocomplete
+ #+begin_src emacs-lisp
+ (use-package auto-complete)
+ #+end_src
 
-
-** Autocomplete
-#+begin_src emacs-lisp
-(use-package auto-complete)
-#+end_src
-
-
-** Helm-swoop
-*use-package helm-swoop*
-#+BEGIN_SRC emacs-lisp
-(use-package helm-swoop
-  :init (progn
-          (global-set-key (kbd "C-c s s") 'helm-swoop)
-          (global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
-        )
-  :config (progn
-            ; When doing isearch, hand the word over to helm-swoop
-            (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-            ; From helm-swoop to helm-multi-swoop-all
-            (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-            ; Save buffer when helm-multi-swoop-edit complete
-            (setq helm-multi-swoop-edit-save t))
-            ; If this value is t, split window inside the current window
-            (setq helm-swoop-split-with-multiple-windows t)
-            ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-            (setq helm-swoop-split-direction 'split-window-vertically)
-            ;; If nil, you can slightly boost invoke speed in exchange for text color
-            (setq helm-swoop-speed-or-color t)
-  )
-#+END_SRC
-
+** Search & select
+*** Helm-swoop
+ *use-package helm-swoop*
+ #+BEGIN_SRC emacs-lisp
+ (use-package helm-swoop
+   :init (progn
+           (global-set-key (kbd "C-c s s") 'helm-swoop)
+           (global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
+         )
+   :config (progn
+             ; When doing isearch, hand the word over to helm-swoop
+             (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+             ; From helm-swoop to helm-multi-swoop-all
+             (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+             ; Save buffer when helm-multi-swoop-edit complete
+             (setq helm-multi-swoop-edit-save t))
+             ; If this value is t, split window inside the current window
+             (setq helm-swoop-split-with-multiple-windows t)
+             ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+             (setq helm-swoop-split-direction 'split-window-vertically)
+             ;; If nil, you can slightly boost invoke speed in exchange for text color
+             (setq helm-swoop-speed-or-color t)
+   )
+ #+END_SRC
 
 ** Other Packages
 *** guide-key
@@ -345,6 +338,68 @@ Automatically resize buffers to "optimal" size when they gain focus. Turned off 
   :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
 #+END_SRC
 
+** Window behavior
+*** Shackle
+Great package. It allows you to configure how popup messages are
+handled. For instance, please stop creating the magit status buffer in
+another window.
+#+begin_src emacs-lisp
+  (use-package shackle
+    :init
+    (setq shackle-default-rule '(:same t))
+    (setq helm-display-function 'pop-to-buffer) ; make helm play nice
+    (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4))))
+#+end_src
+
+** Diffs
+*** git-gutter
+#+begin_src emacs-lisp
+      (use-package git-gutter
+        :commands 
+        git-gutter-mode
+        :init
+        (mapc (lambda (h) (add-hook h 'git-gutter-mode))
+              '(text-mode-hook prog-mode-hook conf-mode-hook))
+        :config
+        (require 'git-gutter-fringe)
+
+        ;; NOTE If you want the git gutter to be on the outside of the
+        ;; margins (rather than inside), `fringes-outside-margins' should be
+        ;; non-nil.
+
+        ;; colored fringe "bars"
+        (define-fringe-bitmap 'git-gutter-fr:added
+          [224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
+          nil nil 'center)
+        (define-fringe-bitmap 'git-gutter-fr:modified
+          [224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
+          nil nil 'center)
+        (define-fringe-bitmap 'git-gutter-fr:deleted
+          [0 0 0 0 0 0 0 0 0 0 0 0 0 128 192 224 240 248]
+          nil nil 'center)
+
+        ;; Refreshing git-gutter
+        (advice-add 'evil-force-normal-state :after 'git-gutter)
+        (add-hook 'focus-in-hook 'git-gutter:update-all-windows))
+#+end_src
+
+** Directories
+*** neotree
+#+begin_src emacs-lisp
+  (use-package neotree
+    :init
+    (setq neo-create-file-auto-open t
+      neo-auto-indent-point nil
+      neo-mode-line-type 'none
+      neo-persist-show nil
+      neo-window-width 25
+      neo-show-updir-line nil
+      neo-theme 'nerd ; fallback
+      neo-banner-message nil
+      neo-smart-open t)
+    :config
+    (setq neo-theme (if (display-graphic-p) 'ascii 'ascii)))
+#+end_src
 
 * Navigation
 ** Basic Settings
@@ -407,7 +462,6 @@ Key bindings for other files:
 
 #+end_src
 
-
 ** windmove
 Navigate windows directionally with wind-move:
 #+BEGIN_SRC emacs-lisp
@@ -423,7 +477,6 @@ Navigate windows directionally with wind-move:
      ("C-x w k" . windmove-down)))
 #+END_SRC
 
-
 ** ace-jump-mode
 Jump quickly to any word using just two key strokes with ace-jump-mode:
 #+BEGIN_SRC emacs-lisp
@@ -432,7 +485,6 @@ Jump quickly to any word using just two key strokes with ace-jump-mode:
   :init
   (key-chord-define-global "cj" 'ace-jump-mode))
 #+END_SRC
-
 
 ** ace-isearch
 This is a mix of ace, isearch, and helm swoop. Pretty cool. If only
@@ -443,16 +495,18 @@ searched, it will use helm-swoop. Nice idea.
 (use-package ace-isearch)
 #+end_src
 
-
 ** ace-window
-Jump quickly between windows and frames using just two key strokes with ace-window:
+Jump quickly between windows and frames using just two key strokes
+with ace-window. Essential package:
 #+BEGIN_SRC emacs-lisp
-(use-package ace-window
-  :commands ace-window
-  :init
-  (key-chord-define-global "xo" 'ace-window))
+  (use-package ace-window
+    :commands ace-window
+    :init
+    (key-chord-define-global "xo" 'ace-window)
+    :config
+    (setq aw-scope 'frame aw-background t)
+    )
 #+END_SRC
-
 
 ** Functions
 Switch between the two most recently visited buffers:
@@ -542,7 +596,6 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
   (unhighlight-regexp t))
 (define-key search-map "hU" #'my/unhighlight-all-in-buffer)
 #+end_src
-
 
 * Editing
 ** Basic Settings
@@ -1180,7 +1233,6 @@ Comment out a line:
 (key-chord-define-global ";'" 'toggle-comment-on-line)
 #+END_SRC
 
-
 * Development Environments
 ** General Settings
 *** Semantic
@@ -1193,8 +1245,6 @@ Comment out a line:
 
 (global-semantic-stickyfunc-mode 1)
 #+end_src
-
-
 *** Compilation
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "<f5>") (lambda ()
@@ -1202,8 +1252,6 @@ Comment out a line:
                                (setq-local compilation-read-command nil)
                                (call-interactively 'compile)))
 #+END_SRC
-
-
 *** Debugging
 #+BEGIN_SRC emacs-lisp
 ;; Setup GDB
@@ -1211,7 +1259,6 @@ Comment out a line:
  ;; Non-nil means display source file containing the main routine at startup
  gdb-show-main t)
 #+END_SRC
-
 
 *** Projectile
 #+BEGIN_SRC emacs-lisp
@@ -1232,7 +1279,6 @@ Comment out a line:
 #+BEGIN_SRC emacs-lisp
 (setq tramp-default-method "ssh")
 #+END_SRC
-
 
 *** Gtags
 #+BEGIN_SRC emacs-lisp
@@ -1265,12 +1311,15 @@ Comment out a line:
   )
 #+END_SRC
 
-
 *** Comint
 #+begin_src emacs-lisp
 (define-key comint-mode-map (kbd "M-r") 'comint-history-isearch-backward)
 #+end_src
 
+*** EMR
+#+begin_src emacs-lisp
+(use-package emr)
+#+end_src
 
 ** Lisps
 *** General Lisp Settings
@@ -1465,7 +1514,6 @@ My clojure-mode hook
   (cider-repl-set-ns "user"))
 #+END_SRC
 
-
 ** Python
 *** iPython
 #+begin_src emacs-lisp
@@ -1498,7 +1546,6 @@ My clojure-mode hook
 ; for explanation.
 #+end_src
 
-
 *** python-mode
 #+begin_src emacs-lisp
 (setenv "PYTHONPATH"
@@ -1508,7 +1555,6 @@ My clojure-mode hook
 
 (setq python-shell-enable-font-lock nil)
 #+end_src
-
 
 *** elpy
 #+BEGIN_SRC emacs-lisp
@@ -1531,7 +1577,6 @@ My clojure-mode hook
       (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
     )
 #+END_SRC
-
 
 *** ein
 Ein is an emacs front end for jupyter notebook.
@@ -1564,13 +1609,33 @@ Ein is an emacs front end for jupyter notebook.
   ;;   )
 #+end_src
 
-
 *** ob-ipython
 #+begin_src emacs-lisp
 
 #+end_src
 
-
+*** company-anaconda
+#+begin_src emacs-lisp
+  (use-package company-anaconda
+    :after anaconda-mode
+    :config
+    (mapc (lambda (x)
+            (let ((command-name (car x))
+                  (title (cadr x))
+                  (region-p (caddr x))
+                  predicate)
+              (setq predicate (lambda () (and (anaconda-mode-running-p)
+                                         (not (use-region-p))
+                                         (not (sp-point-in-string-or-comment)))
+                                         ))
+              (emr-declare-command (intern (format "anaconda-mode-%s" 
+              (symbol-name command-name)))
+                :title title :modes 'python-mode :predicate predicate)))
+          '((show-doc          "view documentation" t)
+            (find-assignments  "find assignments"  t)
+            (find-definitions  "find definitions"  t)
+            (find-file         "find assignments"  t)
+            (find-references "show usages" nil))))
 ** C/C++
 Company-C-Headers enables the completion of C/C++ header file names using company-mode:
 #+begin_src emacs-lisp
@@ -1659,7 +1724,6 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 (global-ede-mode)
 #+END_SRC
 
-
 ** R (statistics)
 This is not downloaded via use-package and the package manager because
 I was having some problems with it throwing errors.
@@ -1668,7 +1732,6 @@ I was having some problems with it throwing errors.
   (load "ess-site")
   (use-package ess)
 #+end_src
-
 
 * Organization and Version Control
 ** Magit
@@ -2217,7 +2280,6 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
   .creator{display:block}@media (min-width:769px){.creator{display:inline;
                                                            float:right}}</style>")
 #+end_src
-
 
 * Emacs as a auxiliary interface
 ** Terminal
