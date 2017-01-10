@@ -9,6 +9,32 @@
   (if (file-exists-p pre)
       (load pre)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;; SET UP PACKAGE MANAGEMENT AND USE-PACKAGE ;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(package-initialize)
+
+;; Load Emacs' package manager
+(require 'package)
+
+;; Add various emacs package repositories to the pool. This is where we
+;; look for packages.
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("tromey" . "http://tromey.com/elpa/") t)
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(add-to-list 'package-archives
+             '("elpy" . "https://jorgenschaefer.github.io/packages/"))
+
+;; Load all of the repositories that we've added.
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
 ;;
 ;; USE-PACKAGE
 ;;
@@ -141,7 +167,7 @@
 (require 'saveplace)
 (setq-default
  save-place-file (expand-file-name "places_" user-emacs-directory)
- save-place t)
+ save-place-mode t)
 (when (>= emacs-major-version 25)
   (save-place-mode +1))
 
@@ -213,33 +239,6 @@
 
 
 (sml/setup)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;; SET UP PACKAGE MANAGEMENT AND USE-PACKAGE ;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(package-initialize)
-
-;; Load Emacs' package manager
-(require 'package)
-
-;; Add various emacs package repositories to the pool. This is where we
-;; look for packages.
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("tromey" . "http://tromey.com/elpa/") t)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives
-             '("elpy" . "https://jorgenschaefer.github.io/packages/"))
-
-;; Load all of the repositories that we've added.
-(when (not package-archive-contents)
-  (package-refresh-contents))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;; LOAD CONFIG.ORG AND SAVE ITS ELISP TO CONFIG.EL ;;;;;;;;;;
