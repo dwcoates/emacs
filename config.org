@@ -431,6 +431,14 @@ This goes before neotree configuration
             neo-theme 'ascii ; fallback
             neo-banner-message nil
             neo-smart-open t)
+      (defun neotree-advice (nt &rest args)
+        (let ((ret (apply nt args)))
+          (with-current-buffer neo-buffer-name
+            ;; dont displace cursor position in neotree when not
+            ;; visiting the neotree buffer. Looks ugly.
+            (setq-local cursor-in-non-selected-windows nil))
+          ret))
+      (advice-add 'neotree :around #'neotree-advice)
       :config
       (setq neo-theme 'ascii)
       (defun neotree-project-dir ()
@@ -444,14 +452,6 @@ This goes before neotree configuration
                 (neotree-find file-name))
             (message "Could not find git project root."))))
       (define-key map (kbd "C-c C-p") 'neotree-project-dir)
-      (defun neotree-advice (nt &rest args)
-        (let ((ret (apply nt args)))
-          (with-current-buffer neo-buffer-name
-            ;; dont displace cursor position in neotree when not
-            ;; visiting the neotree buffer. Looks ugly.
-            (setq-local cursor-in-non-selected-windows nil))
-          ret))
-      (advice-add 'neotree :around #'neotree-advice)
 
 
                                             ;        (defun display-buffer-neotree ()
