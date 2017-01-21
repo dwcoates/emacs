@@ -248,6 +248,7 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
      (company-quickhelp-mode 1)    
      :config
      (setq company-quickhelp-max-lines 10)
+     (setq company-idle-delay 0.25)
      (setq company-quickhelp-delay nil)
      (bind-key "M-h" 'company-quickhelp-manual-begin))
    :config (progn
@@ -492,6 +493,19 @@ Quickly move the cursor to the first instance of a character with iy-go-to-char:
   )
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun safe-file-visit-hook ()
+    "If a file is over a given size, make the buffer read only."
+    (when (> (buffer-size) (* 1024 1024))
+      (print 
+       "Buffer set to read-only mode due to its size. See `safe-file-visit-hook'.")
+      (setq buffer-read-only t)
+      (buffer-disable-undo)
+      (fundamental-mode)))
+
+  (add-hook 'find-file-hook 'safe-file-visit-hook)
+#+end_src
+
 
 General navigation bindings:
 #+begin_src emacs-lisp
@@ -680,53 +694,57 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 * Editing
 ** Basic Settings
 #+BEGIN_SRC emacs-lisp
-(show-paren-mode 1)
+  (show-paren-mode 1)
 
-;; Highlight current line
-(global-hl-line-mode 1)
+  ;; delete tabs with backspace
+  (setq backward-delete-char-untabify-method 'hungry)
 
-(setq global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
-      mark-ring-max 10000                ; increase kill ring to contains 10000 entries
-      mode-require-final-newline t      ; add a newline to end of file
-      tab-width 4)                       ; default to 4 visible spaces to display a tab
 
-(add-hook 'sh-mode-hook (lambda ()
-                          (setq tab-width 4)))
+  ;; Highlight current line
+  (global-hl-line-mode 1)
 
-(setq kill-ring-max 10000 ; increase kill-ring capacity
-      kill-whole-line t)  ; if NIL, kill whole line and move the next line up
+  (setq global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
+        mark-ring-max 10000                ; increase kill ring to contains 10000 entries
+        mode-require-final-newline t      ; add a newline to end of file
+        tab-width 4)                       ; default to 4 visible spaces to display a tab
 
-;; key-chord for add region to kill ring
-(key-chord-define-global "qw" 'kill-ring-save)
+  (add-hook 'sh-mode-hook (lambda ()
+                            (setq tab-width 4)))
 
-;; show whitespace in diff-mode
-(add-hook 'diff-mode-hook (lambda ()
-                            (setq-local whitespace-style
-                                        '(face
-                                          tabs
-                                          tab-mark
-                                          spaces
-                                          space-mark
-                                          trailing
-                                          indentation::space
-                                          indentation::tab
-                                          newline
-                                          newline-mark))
-                            (whitespace-mode 1)))
+  (setq kill-ring-max 10000 ; increase kill-ring capacity
+        kill-whole-line t)  ; if NIL, kill whole line and move the next line up
 
-(setq electric-indent-mode nil)
+  ;; key-chord for add region to kill ring
+  (key-chord-define-global "qw" 'kill-ring-save)
 
-(put 'downcase-region 'disabled nil)
-(put 'upcase-region 'disabled nil)
+  ;; show whitespace in diff-mode
+  (add-hook 'diff-mode-hook (lambda ()
+                              (setq-local whitespace-style
+                                          '(face
+                                            tabs
+                                            tab-mark
+                                            spaces
+                                            space-mark
+                                            trailing
+                                            indentation::space
+                                            indentation::tab
+                                            newline
+                                            newline-mark))
+                              (whitespace-mode 1)))
 
-;; show unncessary whitespace that can mess up your diff
-(add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
+  (setq electric-indent-mode nil)
 
-;; use space to indent by default
-(setq-default indent-tabs-mode nil)
+  (put 'downcase-region 'disabled nil)
+  (put 'upcase-region 'disabled nil)
 
-;; set appearance of a tab that is represented by 4 spaces
-(setq-default tab-width 4)
+  ;; show unncessary whitespace that can mess up your diff
+  (add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
+
+  ;; use space to indent by default
+  (setq-default indent-tabs-mode nil)
+
+  ;; set appearance of a tab that is represented by 4 spaces
+  (setq-default tab-width 4)
 #+END_SRC
 
 
@@ -811,30 +829,28 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 
 #+END_SRC
 
-
 ** smartparens
 *use-package smartparents*
 #+BEGIN_SRC emacs-lisp
-(use-package smartparens
-  :config
-  (sp-pair "'" nil :unless '(sp-point-after-word-p) :actions nil)
+  (use-package smartparens
+    :config
+    (sp-pair "'" nil :unless '(eq major-mode 'lisp-mode) :actions nil)
 
-  (setq sp-base-key-bindings 'paredit)
-  (setq sp-autoskip-closing-pair 'always)
-  (setq sp-hybrid-kill-entire-symbol nil)
-  (setq sp-backward-delete-char 'paredit-backward-delete)
-  (sp-use-paredit-bindings)
+    (setq sp-base-key-bindings 'paredit)
+    (setq sp-autoskip-closing-pair 'always)
+    (setq sp-hybrid-kill-entire-symbol nil)
+    (setq sp-backward-delete-char 'paredit-backward-delete)
+    (sp-use-paredit-bindings)
 
-  (show-smartparens-global-mode +1)
-  (smartparens-global-mode 1)
+    (show-smartparens-global-mode +1)
+    (smartparens-global-mode 1)
 
-  (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
-  (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+    (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
+    (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
-  (diminish 'smartparens-mode)
-)
+    (diminish 'smartparens-mode)
+    )
 #+END_SRC
-
 
 *** sp-delete-sexp and sp-backward-delete-sexp
 Delete sexp:
@@ -858,7 +874,6 @@ Backward delete sexp:
     )
 #+END_SRC
 
-
 *** bind-keys
 These are loaded from a file because currently smartparens isn't
 handling escaped quotations in org well. Funnily enough, smartparens
@@ -867,7 +882,6 @@ quotation :O
 #+BEGIN_SRC emacs-lisp
 (load-file "~/.emacs.d/sp-binds.el")
 #+END_SRC
-
 
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
@@ -919,7 +933,6 @@ Inter-field navigation:
         (move-beginning-of-line 1)
       (goto-char position))))
 #+end_src
-
 
 ** Other Packages
 *** hippie-expand
@@ -1030,7 +1043,6 @@ Inter-field navigation:
   (bind-key "M-c" 'duplicate-thing)
  )
 #+END_SRC
-
 
 ** Functions
 *** just-one-space
@@ -1471,7 +1483,13 @@ Turn on emacs lisp documentation
 
 
 #+begin_src emacs-lisp
-(use-package persistent-scratch)
+  (use-package persistent-scratch
+    :init
+    ;; careful about keeping this order. Wouldn't want to save before
+    ;; you restore :O
+    (persistent-scratch-restore)
+    (persistent-scratch-autosave-mode)
+    )
 #+end_src
 
 
@@ -1598,11 +1616,12 @@ My clojure-mode hook
 *** iPython
 #+begin_src emacs-lisp
     (setq python-shell-prompt-detect-failure-warning nil
-          python-shell-prompt-input-regexps '("$ " "\\.\\.\\. " 
-                                              "In \\[[0-9]+\\]: " 
-                                              "In : " "\\.\\.\\.: "))
+ ;         python-shell-prompt-input-regexps '("$ " "\\.\\.\\. " 
+  ;                                            "In \\[[0-9]+\\]: " 
+   ;                                           "In : " "\\.\\.\\.: ")
+)
 
-    ;(setq-default py-shell-name "jupyter")
+;    (setq-default py-shell-name "jupyter")
 
     ;(setenv "JUPYTER_CONSOLE_TEST" "1")
     ;(setq python-shell-interpreter "~/.local/anaconda2/bin/jupyter-console"
@@ -1639,27 +1658,31 @@ My clojure-mode hook
 
   (setq python-shell-enable-font-lock nil)
 #+end_src
+Enable wrapping for single quotes
+#+begin_src emacs-lisp
+(sp-pair "'" nil)
+#+end_src
 
 *** elpy
 #+BEGIN_SRC emacs-lisp
-  (setq elpy-rpc-backend "rope")
-  (use-package elpy
-    :commands (elpy-mode elpy-enable)
-    :init
-    (defun elpy-on-python-mode ()
-      (elpy-mode)
-      (elpy-enable)
-    )
-    (add-hook 'python-mode-hook
-              'elpy-on-python-mode)
-    :config
-    (when (require 'flycheck nil t)
-      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-      (add-hook 'elpy-mode-hook 'flycheck-mode))
-    (use-package py-autopep8
-      :init
-      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
-    )
+  ;; (setq elpy-rpc-backend "rope")
+  ;; (use-package elpy
+  ;;   :commands (elpy-mode elpy-enable)
+  ;;   :init
+  ;;   (defun elpy-on-python-mode ()
+  ;;     (elpy-mode)
+  ;;     (elpy-enable)
+  ;;   )
+  ;;   (add-hook 'python-mode-hook
+  ;;             'elpy-on-python-mode)
+  ;;   :config
+  ;;   (when (require 'flycheck nil t)
+  ;;     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  ;;     (add-hook 'elpy-mode-hook 'flycheck-mode))
+  ;;   (use-package py-autopep8
+  ;;     :init
+  ;;     (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+  ;;   )
 #+END_SRC
 
 *** ein
@@ -1694,8 +1717,10 @@ Ein is an emacs front end for jupyter notebook.
 #+end_src
 
 *** ob-ipython
+Currently DO NOT attempt to fetch completions from jupyter. It does
+not yet support emacs due to a jupyter bug.
 #+begin_src emacs-lisp
-
+(setq python-shell-completion-native-disabled-interpreters '("jupyter" "pypy"))
 #+end_src
 
 *** company-anaconda
@@ -1812,9 +1837,11 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 This is not downloaded via use-package and the package manager because
 I was having some problems with it throwing errors.
 #+begin_src emacs-lisp
-  (add-to-list 'load-path "~/ess/lisp/")
-  (load "ess-site")
-  (use-package ess)
+    (add-to-list 'load-path "~/ess/lisp/")
+    (load "ess-site")
+    (defun my/ess-mode-hook-funct ()
+      (smartparens-mode))
+    (add-hook 'ess-mode-hook 'my/ess-mode-hook-funct)
 #+end_src
 
 * Organization and Version Control
@@ -1845,6 +1872,11 @@ I was having some problems with it throwing errors.
     (my/backup-specifics "~/.emacs.d/specifics.el" "~/.emacsSpecificsBackup.el")
     (apply push args)))
 #+END_SRC
+
+** gist
+#+begin_src emacs-lisp
+(use-package gist)
+#+end_src
 
 ** Org Mode
 *** General
@@ -1930,11 +1962,14 @@ Set default notes file:
 #+end_src
 
 *** babel
-This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
+    This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
 #+begin_src emacs-lisp
-(load "~/.emacs.d/f.el")
+;(load "~/.emacs.d/f.el")
 (use-package dash-functional)
+(use-package f)
+(use-package s)
 (use-package ob-ipython)
+
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((ipython . t)))
@@ -2040,12 +2075,11 @@ org-capture-template is set in a private file. Look up the documention for org-c
     "Org capture template for general tasks."
     )
 
-  (defvar basic-nugget-template "* [#%^{Priority:E|A|B|C|D|E}] %^{Task:}
-  %^{Condition|SCHEDULED|DEADLINE}: %T
+  (defvar basic-nugget-template "* %^{Thought:}       :idea:
 
     %?
 
-  Captured on %U by %(system-name)"
+  "
     "Org capture template for general tasks."
     )
 #+end_src

@@ -49,6 +49,7 @@
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
+
 ;; Configure use-package
 (setq use-package-verbose t)
 (require 'use-package)
@@ -87,7 +88,7 @@
 (setq-default
  ;; Formatting
  delete-trailing-lines nil
- fill-column 70
+ fill-column 80
  ;; Spaces, not tabs
  indent-tabs-mode nil
  require-final-newline t
@@ -127,13 +128,14 @@
  column-number-mode t
  )
 
+(setq-default cursor-in-non-selected-windows nil)
 ;; no scroll bar
 (toggle-scroll-bar -1)
 ;; no toolbar
 (tool-bar-mode -1)
 
 ;; set transparency
-(set-frame-parameter (selected-frame) 'alpha '(96 85))
+(set-frame-parameter (selected-frame) 'alpha '(100 100))
 (add-to-list 'default-frame-alist '(alpha 96 85))
 
 ;; key binding for turning the menu bar on and off
