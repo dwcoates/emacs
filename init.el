@@ -5,7 +5,7 @@
 (package-initialize)
 
 ;; load system-specific settings best loaded first
-(let ((pre "~/personal/exclusive/pre.el"))
+(let ((pre "~/personal/.exclusive/pre.el"))
   (if (file-exists-p pre)
       (load pre)))
 
@@ -271,6 +271,6 @@
 
 
 ;; Load system-specific settings best loaded last
-(let ((post "~/personal/exclusive/post.el"))
+(let ((post "~/personal/.exclusive/post.el"))
   (if (file-exists-p post)
       (load post)))

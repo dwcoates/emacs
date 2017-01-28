@@ -9,7 +9,7 @@
  '(org-agenda-files (quote ("~/personal/everything.org")))
  '(package-selected-packages
    (quote
-    (omni-scratch general gist w3m evil nlinum git-gutter+ zygospore xkcd ws-butler volatile-highlights use-package undo-tree tea-time sx sr-speedbar smooth-scroll smartparens smart-mode-line shackle rainbow-delimiters py-autopep8 persistent-scratch org-plus-contrib ob-ipython neotree magit key-chord iy-go-to-char hydra htmlize helm-projectile helm-gtags helm-company guide-key golden-ratio git-gutter-fringe function-args flycheck-clojure expand-region ess emr elpy edit-server duplicate-thing dtrt-indent doom-themes company-quickhelp company-c-headers company-anaconda clojure-mode-extra-font-locking clean-aindent-mode char-menu auto-complete auto-compile anzu ace-window ace-isearch)))
+    (elpy omni-scratch general gist w3m evil nlinum git-gutter+ zygospore xkcd ws-butler volatile-highlights use-package undo-tree tea-time sx sr-speedbar smooth-scroll smartparens smart-mode-line shackle rainbow-delimiters py-autopep8 persistent-scratch org-plus-contrib ob-ipython neotree magit key-chord iy-go-to-char hydra htmlize helm-projectile helm-gtags helm-company guide-key golden-ratio git-gutter-fringe function-args flycheck-clojure expand-region ess emr edit-server duplicate-thing dtrt-indent doom-themes company-quickhelp company-c-headers company-anaconda clojure-mode-extra-font-locking clean-aindent-mode char-menu auto-complete auto-compile anzu ace-window ace-isearch)))
  '(vc-annotate-background "#000000")
  '(vc-annotate-color-map
    (quote
@@ -40,4 +40,5 @@
  '(mode-line ((t (:background "dark cyan" :foreground "black" :inverse-video nil))))
  '(mode-line-buffer-id ((t (:inherit nil :background "black" :foreground "orange red" :weight bold))))
  '(mode-line-highlight ((t (:box (:line-width 2 :color "yellow" :style released-button)))))
- '(mode-line-inactive ((t (:background "gray22" :foreground "gray52" :inverse-video nil :box nil)))))
+ '(mode-line-inactive ((t (:background "gray22" :foreground "gray52" :inverse-video nil :box nil))))
+ '(org-level-3 ((t (:foreground "deep sky blue" :weight bold)))))
