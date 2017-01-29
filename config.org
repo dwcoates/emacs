@@ -1928,6 +1928,14 @@ Set default notes file:
 (setq org-default-notes-file "~/personal/everything.org")
 #+end_src
 
+*** Clock
+#+begin_src emacs-lisp
+(define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
+#+end_src
+
+#+RESULTS:
+: org-clock-in
+
 *** Appearance
 **** General
 #+begin_src emacs-lisp
