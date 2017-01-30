@@ -1878,7 +1878,6 @@ I was having some problems with it throwing errors.
 #+begin_src emacs-lisp
 (use-package gist)
 #+end_src
-
 ** Org Mode
 *** General
 Please truncate lines in org-mode. The last thing I want to see is a
@@ -1928,11 +1927,6 @@ Set default notes file:
 (setq org-default-notes-file "~/personal/everything.org")
 #+end_src
 
-*** Clock
-#+begin_src emacs-lisp
-(define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
-#+end_src
-
 *** Appearance
 **** General
 #+begin_src emacs-lisp
@@ -1940,9 +1934,39 @@ Set default notes file:
 (set-face-attribute 'org-warning nil :foreground "red3" :weight 'bold)
 #+end_src
 
+*** Tasks and States
+Tasks have multiple possible states. Below defines them and their transitions
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
+
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("NEXT" :foreground "blue" :weight bold)
+              ("DONE" :foreground "forest green" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("HOLD" :foreground "magenta" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold)
+              ("MEETING" :foreground "forest green" :weight bold)
+              ("PHONE" :foreground "forest green" :weight bold))))
+
+#+end_src
+Task triggers
+#+begin_src emacs-lisp
+(setq org-todo-state-tags-triggers
+      (quote (("CANCELLED" ("CANCELLED" . t))
+              ("WAITING" ("WAITING" . t))
+              ("HOLD" ("WAITING") ("HOLD" . t))
+              (done ("WAITING") ("HOLD"))
+              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+#+end_src
+
 *** Agenda
 #+begin_src emacs-lisp
-  (setq org-agenda-files '("~/personal/everything.org")
+  (setq org-agenda-files '("~/personal")
         org-deadline-warning-days 2 
         org-default-notes-file "~/personal/everything.org"
         org-directory "~/personal/"
@@ -1958,6 +1982,124 @@ Set default notes file:
                       :foreground "olive drab" 
                       :weight 'ultra-light)
 #+end_src
+**** Interface for agenda
+#+begin_src emacs-lisp
+;; Do not dim blocked tasks
+(setq org-agenda-dim-blocked-tasks nil)
+
+;; Compact the block agenda view
+(setq org-agenda-compact-blocks t)
+
+;; Custom agenda command definitions
+(setq org-agenda-custom-commands
+      (quote (("N" "Notes" tags "NOTE"
+               ((org-agenda-overriding-header "Notes")
+                (org-tags-match-list-sublevels t)))
+              ("h" "Habits" tags-todo "STYLE=\"habit\""
+               ((org-agenda-overriding-header "Habits")
+                (org-agenda-sorting-strategy
+                 '(todo-state-down effort-up category-keep))))
+              (" " "Agenda"
+               ((agenda "" nil)
+                (tags "REFILE"
+                      ((org-agenda-overriding-header "Tasks to Refile")
+                       (org-tags-match-list-sublevels nil)))
+                (tags-todo "-CANCELLED/!"
+                           ((org-agenda-overriding-header "Stuck Projects")
+                            (org-agenda-skip-function 'bh/skip-non-stuck-projects)
+                            (org-agenda-sorting-strategy
+                             '(category-keep))))
+                (tags-todo "-HOLD-CANCELLED/!"
+                           ((org-agenda-overriding-header "Projects")
+                            (org-agenda-skip-function 'bh/skip-non-projects)
+                            (org-tags-match-list-sublevels 'indented)
+                            (org-agenda-sorting-strategy
+                             '(category-keep))))
+                (tags-todo "-CANCELLED/!NEXT"
+                           ((org-agenda-overriding-header (concat "Project Next Tasks"
+                                                                  (if bh/hide-scheduled-and-waiting-next-tasks
+                                                                      ""
+                                                                    " (including WAITING and SCHEDULED tasks)")))
+                            (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+                            (org-tags-match-list-sublevels t)
+                            (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+                            (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
+                            (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
+                            (org-agenda-sorting-strategy
+                             '(todo-state-down effort-up category-keep))))
+                (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
+                           ((org-agenda-overriding-header (concat "Project Subtasks"
+                                                                  (if bh/hide-scheduled-and-waiting-next-tasks
+                                                                      ""
+                                                                    " (including WAITING and SCHEDULED tasks)")))
+                            (org-agenda-skip-function 'bh/skip-non-project-tasks)
+                            (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+                            (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
+                            (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
+                            (org-agenda-sorting-strategy
+                             '(category-keep))))
+                (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
+                           ((org-agenda-overriding-header (concat "Standalone Tasks"
+                                                                  (if bh/hide-scheduled-and-waiting-next-tasks
+                                                                      ""
+                                                                    " (including WAITING and SCHEDULED tasks)")))
+                            (org-agenda-skip-function 'bh/skip-project-tasks)
+                            (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+                            (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
+                            (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
+                            (org-agenda-sorting-strategy
+                             '(category-keep))))
+                (tags-todo "-CANCELLED+WAITING|HOLD/!"
+                           ((org-agenda-overriding-header (concat "Waiting and Postponed Tasks"
+                                                                  (if bh/hide-scheduled-and-waiting-next-tasks
+                                                                      ""
+                                                                    " (including WAITING and SCHEDULED tasks)")))
+                            (org-agenda-skip-function 'bh/skip-non-tasks)
+                            (org-tags-match-list-sublevels nil)
+                            (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+                            (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)))
+                (tags "-REFILE/"
+                      ((org-agenda-overriding-header "Tasks to Archive")
+                       (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
+                       (org-tags-match-list-sublevels nil))))
+               nil))))
+#+end_src
+
+**** Delimit prioirites
+#+begin_src emacs-lisp
+(custom-set-variables
+ '(org-agenda-files (quote ("~/personal/everything.org"))))
+#+end_src
+
+
+Function to visually delimit priorities in the org-agenda-list buffer.
+NOTE: Currently disabled
+#+begin_src emacs-lisp
+  (defun my-custom-agenda-fn ()
+    (interactive)
+    (save-excursion
+      (let ((delimit "------------------------"))
+        (org-agenda-goto-today)
+        (dolist
+            (priority '("\\[#A\\]" "\\[#B\\]" "\\[#C\\]" "\\[#D\\]" "\\[#E\\]"))
+          (when (re-search-forward priority nil t)
+            (goto-char (point-at-bol)) (insert (concat delimit "\n"))))
+        (org-agenda-goto-today)
+        (when (re-search-forward delimit nil t)
+          (delete-region
+           (progn (forward-visible-line 0) (point))
+           (progn (forward-visible-line 1) (point))))
+        ))
+    )
+
+;  (add-hook 'org-agenda-finalize-hook 'my-custom-agenda-fn)
+#+end_src
+
+*** Clock
+#+begin_src emacs-lisp
+(define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
+#+end_src
+
 *** tea-time
 #+begin_src emacs-lisp
   (use-package tea-time
@@ -2012,58 +2154,62 @@ Editting source code
 (define-key org-src-mode-map (kbd "C-c k") 'org-exit-src-code)
 #+end_src
 
-*** Agenda
-#+begin_src emacs-lisp
-(custom-set-variables
- '(org-agenda-files (quote ("~/personal/everything.org"))))
-#+end_src
-
-
-Function to visually delimit priorities in the org-agenda-list buffer.
-#+begin_src emacs-lisp
-  (defun my-custom-agenda-fn ()
-    (interactive)
-    (save-excursion
-      (let ((delimit "------------------------"))
-        (org-agenda-goto-today)
-        (dolist
-            (priority '("\\[#A\\]" "\\[#B\\]" "\\[#C\\]" "\\[#D\\]" "\\[#E\\]"))
-          (when (re-search-forward priority nil t)
-            (goto-char (point-at-bol)) (insert (concat delimit "\n"))))
-        (org-agenda-goto-today)
-        (when (re-search-forward delimit nil t)
-          (delete-region
-           (progn (forward-visible-line 0) (point))
-           (progn (forward-visible-line 1) (point))))
-        ))
-    )
-
-  (add-hook 'org-agenda-finalize-hook 'my-custom-agenda-fn)
-#+end_src
-
 *** Commands
 #+begin_src emacs-lisp
 (define-key org-mode-map (kbd "C-M-<return>") 'org-insert-subheading)
 #+end_src
 
 *** Capture
-org-capture-template is set in a private file. Look up the documention for org-capture-template (and org-capture in general) to see how it might look.
+Paths to various locations in my personal organization workflow
 #+begin_src emacs-lisp
-(defun dwc-template/make-task-prompt (&optional task-type)
-    (unless task-type
-      (setq task-type "Task"))
-  (concat "%^{" task-type ":}\n")
-  )
-
-(defconst dwc-template/star-todo "* TODO ")
-(defconst dwc-template/star "* ")
-(defconst dwc-template/star-todo "* TODO ")
-(defconst dwc-template/dash "- ")
-(defconst dwc-template/deadline "DEADLINE: %^t\n\n")
-(defconst dwc-template/deadline "SCHEDULED: %^t\n\n")
-(defconst dwc-template/meta-data "\n\nCaptured on %T by %(system-name)")
+  (setq org-personal-dir "~/personal/")
+  (setq org-default-notes-file (concat org-personal-dir "todo.org"))
+  (setq org-journal-file (concat org-personal-dir "journal.org"))
 #+end_src
 
+org-capture-template is set in a private file. Look up the documention for
+org-capture-template (and org-capture in general) to see how it might look.
+#+begin_src emacs-lisp
+  (defun dwc-template/make-task-prompt (&optional task-type)
+    (unless task-type
+      (setq task-type "Task"))
+    (concat "%^{" task-type ":}\n")
+    )
+
+  (defconst dwc-template/star-todo "* TODO ")
+  (defconst dwc-template/star "* ")
+  (defconst dwc-template/star-todo "* TODO ")
+  (defconst dwc-template/dash "- ")
+  (defconst dwc-template/deadline "DEADLINE: %^t\n\n")
+  (defconst dwc-template/deadline "SCHEDULED: %^t\n\n")
+  (defconst dwc-template/meta-data "\n\nCaptured on %T by %(system-name)")
+
+  (defconst org-note-template "* %? :NOTE:\n%U\n%a\n")
+  (defconst org-question-template "* %? :NOTE:\n%U\n%a\n")
+  (defconst org-task-template "* TODO %?\n%U\n%a\n")
+
+  (setq org-capture-templates
+        (append org-capture-templates
+                (quote (("g" "General todos and refiles")
+                        ("gt" "todo" entry (file nil)
+                         "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+                        ("gr" "respond" entry (file nil)
+                         "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+                        ("gn" "note" entry (file nil)
+                         "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+                        ("gj" "Journal" entry (file+datetree org-journal-file)
+                         "* %?\n%U\n" :clock-in t :clock-resume t)
+                        ("gw" "org-protocol" entry (file org-default-notes-file)
+                         "* TODO Review %c\n%U\n" :immediate-finish t)
+                        ("gm" "Meeting" entry (file org-default-notes-file)
+                         "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+                        ("gp" "Phone call" entry (file org-default-notes-file)
+                         "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+                        ("gh" "Habit" entry (file org-default-notes-file)
+                         "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+                        ("gb" "Stretch your legs" entry (file org-default-notes-file)
+                         "* TAKE A BREAK\nDEADLINE: %^T")))))
+#+end_src
 
 #+begin_src emacs-lisp
   (defvar basic-note-template "* %^{Note}
