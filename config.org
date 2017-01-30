@@ -1933,9 +1933,6 @@ Set default notes file:
 (define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
 #+end_src
 
-#+RESULTS:
-: org-clock-in
-
 *** Appearance
 **** General
 #+begin_src emacs-lisp
@@ -2824,7 +2821,6 @@ Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn e
     (if fullscreen
       (toggle-frame-fullscreen)
      )
-    (toggle-scroll-bar -1)
     )
 
   (defun  dwc-org-frame (org-filename &optional fullscreen)

@@ -105,6 +105,7 @@
  scroll-conservatively 1001
  scroll-margin 0
  scroll-preserve-screen-position t
+ scroll-bar-mode -1
  ;; Regions
  shift-select-mode t
  ;; Whitespace
@@ -129,14 +130,19 @@
  )
 
 (setq-default cursor-in-non-selected-windows nil)
-;; no scroll bar
-(toggle-scroll-bar -1)
 ;; no toolbar
 (tool-bar-mode -1)
 
 ;; set transparency
 (set-frame-parameter (selected-frame) 'alpha '(100 100))
 (add-to-list 'default-frame-alist '(alpha 96 85))
+
+;; don't include scroll bars in new frames
+(defun my/disable-scroll-bars (frame)
+  (modify-frame-parameters frame
+                           '((vertical-scroll-bars . nil)
+                             (horizontal-scroll-bars . nil))))
+(add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 
 ;; key binding for turning the menu bar on and off
 (defun toggle-menu-bar ()
