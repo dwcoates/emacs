@@ -2181,23 +2181,39 @@ org-capture-template (and org-capture in general) to see how it might look.
   (setq org-capture-templates
         (quote (("g" "General todos and refiles")
                 ("gt" "todo" entry (file nil)
-                 "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+                 "* TODO %^{Todo}\n%U\n\n\t%?\n\n%a\n" 
+                 ; :clock-in t :clock-resume t
+                 )
                 ("gr" "respond" entry (file nil)
-                 "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+                 "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
+                 :immediate-finish t ; :clock-in t :clock-resume t 
+                 )
                 ("gn" "note" entry (file nil)
-                 "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+                 "* %^{Note} :NOTE:\n%U\n\t%a\n" 
+                 ; :clock-in t :clock-resume t
+                 )
                 ("gj" "Journal" entry (file+datetree org-journal-file)
-                 "* %?\n%U\n" :clock-in t :clock-resume t)
+                 "* %?\n%U\n" 
+                 ; :clock-in t :clock-resume t
+                 )
                 ("gw" "org-protocol" entry (file org-default-notes-file)
-                 "* TODO Review %c\n%U\n" :immediate-finish t)
+                 "* TODO Review %c\n%U\n" 
+                 :immediate-finish t
+                 )
                 ("gm" "Meeting" entry (file org-default-notes-file)
-                 "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+                 "* MEETING with %? :MEETING:\n%U" 
+                 ; :clock-in t :clock-resume t
+                 )
                 ("gp" "Phone call" entry (file org-default-notes-file)
-                 "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+                 "* PHONE %? :PHONE:\n%U" 
+                 ; :clock-in t :clock-resume t
+                 )
                 ("gh" "Habit" entry (file org-default-notes-file)
-                 "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+                 "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"
+                 )
                 ("gb" "Stretch your legs" entry (file org-default-notes-file)
-                 "* TAKE A BREAK\nDEADLINE: %^T"))))
+                 "* TAKE A BREAK\nDEADLINE: %^T"
+                 ))))
 #+end_src
 #+begin_src emacs-lisp
   (defvar basic-note-template "* %^{Note}
