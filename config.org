@@ -1880,6 +1880,11 @@ I was having some problems with it throwing errors.
 #+end_src
 ** Org Mode
 *** General
+#+begin_src emacs-lisp
+; org warnings
+(set-face-attribute 'org-warning nil :foreground "red3" :weight 'bold)
+#+end_src
+
 Please truncate lines in org-mode. The last thing I want to see is a
 wrapped table, and everything should be paragraphed, anyway (M-q).
 #+begin_src emacs-lisp
@@ -1925,13 +1930,6 @@ Org-mode hook.
 Set default notes file:
 #+begin_src emacs-lisp
 (setq org-default-notes-file "~/personal/everything.org")
-#+end_src
-
-*** Appearance
-**** General
-#+begin_src emacs-lisp
-; org warnings
-(set-face-attribute 'org-warning nil :foreground "red3" :weight 'bold)
 #+end_src
 
 *** Tasks and States
@@ -1990,7 +1988,9 @@ org-agenda-files is set below intelligently
 
 ;; Compact the block agenda view
 (setq org-agenda-compact-blocks t)
-
+#+end_src
+Agenda custom commands
+#+begin_src emacs-lisp
 ;; Custom agenda command definitions
 (setq org-agenda-custom-commands
       (quote (("N" "Notes" tags "NOTE"
@@ -2065,7 +2065,6 @@ org-agenda-files is set below intelligently
                        (org-tags-match-list-sublevels nil))))
                nil))))
 #+end_src
-
 **** Delimit prioirites
 Function to visually delimit priorities in the org-agenda-list buffer.
 NOTE: Currently disabled
@@ -2089,7 +2088,6 @@ NOTE: Currently disabled
 
 ;  (add-hook 'org-agenda-finalize-hook 'my-custom-agenda-fn)
 #+end_src
-
 **** Update org-agenda-files
 #+begin_src emacs-lisp
 (setq org-agenda-file-regexp "\\`[^.].*\\.org\\'") ; default value
@@ -2102,18 +2100,10 @@ NOTE: Currently disabled
         (unless (member file '("." ".."))
             (let ((file (concat dir file "/")))
                 (when (file-directory-p file)
-                    (load-org-agenda-files-recursively file)
-                )
-            )
-        )
-    )
-) 
+                    (load-org-agenda-files-recursively file)))))) 
 
 (load-org-agenda-files-recursively org-directory)
 #+end_src
-
-#+RESULTS:
-
 *** Clock
 #+begin_src emacs-lisp
 (define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
