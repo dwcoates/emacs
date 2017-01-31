@@ -1965,11 +1965,12 @@ Task triggers
 #+end_src
 
 *** Agenda
+**** Defaults 
+org-agenda-files is set below intelligently
 #+begin_src emacs-lisp
-  (setq org-agenda-files '("~/personal")
-        org-deadline-warning-days 2 
-        org-default-notes-file "~/personal/everything.org"
-        org-directory "~/personal/"
+  (setq org-deadline-warning-days 2 
+        org-default-notes-file "~/personal/todo.org"
+        org-directory "~/personal/"     
         org-extend-today-until 4
         org-footnote-section nil
         org-from-is-user-regexp "\\<Dodge Coates\\>"
@@ -2066,12 +2067,6 @@ Task triggers
 #+end_src
 
 **** Delimit prioirites
-#+begin_src emacs-lisp
-(custom-set-variables
- '(org-agenda-files (quote ("~/personal/everything.org"))))
-#+end_src
-
-
 Function to visually delimit priorities in the org-agenda-list buffer.
 NOTE: Currently disabled
 #+begin_src emacs-lisp
@@ -2094,6 +2089,30 @@ NOTE: Currently disabled
 
 ;  (add-hook 'org-agenda-finalize-hook 'my-custom-agenda-fn)
 #+end_src
+
+**** Update org-agenda-files
+#+begin_src emacs-lisp
+(setq org-agenda-file-regexp "\\`[^.].*\\.org\\'") ; default value
+(defun load-org-agenda-files-recursively (dir) "Find all directories in DIR."
+    (unless (file-directory-p dir) (error "Not a directory `%s'" dir))
+    (unless (equal (directory-files dir nil org-agenda-file-regexp t) nil)
+      (add-to-list 'org-agenda-files dir)
+    )
+    (dolist (file (directory-files dir nil nil t))
+        (unless (member file '("." ".."))
+            (let ((file (concat dir file "/")))
+                (when (file-directory-p file)
+                    (load-org-agenda-files-recursively file)
+                )
+            )
+        )
+    )
+) 
+
+(load-org-agenda-files-recursively org-directory)
+#+end_src
+
+#+RESULTS:
 
 *** Clock
 #+begin_src emacs-lisp
@@ -2189,26 +2208,25 @@ org-capture-template (and org-capture in general) to see how it might look.
   (defconst org-task-template "* TODO %?\n%U\n%a\n")
 
   (setq org-capture-templates
-        (append org-capture-templates
-                (quote (("g" "General todos and refiles")
-                        ("gt" "todo" entry (file nil)
-                         "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-                        ("gr" "respond" entry (file nil)
-                         "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
-                        ("gn" "note" entry (file nil)
-                         "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
-                        ("gj" "Journal" entry (file+datetree org-journal-file)
-                         "* %?\n%U\n" :clock-in t :clock-resume t)
-                        ("gw" "org-protocol" entry (file org-default-notes-file)
-                         "* TODO Review %c\n%U\n" :immediate-finish t)
-                        ("gm" "Meeting" entry (file org-default-notes-file)
-                         "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
-                        ("gp" "Phone call" entry (file org-default-notes-file)
-                         "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
-                        ("gh" "Habit" entry (file org-default-notes-file)
-                         "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
-                        ("gb" "Stretch your legs" entry (file org-default-notes-file)
-                         "* TAKE A BREAK\nDEADLINE: %^T")))))
+        (quote (("g" "General todos and refiles")
+                ("gt" "todo" entry (file nil)
+                 "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+                ("gr" "respond" entry (file nil)
+                 "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+                ("gn" "note" entry (file nil)
+                 "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+                ("gj" "Journal" entry (file+datetree org-journal-file)
+                 "* %?\n%U\n" :clock-in t :clock-resume t)
+                ("gw" "org-protocol" entry (file org-default-notes-file)
+                 "* TODO Review %c\n%U\n" :immediate-finish t)
+                ("gm" "Meeting" entry (file org-default-notes-file)
+                 "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+                ("gp" "Phone call" entry (file org-default-notes-file)
+                 "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+                ("gh" "Habit" entry (file org-default-notes-file)
+                 "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+                ("gb" "Stretch your legs" entry (file org-default-notes-file)
+                 "* TAKE A BREAK\nDEADLINE: %^T"))))
 #+end_src
 
 #+begin_src emacs-lisp
