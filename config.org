@@ -1624,9 +1624,9 @@ My clojure-mode hook
   (setq-default py-shell-interpreter "python")
 
   ;      (setenv "JUPYTER_CONSOLE_TEST" "1")
-;  (setq python-shell-interpreter-args 
-;        "-i ~/.local/anaconda2/bin/jupyter-console")
-  ;            python-shell-interpreter-interactive-arg "--existing")
+  (setq python-shell-interpreter-args 
+        "-i ~/.local/anaconda2/bin/jupyter-console")
+;              python-shell-interpreter-interactive-arg "--existing")
 
 
         ;(setq-default py-which-bufname "IPython")
