@@ -2160,60 +2160,65 @@ Paths to various locations in my personal organization workflow
 org-capture-template is set in a private file. Look up the documention for
 org-capture-template (and org-capture in general) to see how it might look.
 #+begin_src emacs-lisp
-  (defun dwc-template/make-task-prompt (&optional task-type)
-    (unless task-type
-      (setq task-type "Task"))
-    (concat "%^{" task-type ":}\n")
-    )
+    (defun dwc-template/make-task-prompt (&optional task-type)
+      (unless task-type
+        (setq task-type "Task"))
+      (concat "%^{" task-type ":}\n")
+      )
 
-  (defconst dwc-template/star-todo "* TODO ")
-  (defconst dwc-template/star "* ")
-  (defconst dwc-template/star-todo "* TODO ")
-  (defconst dwc-template/dash "- ")
-  (defconst dwc-template/deadline "DEADLINE: %^t\n\n")
-  (defconst dwc-template/deadline "SCHEDULED: %^t\n\n")
-  (defconst dwc-template/meta-data "\n\nCaptured on %T by %(system-name)")
+    (defconst dwc-template/star-todo "* TODO ")
+    (defconst dwc-template/star "* ")
+    (defconst dwc-template/star-todo "* TODO ")
+    (defconst dwc-template/dash "- ")
+    (defconst dwc-template/deadline "DEADLINE: %^t\n\n")
+    (defconst dwc-template/deadline "SCHEDULED: %^t\n\n")
+    (defconst dwc-template/meta-data "\n\nCaptured on %T by %(system-name)")
 
-  (defconst org-note-template "* %? :NOTE:\n%U\n%a\n")
-  (defconst org-question-template "* %? :NOTE:\n%U\n%a\n")
-  (defconst org-task-template "* TODO %?\n%U\n%a\n")
+    (defconst org-note-template "* %^{Todo} :NOTE:\n%U\n%a\n")
+    (defconst org-question-template "* %^{Todo} :NOTE:\n%U\n%a\n")
+    (defconst org-task-template "* TODO %^{Todo}\n%U\n%a\n")
+    (defconst org-thought-template "* %^{Todo}\n%U\n")
 
-  (setq org-capture-templates
-        (quote (("g" "General todos and refiles")
-                ("gt" "todo" entry (file nil)
-                 "* TODO %^{Todo}\n%U\n\n\t%?\n\n%a\n" 
-                 ; :clock-in t :clock-resume t
-                 )
-                ("gr" "respond" entry (file nil)
-                 "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
-                 :immediate-finish t ; :clock-in t :clock-resume t 
-                 )
-                ("gn" "note" entry (file nil)
-                 "* %^{Note} :NOTE:\n%U\n\t%a\n" 
-                 ; :clock-in t :clock-resume t
-                 )
-                ("gj" "Journal" entry (file+datetree org-journal-file)
-                 "* %?\n%U\n" 
-                 ; :clock-in t :clock-resume t
-                 )
-                ("gw" "org-protocol" entry (file org-default-notes-file)
-                 "* TODO Review %c\n%U\n" 
-                 :immediate-finish t
-                 )
-                ("gm" "Meeting" entry (file org-default-notes-file)
-                 "* MEETING with %? :MEETING:\n%U" 
-                 ; :clock-in t :clock-resume t
-                 )
-                ("gp" "Phone call" entry (file org-default-notes-file)
-                 "* PHONE %? :PHONE:\n%U" 
-                 ; :clock-in t :clock-resume t
-                 )
-                ("gh" "Habit" entry (file org-default-notes-file)
-                 "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"
-                 )
-                ("gb" "Stretch your legs" entry (file org-default-notes-file)
-                 "* TAKE A BREAK\nDEADLINE: %^T"
-                 ))))
+    (setq org-capture-templates
+          `(("g" "General todos and refiles")
+            ("gt" "todo" entry (file nil)
+             "* TODO %^{Todo}\n%U\n\n\t%?\n\n%a\n" 
+                                            ; :clock-in t :clock-resume t
+             )
+            ("gr" "respond" entry (file nil)
+             "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
+             :immediate-finish t ; :clock-in t :clock-resume t 
+             )
+            ("gn" "note" entry (file nil)
+             "* %^{Note} :NOTE:\n%U\n\t%a\n" 
+                                            ; :clock-in t :clock-resume t
+             )
+            ("gj" "Journal" entry (file+datetree org-journal-file)
+             "* %?\n%U\n" 
+                                            ; :clock-in t :clock-resume t
+             )
+            ("gw" "org-protocol" entry (file org-default-notes-file)
+             "* TODO Review %c\n%U\n" 
+             :immediate-finish t
+             )
+            ("gm" "Meeting" entry (file org-default-notes-file)
+             "* MEETING with %? :MEETING:\n%U" 
+                                            ; :clock-in t :clock-resume t
+             )
+            ("gp" "Phone call" entry (file org-default-notes-file)
+             "* PHONE %? :PHONE:\n%U" 
+                                            ; :clock-in t :clock-resume t
+             )
+            ("gh" "Habit" entry (file org-default-notes-file)
+             "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"
+             )
+            ("gb" "Stretch your legs" entry (file org-default-notes-file)
+             "* TAKE A BREAK\nDEADLINE: %^T"
+             )
+            ("gq" "Quick thought" entry (file nil)
+             ,org-thought-template
+             :immediate-finish t
+             )))
 #+end_src
 #+begin_src emacs-lisp
   (defvar basic-note-template "* %^{Note}
