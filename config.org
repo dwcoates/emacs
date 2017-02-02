@@ -475,16 +475,17 @@ This goes before neotree configuration
                                             ;(advice-add 'find-file :around 'neo-new-view-advise)
       )
     ;; Don't go to neotree buffer with other-window
-    (add-hook 'after-init-hook 
-              (lambda () 
-                (set-window-parameter 
-                 (get-buffer-window neo-buffer-name) 
-                 'no-other-window t)))
+;    (add-hook 'after-init-hook 
+ ;             (lambda () 
+  ;              (set-window-parameter 
+   ;              (get-buffer-window neo-buffer-name) 
+;                 'no-other-window t)))
 #+end_src
 
 * Navigation
 ** Basic Settings
-Quickly move the cursor to the first instance of a character with iy-go-to-char:
+   Quickly move the cursor to the first instance of a character with
+   iy-go-to-char:
 #+begin_src emacs-lisp
 (use-package iy-go-to-char
   :init (progn
@@ -492,6 +493,7 @@ Quickly move the cursor to the first instance of a character with iy-go-to-char:
           (key-chord-define-global "df" 'iy-go-to-char-backward))
   )
 #+end_src
+
 
 #+begin_src emacs-lisp
   (defun safe-file-visit-hook ()
@@ -507,7 +509,7 @@ Quickly move the cursor to the first instance of a character with iy-go-to-char:
 #+end_src
 
 
-General navigation bindings:
+   General navigation bindings:
 #+begin_src emacs-lisp
 ;(key-chord-define-global "fp" 'find-file-at-point)
 
@@ -519,7 +521,7 @@ General navigation bindings:
 #+end_src
 
 
-Key bindings for other files:
+   Key bindings for other files:
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-c o e")
                 (lambda () (interactive) (find-file "~/personal/everything.org")))
@@ -693,6 +695,7 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 
 * Editing
 ** Basic Settings
+
 #+BEGIN_SRC emacs-lisp
   (show-paren-mode 1)
 
@@ -1847,13 +1850,13 @@ I was having some problems with it throwing errors.
 
 * Organization and Version Control
 ** Magit
+Magit stuff
 #+BEGIN_SRC  emacs-lisp
 (use-package magit
   :commands magit-status
   :init
   (bind-key "C-c m s" 'magit-status))
 #+END_SRC
-
 
 *** backup specifics
 #+BEGIN_SRC emacs-lisp
@@ -1864,7 +1867,6 @@ I was having some problems with it throwing errors.
       (write-region "" nil file)) ; create file
     (copy-file file target t))
 #+END_SRC
-
 
 *** On magit-push
 #+BEGIN_SRC emacs-lisp
@@ -1878,6 +1880,7 @@ I was having some problems with it throwing errors.
 #+begin_src emacs-lisp
 (use-package gist)
 #+end_src
+
 ** Org Mode
 *** General
 Org warnings:
@@ -1941,6 +1944,18 @@ Some general defaults:
                       :foreground "olive drab" 
                       :weight 'ultra-light)
 #+end_src
+
+*** Appearance
+#+begin_src emacs-lisp
+(use-package org-bullets
+  :init
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+end_src
+
+#+begin_src emacs-lisp
+
+#+end_src
+
 *** Tasks and States
 Tasks have multiple possible states. Below defines them and their transitions
 #+begin_src emacs-lisp
@@ -2097,6 +2112,7 @@ NOTE: Currently disabled
 #+begin_src emacs-lisp
   (define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
 #+end_src
+
 **** tea-time
  #+begin_src emacs-lisp
    (use-package tea-time
@@ -2105,6 +2121,7 @@ NOTE: Currently disabled
      (global-set-key (kbd "C-c C-x s") 'tea-show-remaining-time)
      (global-set-key (kbd "C-c C-x n") 'tea-time))
  #+end_src
+
 *** babel
     This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
 #+begin_src emacs-lisp
@@ -2248,6 +2265,7 @@ SCHEDULED: %^t
   "
     "Org capture template for general tasks.")
 #+end_src
+
 *** Exports
 **** html
 #+begin_src emacs-lisp
@@ -2941,6 +2959,7 @@ Get autocompletions in tramp:
 ** Extremely fast emacs startup with emacs server
 Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn emacs sessions (nearly) instantly. There is a single overhead cost of typical startup timen (~2 seconds) on login, but it means means I can now use emacs for quick edits. I bind `emacsclient -c -a emacs' to a keyboard shortcut.
 ** Custom Frames
+
 #+begin_src emacs-lisp
 (defun open-org-agenda-hack ()
   "Splits frame horizontally and switches to left window to open an
@@ -2984,3 +3003,4 @@ Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn e
 
   ;; `(on-startup)' defined and called in "exclusive/post.el"
 #+end_src
+
