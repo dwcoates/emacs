@@ -1,13 +1,19 @@
-;; DOOM Molokai (inspired by molokai)
+;;; Package --- Summary:
+;; Atchka theme description.  By Dodge Coates, code base taken from doom-molokai
+;; by Henrik Lasser and using Henrik Lasser's doom-themes package.
+;;
+;;; Commentary:
+;; Atchka theme
+;;
+;;; Code:
 
-(require 'dood-themes)
+(require 'doom-themes)
 
-(deftheme dood-molokai
-  "A dark theme inspired by molokai")
+(deftheme atchka "A dark theme.")
 
 (let ((c '((class color) (min-colors 89)))
-      (bold   dood-enable-bold)
-      (italic dood-enable-italic)
+      (bold   doom-enable-bold)
+      (italic doom-enable-italic)
 
       (bg             "#1D1F20")
       (bg-l           "#222425")
@@ -78,22 +84,22 @@
          (vc-deleted     red))
 
     (custom-theme-set-faces
-     'dood-molokai
-     ;; Dood faces
-     `(dood-default
+     'doom-molokai
+     ;; Doom faces
+     `(doom-default
        ((((type graphic)) :inherit default :background ,bg-l)
         (t                :inherit default)))
-     `(dood-hl-line
+     `(doom-hl-line
        ((((type graphic)) :background ,bg)
         (t                :inherit hl-line)))
-     `(dood-linum
+     `(doom-linum
        ((((type graphic)) :inherit linum :background ,bg-l)
         (t                :inherit linum)))
-     `(dood-minibuffer-active ((,c (:background ,bg-l))))
-     `(dood-nlinum-highlight  ((,c (:foreground ,linum-hl-fg :bold nil))))
-     `(dood-flycheck-error    ((,c (:underline nil :foreground ,black :background ,red))))
-     `(dood-flycheck-warning  ((,c (:underline nil :foreground ,black :background ,yellow))))
-     `(dood-flycheck-info     ((,c (:underline nil :foreground ,black :background ,green))))
+     `(doom-minibuffer-active ((,c (:background ,bg-l))))
+     `(doom-nlinum-highlight  ((,c (:foreground ,linum-hl-fg :bold nil))))
+     `(doom-flycheck-error    ((,c (:underline nil :foreground ,black :background ,red))))
+     `(doom-flycheck-warning  ((,c (:underline nil :foreground ,black :background ,yellow))))
+     `(doom-flycheck-info     ((,c (:underline nil :foreground ,black :background ,green))))
      ;; Text
      `(default                             ((,c (:foreground ,fg :background ,bg))))
      `(fringe                              ((,c (:background ,bg-l :foreground ,grey-1))))
@@ -333,31 +339,29 @@
      )
 
     (custom-theme-set-variables
-     'dood-molokai
+     'doom-molokai
      `(vc-annotate-color-map
        '((20 .  ,green)
-         (40 .  ,(dood-blend yellow green (/ 1.0 3)))
-         (60 .  ,(dood-blend yellow green (/ 2.0 3)))
+         (40 .  ,(doom-blend yellow green (/ 1.0 3)))
+         (60 .  ,(doom-blend yellow green (/ 2.0 3)))
          (80 .  ,yellow)
-         (100 . ,(dood-blend orange yellow (/ 1.0 3)))
-         (120 . ,(dood-blend orange yellow (/ 2.0 3)))
+         (100 . ,(doom-blend orange yellow (/ 1.0 3)))
+         (120 . ,(doom-blend orange yellow (/ 2.0 3)))
          (140 . ,orange)
-         (160 . ,(dood-blend magenta orange (/ 1.0 3)))
-         (180 . ,(dood-blend magenta orange (/ 2.0 3)))
+         (160 . ,(doom-blend magenta orange (/ 1.0 3)))
+         (180 . ,(doom-blend magenta orange (/ 2.0 3)))
          (200 . ,magenta)
-         (220 . ,(dood-blend red magenta (/ 1.0 3)))
-         (240 . ,(dood-blend red magenta (/ 2.0 3)))
+         (220 . ,(doom-blend red magenta (/ 1.0 3)))
+         (240 . ,(doom-blend red magenta (/ 2.0 3)))
          (260 . ,red)
-         (280 . ,(dood-blend grey red (/ 1.0 4)))
-         (300 . ,(dood-blend grey red (/ 2.0 4)))
-         (320 . ,(dood-blend grey red (/ 3.0 4)))
+         (280 . ,(doom-blend grey red (/ 1.0 4)))
+         (300 . ,(doom-blend grey red (/ 2.0 4)))
+         (320 . ,(doom-blend grey red (/ 3.0 4)))
          (340 . ,grey)
          (360 . ,grey)))
      `(vc-annotate-very-old-color nil)
      `(vc-annotate-background ,black))))
 
-(provide-theme 'dood-molokai)
+(provide-theme 'atchka)
 
-;; Local Variables:
-;; no-byte-compile: t
-;; End:
+;;; atchka ends here
