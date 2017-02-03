@@ -242,17 +242,16 @@
 (add-to-list 'load-path (concat user-emacs-directory "atchka"))
 (use-package doom-themes :ensure nil
   :init
+  (require 'atchka-theme)
   (add-hook 'after-init-hook (lambda ()
-                               (load-theme 'atchka-molokai t)
-                               (load-theme 'atchka-org t)))
+                               (load-theme 'atchka t)))
   :config
   ;; brighten source code buffers
   (add-hook 'find-file-hook 'doom-buffer-mode)
   ;; brighten minibuffers (does this even work??)
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer))
 
-;; load up the org theme
-(use-package org-)
+
 
 (sml/setup)
 

@@ -14,6 +14,13 @@
 (let ((c '((class color) (min-colors 89)))
       (bold   doom-enable-bold)
       (italic doom-enable-italic)
+      (sans-font (cond ((x-list-fonts "Lucida Grande") '(:font "Lucida Grande"))
+                       ((x-list-fonts "Verdana") '(:font "Verdana"))
+                       ((x-family-fonts "Sans Serif") '(:family "Sans Serif"))
+                       (nil (warn "Cannot find a Sans Serif Font."))))
+      (org-agenda-font (cond ((x-list-fonts "Liberation Serif") '(:font "Liberation Serif"))
+                             (nil (warn "No Agenda Font"))))
+      (padding `(:line-width 5))
 
       (bg             "#1D1F20")
       (bg-l           "#222425")
@@ -84,7 +91,7 @@
          (vc-deleted     red))
 
     (custom-theme-set-faces
-     'doom-molokai
+     'atchka
      ;; Doom faces
      `(doom-default
        ((((type graphic)) :inherit default :background ,bg-l)
@@ -304,34 +311,39 @@
      `(org-document-info            ((,c (:foreground ,orange))))
      `(org-document-info-keyword    ((,c (:foreground ,grey-1))))
      `(org-meta-line                ((,c (:foreground ,vsubtle))))
-     `(org-block-begin-line         ((,c (:background ,current-line :foreground ,vsubtle))))
-     `(org-block-end-line           ((,c (:inherit org-block-begin-line))))
      `(org-block-background         ((,c (:background ,current-line))))
      `(org-archived                 ((,c (:foreground ,grey-.5))))
-     `(org-document-title           ((,c (:foreground ,cyan))))
-     ;; me
-     `(org-block nil ((,c (:inherit 'shadow ) :background "gray10" :distant-foreground "white")))
-     `(org-block-begin-line nil     ((,c (:foreground "gray14"))))
-     `(org-block-end-line nil       ((,c (:foreground "gray14"))))
-     `(org-level-1 nil              ((,c (:foreground "olive drab" :bold ,bold))))
-     `(org-level-2 nil              ((,c (:foreground "light coral" :bold ,bold))))
-     `(org-level-3                  ((,c (:bold ,bold))))
-     `(org-level-4 nil              ((,c (:inherit 'outline-4))))
-     `(org-level-6 nil              ((,c (:inherit 'outline-7))))
-     `(org-level-7 nil              ((,c (:foreground "yellow green"))))
-     `(org-scheduled nil            ((,c (:foreground "yellow3"))))
-     `(org-scheduled-today nil      ((,c (:foreground "dark orange") :weight 'bold)))
-     `(org-upcoming-deadline nil    ((,c (:foreground "dark gray") :weight 'ultra-bold)))
-     ;; not me
+     `(org-document-title           ((,c (:inherit org-level-1 :height 1.5 :underline nil :box ,padding :foreground ,cyan))))
+           ;; Org Source Code
+     `(org-block                    ((,c (:inherit 'shadow ) :background "gray30" :distant-foreground "white")))
+     `(org-block-begin-line         ((,c (:background "SkyBlue4" :foreground "SkyBlue4"  :height 0.2))))
+     `(org-block-end-line           ((,c (:inherit org-block-begin-line))))
      `(org-code                     ((,c (:foreground ,orange))))
      `(org-verbatim                 ((,c (:foreground ,green))))
      `(org-formula                  ((,c (:foreground ,cyan))))
+           ;; Headers
+     `(org-level-2                  ((,c (,@sans-font :height 1.10))))
+     `(org-level-3                  ((,c (,@sans-font))))
+     `(org-level-4                  ((,c (:inherit 'outline-4))))
+     `(org-level-6                  ((,c (:inherit 'outline-7))))
+     `(org-level-7                  ((,c (:foreground "yellow green"))))
+     `(org-level-1                  ((,c (,@sans-font :height 1.25 :bold t))))
+            ;; Agenda
+     `(org-scheduled                ((,c (:foreground "yellow3"))))
+     `(org-scheduled-today          ((,c (:foreground "dark orange") :weight bold)))
+     `(org-agenda-date              ((,c (:inherit org-agenda-structure :height 1.10))))
+     `(org-agenda-date-today        ((,c (:inherit org-agenda-date :bold black :underline t))))
+     `(org-agenda-date-weekend      ((,c (:inherit org-agenda-date :italic yes :height .95))))
+     `(org-upcoming-deadline        ((,c (:foreground "dark gray") :weight bold)))
+     `(org-agenda-structure         ((,c (:inherit default ,@org-agenda-font :height 1.10 :underline nil))))
+     `(org-date                     ((,c (:foreground ,violet))))
+            ;; Tasks
+     `(org-todo                     ((,c (:foreground ,yellow :bold inherit))))
+     `(org-done                     ((,c (:foreground ,green :bold inherit))))
+            ;; Misc
      `(org-list-dt                  ((,c (:foreground ,cyan))))
      `(org-footnote                 ((,c (:foreground ,orange))))
      `(org-link                     ((,c (:underline t :foreground ,cyan :bold inherit))))
-     `(org-date                     ((,c (:foreground ,violet))))
-     `(org-todo                     ((,c (:foreground ,yellow :bold inherit))))
-     `(org-done                     ((,c (:foreground ,green :bold inherit))))
      `(org-headline-done            ((,c (:foreground ,grey-.5 :strike-through t :bold nil))))
      `(org-special-keyword          ((,c (:foreground ,magenta))))
      `(org-checkbox-statistics-todo ((,c (:inherit org-todo))))
@@ -339,7 +351,7 @@
      )
 
     (custom-theme-set-variables
-     'doom-molokai
+     'atchka
      `(vc-annotate-color-map
        '((20 .  ,green)
          (40 .  ,(doom-blend yellow green (/ 1.0 3)))
@@ -361,6 +373,19 @@
          (360 . ,grey)))
      `(vc-annotate-very-old-color nil)
      `(vc-annotate-background ,black))))
+
+(setq org-src-block-faces
+      '(("python" (:background "gray25"))))
+
+(setq org-src-block-faces
+      '(("emacs-lisp" (:background "gray25"))))
+
+;;;###autoload
+(when load-file-name
+  (add-to-list 'custom-theme-load-path
+               (file-name-as-directory (file-name-directory load-file-name)))
+  (when (not window-system)
+    (custom-set-faces '(default ((t (:background nil)))))))
 
 (provide-theme 'atchka)
 

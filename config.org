@@ -1952,10 +1952,6 @@ Some general defaults:
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+end_src
 
-#+begin_src emacs-lisp
-
-#+end_src
-
 *** Tasks and States
 Tasks have multiple possible states. Below defines them and their transitions
 #+begin_src emacs-lisp
