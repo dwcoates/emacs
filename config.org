@@ -1,12 +1,12 @@
 This is my emacs config file.
 
 * Package Management
+
 #+begin_src emacs-lisp
 ;; Keep emacs-generated custom settings in a separate file so they don't pollute init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file)
 #+end_src
-
 
 I run linux, but this may be useful for those who use OSX. Description:
 
@@ -29,14 +29,13 @@ https://github.com/purcell/exec-path-from-shell
 ** Basic Settings
 ** Basic Appearance
 *** isearch
-#+begin_src emacs-lisp
-#+end_src
 *** linum
 #+begin_src emacs-lisp
 ;  (set-face-attribute 'linum-mode nil 
 ;                      :background "gray16" 
 ;                      :foreground "dim gray")
 #+end_src
+
 ** Key-Command Interfaces
 Turn on ido. I prefer Ido's approach to find-file over helm's
 approach:
@@ -1679,6 +1678,7 @@ Enable wrapping for single quotes
     )
     (add-hook 'python-mode-hook
               'elpy-on-python-mode)
+  
     :config
     (when (require 'flycheck nil t)
       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
@@ -1749,6 +1749,8 @@ not yet support emacs due to a jupyter bug.
             (find-definitions  "find definitions"  t)
             (find-file         "find assignments"  t)
             (find-references "show usages" nil))))
+#+end_src
+
 ** C/C++
 Company-C-Headers enables the completion of C/C++ header file names using company-mode:
 #+begin_src emacs-lisp
@@ -1883,6 +1885,10 @@ Magit stuff
 
 ** Org Mode
 *** General
+#+begin_src emacs-lisp
+(add-to-list 'load-path (concat user-emacs-directory "org-misc"))
+#+end_src
+
 Org warnings:
 #+begin_src emacs-lisp
   (set-face-attribute 'org-warning nil :foreground "red3" :weight 'bold)
@@ -1946,7 +1952,7 @@ Some general defaults:
 #+end_src
 
 *** Appearance
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :exports none something :results output org
 (use-package org-bullets
   :init
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
@@ -1990,6 +1996,7 @@ Task triggers
   ;; Compact the block agenda view
   (setq org-agenda-compact-blocks t)
 #+end_src
+
 
 Agenda custom commands
 #+begin_src emacs-lisp
@@ -2067,6 +2074,7 @@ Agenda custom commands
                          (org-tags-match-list-sublevels nil))))
                  nil))))
 #+end_src
+
 **** Delimit prioirites (DISABLED)
 Function to visually delimit priorities in the org-agenda-list buffer.
 NOTE: Currently disabled
@@ -2089,6 +2097,7 @@ NOTE: Currently disabled
 
 ;  (add-hook 'org-agenda-finalize-hook 'my-custom-agenda-fn)
 #+end_src
+
 **** Update org-agenda-files
 #+begin_src emacs-lisp
   (setq org-agenda-file-regexp "\\`[^.].*\\.org\\'") ; default value
@@ -2104,6 +2113,8 @@ NOTE: Currently disabled
                  (load-org-agenda-files-recursively file)))))) 
 
   (load-org-agenda-files-recursively org-directory)
+#+end_src
+
 *** Clock
 #+begin_src emacs-lisp
   (define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
@@ -2119,7 +2130,7 @@ NOTE: Currently disabled
  #+end_src
 
 *** babel
-    This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
+This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
 #+begin_src emacs-lisp
 ;(load "~/.emacs.d/f.el")
 (use-package dash-functional)
@@ -2161,6 +2172,14 @@ Editting source code
 #+begin_src emacs-lisp
 (define-key org-mode-map (kbd "C-c RET") 'org-edit-src-code)
 (define-key org-src-mode-map (kbd "C-c k") 'org-exit-src-code)
+#+end_src
+**** Commands
+Need ob-misc for some of this stuff. It's on my github.
+#+begin_src emacs-lisp
+(require 'ob-misc) 
+
+(global-set-key (kbd "C-c C-v ;") 'org-edit-src-headers)
+(global-set-key (kbd "C-c C-v :") 'org-show-headers)
 #+end_src
 
 *** Capture
