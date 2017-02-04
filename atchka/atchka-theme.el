@@ -322,12 +322,12 @@
      `(org-verbatim                 ((,c (:foreground ,green))))
      `(org-formula                  ((,c (:foreground ,cyan))))
            ;; Headers
-     `(org-level-2                  ((,c (,@sans-font :height 1.10))))
+     `(org-level-2                  ((,c (,@sans-font :height 1.07))))
      `(org-level-3                  ((,c (,@sans-font))))
      `(org-level-4                  ((,c (:inherit 'outline-4))))
      `(org-level-6                  ((,c (:inherit 'outline-7))))
      `(org-level-7                  ((,c (:foreground "yellow green"))))
-     `(org-level-1                  ((,c (,@sans-font :height 1.25 :bold t))))
+     `(org-level-1                  ((,c (,@sans-font :height 1.18 :bold t))))
             ;; Agenda
      `(org-scheduled                ((,c (:foreground "yellow3"))))
      `(org-scheduled-today          ((,c (:foreground "dark orange") :weight bold)))
