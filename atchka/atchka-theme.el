@@ -374,11 +374,14 @@
      `(vc-annotate-very-old-color nil)
      `(vc-annotate-background ,black))))
 
-(setq org-src-block-faces
-      '(("python" (:background "gray25"))))
+;; Makes source blocks in org look prettier, and generally, org documents should
+;; never exceed 80 columns or so, i feel. I use M-q (fill-column) constantly.
+(add-hook 'org-mode-hook (lambda () (set-window-fringes nil 25 25)) t)
 
 (setq org-src-block-faces
-      '(("emacs-lisp" (:background "gray25"))))
+      '(("python" (:background "gray25"))
+        ("emacs-lisp" (:background "gray25"))
+        ("R" (:background "gray25"))))
 
 ;;;###autoload
 (when load-file-name
