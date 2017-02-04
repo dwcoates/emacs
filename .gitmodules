@@ -1,3 +1,6 @@
 [submodule "fonts"]
 	path = neotree_fonts
 	url = https://github.com/domtronn/all-the-icons.el/
+[submodule "dwc-org-misc"]
+	path = org-misc
+	url = https://www.github.com/dwcoates/org-misc
