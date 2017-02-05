@@ -11,6 +11,8 @@
 
 (deftheme atchka "A dark theme.")
 
+(defconst atchka--org-block-header-height 0.2 "Height for org block lines.")
+
 (let ((c '((class color) (min-colors 89)))
       (bold   doom-enable-bold)
       (italic doom-enable-italic)
@@ -316,7 +318,7 @@
      `(org-document-title           ((,c (:inherit org-level-1 :height 1.5 :underline nil :box ,padding :foreground ,cyan))))
            ;; Org Source Code
      `(org-block                    ((,c (:inherit 'shadow ) :background "gray30" :distant-foreground "white")))
-     `(org-block-begin-line         ((,c (:background "SkyBlue4" :foreground "SkyBlue4"  :height 0.2))))
+     `(org-block-begin-line         ((,c (:background "SkyBlue4" :foreground "SkyBlue4"  :height ,atchka--org-block-header-height))))
      `(org-block-end-line           ((,c (:inherit org-block-begin-line))))
      `(org-code                     ((,c (:foreground ,orange))))
      `(org-verbatim                 ((,c (:foreground ,green))))
