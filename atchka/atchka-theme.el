@@ -376,6 +376,21 @@
      `(vc-annotate-very-old-color nil)
      `(vc-annotate-background ,black))))
 
+(defun org-enlarge-block-lines ()
+  (interactive)
+  (set-face-attribute 'org-block-begin-line nil :height 100 :foreground "black")
+  )
+
+(defun org-minimize-block-lines ()
+  (interactive)
+  (set-face-attribute 'org-block-begin-line nil
+                      :height (truncate (* atchka--org-block-header-height 10))
+                      :foreground (face-attribute 'org-block-begin-line :background)))
+
+(when (require 'yasnippet nil t)
+  (add-hook 'yas-before-expand-snippet-hook 'org-enlarge-block-lines)
+  (add-hook 'yas-after-exit-snippet-hook 'org-minimize-block-lines))
+
 ;; Makes source blocks in org look prettier, and generally, org documents should
 ;; never exceed 80 columns or so, i feel. I use M-q (fill-column) constantly.
 (add-hook 'org-mode-hook (lambda () (set-window-fringes nil 25 25)) t)
