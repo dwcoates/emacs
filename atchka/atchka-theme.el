@@ -312,12 +312,12 @@
      `(org-quote                    ((,c (:slant italic :foreground ,grey :background ,current-line))))
      `(org-document-info            ((,c (:foreground ,orange))))
      `(org-document-info-keyword    ((,c (:foreground ,grey-1))))
-     `(org-meta-line                ((,c (:foreground ,vsubtle))))
-     ;`(org-block-background         ((,c (:background ,current-line))))
+     `(org-meta-line                ((,c (:foreground "#cd3278" :box t))))
      `(org-archived                 ((,c (:foreground ,grey-.5))))
      `(org-document-title           ((,c (:inherit org-level-1 :height 1.5 :underline nil :box ,padding :foreground ,cyan))))
            ;; Org Source Code
      `(org-block                    ((,c (:inherit 'shadow ) :background "gray30" :distant-foreground "white")))
+     `(org-block-background         ((,c (:background "gray25"))))
      `(org-block-begin-line         ((,c (:background "SkyBlue4" :foreground "SkyBlue4"  :height ,atchka--org-block-header-height))))
      `(org-block-end-line           ((,c (:inherit org-block-begin-line))))
      `(org-code                     ((,c (:foreground ,orange))))
@@ -475,7 +475,8 @@ Please `previous-line' past org-block headers'"
       '(("python" (:background "gray25"))
         ("emacs-lisp" (:background "gray25"))
         ("R" (:background "gray25"))
-        ("org" (:background "gray25"))))
+        ("org" (:background "gray25"))
+        ("example" (:background "gray25"))))
 
 ;;;###autoload
 (when load-file-name
