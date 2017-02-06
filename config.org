@@ -1,7 +1,6 @@
 #+Title: This is my emacs config file.
 
 * Package Management
-
 #+begin_src emacs-lisp
 ;; Keep emacs-generated custom settings in a separate file so they don't pollute init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -106,6 +105,20 @@ Make sure emacs gets my bashrc environment variable:
 #+begin_src emacs-lisp
   (setq fringe-mode '(4 . 4))
 #+end_src
+
+*** Cursor
+Change cursor when idle or in a different buffer. I like the vertical bar
+cursor, so this is nice when I need to find my cursor after not looking at the
+screen for minute.
+#+begin_src emacs-lisp
+  (use-package cursor-chg
+    :init
+    ()
+    :config
+    (curchg-toggle-cursor-type-when-idle)
+    (setq curch-idle-interval 0.5))
+#+end_src
+
 ** Helm
 This variables must be set before loading helm-gtags
 #+BEGIN_SRC emacs-lisp
@@ -2571,6 +2584,7 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 
 * Emacs as a auxiliary interface
 ** Terminal
+
 #+begin_src emacs-lisp
 (defun dwc-spawn-terminal ()
   (interactive)
@@ -2590,6 +2604,7 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
   (edit-server-start))
 
 #+END_SRC
+
 
 ** IRC
 *** ERC
@@ -2613,6 +2628,7 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
   )
 #+end_src
 
+src
 ** SSH
 *** Tramp
 I edit ~/.ssh/config to add something like the following
@@ -2918,7 +2934,6 @@ Get autocompletions in tramp:
       (insert (rand-alphanum length prefix suffix))
       ))
 #+end_src
-
 
 *** remove-headers
 #+BEGIN_SRC emacs-lisp
