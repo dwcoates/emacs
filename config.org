@@ -2175,35 +2175,74 @@ org-capture-template (and org-capture in general) to see how it might look.
       (setq task-type "Task"))
     (concat "%^{" task-type ":}\n"))
 
-  (defconst org-template/star-todo "* TODO ")
-  (defconst org-template/star "* ")
-  (defconst org-template/star-todo "* TODO ")
-  (defconst org-template/dash "- ")
-  (defconst org-template/deadline "DEADLINE: %^t\n\n")
-  (defconst org-template/schedule "SCHEDULED: %^t\n\n")
-  (defconst org-template/meta-data "\n\nCaptured on %T by %(system-name)")
 
-  (defun project-note-template-builder (header tags scheduling watermark)
+  (defconst org-template--todo "* TODO ")
+  (defconst org-template--next "* NEXT ")
+  (defconst org-template--basic-priority "[#%^{Priority:|C|A|B|C|D|E}] ")
+
+    ;;;;;;;; HEADER ;;;;;;;;
+  (defun org-template/todo-prompt (priority prompt) 
+    (concat org-template--todo priority "%^{" prompt "}"))
+  (defun org-template/next-prompt (priority prompt) 
+    (concat org-template--next priority "%^{" prompt "}"))
+    ;;;;;; SCHEDULING ;;;;;;
+  (defconst org-template/deadline "DEADLINE: %^t")
+  (defconst org-template/schedule "SCHEDULED: %^t")
+  (defconst org-template/timeline-query "%^{Timeline|SCHEDULED|DEADLINE}: %^t")
+    ;;;;;;;;; BODY ;;;;;;;;;
+  (defconst org-indented-cursor-placement "  %?")
+    ;;;;;; WATERMARK ;;;;;;;
+  (defconst org-template/meta-data "Captured on %T by %(system-name)")
+
+  (defun org-project-template-builder (header tags scheduling body watermark)
     "Builds a template using the org-template componenets."
     (concat
-     header
+     header " "
      (when tags
        (concat
         ":"
         (if (listp tags)
             (mapconcat 'identity tags ":")
-          tags
-          )
-        ":")
-       )
+          tags)
+        ":"))
      "\n"
      (when scheduling (concat scheduling "\n"))
      (when body (concat body "\n"))
      watermark))
 
-  (defconst org-note-template "* %? :NOTE:\n%U\n%a\n")
-  (defconst org-question-template "* %? :NOTE:\n%U\n%a\n")
-  (defconst org-task-template "* TODO %?\n%U\n%a\n")
+  (defconst org-basic-note-template 
+    (org-project-template-builder (org-template/next-prompt nil "Note")
+                                  "note" 
+                                  nil 
+                                  org-indented-cursor-placement
+                                  org-template/meta-data))
+  (defconst org-basic-quick-note-template
+    (org-project-template-builder (org-template/next-prompt nil "Quick Note")
+                                  "note" 
+                                  nil 
+                                  nil
+                                  org-template/meta-data))
+  (defconst org-basic-question-template 
+    (org-project-template-builder (org-template/next-prompt nil "Question")
+                                  "question" 
+                                  nil 
+                                  org-indented-cursor-placement
+                                  org-template/meta-data))
+  (defconst org-basic-nugget-template
+    (org-project-template-builder
+     (org-template/next-prompt nil "Thought")
+     "idea"
+     nil
+     org-indented-cursor-placement
+     org-template/meta-data))
+  (defconst org-basic-task-template 
+    (org-project-template-builder (org-template/next-prompt 
+                                   org-template--basic-priority
+                                   "Question")
+                                  nil 
+                                  org-template/timeline-query
+                                  org-indented-cursor-placement
+                                  org-template/meta-data))
 
   (setq org-capture-templates
         (quote (("g" "General todos and refiles")
@@ -2243,34 +2282,6 @@ org-capture-template (and org-capture in general) to see how it might look.
                  ))))
 #+end_src
 
-#+begin_src emacs-lisp
-  (defvar basic-note-template "* %^{Note}
-
-        %?
-
-      Captured on %U by %(system-name)")
-
-  (defvar basic-task-template "* TODO [#%^{Priority:|C|A|B|C|D|E}] %^{Task}
-      %^{Condition|SCHEDULED|DEADLINE}: %^t
-
-        %?
-
-      Captured on %U by %(system-name)"
-    "Org capture template for general tasks.")
-
-  (defvar basic-question-template "* TODO [#%^{Priority:|C|A|B|C|D|E}] %^{Task}
-SCHEDULED: %^t
-        %?
-   "
-    "Org capture template for general tasks.")
-
-  (defvar basic-nugget-template
-    "* %^{Thought}       :idea:
-
-      %?
-  "
-    "Org capture template for general tasks.")
-#+end_src
 *** Exports
 **** html
 #+begin_src emacs-lisp
