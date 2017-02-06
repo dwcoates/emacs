@@ -119,6 +119,20 @@ screen for minute.
     (setq curch-idle-interval 0.5))
 #+end_src
 
+*** Macros
+Don't display message "type 'e' to repeat macro" after I execute a macro. This
+interferes sometimes when I want my macro to display a message in the
+minibuffer.
+#+begin_src emacs-lisp
+(require 'cl) ; for flet
+(add-to-list 'minor-mode-alist '(kmacro-repeat-mode " MACRO-REPEAT!"))
+(defadvice kmacro-call-macro (around kmacro-call-macro-without-message activate)
+  "run kmacro-call-macro without any messages"
+  (flet ((message (&rest args)))
+    (let ((kmacro-repeat-mode t))
+      ad-do-it)))
+#+end_src
+
 ** Helm
 This variables must be set before loading helm-gtags
 #+BEGIN_SRC emacs-lisp
