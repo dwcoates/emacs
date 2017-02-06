@@ -11,7 +11,7 @@
 
 (deftheme atchka "A dark theme.")
 
-(defconst atchka--org-block-header-height 0.2 "Height for org block lines.")
+(defconst atchka--org-block-header-height 0.1 "Height for org block lines.")
 
 (let ((c '((class color) (min-colors 89)))
       (bold   doom-enable-bold)
@@ -313,7 +313,7 @@
      `(org-document-info            ((,c (:foreground ,orange))))
      `(org-document-info-keyword    ((,c (:foreground ,grey-1))))
      `(org-meta-line                ((,c (:foreground ,vsubtle))))
-     `(org-block-background         ((,c (:background ,current-line))))
+     ;`(org-block-background         ((,c (:background ,current-line))))
      `(org-archived                 ((,c (:foreground ,grey-.5))))
      `(org-document-title           ((,c (:inherit org-level-1 :height 1.5 :underline nil :box ,padding :foreground ,cyan))))
            ;; Org Source Code
@@ -393,11 +393,14 @@ This is used to show hidden blocks in `org-mode' while expanding a snippet."
                                       (if (symbolp dir) (symbol-value dir) dir))
                                      "org-mode")))
                       (when (f-directory-p dir)
-                          (directory-files dir)))
-                    yas-snippet-dirs
-                    )))
+                          (directory-files dir))))
+                    yas-snippet-dirs)))
         (org-show-block-lines)
         ))))
+
+(when (require 'yasnippet nil t)
+  (add-hook 'yas-before-expand-snippet-hook 'yas-show-org-block-lines)
+  (add-hook 'yas-after-exit-snippet-hook 'org-hide-block-lines))
 
 (defun org-show-block-lines ()
   "Show the Org-block lines.
@@ -432,7 +435,7 @@ Please `next-line' past org-block headers'"
     (forward-line))
   )
 
-(advice-remove 'next-line 'org-skip-source-previous-advice)
+;(advice-remove 'next-line 'org-skip-source-next-advice)
 (advice-add 'next-line :before 'org-skip-source-next-advice)
 
 (defun org-skip-source-previous-advice ()
@@ -452,17 +455,19 @@ Please `previous-line' past org-block headers'"
     (forward-line -1))
   )
 
-(advice-remove 'previous-line 'org-skip-source-previous-advice)
+;(advice-remove 'previous-line 'org-skip-source-previous-advice)
 (advice-add 'previous-line :before 'org-skip-source-previous-advice)
 
-(when (require 'yasnippet nil t)
-  (add-hook 'yas-before-expand-snippet-hook 'yas-show-org-block-lines)
-  (add-hook 'yas-after-exit-snippet-hook 'org-show-block-lines))
 
 ;; Makes source blocks in org look prettier, and generally, org documents should
-;; never exceed 80 columns or so, i feel. I use M-q (fill-column) constantly.
-(add-hook 'org-mode-hook (lambda () (set-window-fringes nil 25 25)) t)
+;; never exceed 80 columns or so. I use M-q (fill-column) constantly to enforce
+;; this, which I think looks prettier and neater.
+(add-hook 'window-configuration-change-hook (lambda ()
+                                              (when (eq major-mode 'org-mode)
+                                               (set-window-fringes
+                                                (selected-window) 18 25))))
 
+;; I don't know why this is still necessasry. I would like to get rid of it.
 (setq org-src-block-faces
       '(("python" (:background "gray25"))
         ("emacs-lisp" (:background "gray25"))

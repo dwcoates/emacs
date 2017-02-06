@@ -709,10 +709,6 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
   ;; delete tabs with backspace
   (setq backward-delete-char-untabify-method 'hungry)
 
-
-  ;; Highlight current line
-  (global-hl-line-mode 1)
-
   (setq global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
         mark-ring-max 10000                ; increase kill ring to contains 10000 entries
         mode-require-final-newline t      ; add a newline to end of file
