@@ -121,13 +121,16 @@
  gc-cons-threshold 100000000
  ;; no splash message
  inhibit-startup-message t
- blink-cursor-mode 0
+ ;; cursor
+ blink-cursor-mode nil
+ cursor-type 'bar
  ;; highlight current line
- global-hl-line-mode 1
+ global-hl-line-mode nil
  display-time-mode t
  ;; current display column number in modeline
  column-number-mode t
  )
+
 
 (setq-default cursor-in-non-selected-windows nil)
 ;; no toolbar
