@@ -135,8 +135,8 @@
      `(vertical-border                     ((,c (:foreground ,vertical-bar :background ,vertical-bar))))
      `(linum                               ((,c (:foreground ,linum-fg :background ,bg :bold nil))))
      `(font-lock-builtin-face              ((,c (:foreground ,builtin))))
-     `(font-lock-comment-face              ((,c (:foreground ,comments))))
-     `(font-lock-comment-delimiter-face    ((,c (:foreground ,comments))))
+     `(font-lock-comment-face              ((,c (:foreground "#8fbc8f"))))
+     `(font-lock-comment-delimiter-face    ((,c (:inherit font-lock-comment-face))))
      `(font-lock-doc-face                  ((,c (:foreground ,blue+2))))
      `(font-lock-doc-string-face           ((,c (:foreground ,blue+2))))
      `(font-lock-constant-face             ((,c (:foreground ,constants))))
@@ -418,6 +418,9 @@ This is useful because the atchka theme obfuscates block markup."
   (set-face-attribute 'org-block-begin-line nil
                       :height (truncate (* atchka--org-block-header-height 10))
                       :foreground (face-attribute 'org-block-begin-line :background)))
+
+(global-set-key (kbd "C-c C-v C-;") 'org-show-block-lines)
+(global-set-key (kbd "C-c C-v C-:") 'org-hide-block-lines)
 
 (defun org-skip-source-next-advice ()
   "Advice for the `next-line' function.
