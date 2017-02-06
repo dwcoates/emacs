@@ -1949,6 +1949,17 @@ Some general defaults:
                       :foreground "olive drab" 
                       :weight 'ultra-light)
 #+end_src
+
+#+begin_src emacs-lisp
+  (add-to-list 'load-path (concat user-emacs-directory "org-misc"))
+  (unless (require 'ob-misc nil t)
+    (warn "Cannot load ob-misc"))
+
+  (global-set-key (kbd "C-c C-v ;") 'org-edit-src-headers)
+  (global-set-key (kbd "C-c C-v :") 'org-print-src-headers)
+#+end_src
+
+
 *** Tasks and States
 Tasks have multiple possible states. Below defines them and their transitions
 #+begin_src emacs-lisp
@@ -2116,7 +2127,7 @@ NOTE: Currently disabled
  #+end_src
 
 *** babel
-    This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
+This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
 #+begin_src emacs-lisp
 ;(load "~/.emacs.d/f.el")
 (use-package dash-functional)
