@@ -1885,6 +1885,7 @@ I was having some problems with it throwing errors.
 #+begin_src emacs-lisp
 (use-package gist)
 #+end_src
+
 ** Org Mode
 *** General
 Org warnings:
@@ -2104,6 +2105,7 @@ NOTE: Currently disabled
 #+begin_src emacs-lisp
   (define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
 #+end_src
+
 **** tea-time
  #+begin_src emacs-lisp
    (use-package tea-time
@@ -2112,6 +2114,7 @@ NOTE: Currently disabled
      (global-set-key (kbd "C-c C-x s") 'tea-show-remaining-time)
      (global-set-key (kbd "C-c C-x n") 'tea-time))
  #+end_src
+
 *** babel
     This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
 #+begin_src emacs-lisp
@@ -2170,16 +2173,33 @@ org-capture-template (and org-capture in general) to see how it might look.
   (defun dwc-template/make-task-prompt (&optional task-type)
     (unless task-type
       (setq task-type "Task"))
-    (concat "%^{" task-type ":}\n")
-    )
+    (concat "%^{" task-type ":}\n"))
 
-  (defconst dwc-template/star-todo "* TODO ")
-  (defconst dwc-template/star "* ")
-  (defconst dwc-template/star-todo "* TODO ")
-  (defconst dwc-template/dash "- ")
-  (defconst dwc-template/deadline "DEADLINE: %^t\n\n")
-  (defconst dwc-template/deadline "SCHEDULED: %^t\n\n")
-  (defconst dwc-template/meta-data "\n\nCaptured on %T by %(system-name)")
+  (defconst org-template/star-todo "* TODO ")
+  (defconst org-template/star "* ")
+  (defconst org-template/star-todo "* TODO ")
+  (defconst org-template/dash "- ")
+  (defconst org-template/deadline "DEADLINE: %^t\n\n")
+  (defconst org-template/schedule "SCHEDULED: %^t\n\n")
+  (defconst org-template/meta-data "\n\nCaptured on %T by %(system-name)")
+
+  (defun project-note-template-builder (header tags scheduling watermark)
+    "Builds a template using the org-template componenets."
+    (concat
+     header
+     (when tags
+       (concat
+        ":"
+        (if (listp tags)
+            (mapconcat 'identity tags ":")
+          tags
+          )
+        ":")
+       )
+     "\n"
+     (when scheduling (concat scheduling "\n"))
+     (when body (concat body "\n"))
+     watermark))
 
   (defconst org-note-template "* %? :NOTE:\n%U\n%a\n")
   (defconst org-question-template "* %? :NOTE:\n%U\n%a\n")
@@ -2189,7 +2209,7 @@ org-capture-template (and org-capture in general) to see how it might look.
         (quote (("g" "General todos and refiles")
                 ("gt" "todo" entry (file nil)
                  "* TODO %^{Todo}\n%U\n\n\t%?\n\n%a\n" 
-                 ; :clock-in t :clock-resume t
+                                          ; :clock-in t :clock-resume t
                  )
                 ("gr" "respond" entry (file nil)
                  "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
@@ -2197,11 +2217,11 @@ org-capture-template (and org-capture in general) to see how it might look.
                  )
                 ("gn" "note" entry (file nil)
                  "* %^{Note} :NOTE:\n%U\n\t%a\n" 
-                 ; :clock-in t :clock-resume t
+                                          ; :clock-in t :clock-resume t
                  )
                 ("gj" "Journal" entry (file+datetree org-journal-file)
                  "* %?\n%U\n" 
-                 ; :clock-in t :clock-resume t
+                                          ; :clock-in t :clock-resume t
                  )
                 ("gw" "org-protocol" entry (file org-default-notes-file)
                  "* TODO Review %c\n%U\n" 
@@ -2209,11 +2229,11 @@ org-capture-template (and org-capture in general) to see how it might look.
                  )
                 ("gm" "Meeting" entry (file org-default-notes-file)
                  "* MEETING with %? :MEETING:\n%U" 
-                 ; :clock-in t :clock-resume t
+                                          ; :clock-in t :clock-resume t
                  )
                 ("gp" "Phone call" entry (file org-default-notes-file)
                  "* PHONE %? :PHONE:\n%U" 
-                 ; :clock-in t :clock-resume t
+                                          ; :clock-in t :clock-resume t
                  )
                 ("gh" "Habit" entry (file org-default-notes-file)
                  "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"
@@ -2222,6 +2242,7 @@ org-capture-template (and org-capture in general) to see how it might look.
                  "* TAKE A BREAK\nDEADLINE: %^T"
                  ))))
 #+end_src
+
 #+begin_src emacs-lisp
   (defvar basic-note-template "* %^{Note}
 
@@ -2601,7 +2622,6 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
   (edit-server-start))
 
 #+END_SRC
-
 
 ** IRC
 *** ERC
