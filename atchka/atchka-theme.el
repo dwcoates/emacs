@@ -376,20 +376,88 @@
      `(vc-annotate-very-old-color nil)
      `(vc-annotate-background ,black))))
 
-(defun org-enlarge-block-lines ()
+(defun yas-show-org-block-lines ()
+  "Enlarge block lines when in an Org buffer.
+This is used to show hidden blocks in `org-mode' while expanding a snippet."
   (interactive)
-  (set-face-attribute 'org-block-begin-line nil :height 100 :foreground "black")
+  (when (and (boundp 'yas-minor-mode) (equal yas-minor-mode t))
+    (let ((s (buffer-substring-no-properties (line-beginning-position)
+                                             (point))))
+      (when
+        (member s (apply
+                   'append
+                   (mapcar
+                    (lambda (dir)
+                      (let ((dir
+                             (concat (file-name-as-directory
+                                      (if (symbolp dir) (symbol-value dir) dir))
+                                     "org-mode")))
+                      (when (f-directory-p dir)
+                          (directory-files dir)))
+                    yas-snippet-dirs
+                    )))
+        (org-show-block-lines)
+        ))))
+
+(defun org-show-block-lines ()
+  "Show the Org-block lines.
+This is useful because the atchka theme obfuscates block markup."
+  (interactive)
+  (set-face-attribute 'org-block-begin-line
+                      (selected-frame)
+                      :height 100
+                      :foreground "black")
   )
 
-(defun org-minimize-block-lines ()
+(defun org-hide-block-lines ()
+  "Hide the org block lines."
   (interactive)
   (set-face-attribute 'org-block-begin-line nil
                       :height (truncate (* atchka--org-block-header-height 10))
                       :foreground (face-attribute 'org-block-begin-line :background)))
 
+(defun org-skip-source-next-advice ()
+  "Advice for the `next-line' function.
+Please `next-line' past org-block headers'"
+  (interactive)
+  (when (and (eq major-mode 'org-mode)
+             (save-excursion
+               (forward-line)
+               (call-interactively 'beginning-of-line)
+               (or
+                (re-search-forward "#\\+begin_src[ ]+?"
+                                   (line-end-position) t)
+                (re-search-forward "#\\+end_src[ ]*?"
+                                   (line-end-position) t))))
+    (forward-line))
+  )
+
+(advice-remove 'next-line 'org-skip-source-previous-advice)
+(advice-add 'next-line :before 'org-skip-source-next-advice)
+
+(defun org-skip-source-previous-advice ()
+  "Advice for the `previous-line' function.
+Please `previous-line' past org-block headers'"
+  (interactive)
+  (when (and
+         (eq major-mode 'org-mode)
+         (save-excursion
+          (forward-line -1)
+          (call-interactively 'beginning-of-line)
+          (or
+           (re-search-forward "#\\+begin_src[ ]+?"
+                              (line-end-position) t)
+           (re-search-forward "#\\+end_src[ ]*?"
+                              (line-end-position) t))))
+    (forward-line -1))
+  )
+
+(advice-remove 'previous-line 'org-skip-source-previous-advice)
+(advice-add 'previous-line :before 'org-skip-source-previous-advice)
+
 (when (require 'yasnippet nil t)
-  (add-hook 'yas-before-expand-snippet-hook 'org-enlarge-block-lines)
-  (add-hook 'yas-after-exit-snippet-hook 'org-minimize-block-lines))
+  (add-hook 'yas-before-expand-snippet-hook 'yas-show-org-block-lines)
+  (add-hook 'yas-after-exit-snippet-hook 'org-show-block-lines))
 
 ;; Makes source blocks in org look prettier, and generally, org documents should
 ;; never exceed 80 columns or so, i feel. I use M-q (fill-column) constantly.
