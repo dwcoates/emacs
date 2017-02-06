@@ -470,6 +470,9 @@ Please `previous-line' past org-block headers'"
                                                (set-window-fringes
                                                 (selected-window) 18 25))))
 
+;; This hides the asterisks in org headers, so they look like they are indented
+(setq org-hide-leading-stars t)
+
 ;; I don't know why this is still necessasry. I would like to get rid of it.
 (setq org-src-block-faces
       '(("python" (:background "gray25"))
