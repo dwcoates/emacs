@@ -474,7 +474,8 @@ Please `previous-line' past org-block headers'"
 (setq org-src-block-faces
       '(("python" (:background "gray25"))
         ("emacs-lisp" (:background "gray25"))
-        ("R" (:background "gray25"))))
+        ("R" (:background "gray25"))
+        ("org" (:background "gray25"))))
 
 ;;;###autoload
 (when load-file-name
