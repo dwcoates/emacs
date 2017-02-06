@@ -2,6 +2,6 @@
 # name: R source block
 # key: R
 # --
-#+BEGIN_SRC R :session :exports ${1:both} :results ${2:output ${3:graphics ${4::file ${5:`(rand-alphanum 8 "./img/R_" ".png")`}}}${6:org}} 
+#+BEGIN_SRC R :session :exports ${1:both} :results ${2:output ${3:graphics :file `(rand-alphanum 8 "./img/R_" ".png")`}} 
 $0
 #+END_SRC
