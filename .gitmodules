@@ -7,3 +7,6 @@
 [submodule "dwc-smartparens"]
 	path = smartparens
 	url = https://github.com/dwcoates/smartparens
+[submodule "goodies"]
+	path = goodies
+	url = https://www.github.com/dwcoates/goodies
