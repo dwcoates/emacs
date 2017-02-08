@@ -2210,8 +2210,8 @@ Display images in the results section of the org buffer (like a normal notebook)
 
 Editting source code
 #+begin_src emacs-lisp
-(define-key org-mode-map (kbd "C-c RET") 'org-edit-src-code)
-(define-key org-src-mode-map (kbd "C-c k") 'org-exit-src-code)
+  (define-key org-mode-map (kbd "C-c RET") 'org-edit-special)
+  (define-key org-src-mode-map (kbd "C-c k") 'org-exit-src-code)
 #+end_src
 
 *** Capture
