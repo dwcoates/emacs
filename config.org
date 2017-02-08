@@ -2848,57 +2848,6 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
   )
 #+end_src
 
-**** Captures
-#+begin_src emacs-lisp
-  (setq org-capture-templates
-       `(("g" "General todos and refiles")
-         ("gt" "Todo" entry (file nil)
-          ,org-basic-task-template
-                                          ; :clock-in t :clock-resume t
-          )
-         ("gr" "Respond" entry (file nil)
-          "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
-          :immediate-finish t
-                                          ; :clock-in t :clock-resume t
-          )
-         ("gn" "Quick Note" entry (file nil)
-          ,org-basic-quick-note-template
-                                          ; :clock-in t :clock-resume t
-          :immediate-finish t
-          )
-         ("gN" "Note" entry (file nil)
-          ,org-basic-quick-note-template
-                                          ; :clock-in t :clock-resume t
-          )
-         ("gf" "Oh Yeah..." entry (file nil)
-          ,org-basic-oh-yeah-template
-                                        ; :clock-in t :clock-resume t
-          :immediate-finish t
-          )
-         ("gj" "Journal" entry (file+datetree org-journal-file)
-          "* %?\n%U\n"
-                                          ; :clock-in t :clock-resume t
-          )
-         ("gw" "org-protocol" entry (file org-default-notes-file)
-          "* TODO Review %c\n%U\n"
-          :immediate-finish t
-          )
-         ("gm" "Meeting" entry (file org-default-notes-file)
-          "* MEETING with %? :MEETING:\n%U"
-                                          ; :clock-in t :clock-resume t
-          )
-         ("gp" "Phone call" entry (file org-default-notes-file)
-          "* PHONE %? :PHONE:\n%U"
-                                          ; :clock-in t :clock-resume t
-          )
-         ("gh" "Habit" entry (file org-default-notes-file)
-          "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"
-          )
-         ("gb" "Stretch your legs" entry (file org-default-notes-file)
-          "* TAKE A BREAK\nDEADLINE: %^T"
-          )))
-#+end_src
-
 * Emacs as a auxiliary interface
 ** Terminal
 
