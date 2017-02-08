@@ -228,12 +228,6 @@
                  ))
     (mapc load-it (directory-files dir nil "\\.el$"))))
 
-;; Get some pretty icons to use
-(use-package all-the-icons
-  :init
-  (load-directory (concat user-emacs-directory "neotree_fonts"))
-  )
-
 ;; Set up modeline
 (use-package smart-mode-line
   :init
