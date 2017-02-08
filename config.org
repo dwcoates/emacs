@@ -2047,7 +2047,9 @@ Compact the block agenda view
 #+end_src
 
 #+begin_src emacs-lisp
+  (require 'org-agenda)
   (define-key org-agenda-mode-map "T" 'org-tags-view)
+
 
   ;; these functions are in org-misc
   (global-set-key (kbd "C-c j") 'org-switch-to-agenda)

@@ -5,7 +5,6 @@ backups
 .places
 session.*
 eshell
-elpa
 settings
 emacsBackupNewest
 temp
@@ -36,7 +35,6 @@ backups
 /url/
 /var/
 /.sx/
-elpa
 elpaBackup
 *txt
 Makefile

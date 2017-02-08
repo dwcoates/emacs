@@ -476,6 +476,7 @@ Please `previous-line' past org-block headers'"
 ;; I don't know why this is still necessasry. I would like to get rid of it.
 (setq org-src-block-faces
       '(("python" (:background "gray25"))
+        ("ipython" (:background "gray25"))
         ("emacs-lisp" (:background "gray25"))
         ("R" (:background "gray25"))
         ("org" (:background "gray25"))
