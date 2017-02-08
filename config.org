@@ -1875,38 +1875,39 @@ I was having some problems with it throwing errors.
 #+end_src
 
 * Organization and Version Control
-** Magit
-#+BEGIN_SRC  emacs-lisp
-(use-package magit
-  :commands magit-status
-  :init
-  (bind-key "C-c m s" 'magit-status))
-#+END_SRC
+** Git
+*** Magit
+ #+BEGIN_SRC  emacs-lisp
+ (use-package magit
+   :commands magit-status
+   :init
+   (bind-key "C-c m s" 'magit-status))
+ #+END_SRC
 
 
-*** backup specifics
-#+BEGIN_SRC emacs-lisp
-;; Backup function to target when called.
-(defun my/backup-specifics (file target)
-"Copy file to target and apply function"
-    (if (not (file-exists-p file))
-      (write-region "" nil file)) ; create file
-    (copy-file file target t))
-#+END_SRC
+**** backup specifics
+ #+BEGIN_SRC emacs-lisp
+ ;; Backup function to target when called.
+ (defun my/backup-specifics (file target)
+ "Copy file to target and apply function"
+     (if (not (file-exists-p file))
+       (write-region "" nil file)) ; create file
+     (copy-file file target t))
+ #+END_SRC
 
 
-*** On magit-push
-#+BEGIN_SRC emacs-lisp
-;; Advise magit-push to backup specifics.el to a backup file in home
-(advice-add 'magit-push :around (lambda (push &rest args)
-    (my/backup-specifics "~/.emacs.d/specifics.el" "~/.emacsSpecificsBackup.el")
-    (apply push args)))
-#+END_SRC
+**** On magit-push
+ #+BEGIN_SRC emacs-lisp
+ ;; Advise magit-push to backup specifics.el to a backup file in home
+ (advice-add 'magit-push :around (lambda (push &rest args)
+     (my/backup-specifics "~/.emacs.d/specifics.el" "~/.emacsSpecificsBackup.el")
+     (apply push args)))
+ #+END_SRC
 
-** gist
-#+begin_src emacs-lisp
-(use-package gist)
-#+end_src
+*** gist
+ #+begin_src emacs-lisp
+ (use-package gist)
+ #+end_src
 
 ** Org Mode
 *** General
@@ -2027,10 +2028,13 @@ Task triggers
 
 *** Agenda
 **** Interface for agenda
+Do not dim blocked tasks
 #+begin_src emacs-lisp
-  ;; Do not dim blocked tasks
   (setq org-agenda-dim-blocked-tasks nil)
-  ;; Compact the block agenda view
+#+end_src
+
+Compact the block agenda view
+#+begin_src emacs-lisp
   (setq org-agenda-compact-blocks t)
 #+end_src
 
@@ -2110,9 +2114,10 @@ Agenda custom commands
                          (org-tags-match-list-sublevels nil))))
                  nil))))
 #+end_src
-**** Delimit prioirites (DISABLED)
+
+**** Delimit prioirites *DISABLED*
 Function to visually delimit priorities in the org-agenda-list buffer.
-NOTE: Currently disabled
+*NOTE: Currently disabled*
 #+begin_src emacs-lisp
   (defun my-custom-agenda-fn ()
     (interactive)
@@ -2132,6 +2137,7 @@ NOTE: Currently disabled
 
 ;  (add-hook 'org-agenda-finalize-hook 'my-custom-agenda-fn)
 #+end_src
+
 **** Update org-agenda-files
 #+begin_src emacs-lisp
   (setq org-agenda-file-regexp "\\`[^.].*\\.org\\'") ; default value
