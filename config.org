@@ -260,6 +260,7 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 (setq helm-lisp-fuzzy-completion t)
 #+END_SRC
 
+** Ido
 ** Error finding
 *** Flycheck
 
@@ -343,7 +344,6 @@ Display possible key binding completions automatically in a small pop-up buffer 
 )
 #+END_SRC
 
-
 *** ~rainbow-delimiters~
 Automatically color parentheses pairs different colors with rainbow-delimiters:
 #+BEGIN_SRC emacs-lisp
@@ -362,7 +362,6 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
     (set-face-attribute 'rainbow-delimiters-depth-9-face nil :foreground "chocolate")
     (set-face-attribute 'rainbow-delimiters-unmatched-face nil :foreground "red"))
 #+END_SRC
-
 
 *** ~golden-ratio~
 Automatically resize buffers to "optimal" size when they gain focus. Turned off
@@ -389,14 +388,12 @@ by default.
     )
 #+END_SRC
 
-
 *** ~speedbar~
 #+BEGIN_SRC emacs-lisp
 (use-package sr-speedbar)
 
 ;(setq speedbar-show-unknown-files t)
 #+END_SRC
-
 
 *** ~zygospore~
 #+BEGIN_SRC emacs-lisp
@@ -463,58 +460,58 @@ This goes before neotree configuration
 
 *** neotree
 #+begin_src emacs-lisp
-    (use-package neotree
-      :init
-      (setq neo-create-file-auto-open t
-            neo-auto-indent-point nil
-            neo-mode-line-type 'none
-            neo-persist-show nil
-            neo-window-width 25
-            neo-show-updir-line nil
-            neo-theme 'ascii ; fallback
-            neo-banner-message nil
-            neo-smart-open t)
-      (defun neotree-advice (nt &rest args)
-        (let ((ret (apply nt args)))
-          (with-current-buffer neo-buffer-name
-            ;; dont displace cursor position in neotree when not
-            ;; visiting the neotree buffer. Looks ugly.
-            (setq-local cursor-in-non-selected-windows nil))
-          ret))
-      (advice-add 'neotree :around #'neotree-advice)
-      :config
-      (setq neo-theme 'ascii)
-      (defun neotree-project-dir ()
-        "Open NeoTree using the git root."
-        (interactive)
-        (let ((project-dir (ffip-project-root))
-              (file-name (buffer-file-name)))
-          (if project-dir
-              (progn
-                (neotree-dir project-dir)
-                (neotree-find file-name))
-            (message "Could not find git project root."))))
-      (define-key global-map (kbd "C-c C-P") 'neotree-project-dir)
+  ;; (use-package neotree
+  ;;   :init
+  ;;   (setq neo-create-file-auto-open t
+  ;;         neo-auto-indent-point nil
+  ;;         neo-mode-line-type 'none
+  ;;         neo-persist-show nil
+  ;;         neo-window-width 25
+  ;;         neo-show-updir-line nil
+  ;;         neo-theme 'ascii ; fallback
+  ;;         neo-banner-message nil
+  ;;         neo-smart-open t)
+  ;;   (defun neotree-advice (nt &rest args)
+  ;;     (let ((ret (apply nt args)))
+  ;;       (with-current-buffer neo-buffer-name
+  ;;         ;; dont displace cursor position in neotree when not
+  ;;         ;; visiting the neotree buffer. Looks ugly.
+  ;;         (setq-local cursor-in-non-selected-windows nil))
+  ;;       ret))
+  ;;   (advice-add 'neotree :around #'neotree-advice)
+  ;;   :config
+  ;;   (setq neo-theme 'ascii)
+  ;;   (defun neotree-project-dir ()
+  ;;     "Open NeoTree using the git root."
+  ;;     (interactive)
+  ;;     (let ((project-dir (ffip-project-root))
+  ;;           (file-name (buffer-file-name)))
+  ;;       (if project-dir
+  ;;           (progn
+  ;;             (neotree-dir project-dir)
+  ;;             (neotree-find file-name))
+  ;;         (message "Could not find git project root."))))
+  ;;   (define-key global-map (kbd "C-c C-P") 'neotree-project-dir)
 
 
-                                            ;        (defun display-buffer-neotree ()
-                                            ;          (interactive)
-                                            ;          (let ((buf-name (current-buffer))
-                                            ;                (buf-filename (buffer-file-name (current-buffer)))
-                                            ;       (neo-toggle-window-keep-p t)
-                                            ;   )
-      ;; display neo-tree if looking at a file
-                                            ;            (when buf-filename
-                                            ;              (neotree))
-                                            ;            ))
-                                            ;        (defun neo-new-view-advise (func &rest args)
-                                            ;          (let ((res (apply func args)))
-                                            ;            (display-buffer-neotree)
-                                            ;          res)
-                                            ;          )
-                                            ;(advice-add 'other-buffer :around 'neo-new-view-advise)
-                                            ;(advice-add 'find-file :around 'neo-new-view-advise)
-      )
+  ;;                                         ;        (defun display-buffer-neotree ()
+  ;;                                         ;          (interactive)
+  ;;                                         ;          (let ((buf-name (current-buffer))
+  ;;                                         ;                (buf-filename (buffer-file-name (current-buffer)))
+  ;;                                         ;       (neo-toggle-window-keep-p t)
+  ;;                                         ;   )
+  ;;   ;; display neo-tree if looking at a file
+  ;;                                         ;            (when buf-filename
+  ;;                                         ;              (neotree))
+  ;;                                         ;            ))
+  ;;                                         ;        (defun neo-new-view-advise (func &rest args)
+  ;;                                         ;          (let ((res (apply func args)))
+  ;;                                         ;            (display-buffer-neotree)
+  ;;                                         ;          res)
+  ;;                                         ;          )
+  ;;                                         ;(advice-add 'other-buffer :around 'neo-new-view-advise)
+  ;;                                         ;(advice-add 'find-file :around 'neo-new-view-advise)
+  ;;   )
 #+end_src
 
 * Navigation
@@ -1983,13 +1980,20 @@ Some general defaults:
   (global-set-key (kbd "C-c C-v ;") 'org-edit-src-headers)
   (global-set-key (kbd "C-c C-v :") 'org-print-src-headers)
 #+end_src
+
 *** Appearance
+
 Org will automatically convert the LaTex names for symbols to their utf-8
 encodings (so long as they are preceeded by a backslash.) For example, \Gamma is
-entered by typing "Gamma" preceeded by a slash
+entered by typing "Gamma" preceeded by a slash:
 #+begin_src emacs-lisp
-(org-toggle-pretty-entities)
+(setq-default org-pretty-entities-include-sub-superscripts t)
 #+end_src
+
+Hide all Org source blocks by default. 
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'org-babel-result-hide-all)
+#+end_src\n
 
 *** Tasks and States
 Tasks have multiple possible states. Below defines them and their transitions
