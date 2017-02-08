@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: int0f
+# key: int0f
+# --
+\int_0^\infty
