@@ -479,7 +479,8 @@ Please `previous-line' past org-block headers'"
         ("emacs-lisp" (:background "gray25"))
         ("R" (:background "gray25"))
         ("org" (:background "gray25"))
-        ("example" (:background "gray25"))))
+        ("example" (:background "gray25"))
+        ("latex" (:background "gray25"))))
 
 ;;;###autoload
 (when load-file-name
