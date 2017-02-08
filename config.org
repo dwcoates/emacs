@@ -182,8 +182,15 @@ This variables must be set before loading helm-gtags
                           :foreground "black")
       )
 #+END_SRC
-#+begin_src emacs-lisp
 
+Helm-flx improves helms scoring of results. Helm-fuzzier improves its fuzzy
+matching.
+#+begin_src emacs-lisp
+  (use-package helm-flx
+    :init (helm-flx-mode 1))
+
+  (use-package helm-fuzzier
+    :init (helm-fuzzier-mode 1))
 #+end_src
 
 
