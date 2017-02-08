@@ -133,6 +133,17 @@ minibuffer.
       ad-do-it)))
 #+end_src
 
+*** Pretty Symbols
+
+Prettify certain symbols. For example, use a λ instead of ~lambda~ in elisp code.
+#+begin_src emacs-lisp
+(global-prettify-symbols-mode t)
+#+end_src
+
+Unprettify when symbol is just before point. This doesn't seem to work...
+#+begin_src emacs-lisp
+(setq prettify-symbols-unprettify-at-point 'right-edge)
+#+end_src
 ** Helm
 This variables must be set before loading helm-gtags
 #+BEGIN_SRC emacs-lisp
@@ -1972,7 +1983,13 @@ Some general defaults:
   (global-set-key (kbd "C-c C-v ;") 'org-edit-src-headers)
   (global-set-key (kbd "C-c C-v :") 'org-print-src-headers)
 #+end_src
-
+*** Appearance
+Org will automatically convert the LaTex names for symbols to their utf-8
+encodings (so long as they are preceeded by a backslash.) For example, \Gamma is
+entered by typing "Gamma" preceeded by a slash
+#+begin_src emacs-lisp
+(org-toggle-pretty-entities)
+#+end_src
 
 *** Tasks and States
 Tasks have multiple possible states. Below defines them and their transitions
@@ -2140,7 +2157,7 @@ NOTE: Currently disabled
      (global-set-key (kbd "C-c C-x n") 'tea-time))
  #+end_src
 
-*** babel
+*** Babel
 This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
 #+begin_src emacs-lisp
 ;(load "~/.emacs.d/f.el")
@@ -2195,116 +2212,140 @@ Paths to various locations in my personal organization workflow
 org-capture-template is set in a private file. Look up the documention for
 org-capture-template (and org-capture in general) to see how it might look.
 #+begin_src emacs-lisp
-  (defun dwc-template/make-task-prompt (&optional task-type)
-    (unless task-type
-      (setq task-type "Task"))
-    (concat "%^{" task-type ":}\n"))
+    (defun dwc-template/make-task-prompt (&optional task-type)
+      (unless task-type
+        (setq task-type "Task"))
+      (concat "%^{" task-type ":}\n"))
 
 
-  (defconst org-template--todo "* TODO ")
-  (defconst org-template--next "* NEXT ")
-  (defconst org-template--basic-priority "[#%^{Priority:|C|A|B|C|D|E}] ")
+    (defconst org-template--todo "* TODO ")
+    (defconst org-template--next "* NEXT ")
+    (defconst org-template--basic-priority "[#%^{Priority:|C|A|B|C|D|E}] ")
 
-    ;;;;;;;; HEADER ;;;;;;;;
-  (defun org-template/todo-prompt (priority prompt) 
-    (concat org-template--todo priority "%^{" prompt "}"))
-  (defun org-template/next-prompt (priority prompt) 
-    (concat org-template--next priority "%^{" prompt "}"))
-    ;;;;;; SCHEDULING ;;;;;;
-  (defconst org-template/deadline "DEADLINE: %^t")
-  (defconst org-template/schedule "SCHEDULED: %^t")
-  (defconst org-template/timeline-query "%^{Timeline|SCHEDULED|DEADLINE}: %^t")
-    ;;;;;;;;; BODY ;;;;;;;;;
-  (defconst org-indented-cursor-placement "  %?")
-    ;;;;;; WATERMARK ;;;;;;;
-  (defconst org-template/meta-data "Captured on %T by %(system-name)")
+        ;;;;;;;; HEADER ;;;;;;;;
+    (defun org-template/todo-prompt (priority prompt)
+      (concat org-template--todo priority "%^{" prompt "}"))
+    (defun org-template/next-prompt (priority prompt)
+      (concat org-template--next priority "%^{" prompt "}"))
+        ;;;;;; SCHEDULING ;;;;;;
+    (defconst org-template/deadline "DEADLINE: %^t")
+    (defconst org-template/schedule "SCHEDULED: %^t")
+    (defconst org-template/timeline-query "%^{Timeline|SCHEDULED|DEADLINE}: %^t")
+        ;;;;;;;;; BODY ;;;;;;;;;
+    (defconst org-indented-cursor-placement "  %?")
+        ;;;;;; WATERMARK ;;;;;;;
+    (defconst org-template/meta-data "%a: on %T by %(system-name)")
 
-  (defun org-project-template-builder (header tags scheduling body watermark)
-    "Builds a template using the org-template componenets."
-    (concat
-     header " "
-     (when tags
-       (concat
-        ":"
-        (if (listp tags)
-            (mapconcat 'identity tags ":")
-          tags)
-        ":"))
-     "\n"
-     (when scheduling (concat scheduling "\n"))
-     (when body (concat body "\n"))
-     watermark))
+    (defun org-project-template-builder (header tags scheduling body watermark)
+      "Builds a template using the org-template componenets."
+      (concat
+       header " "
+       (when tags
+         (concat
+          ":"
+          (if (listp tags)
+              (mapconcat 'identity tags ":")
+            tags)
+          ":"))
+       "\n"
+       (when scheduling (concat scheduling "\n"))
+       (when body (concat body "\n"))
+       watermark))
 
-  (defconst org-basic-note-template 
-    (org-project-template-builder (org-template/next-prompt nil "Note")
-                                  "note" 
-                                  nil 
-                                  org-indented-cursor-placement
-                                  org-template/meta-data))
-  (defconst org-basic-quick-note-template
-    (org-project-template-builder (org-template/next-prompt nil "Quick Note")
-                                  "note" 
-                                  nil 
-                                  nil
-                                  org-template/meta-data))
-  (defconst org-basic-question-template 
-    (org-project-template-builder (org-template/next-prompt nil "Question")
-                                  "question" 
-                                  nil 
-                                  org-indented-cursor-placement
-                                  org-template/meta-data))
-  (defconst org-basic-nugget-template
-    (org-project-template-builder
-     (org-template/next-prompt nil "Thought")
-     "idea"
-     nil
-     org-indented-cursor-placement
-     org-template/meta-data))
-  (defconst org-basic-task-template 
-    (org-project-template-builder (org-template/next-prompt 
-                                   org-template--basic-priority
-                                   "Question")
-                                  nil 
-                                  org-template/timeline-query
-                                  org-indented-cursor-placement
-                                  org-template/meta-data))
+    (defconst org-basic-idea-template
+      (org-project-template-builder (org-template/next-prompt nil "Idea")
+                                    "note"
+                                    nil
+                                    org-indented-cursor-placement
+                                    org-template/meta-data))
+    (defconst org-basic-note-template
+      (org-project-template-builder (org-template/next-prompt nil "Note")
+                                    "note"
+                                    nil
+                                    org-indented-cursor-placement
+                                    org-template/meta-data))
+    (defconst org-basic-quick-note-template
+      (org-project-template-builder (org-template/next-prompt nil "Quick Note")
+                                    "note"
+                                    nil
+                                    nil
+                                    org-template/meta-data))
+    (defconst org-basic-question-template
+      (org-project-template-builder (org-template/next-prompt nil "Question")
+                                    "question"
+                                    nil
+                                    org-indented-cursor-placement
+                                    org-template/meta-data))
+    (defconst org-basic-nugget-template
+      (org-project-template-builder (org-template/next-prompt nil "Thought")
+                                    "idea"
+                                    nil
+                                    org-indented-cursor-placement
+                                    org-template/meta-data))
+    (defconst org-basic-task-template
+      (org-project-template-builder (org-template/todo-prompt
+                                     org-template--basic-priority
+                                     "Task")
+                                    nil
+                                    org-template/timeline-query
+                                    org-indented-cursor-placement
+                                    org-template/meta-data))
+    (defconst org-basic-oh-yeah-template
+      (org-project-template-builder (org-template/next-prompt
+                                     nil
+                                     "Oh yeah...")
+                                    nil
+                                    nil
+                                    nil
+                                    org-template/meta-data))
 
-  (setq org-capture-templates
-        (quote (("g" "General todos and refiles")
-                ("gt" "todo" entry (file nil)
-                 "* TODO %^{Todo}\n%U\n\n\t%?\n\n%a\n" 
+    (setq org-capture-templates
+         `(("g" "General todos and refiles")
+           ("gt" "Todo" entry (file nil)
+            ,org-basic-task-template
+                                            ; :clock-in t :clock-resume t
+            )
+           ("gr" "Respond" entry (file nil)
+            "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
+            :immediate-finish t
+                                            ; :clock-in t :clock-resume t
+            )
+           ("gn" "Quick Note" entry (file nil)
+            ,org-basic-quick-note-template
+                                            ; :clock-in t :clock-resume t
+            :immediate-finish t
+            )
+           ("gN" "Note" entry (file nil)
+            ,org-basic-quick-note-template
+                                            ; :clock-in t :clock-resume t
+            )
+           ("gf" "Oh Yeah..." entry (file nil)
+            ,org-basic-oh-yeah-template
                                           ; :clock-in t :clock-resume t
-                 )
-                ("gr" "respond" entry (file nil)
-                 "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
-                 :immediate-finish t ; :clock-in t :clock-resume t 
-                 )
-                ("gn" "note" entry (file nil)
-                 "* %^{Note} :NOTE:\n%U\n\t%a\n" 
-                                          ; :clock-in t :clock-resume t
-                 )
-                ("gj" "Journal" entry (file+datetree org-journal-file)
-                 "* %?\n%U\n" 
-                                          ; :clock-in t :clock-resume t
-                 )
-                ("gw" "org-protocol" entry (file org-default-notes-file)
-                 "* TODO Review %c\n%U\n" 
-                 :immediate-finish t
-                 )
-                ("gm" "Meeting" entry (file org-default-notes-file)
-                 "* MEETING with %? :MEETING:\n%U" 
-                                          ; :clock-in t :clock-resume t
-                 )
-                ("gp" "Phone call" entry (file org-default-notes-file)
-                 "* PHONE %? :PHONE:\n%U" 
-                                          ; :clock-in t :clock-resume t
-                 )
-                ("gh" "Habit" entry (file org-default-notes-file)
-                 "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"
-                 )
-                ("gb" "Stretch your legs" entry (file org-default-notes-file)
-                 "* TAKE A BREAK\nDEADLINE: %^T"
-                 ))))
+            :immediate-finish t
+            )
+           ("gj" "Journal" entry (file+datetree org-journal-file)
+            "* %?\n%U\n"
+                                            ; :clock-in t :clock-resume t
+            )
+           ("gw" "org-protocol" entry (file org-default-notes-file)
+            "* TODO Review %c\n%U\n"
+            :immediate-finish t
+            )
+           ("gm" "Meeting" entry (file org-default-notes-file)
+            "* MEETING with %? :MEETING:\n%U"
+                                            ; :clock-in t :clock-resume t
+            )
+           ("gp" "Phone call" entry (file org-default-notes-file)
+            "* PHONE %? :PHONE:\n%U"
+                                            ; :clock-in t :clock-resume t
+            )
+           ("gh" "Habit" entry (file org-default-notes-file)
+            "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"
+            )
+           ("gb" "Stretch your legs" entry (file org-default-notes-file)
+            "* TAKE A BREAK\nDEADLINE: %^T"
+            )))
 #+end_src
 
 *** Exports
@@ -2541,9 +2582,11 @@ org-capture-template (and org-capture in general) to see how it might look.
 #+end_src
 
 *** Functions
+
 #+begin_src emacs-lisp
 (define-key org-mode-map (kbd "C-M-<return>") 'org-insert-subheading)
 #+end_src
+
 **** column editing
 #+BEGIN_SRC emacs-lisp
 ;(add-hook 'org-mode-hook 'my-org-mode-hook)
@@ -2583,7 +2626,8 @@ org-capture allows you to take a note anywhere, which it will write to the org-d
 **** org-summary-todo
 This is for making sure that the top-level todo automatically is marked DONE if all sub-levels are DONE.
 TODO otherwise.
-#+BEGIN_SRC elisp
+
+#+BEGIN_SRC emacs-lisp
 (defun org-summary-todo (n-done n-not-done)
   "Switch entry to DONE when all subentries are done, to TODO otherwise."
   (let (org-log-done org-log-states)   ; turn off logging
@@ -2595,7 +2639,8 @@ TODO otherwise.
 **** jump-to-org-agenda
 This is a snippet from John Wiegley.
 It shows org agenda after emacs has been idle for a certain amount of time.
-#+BEGIN_SRC elisp
+
+#+BEGIN_SRC emacs-lisp
 (defun jump-to-org-agenda ()
   (interactive)
   (let ((buf (get-buffer "*Org Agenda*"))
@@ -2618,7 +2663,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
   ;;  (unless (get-buffer-window buf)
   ;;    (org-agenda-goto-calendar)))
   )
-(run-with-idle-timer 300 t 'jump-to-org-agenda)
+(run-with-idle-timer 60 t 'jump-to-org-agenda)
 #+END_SRC
 
 **** create-tasks-heading
