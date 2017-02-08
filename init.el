@@ -137,8 +137,8 @@
 (tool-bar-mode -1)
 
 ;; set transparency
-(set-frame-parameter (selected-frame) 'alpha '(100 100))
-(add-to-list 'default-frame-alist '(alpha 96 85))
+(set-frame-parameter (selected-frame) 'alpha '(100 85))
+(add-to-list 'default-frame-alist '(alpha 100 85))
 
 ;; don't include scroll bars in new frames
 (defun my/disable-scroll-bars (frame)
