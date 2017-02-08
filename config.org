@@ -2253,7 +2253,7 @@ Some components I made for building templates
       ;;;;;;;;; BODY ;;;;;;;;;
     (defconst org-indented-cursor-placement "  %?")
       ;;;;;; WATERMARK ;;;;;;;
-    (defconst org-template/meta-data "Captured on %T by %(system-name)")
+    (defconst org-template/meta-data "Captured on %T by %(system-name) by: %a")
 #+end_src
 
 ***** Project templates builder
@@ -2388,19 +2388,64 @@ Project builder templates.
                                   nil
                                   org-template/meta-data
                                   ))
+
+  (defun project-issue-template (&rest tags)
+    (org-project-template-builder (org-template/next-prompt 
+                                   org-template--basic-priority
+                                   "Issue")
+                                  (append '("issue") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  ))
+
+  (defun project-bug-template (&rest tags)
+    (org-project-template-builder (org-template/next-prompt 
+                                   org-template--basic-priority
+                                   "Bug")
+                                  (append '("bug") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  ))
+
+  (defun project-feature-template (&rest tags)
+    (org-project-template-builder (org-template/next-prompt
+                                   org-template--basic-priority
+                                   "Feature")
+                                  (append '("feature") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  ))
 #+end_src
 
-***** Templates
-Basic, non-descript templates.
+**** Templates
+Basic templates
 #+begin_src emacs-lisp
-  (defconst org-basic-idea-template (project-idea-template))
-  (defconst org-basic-note-template (project-note-template))
+  (defconst org-basic-idea-template       (project-idea-template))
+  (defconst org-basic-quick-idea-template (project-quick-idea-template))
+  (defconst org-basic-note-template       (project-note-template))
   (defconst org-basic-quick-note-template (project-quick-note-template))
-  (defconst org-basic-question-template (project-question-template))
-  (defconst org-basic-task-template (project-tasks-and-todos-template))
+  (defconst org-basic-question-template   (project-question-template))
+  (defconst org-basic-task-template       (project-tasks-and-todos-template))
+  (defconst org-basic-nugget-template     (org-project-template-builder
+                                           (org-template/next-prompt nil "Thought")
+                                           "nugget"
+                                           nil
+                                           org-indented-cursor-placement
+                                           org-template/meta-data))
+  (defconst org-basic-oh-yeah-template 
+    (org-project-template-builder (org-template/next-prompt nil "Oh yeah...")
+                                  "forgotten"
+                                  nil
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  ))
 #+end_src
 
-emplates for emacs-related captures.
+
+Templates for emacs-related captures.
 #+begin_src emacs-lisp
 (defconst emacs-idea-template (project-idea-template "emacs"))
 (defconst emacs-task-template (project-tasks-and-todos-template "emacs"))
@@ -2409,12 +2454,13 @@ emplates for emacs-related captures.
 (defconst emacs-note-template (project-note-template "emacs"))
 (defconst emacs-quick-note-template (project-quick-note-template "emacs"))
 
-(defconst emacs-feature-template (project-note-template "emacs" "feature"))
-(defconst emacs-issue-template (project-note-template "emacs" "issue"))
-(defconst emacs-bug-template (project-note-template "emacs" "bug"))
+(defconst emacs-feature-template (project-feature-template "emacs"))
+(defconst emacs-issue-template (project-issue-template "emacs"))
+(defconst emacs-bug-template (project-bug-template "emacs"))
 #+end_src
 
-***** Captures
+**** Captures
+
 #+begin_src emacs-lisp
   (setq org-capture-templates
        `(("g" "General todos and refiles")
@@ -2463,80 +2509,6 @@ emplates for emacs-related captures.
          ("gb" "Stretch your legs" entry (file org-default-notes-file)
           "* TAKE A BREAK\nDEADLINE: %^T"
           )))
-#+end_src
-
-**** Templates
-Basic templates
-#+begin_src emacs-lisp
-  (defconst org-basic-idea-template       (project-idea-template))
-  (defconst org-basic-quick-idea-template (project-quick-idea-template))
-  (defconst org-basic-note-template       (project-note-template))
-  (defconst org-basic-quick-note-template (project-quick-note-template))
-  (defconst org-basic-question-template   (project-question-template))
-  (defconst org-basic-task-template       (project-tasks-and-todos-template))
-  (defconst org-basic-nugget-template     (org-project-template-builder
-                                           (org-template/next-prompt nil "Thought")
-                                           "nugget"
-                                           nil
-                                           org-indented-cursor-placement
-                                           org-template/meta-data))
-#+end_src
-
-***** Emacs templates
-#+begin_src emacs-lisp
-  (defconst emacs-idea-template       (project-idea-template "emacs"))
-  (defconst emacs-quick-idea-template (project-quick-idea-template"emacs"))
-
-  (defconst emacs-feature-template       (project-idea-template "emacs" "feature"))
-  (defconst emacs-quick-feature-template (project-quick-idea-template"emacs" "feature"))
-
-  (defconst emacs-bug-template       (project-idea-template "emacs"))
-  (defconst emacs-quick-bug-template (project-quick-idea-template"emacs"))
-
-  (defconst emacs-note-template       (project-note-template"emacs"))
-  (defconst emacs-quick-note-template (project-quick-note-template"emacs"))
-  (defconst emacs-question-template   (project-question-template"emacs"))
-  (defconst emacs-task-template       (project-tasks-and-todos-template"emacs"))
-#+end_src
-
-**** Captures
-#+begin_src emacs-lisp
-    (setq org-capture-templates
-          (quote (("g" "General todos and refiles")
-                  ("gt" "todo" entry (file nil)
-                   "* TODO %^{Todo}\n%U\n\n\t%?\n\n%a\n" 
-                                            ; :clock-in t :clock-resume t
-                   )
-                  ("gr" "respond" entry (file nil)
-                   "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
-                   :immediate-finish t ; :clock-in t :clock-resume t 
-                   )
-                  ("gn" "note" entry (file nil)
-                   "* %^{Note} :NOTE:\n%U\n\t%a\n" 
-                                            ; :clock-in t :clock-resume t
-                   )
-                  ("gj" "Journal" entry (file+datetree org-journal-file)
-                   "* %?\n%U\n" 
-                                            ; :clock-in t :clock-resume t
-                   )
-                  ("gw" "org-protocol" entry (file org-default-notes-file)
-                   "* TODO Review %c\n%U\n" 
-                   :immediate-finish t
-                   )
-                  ("gm" "Meeting" entry (file org-default-notes-file)
-                   "* MEETING with %? :MEETING:\n%U" 
-                                            ; :clock-in t :clock-resume t
-                   )
-                  ("gp" "Phone call" entry (file org-default-notes-file)
-                   "* PHONE %? :PHONE:\n%U" 
-                                            ; :clock-in t :clock-resume t
-                   )
-                  ("gh" "Habit" entry (file org-default-notes-file)
-                   "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"
-                   )
-                  ("gb" "Stretch your legs" entry (file org-default-notes-file)
-                   "* TAKE A BREAK\nDEADLINE: %^T"
-                   ))))
 #+end_src
 
 *** Exports
@@ -2870,6 +2842,57 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
     (kill-new (org-id-get-create))
     )
   )
+#+end_src
+
+**** Captures
+#+begin_src emacs-lisp
+  (setq org-capture-templates
+       `(("g" "General todos and refiles")
+         ("gt" "Todo" entry (file nil)
+          ,org-basic-task-template
+                                          ; :clock-in t :clock-resume t
+          )
+         ("gr" "Respond" entry (file nil)
+          "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
+          :immediate-finish t
+                                          ; :clock-in t :clock-resume t
+          )
+         ("gn" "Quick Note" entry (file nil)
+          ,org-basic-quick-note-template
+                                          ; :clock-in t :clock-resume t
+          :immediate-finish t
+          )
+         ("gN" "Note" entry (file nil)
+          ,org-basic-quick-note-template
+                                          ; :clock-in t :clock-resume t
+          )
+         ("gf" "Oh Yeah..." entry (file nil)
+          ,org-basic-oh-yeah-template
+                                        ; :clock-in t :clock-resume t
+          :immediate-finish t
+          )
+         ("gj" "Journal" entry (file+datetree org-journal-file)
+          "* %?\n%U\n"
+                                          ; :clock-in t :clock-resume t
+          )
+         ("gw" "org-protocol" entry (file org-default-notes-file)
+          "* TODO Review %c\n%U\n"
+          :immediate-finish t
+          )
+         ("gm" "Meeting" entry (file org-default-notes-file)
+          "* MEETING with %? :MEETING:\n%U"
+                                          ; :clock-in t :clock-resume t
+          )
+         ("gp" "Phone call" entry (file org-default-notes-file)
+          "* PHONE %? :PHONE:\n%U"
+                                          ; :clock-in t :clock-resume t
+          )
+         ("gh" "Habit" entry (file org-default-notes-file)
+          "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"
+          )
+         ("gb" "Stretch your legs" entry (file org-default-notes-file)
+          "* TAKE A BREAK\nDEADLINE: %^T"
+          )))
 #+end_src
 
 * Emacs as a auxiliary interface
