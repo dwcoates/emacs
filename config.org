@@ -862,7 +862,8 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
     :config
-    (sp-pair "'" nil :when '(not (eq major-mode 'lisp-mode)) :actions nil) 
+    (sp-pair "'" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
+    (sp-pair "`" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
 
     (setq sp-base-key-bindings 'paredit)
     (setq sp-autoskip-closing-pair 'always)
@@ -2036,6 +2037,14 @@ Do not dim blocked tasks
 Compact the block agenda view
 #+begin_src emacs-lisp
   (setq org-agenda-compact-blocks t)
+#+end_src
+
+#+begin_src emacs-lisp
+  (define-key org-agenda-mode-map "T" 'org-tags-view)
+
+  ;; these functions are in org-misc
+  (global-set-key (kbd "C-c j") 'org-switch-to-agenda)
+  (global-set-key (kbd "C-c J") 'org-get-agenda)
 #+end_src
 
 Agenda custom commands
