@@ -4,4 +4,4 @@
 # --
 #+BEGIN_SRC ipython :session ${1::file `(rand-alphanum 6 "./img/py_" ".png")` } :exports ${2:both} :results${3: org :noweb yes }
 $0
-#+END_SRC
+#+END_SRC\n
