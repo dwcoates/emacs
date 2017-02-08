@@ -4,3 +4,9 @@
 [submodule "dwc-org-misc"]
 	path = org-misc
 	url = https://www.github.com/dwcoates/org-misc
+[submodule "dwc-smartparens"]
+	path = smartparens
+	url = https://github.com/dwcoates/smartparens
+[submodule "goodies"]
+	path = goodies
+	url = https://www.github.com/dwcoates/goodies

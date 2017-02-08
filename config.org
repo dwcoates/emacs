@@ -119,18 +119,18 @@ screen for minute.
     (setq curch-idle-interval 0.5))
 #+end_src
 
-*** Macros
+*** COMMENT Macros
 Don't display message "type 'e' to repeat macro" after I execute a macro. This
 interferes sometimes when I want my macro to display a message in the
 minibuffer.
 #+begin_src emacs-lisp
-(require 'cl) ; for flet
-(add-to-list 'minor-mode-alist '(kmacro-repeat-mode " MACRO-REPEAT!"))
-(defadvice kmacro-call-macro (around kmacro-call-macro-without-message activate)
-  "run kmacro-call-macro without any messages"
-  (flet ((message (&rest args)))
-    (let ((kmacro-repeat-mode t))
-      ad-do-it)))
+  ;; (require 'cl) ; for flet
+  ;; (add-to-list 'minor-mode-alist '(kmacro-repeat-mode " MACRO-REPEAT!"))
+  ;; (defadvice kmacro-call-macro (around kmacro-call-macro-without-message activate)
+  ;;   "run kmacro-call-macro without any messages"
+  ;;   (cl-flet ((message (&rest args)))
+  ;;     (let ((kmacro-repeat-mode t))
+  ;;       ad-do-it)))
 #+end_src
 
 *** Pretty Symbols
@@ -2143,6 +2143,7 @@ NOTE: Currently disabled
                  (load-org-agenda-files-recursively file)))))) 
 
   (load-org-agenda-files-recursively org-directory)
+#+end_src
 *** Clock
 #+begin_src emacs-lisp
   (define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
@@ -2203,6 +2204,7 @@ Editting source code
 #+end_src
 
 *** Capture
+**** Template Components
 Paths to various locations in my personal organization workflow
 #+begin_src emacs-lisp
   (setq org-personal-dir "~/personal/")
@@ -2211,6 +2213,8 @@ Paths to various locations in my personal organization workflow
 #+end_src
 org-capture-template is set in a private file. Look up the documention for
 org-capture-template (and org-capture in general) to see how it might look.
+Some components I made for building templates
+#+begin_src emacs-lisp
 #+begin_src emacs-lisp
     (defun dwc-template/make-task-prompt (&optional task-type)
       (unless task-type
@@ -2236,6 +2240,22 @@ org-capture-template (and org-capture in general) to see how it might look.
         ;;;;;; WATERMARK ;;;;;;;
     (defconst org-template/meta-data "%a: on %T by %(system-name)")
 
+      ;;;;;;;; HEADER ;;;;;;;;
+    (defun org-template/todo-prompt (priority prompt) 
+      (concat org-template--todo priority "%^{" prompt "}"))
+    (defun org-template/next-prompt (priority prompt) 
+      (concat org-template--next priority "%^{" prompt "}"))
+      ;;;;;; SCHEDULING ;;;;;;
+    (defconst org-template/deadline "DEADLINE: %^t")
+    (defconst org-template/schedule "SCHEDULED: %^t")
+    (defconst org-template/timeline-query "%^{Timeline|SCHEDULED|DEADLINE}: %^t")
+      ;;;;;;;;; BODY ;;;;;;;;;
+    (defconst org-indented-cursor-placement "  %?")
+      ;;;;;; WATERMARK ;;;;;;;
+    (defconst org-template/meta-data "Captured on %T by %(system-name)")
+#+end_src
+***** Project templates builder
+#+begin_src emacs-lisp
     (defun org-project-template-builder (header tags scheduling body watermark)
       "Builds a template using the org-template componenets."
       (concat
@@ -2346,6 +2366,140 @@ org-capture-template (and org-capture in general) to see how it might look.
            ("gb" "Stretch your legs" entry (file org-default-notes-file)
             "* TAKE A BREAK\nDEADLINE: %^T"
             )))
+#+end_src
+***** Templates builders
+#+begin_src emacs-lisp
+  (defun project-tasks-and-todos-template (&rest tags)
+    (org-project-template-builder (org-template/todo-prompt
+                                   org-template--basic-priority
+                                   "Task")
+                                  (append '() (if (listp tags) tags (list tags)))
+                                  org-template/timeline-query
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  ))
+
+  (defun project-idea-template (&rest tags)
+    (org-project-template-builder (org-template/next-prompt nil "Idea")
+                                  (append '("idea") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  ))
+
+  (defun project-quick-idea-template (&rest tags)
+    (org-project-template-builder (org-template/next-prompt nil "Idea")
+                                  (append '("idea") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  org-template/meta-data
+                                  ))
+
+
+  (defun project-quick-note-template (&rest tags)
+    (org-project-template-builder (org-template/next-prompt nil "Quick Note")
+                                  (append '("note") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  org-template/meta-data
+                                  ))
+
+  (defun project-note-template (&rest tags)
+    (org-project-template-builder (org-template/next-prompt nil "Note")
+                                  (append '("note") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  ))
+
+  (defun project-question-template (&rest tags)
+    (org-project-template-builder (org-template/next-prompt nil "Question")
+                                  (append '("question") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  ))
+
+  (defun project-quick-question-template (&rest tags)
+    (org-project-template-builder (org-template/next-prompt nil "Question")
+                                  (append '("question") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  org-template/meta-data
+                                  ))
+#+end_src
+
+**** Templates
+Basic templates
+#+begin_src emacs-lisp
+  (defconst org-basic-idea-template       (project-idea-template))
+  (defconst org-basic-quick-idea-template (project-quick-idea-template))
+  (defconst org-basic-note-template       (project-note-template))
+  (defconst org-basic-quick-note-template (project-quick-note-template))
+  (defconst org-basic-question-template   (project-question-template))
+  (defconst org-basic-task-template       (project-tasks-and-todos-template))
+  (defconst org-basic-nugget-template     (org-project-template-builder
+                                           (org-template/next-prompt nil "Thought")
+                                           "nugget"
+                                           nil
+                                           org-indented-cursor-placement
+                                           org-template/meta-data))
+#+end_src
+***** Emacs templates
+#+begin_src emacs-lisp
+  (defconst emacs-idea-template       (project-idea-template "emacs"))
+  (defconst emacs-quick-idea-template (project-quick-idea-template"emacs"))
+
+  (defconst emacs-feature-template       (project-idea-template "emacs" "feature"))
+  (defconst emacs-quick-feature-template (project-quick-idea-template"emacs" "feature"))
+
+  (defconst emacs-bug-template       (project-idea-template "emacs"))
+  (defconst emacs-quick-bug-template (project-quick-idea-template"emacs"))
+
+  (defconst emacs-note-template       (project-note-template"emacs"))
+  (defconst emacs-quick-note-template (project-quick-note-template"emacs"))
+  (defconst emacs-question-template   (project-question-template"emacs"))
+  (defconst emacs-task-template       (project-tasks-and-todos-template"emacs"))
+#+end_src
+
+**** Captures
+#+begin_src emacs-lisp
+    (setq org-capture-templates
+          (quote (("g" "General todos and refiles")
+                  ("gt" "todo" entry (file nil)
+                   "* TODO %^{Todo}\n%U\n\n\t%?\n\n%a\n" 
+                                            ; :clock-in t :clock-resume t
+                   )
+                  ("gr" "respond" entry (file nil)
+                   "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n"
+                   :immediate-finish t ; :clock-in t :clock-resume t 
+                   )
+                  ("gn" "note" entry (file nil)
+                   "* %^{Note} :NOTE:\n%U\n\t%a\n" 
+                                            ; :clock-in t :clock-resume t
+                   )
+                  ("gj" "Journal" entry (file+datetree org-journal-file)
+                   "* %?\n%U\n" 
+                                            ; :clock-in t :clock-resume t
+                   )
+                  ("gw" "org-protocol" entry (file org-default-notes-file)
+                   "* TODO Review %c\n%U\n" 
+                   :immediate-finish t
+                   )
+                  ("gm" "Meeting" entry (file org-default-notes-file)
+                   "* MEETING with %? :MEETING:\n%U" 
+                                            ; :clock-in t :clock-resume t
+                   )
+                  ("gp" "Phone call" entry (file org-default-notes-file)
+                   "* PHONE %? :PHONE:\n%U" 
+                                            ; :clock-in t :clock-resume t
+                   )
+                  ("gh" "Habit" entry (file org-default-notes-file)
+                   "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"
+                   )
+                  ("gb" "Stretch your legs" entry (file org-default-notes-file)
+                   "* TAKE A BREAK\nDEADLINE: %^T"
+                   ))))
 #+end_src
 
 *** Exports
