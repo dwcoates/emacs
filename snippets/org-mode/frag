@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: frag
+# key: frag
+# --
+\[ $0 \]
