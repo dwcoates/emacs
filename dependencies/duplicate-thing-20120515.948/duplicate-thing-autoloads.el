@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "duplicate-thing" "duplicate-thing.el" (22648
-;;;;;;  549 536497 433000))
+;;;### (autoloads nil "duplicate-thing" "duplicate-thing.el" (22683
+;;;;;;  54978 862504 599000))
 ;;; Generated autoloads from duplicate-thing.el
 
 (autoload 'duplicate-thing "duplicate-thing" "\

@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "cursor-chg" "cursor-chg.el" (22679 46154 407141
-;;;;;;  2000))
+;;;### (autoloads nil "cursor-chg" "cursor-chg.el" (22683 54895 6502
+;;;;;;  487000))
 ;;; Generated autoloads from cursor-chg.el
 
 (defvar curchg-change-cursor-on-input-method-flag t "\

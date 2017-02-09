@@ -3,7 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "gh-api" "gh-api.el" (22673 62353 31850 895000))
+;;;### (autoloads nil "gh-api" "gh-api.el" (22683 55011 586505 423000))
 ;;; Generated autoloads from gh-api.el
 
 (require 'eieio)
@@ -24,8 +24,7 @@
 
 ;;;***
 
-;;;### (autoloads nil "gh-auth" "gh-auth.el" (22673 62353 143850
-;;;;;;  893000))
+;;;### (autoloads nil "gh-auth" "gh-auth.el" (22683 55012 2505 433000))
 ;;; Generated autoloads from gh-auth.el
 
 (require 'eieio)
@@ -40,8 +39,8 @@
 
 ;;;***
 
-;;;### (autoloads nil "gh-cache" "gh-cache.el" (22673 62353 99850
-;;;;;;  894000))
+;;;### (autoloads nil "gh-cache" "gh-cache.el" (22683 55011 838505
+;;;;;;  429000))
 ;;; Generated autoloads from gh-cache.el
 
 (require 'eieio)
@@ -52,8 +51,8 @@
 
 ;;;***
 
-;;;### (autoloads nil "gh-comments" "gh-comments.el" (22673 62352
-;;;;;;  983850 896000))
+;;;### (autoloads nil "gh-comments" "gh-comments.el" (22683 55011
+;;;;;;  418505 419000))
 ;;; Generated autoloads from gh-comments.el
 
 (require 'eieio)
@@ -62,8 +61,8 @@
 
 ;;;***
 
-;;;### (autoloads nil "gh-common" "gh-common.el" (22673 62353 59850
-;;;;;;  895000))
+;;;### (autoloads nil "gh-common" "gh-common.el" (22683 55011 686505
+;;;;;;  425000))
 ;;; Generated autoloads from gh-common.el
 
 (require 'eieio)
@@ -88,7 +87,8 @@
 
 ;;;***
 
-;;;### (autoloads nil "gh-gist" "gh-gist.el" (22673 62353 3850 896000))
+;;;### (autoloads nil "gh-gist" "gh-gist.el" (22683 55011 478505
+;;;;;;  420000))
 ;;; Generated autoloads from gh-gist.el
 
 (require 'eieio)
@@ -110,15 +110,15 @@
 ;;;***
 
 ;;;### (autoloads nil "gh-issue-comments" "gh-issue-comments.el"
-;;;;;;  (22673 62353 79850 894000))
+;;;;;;  (22683 55011 770505 427000))
 ;;; Generated autoloads from gh-issue-comments.el
 
 (require 'eieio)
 
 ;;;***
 
-;;;### (autoloads nil "gh-issues" "gh-issues.el" (22673 62353 111850
-;;;;;;  894000))
+;;;### (autoloads nil "gh-issues" "gh-issues.el" (22683 55011 890505
+;;;;;;  430000))
 ;;; Generated autoloads from gh-issues.el
 
 (require 'eieio)
@@ -137,8 +137,8 @@
 
 ;;;***
 
-;;;### (autoloads nil "gh-oauth" "gh-oauth.el" (22673 62352 991850
-;;;;;;  896000))
+;;;### (autoloads nil "gh-oauth" "gh-oauth.el" (22683 55011 446505
+;;;;;;  419000))
 ;;; Generated autoloads from gh-oauth.el
 
 (require 'eieio)
@@ -153,7 +153,8 @@
 
 ;;;***
 
-;;;### (autoloads nil "gh-orgs" "gh-orgs.el" (22673 62353 71850 894000))
+;;;### (autoloads nil "gh-orgs" "gh-orgs.el" (22683 55011 722505
+;;;;;;  426000))
 ;;; Generated autoloads from gh-orgs.el
 
 (require 'eieio)
@@ -168,16 +169,16 @@
 
 ;;;***
 
-;;;### (autoloads nil "gh-pull-comments" "gh-pull-comments.el" (22673
-;;;;;;  62353 127850 893000))
+;;;### (autoloads nil "gh-pull-comments" "gh-pull-comments.el" (22683
+;;;;;;  55011 974505 433000))
 ;;; Generated autoloads from gh-pull-comments.el
 
 (require 'eieio)
 
 ;;;***
 
-;;;### (autoloads nil "gh-pulls" "gh-pulls.el" (22673 62353 119850
-;;;;;;  894000))
+;;;### (autoloads nil "gh-pulls" "gh-pulls.el" (22683 55011 938505
+;;;;;;  432000))
 ;;; Generated autoloads from gh-pulls.el
 
 (require 'eieio)
@@ -194,8 +195,8 @@
 
 ;;;***
 
-;;;### (autoloads nil "gh-repos" "gh-repos.el" (22673 62353 91850
-;;;;;;  894000))
+;;;### (autoloads nil "gh-repos" "gh-repos.el" (22683 55011 806505
+;;;;;;  428000))
 ;;; Generated autoloads from gh-repos.el
 
 (require 'eieio)
@@ -210,15 +211,15 @@
 
 ;;;***
 
-;;;### (autoloads nil "gh-search" "gh-search.el" (22673 62353 11850
-;;;;;;  896000))
+;;;### (autoloads nil "gh-search" "gh-search.el" (22683 55011 518505
+;;;;;;  421000))
 ;;; Generated autoloads from gh-search.el
 
 (eieio-defclass-autoload 'gh-search-api '(gh-api-v3) "gh-search" nil)
 
 ;;;***
 
-;;;### (autoloads nil "gh-url" "gh-url.el" (22673 62352 963850 896000))
+;;;### (autoloads nil "gh-url" "gh-url.el" (22683 55011 358505 417000))
 ;;; Generated autoloads from gh-url.el
 
 (require 'eieio)
@@ -231,8 +232,8 @@
 
 ;;;***
 
-;;;### (autoloads nil "gh-users" "gh-users.el" (22673 62353 51850
-;;;;;;  895000))
+;;;### (autoloads nil "gh-users" "gh-users.el" (22683 55011 646505
+;;;;;;  424000))
 ;;; Generated autoloads from gh-users.el
 
 (require 'eieio)
@@ -243,8 +244,8 @@
 
 ;;;***
 
-;;;### (autoloads nil nil ("gh-pkg.el" "gh-profile.el" "gh.el") (22673
-;;;;;;  62353 43850 895000))
+;;;### (autoloads nil nil ("gh-pkg.el" "gh-profile.el" "gh.el") (22683
+;;;;;;  55011 622505 424000))
 
 ;;;***
 

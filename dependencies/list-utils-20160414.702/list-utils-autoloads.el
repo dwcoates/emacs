@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "list-utils" "list-utils.el" (22648 552 992497
-;;;;;;  371000))
+;;;### (autoloads nil "list-utils" "list-utils.el" (22683 54982 278504
+;;;;;;  685000))
 ;;; Generated autoloads from list-utils.el
 
 (let ((loads (get 'list-utils 'custom-loads))) (if (member '"list-utils" loads) nil (put 'list-utils 'custom-loads (cons '"list-utils" loads))))

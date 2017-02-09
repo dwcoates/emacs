@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "avy-menu" "avy-menu.el" (22648 514 640498
-;;;;;;  58000))
+;;;### (autoloads nil "avy-menu" "avy-menu.el" (22683 54918 678503
+;;;;;;  83000))
 ;;; Generated autoloads from avy-menu.el
 
 (autoload 'avy-menu "avy-menu" "\

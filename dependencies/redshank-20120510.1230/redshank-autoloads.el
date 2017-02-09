@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "redshank" "redshank.el" (22648 552 580497
-;;;;;;  378000))
+;;;### (autoloads nil "redshank" "redshank.el" (22683 54981 502504
+;;;;;;  665000))
 ;;; Generated autoloads from redshank.el
 
 (autoload 'redshank-mode "redshank" "\
@@ -40,8 +40,8 @@ This function is designed to be added to hooks, for example:
 
 ;;;***
 
-;;;### (autoloads nil "redshank-loader" "redshank-loader.el" (22648
-;;;;;;  552 640497 377000))
+;;;### (autoloads nil "redshank-loader" "redshank-loader.el" (22683
+;;;;;;  54981 606504 668000))
 ;;; Generated autoloads from redshank-loader.el
 
 (autoload 'redshank-setup "redshank-loader" "\
@@ -53,7 +53,8 @@ activate support for that, too.
 
 ;;;***
 
-;;;### (autoloads nil nil ("redshank-pkg.el") (22648 552 620497 378000))
+;;;### (autoloads nil nil ("redshank-pkg.el") (22683 54981 574504
+;;;;;;  667000))
 
 ;;;***
 

@@ -4,7 +4,7 @@
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
 ;;;### (autoloads nil "persistent-scratch" "persistent-scratch.el"
-;;;;;;  (22648 554 460497 345000))
+;;;;;;  (22683 54983 882504 725000))
 ;;; Generated autoloads from persistent-scratch.el
 
 (autoload 'persistent-scratch-save "persistent-scratch" "\

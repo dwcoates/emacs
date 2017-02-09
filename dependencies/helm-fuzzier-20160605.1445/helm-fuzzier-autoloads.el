@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "helm-fuzzier" "helm-fuzzier.el" (22683 37011
-;;;;;;  67330 736000))
+;;;### (autoloads nil "helm-fuzzier" "helm-fuzzier.el" (22683 54903
+;;;;;;  498502 701000))
 ;;; Generated autoloads from helm-fuzzier.el
 
 (defvar helm-fuzzier-mode nil "\

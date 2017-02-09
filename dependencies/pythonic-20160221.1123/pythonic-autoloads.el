@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "pythonic" "pythonic.el" (22677 11537 419705
-;;;;;;  15000))
+;;;### (autoloads nil "pythonic" "pythonic.el" (22683 54999 974505
+;;;;;;  130000))
 ;;; Generated autoloads from pythonic.el
 
 (autoload 'pythonic-activate "pythonic" "\

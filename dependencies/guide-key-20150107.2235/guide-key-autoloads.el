@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "guide-key" "guide-key.el" (22648 511 4498
-;;;;;;  123000))
+;;;### (autoloads nil "guide-key" "guide-key.el" (22683 54913 94502
+;;;;;;  942000))
 ;;; Generated autoloads from guide-key.el
 
 (defvar guide-key-mode nil "\

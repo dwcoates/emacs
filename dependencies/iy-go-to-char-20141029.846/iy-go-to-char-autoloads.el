@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "iy-go-to-char" "iy-go-to-char.el" (22648 513
-;;;;;;  420498 80000))
+;;;### (autoloads nil "iy-go-to-char" "iy-go-to-char.el" (22683 54916
+;;;;;;  894503 38000))
 ;;; Generated autoloads from iy-go-to-char.el
 
 (autoload 'iy-go-to-char "iy-go-to-char" "\

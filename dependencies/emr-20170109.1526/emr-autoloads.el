@@ -3,7 +3,7 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "emr" "emr.el" (22648 553 688497 358000))
+;;;### (autoloads nil "emr" "emr.el" (22683 54982 886504 700000))
 ;;; Generated autoloads from emr.el
 
 (autoload 'emr-move-above-defun "emr" "\
@@ -99,7 +99,7 @@ Activate language support for EMR.
 
 ;;;***
 
-;;;### (autoloads nil "emr-c" "emr-c.el" (22648 553 708497 358000))
+;;;### (autoloads nil "emr-c" "emr-c.el" (22683 54982 914504 701000))
 ;;; Generated autoloads from emr-c.el
 
 (autoload 'emr-c-tidy-includes "emr-c" "\
@@ -128,7 +128,8 @@ Initialize EMR in C buffers and enable the EMR menu.
 
 ;;;***
 
-;;;### (autoloads nil "emr-css" "emr-css.el" (22648 553 648497 359000))
+;;;### (autoloads nil "emr-css" "emr-css.el" (22683 54982 838504
+;;;;;;  699000))
 ;;; Generated autoloads from emr-css.el
 
 (autoload 'emr-css-toggle-important "emr-css" "\
@@ -138,8 +139,8 @@ Add or remove !important on the property at point.
 
 ;;;***
 
-;;;### (autoloads nil "emr-elisp" "emr-elisp.el" (22648 553 672497
-;;;;;;  359000))
+;;;### (autoloads nil "emr-elisp" "emr-elisp.el" (22683 54982 862504
+;;;;;;  699000))
 ;;; Generated autoloads from emr-elisp.el
 
 (autoload 'emr-el-inline-variable "emr-elisp" "\
@@ -350,8 +351,8 @@ Enable the EMR menu for Elisp buffers.
 
 ;;;***
 
-;;;### (autoloads nil "emr-lisp" "emr-lisp.el" (22648 553 628497
-;;;;;;  360000))
+;;;### (autoloads nil "emr-lisp" "emr-lisp.el" (22683 54982 810504
+;;;;;;  698000))
 ;;; Generated autoloads from emr-lisp.el
 
 (autoload 'emr-lisp-comment-form "emr-lisp" "\
@@ -369,8 +370,8 @@ textual comments.
 
 ;;;***
 
-;;;### (autoloads nil "emr-scheme" "emr-scheme.el" (22648 553 608497
-;;;;;;  360000))
+;;;### (autoloads nil "emr-scheme" "emr-scheme.el" (22683 54982 786504
+;;;;;;  697000))
 ;;; Generated autoloads from emr-scheme.el
 
 (autoload 'emr-scm-extract-function "emr-scheme" "\
@@ -389,7 +390,7 @@ The variable will be called NAME.
 ;;;***
 
 ;;;### (autoloads nil nil ("emr-iedit.el" "emr-js.el" "emr-pkg.el"
-;;;;;;  "emr-prog.el" "emr-ruby.el") (22648 553 724497 358000))
+;;;;;;  "emr-prog.el" "emr-ruby.el") (22683 54982 946504 701000))
 
 ;;;***
 

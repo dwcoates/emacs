@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil nil ("ob-ipython-pkg.el" "ob-ipython.el") (22648
-;;;;;;  582 784496 837000))
+;;;### (autoloads nil nil ("ob-ipython-pkg.el" "ob-ipython.el") (22683
+;;;;;;  55014 454505 495000))
 
 ;;;***
 

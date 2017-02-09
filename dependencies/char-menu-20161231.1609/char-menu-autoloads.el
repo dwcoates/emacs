@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "char-menu" "char-menu.el" (22648 519 152497
-;;;;;;  977000))
+;;;### (autoloads nil "char-menu" "char-menu.el" (22683 54925 278503
+;;;;;;  249000))
 ;;; Generated autoloads from char-menu.el
 
 (autoload 'char-menu "char-menu" "\

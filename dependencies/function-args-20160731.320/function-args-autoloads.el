@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "function-args" "function-args.el" (22648 565
-;;;;;;  436497 148000))
+;;;### (autoloads nil "function-args" "function-args.el" (22683 55003
+;;;;;;  158505 210000))
 ;;; Generated autoloads from function-args.el
 
 (autoload 'function-args-mode "function-args" "\
@@ -22,7 +22,7 @@ Set up default key bindings.
 ;;;***
 
 ;;;### (autoloads nil nil ("function-args-pkg.el" "semantic-directory.el")
-;;;;;;  (22648 565 424497 148000))
+;;;;;;  (22683 55003 118505 209000))
 
 ;;;***
 
