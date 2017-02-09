@@ -2444,21 +2444,28 @@ Project builder templates.
 Basic templates
 
 #+begin_src emacs-lisp
-  (defconst org-basic-idea-template       (project-idea-template))
-  (defconst org-basic-quick-idea-template (project-quick-idea-template))
-  (defconst org-basic-note-template       (project-note-template))
-  (defconst org-basic-quick-note-template (project-quick-note-template))
-  (defconst org-basic-question-template   (project-question-template))
-  (defconst org-basic-task-template       (project-tasks-and-todos-template))
-  (defconst org-basic-nugget-template     (org-project-template-builder
-                                           (org-template/next-prompt nil "Thought")
-                                           "nugget"
-                                           nil
-                                           org-indented-cursor-placement
-                                           org-template/meta-data))
-  (defconst org-basic-oh-yeah-template 
+  (defun org-basic-idea-template (&rest tags)       
+    (apply 'project-idea-template tags))
+  (defun org-basic-quick-idea-template (&rest tags) 
+    (apply 'project-quick-idea-template tags))
+  (defun org-basic-note-template (&rest tags)       
+    (apply 'project-note-template tags))
+  (defun org-basic-quick-note-template (&rest tags) 
+    (apply 'project-quick-note-template tags))
+  (defun org-basic-question-template (&rest tags)   
+    (apply 'project-question-template tags))
+  (defun org-basic-task-template (&rest tags)       
+    (apply 'project-tasks-and-todos-template tags))
+  (defun org-basic-nugget-template (&rest tags)
+    (org-project-template-builder
+     (org-template/next-prompt nil "Thought")
+     (cons "nugget" tags)
+     nil
+     org-indented-cursor-placement
+     org-template/meta-data))
+  (defun org-basic-oh-yeah-template (&rest tags)
     (org-project-template-builder (org-template/next-prompt nil "Oh yeah...")
-                                  "forgotten"
+                                  (cons "forgotten" tags)
                                   nil
                                   org-indented-cursor-placement
                                   org-template/meta-data
@@ -2468,16 +2475,34 @@ Basic templates
 
 Templates for emacs-related captures.
 #+begin_src emacs-lisp
-(defconst emacs-idea-template (project-idea-template "emacs"))
-(defconst emacs-task-template (project-tasks-and-todos-template "emacs"))
-(defconst emacs-question-template (project-question-template "emacs"))
-(defconst emacs-quick-question-template (project-quick-question-template "emacs"))
-(defconst emacs-note-template (project-note-template "emacs"))
-(defconst emacs-quick-note-template (project-quick-note-template "emacs"))
+  (defun emacs-idea-template (&rest tags)
+    (apply 'project-idea-template
+           (cons "emacs" tags)))
+  (defun emacs-task-template (&rest tags)
+    (apply 'project-tasks-and-todos-template
+           (cons "emacs" tags)))
+  (defun emacs-question-template (&rest tags)
+    (apply 'project-question-template
+           (cons "emacs" tags)))
+  (defun emacs-quick-question-template (&rest tags)
+    (apply 'project-quick-question-template
+           (cons "emacs" tags)))
+  (defun emacs-note-template (&rest tags)
+    (apply 'project-note-template
+           (cons "emacs" tags)))
+  (defun emacs-quick-note-template (&rest tags)
+    (apply 'project-quick-note-template
+           (cons "emacs" tags)))
 
-(defconst emacs-feature-template (project-feature-template "emacs"))
-(defconst emacs-issue-template (project-issue-template "emacs"))
-(defconst emacs-bug-template (project-bug-template "emacs"))
+  (defun emacs-feature-template (&rest tags)
+    (apply 'project-feature-template
+           (cons "emacs" tags)))
+  (defun emacs-issue-template (&rest tags)
+    (apply 'project-issue-template
+           (cons "emacs" tags)))
+  (defun emacs-bug-template (&rest tags)
+    (apply 'project-bug-template
+           (cons "emacs" tags)))
 #+end_src
 
 **** Captures
@@ -2486,7 +2511,7 @@ Templates for emacs-related captures.
   (setq org-capture-templates
        `(("g" "General todos and refiles")
          ("gt" "Todo" entry (file nil)
-          ,org-basic-task-template
+          ,(org-basic-task-template)
                                           ; :clock-in t :clock-resume t
           )
          ("gr" "Respond" entry (file nil)
@@ -2495,16 +2520,16 @@ Templates for emacs-related captures.
                                           ; :clock-in t :clock-resume t
           )
          ("gn" "Quick Note" entry (file nil)
-          ,org-basic-quick-note-template
+          ,(org-basic-quick-note-template)
                                           ; :clock-in t :clock-resume t
           :immediate-finish t
           )
          ("gN" "Note" entry (file nil)
-          ,org-basic-quick-note-template
+          ,(org-basic-quick-note-template)
                                           ; :clock-in t :clock-resume t
           )
          ("gf" "Oh Yeah..." entry (file nil)
-          ,org-basic-oh-yeah-template
+          ,(org-basic-oh-yeah-template)
                                         ; :clock-in t :clock-resume t
           :immediate-finish t
           )
