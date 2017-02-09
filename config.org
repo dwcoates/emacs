@@ -271,7 +271,9 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 
 Ido should save its files where everything else does!
 #+begin_src emacs-lisp
-(setq ido-save-directory-list-file (concat (file-name-as-directory saveplace-dir) "ido.last"))
+  (setq-default 
+   ido-save-directory-list-file 
+     (concat (file-name-as-directory saveplace-dir) "ido.last"))
 #+end_src
 
 ** Error finding
@@ -512,6 +514,12 @@ This goes before neotree configuration
 
 * Navigation
 ** Basic Settings
+Remaps the other-window command. In general, commands with consec
+#+begin_src emacs-lisp 
+  (global-set-key (kbd "C-x C-o") 'other-window)
+  (global-set-key (kbd "C-x o") 'other-frame)
+#+end_src
+
 Quickly move the cursor to the first instance of a character with iy-go-to-char:
 #+begin_src emacs-lisp
 (use-package iy-go-to-char
