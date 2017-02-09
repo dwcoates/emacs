@@ -1,8 +1,21 @@
 ;; Keep track of loading time
 (defconst emacs-start-time (current-time))
 
+;; Directory for personal stuff. Personal org documents, emacs history, etc.
+(defconst personal-dir "~/personal")
+(unless (file-exists-p personal-dir)
+  (message "%s: %s" "Creating personal directory for first time" personal-dir)
+  (make-directory personal-dir))
+
+
+;; Directory for emacs saves
+(defconst saveplace-dir (concat (file-name-as-directory personal-dir) ".emacs-saves")
+  "Where all the saves go (stuff like cursor position, autosaves, etc).")
+
+
+
 ;; load system-specific settings best loaded first
-(let ((pre "~/personal/.exclusive/pre.el"))
+(let ((pre (concat (file-name-as-directory personal-dir) ".exclusive/pre.el")))
   (if (file-exists-p pre)
       (load pre)))
 
@@ -16,9 +29,6 @@
 
 ;; Load Emacs' package manager
 (require 'package)
-
-;; Set the directory into which downloaded packages will be installed
-(setq package-user-dir (concat user-emacs-directory "dependencies"))
 
 ;; Add various emacs package repositories to the pool. This is where we
 ;; look for packages.
@@ -79,9 +89,6 @@
 
 ;; Load wilson theme:
 ;(load "~/.emacs.d/wilson-theme.el")
-
-(defvar saveplace-dir (concat user-emacs-directory "saveplace")
-  "Where all the saves go (stuff like cursor position, autosaves, etc).")
 
 ;;
 ;; Some basic editing and appearance defaults
@@ -176,6 +183,10 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;; SAVES ;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Save point across sessions
 (require 'saveplace)
 (setq-default
@@ -203,6 +214,11 @@
       recentf-auto-cleanup 600
       recentf-filename-handlers '(abbreviate-file-name))
 (recentf-mode 1)
+
+;; File Autosaves
+(setq auto-save-list-file-prefix (concat
+                                  (file-name-as-directory saveplace-dir)
+                                  ".saves-"))
 
 ;; window config undo/redo winner is a minor-mode for undoing and
 ;; redoing window configuration changes.
@@ -278,6 +294,6 @@
 
 
 ;; Load system-specific settings best loaded last
-(let ((post "~/personal/.exclusive/post.el"))
+(let ((post (concat (file-name-as-directory personal-dir) ".exclusive/post.el")))
   (if (file-exists-p post)
       (load post)))

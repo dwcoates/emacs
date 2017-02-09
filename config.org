@@ -499,6 +499,11 @@ This goes before neotree configuration
   ;;   )
 #+end_src
 
+** History
+#+begin_src emacs-lisp
+(setq ido-save-directory-list-file (concat (file-name-as-directory saveplace-dir) "ido.last"))
+#+end_src\n
+
 * Navigation
 ** Basic Settings
 Quickly move the cursor to the first instance of a character with iy-go-to-char:
@@ -538,13 +543,6 @@ General navigation bindings:
 
 Key bindings for other files:
 #+begin_src emacs-lisp
-(global-set-key (kbd "C-c o e")
-                (lambda () (interactive) (find-file "~/personal/everything.org")))
-(global-set-key (kbd "C-c o C-e")
-                (lambda ()
-                  (interactive)
-                  (find-file-other-window "~/personal/everything.org")))
-
 (global-set-key (kbd "C-c o f e")
                 (lambda ()
                   (interactive)
@@ -557,6 +555,7 @@ Key bindings for other files:
                   (interactive)
                   (find-file-other-window "~/.emacs.d/custom/")))
 
+(define-key org-mode-map (kbd "C-c o i") nil)
 (global-set-key (kbd "C-c o i")
                 (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
 (global-set-key (kbd "C-c o C-i")
@@ -1500,9 +1499,13 @@ Turn on emacs lisp documentation
     :init
     ;; careful about keeping this order. Wouldn't want to save before
     ;; you restore :O
+    (setq persistent-scratch-save-file (concat (file-name-as-directory saveplace-dir) "persistent-scratch"))
+    (unless (file-exists-p persistent-scratch-save-file)
+      (message "%s: %s" "Creating persistent-scratch file for first time at" persistent-scratch-save-file)
+      (with-temp-buffer (write-file persistent-scratch-save-file))
+      (persistent-scratch-save))
     (persistent-scratch-restore)
-    (persistent-scratch-autosave-mode)
-    )
+    (persistent-scratch-autosave-mode))
 #+end_src
 
 
@@ -1944,8 +1947,10 @@ Org-mode hook.
 Some general defaults:
 #+begin_src emacs-lisp
   (setq org-deadline-warning-days 2 
-        org-default-notes-file "~/personal/todo.org"
-        org-directory "~/personal/"     
+        ;; Paths to various locations in my personal organization workflow
+        org-directory personal-dir
+        org-default-notes-file (concat (file-name-as-directory org-directory) "todo.org")
+        org-journal-file (concat (file-name-as-directory org-directory) "journal.org")
         org-extend-today-until 4
         org-footnote-section nil
         org-from-is-user-regexp "\\<Dodge Coates\\>"
@@ -1957,6 +1962,13 @@ Some general defaults:
   (set-face-attribute 'org-agenda-done nil
                       :foreground "olive drab" 
                       :weight 'ultra-light)
+#+end_src
+
+Some bindings for getting to org files faster
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c o e")
+                  (lambda () (interactive) (find-file (concat (file-name-as-directory org-directory)
+                                                         "everything.org"))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2218,12 +2230,7 @@ Editting source code
 
 *** Capture
 **** Template Components
-Paths to various locations in my personal organization workflow
-#+begin_src emacs-lisp
-  (setq org-personal-dir "~/personal/")
-  (setq org-default-notes-file (concat org-personal-dir "todo.org"))
-  (setq org-journal-file (concat org-personal-dir "journal.org"))
-#+end_src
+
 org-capture-template is set in a private file. Look up the documention for
 org-capture-template (and org-capture in general) to see how it might look.
 Some components I made for building templates
@@ -2763,16 +2770,6 @@ Templates for emacs-related captures.
 (define-key org-mode-map (kbd "C-M-<return>") 'org-insert-subheading)
 #+end_src
 
-**** column editing
-#+BEGIN_SRC emacs-lisp
-;(add-hook 'org-mode-hook 'my-org-mode-hook)
-(global-set-key (kbd "C-c o k") 'org-mode-delete-column)
-(global-set-key (kbd "C-c o i") 'org-mode-insert-column)
-(global-set-key (kbd "C-c o j") 'org-mode-move-column-left)
-(global-set-key (kbd "C-c o l") 'org-mode-move-column-right)
-(global-set-key (kbd "C-c o RET") 'org-mode-todo-heading)
-#+END_SRC
-
 **** org-path-completion
 #+BEGIN_SRC emacs-lisp
 (setq org-goto-interface 'outline-path-completion
@@ -3264,7 +3261,7 @@ Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn e
     (interactive)
     (delete-other-frames)
     (delete-other-windows)
-    (dwc-org-frame "~/personal/everything.org"))
+    (dwc-org-frame (concat (file-name-as-directory org-directory) "everything.org")))
 
   ;; `(on-startup)' defined and called in "exclusive/post.el"
 #+end_src
