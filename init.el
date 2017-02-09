@@ -15,8 +15,13 @@
 
 (package-initialize)
 
+(setq package-user-dir (concat user-emacs-directory "dependencies"))
+
 ;; Load Emacs' package manager
 (require 'package)
+
+;; Set the directory into which downloaded packages will be installed
+(setq package-user-dir (concat user-emacs-directory "dependencies"))
 
 ;; Add various emacs package repositories to the pool. This is where we
 ;; look for packages.
@@ -237,7 +242,7 @@
 
 ;; load up the main theme
 (add-to-list 'load-path (concat user-emacs-directory "atchka"))
-(use-package doom-themes :ensure nil
+(use-package doom-themes
   :init
   (require 'atchka-theme)
   (add-hook 'after-init-hook (lambda ()
@@ -247,8 +252,6 @@
   (add-hook 'find-file-hook 'doom-buffer-mode)
   ;; brighten minibuffers (does this even work??)
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer))
-
-
 
 (sml/setup)
 
