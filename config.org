@@ -2155,10 +2155,11 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 **** Update org-agenda-files
 #+begin_src emacs-lisp
   (setq org-agenda-file-regexp "\\`[^.].*\\.org\\'") ; default value
+  (defvar l '())
   (defun load-org-agenda-files-recursively (dir) "Find all directories in DIR."
          (unless (file-directory-p dir) (error "Not a directory `%s'" dir))
          (unless (equal (directory-files dir nil org-agenda-file-regexp t) nil)
-           (add-to-list 'org-agenda-files dir)
+           (add-to-list 'l dir)
            )
          (dolist (file (directory-files dir nil nil t))
            (unless (member file '("." ".."))
@@ -2167,6 +2168,7 @@ Function to visually delimit priorities in the org-agenda-list buffer.
                  (load-org-agenda-files-recursively file)))))) 
 
   (load-org-agenda-files-recursively org-directory)
+  (org-store-new-agenda-file-list l)
 #+end_src
 
 *** Clock
