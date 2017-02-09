@@ -60,3 +60,5 @@ ede-projects.el
 /places_
 save 
 /snippets/org-mode/olim
+
+ltximg/*
