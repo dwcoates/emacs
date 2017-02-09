@@ -196,39 +196,44 @@
 ;; Save point across sessions
 (require 'saveplace)
 (setq-default
- save-place-file (expand-file-name "places_" user-emacs-directory)
+ save-place-file (concat (file-name-as-directory saveplace-dir) "places_")
  save-place-mode t)
 (when (>= emacs-major-version 25)
   (save-place-mode +1))
 
 ;; Save history across sessions
 (require 'savehist)
-(setq savehist-file (expand-file-name "hist_" saveplace-dir)
+(setq-default savehist-file (expand-file-name "hist_" saveplace-dir)
       savehist-additional-variables
       '(kill-ring search-ring regexp-search-ring))
 (savehist-mode 1)
 
 ;; Keep track of recently opened files
 (require 'recentf)
-(setq recentf-save-file (expand-file-name "recent_" saveplace-dir)
-      recentf-exclude '("/tmp/" "/ssh:" "\\.?ido\\.last$" "\\.revive$" "/TAGS$"
-                        "emacs\\.d/private/cache/.+" "emacs\\.d/workgroups/.+$"
-                        "wg-default" "/company-statistics-cache.el$"
-                        "^/var/folders/.+$" "^/tmp/.+")
-      recentf-max-menu-items 0
-      recentf-max-saved-items 250
-      recentf-auto-cleanup 600
-      recentf-filename-handlers '(abbreviate-file-name))
+(setq-default recentf-save-file (expand-file-name "recent_" saveplace-dir)
+              recentf-exclude '("/tmp/" "/ssh:" "\\.?ido\\.last$" "\\.revive$" "/TAGS$"
+                                "emacs\\.d/private/cache/.+" "emacs\\.d/workgroups/.+$"
+                                "wg-default" "/company-statistics-cache.el$"
+                                "^/var/folders/.+$" "^/tmp/.+")
+              recentf-max-menu-items 0
+              recentf-max-saved-items 250
+              recentf-auto-cleanup 600
+              recentf-filename-handlers '(abbreviate-file-name))
 (recentf-mode 1)
 
 ;; File Autosaves
-(setq auto-save-list-file-prefix (concat
-                                  (file-name-as-directory saveplace-dir)
-                                  ".saves-"))
+(setq-default auto-save-list-file-prefix (concat
+                                          (file-name-as-directory saveplace-dir)
+                                          ".saves-"))
+
+(setq-default bookmark-default-file (concat (file-name-as-directory saveplace-dir) "bookmarks"))
+
+(setq-default ede-project-placeholder-cache-file
+              (concat (file-name-as-directory saveplace-dir) "ede-projects.el"))
 
 ;; window config undo/redo winner is a minor-mode for undoing and
 ;; redoing window configuration changes.
-(setq winner-dont-bind-my-keys t)
+(setq-default winner-dont-bind-my-keys t)
 (use-package winner)
 (winner-mode 1)
 

@@ -267,7 +267,13 @@ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "f
 (setq helm-lisp-fuzzy-completion t)
 #+END_SRC
 
-** Ido
+** Ido 
+
+Ido should save its files where everything else does!
+#+begin_src emacs-lisp
+(setq ido-save-directory-list-file (concat (file-name-as-directory saveplace-dir) "ido.last"))
+#+end_src
+
 ** Error finding
 *** Flycheck
 
@@ -1366,17 +1372,23 @@ Comment out a line:
 
 *** Projectile
 #+BEGIN_SRC emacs-lisp
-(use-package projectile
-  :config
-  (projectile-global-mode)
-  (setq projectile-enable-caching t)
-  (diminish 'projectile-mode))
+  (use-package projectile
+    :config
+    (projectile-global-mode)
+    (setq-default projectile-enable-caching t
+                  projectile-cache-file (concat 
+                                         (file-name-as-directory saveplace-dir)
+                                         "projectile.cache")
+                  projectile-known-projects-file (concat 
+                                                  (file-name-as-directory saveplace-dir)
+                                                  "projectile-bookmarks.eld"))
+    (diminish 'projectile-mode))
 
-(use-package helm-projectile
-  :config
-  (helm-projectile-on)
-  (setq projectile-completion-system 'helm)
-  (setq projectile-indexing-method 'alien))
+  (use-package helm-projectile
+    :config
+    (helm-projectile-on)
+    (setq projectile-completion-system 'helm)
+    (setq projectile-indexing-method 'alien))
 #+END_SRC
 
 
