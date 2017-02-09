@@ -9,9 +9,15 @@
 
 
 ;; Directory for emacs saves
-(defconst saveplace-dir (concat (file-name-as-directory personal-dir) ".emacs-saves")
+(defconst saveplace-dir
+  (concat (file-name-as-directory personal-dir) ".emacs-saves")
   "Where all the saves go (stuff like cursor position, autosaves, etc).")
 
+;; Directory for lisp source code
+(defconst lisp-dir
+  (concat user-emacs-directory (file-name-as-directory "lisp"))
+  "Where Lisp and packages not added by package.el belong.")
+(add-to-list 'load-path lisp-dir)
 
 
 ;; load system-specific settings best loaded first

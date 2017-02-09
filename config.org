@@ -891,7 +891,7 @@ handling escaped quotations in org well. Funnily enough, smartparens
 binds requires that I bind to a quotation, which requires an escaped
 quotation :O
 #+BEGIN_SRC emacs-lisp
-(load-file "~/.emacs.d/sp-binds.el")
+(load-file (concat lisp-dir "sp-binds.el"))
 #+END_SRC
 
 ** yasnippet
@@ -1051,7 +1051,7 @@ Use my goodies repository for some stuff I like to use, for instance,
 ~helm-insert-color-name~, for selecting colors and inserting their name at
 point.
 #+begin_src emacs-lisp
-  (add-to-list 'load-path (concat user-emacs-directory "goodies"))
+  (add-to-list 'load-path (concat lisp-dir "goodies"))
   (unless (require 'dwc-goodies nil t)
     (warn "Could not load dwc-goodies"))
 #+end_src
@@ -1972,7 +1972,7 @@ Some bindings for getting to org files faster
 #+end_src
 
 #+begin_src emacs-lisp
-  (add-to-list 'load-path (concat user-emacs-directory "org-misc"))
+  (add-to-list 'load-path (concat (file-name-as-directory lisp-dir) "org-misc"))
   (unless (require 'ob-misc nil t)
     (warn "Cannot load ob-misc"))
 
@@ -2186,15 +2186,14 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 *** Babel
 This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
 #+begin_src emacs-lisp
-;(load "~/.emacs.d/f.el")
-(use-package dash-functional)
-(use-package f)
-(use-package s)
-(use-package ob-ipython)
+  (use-package dash-functional)
+  (use-package f)
+  (use-package s)
+  (use-package ob-ipython)
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((ipython . t)))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((ipython . t)))
 #+end_src
 
 
@@ -2870,7 +2869,7 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 ** Edit With Emacs (Google Chrome extension)
 #+BEGIN_SRC emacs-lisp
 ;; Edit With Emacs (Google Chrome Extension)
-(add-to-list 'load-path "~/.emacs.d/edit-with-emacs")
+(add-to-list 'load-path (concat lisp-dir "edit-with-emacs"))
 (use-package edit-server
   :config
   (edit-server-start))
