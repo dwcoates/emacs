@@ -1,9 +1,6 @@
 ;; Keep track of loading time
 (defconst emacs-start-time (current-time))
 
-(setq package-enable-at-startup nil)
-(package-initialize)
-
 ;; load system-specific settings best loaded first
 (let ((pre "~/personal/.exclusive/pre.el"))
   (if (file-exists-p pre)
@@ -13,9 +10,9 @@
 ;;;;;;;;;;; SET UP PACKAGE MANAGEMENT AND USE-PACKAGE ;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(package-initialize)
-
 (setq package-user-dir (concat user-emacs-directory "dependencies"))
+
+(package-initialize)
 
 ;; Load Emacs' package manager
 (require 'package)
