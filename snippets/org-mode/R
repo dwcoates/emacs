@@ -4,4 +4,4 @@
 # --
 #+BEGIN_SRC R :session :exports ${1:both} :results ${2:output ${3:graphics :file `(rand-alphanum 8 "./img/R_" ".png")`}} 
 $0
-#+END_SRC\n
+#+END_SRC
