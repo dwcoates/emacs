@@ -2,7 +2,7 @@
 (defconst emacs-start-time (current-time))
 
 ;; Directory for personal stuff. Personal org documents, emacs history, etc.
-(defconst personal-dir "~/personal")
+(defconst personal-dir (file-name-as-directory "~/personal"))
 (unless (file-exists-p personal-dir)
   (message "%s: %s" "Creating personal directory for first time" personal-dir)
   (make-directory personal-dir))
@@ -10,18 +10,18 @@
 
 ;; Directory for emacs saves
 (defconst saveplace-dir
-  (concat (file-name-as-directory personal-dir) ".emacs-saves")
+  (concat (file-name-as-directory (concat personal-dir ".emacs-saves")))
   "Where all the saves go (stuff like cursor position, autosaves, etc).")
 
 ;; Directory for lisp source code
 (defconst lisp-dir
-  (concat user-emacs-directory (file-name-as-directory "lisp"))
+  (file-name-as-directory (concat user-emacs-directory "lisp"))
   "Where Lisp and packages not added by package.el belong.")
 (add-to-list 'load-path lisp-dir)
 
 
 ;; load system-specific settings best loaded first
-(let ((pre (concat (file-name-as-directory personal-dir) ".exclusive/pre.el")))
+(let ((pre (concat personal-dir ".exclusive/pre.el")))
   (if (file-exists-p pre)
       (load pre)))
 
@@ -196,7 +196,7 @@
 ;; Save point across sessions
 (require 'saveplace)
 (setq-default
- save-place-file (concat (file-name-as-directory saveplace-dir) "places_")
+ save-place-file (concat saveplace-dir "places_")
  save-place-mode t)
 (when (>= emacs-major-version 25)
   (save-place-mode +1))
@@ -222,14 +222,12 @@
 (recentf-mode 1)
 
 ;; File Autosaves
-(setq-default auto-save-list-file-prefix (concat
-                                          (file-name-as-directory saveplace-dir)
-                                          ".saves-"))
+(setq-default auto-save-list-file-prefix (concat saveplace-dir ".saves-"))
 
-(setq-default bookmark-default-file (concat (file-name-as-directory saveplace-dir) "bookmarks"))
+(setq-default bookmark-default-file (concat saveplace-dir "bookmarks"))
 
 (setq-default ede-project-placeholder-cache-file
-              (concat (file-name-as-directory saveplace-dir) "ede-projects.el"))
+              (concat saveplace-dir "ede-projects.el"))
 
 ;; window config undo/redo winner is a minor-mode for undoing and
 ;; redoing window configuration changes.
@@ -305,6 +303,6 @@
 
 
 ;; Load system-specific settings best loaded last
-(let ((post (concat (file-name-as-directory personal-dir) ".exclusive/post.el")))
+(let ((post (concat personal-dir ".exclusive/post.el")))
   (if (file-exists-p post)
       (load post)))
