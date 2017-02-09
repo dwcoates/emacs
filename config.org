@@ -2032,7 +2032,7 @@ Compact the block agenda view
 #+begin_src emacs-lisp
   (require 'org-agenda)
   (define-key org-agenda-mode-map "T" 'org-tags-view)
-  (define-key org-agenda-mode-map (kbd "C-c k") 'org-agenda-kill-entries)
+  (define-key org-agenda-mode-map (kbd "C-c C-k") 'org-agenda-kill-entries)
 
 
   ;; these functions are in org-misc
