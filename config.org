@@ -426,31 +426,9 @@ another window.
 #+begin_src emacs-lisp
       (use-package git-gutter+
         :commands 
-        git-gutter-mode
+        git-gutter-mode+
         :init
-        (mapc (lambda (h) (add-hook h 'git-gutter-mode))
-              '(text-mode-hook prog-mode-hook conf-mode-hook))
-        :config
-        (require 'git-gutter-fringe)
-
-        ;; NOTE If you want the git gutter to be on the outside of the
-        ;; margins (rather than inside), `fringes-outside-margins' should be
-        ;; non-nil.
-
-        ;; colored fringe "bars"
-        (define-fringe-bitmap 'git-gutter-fr:added
-          [224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
-          nil nil 'center)
-        (define-fringe-bitmap 'git-gutter-fr:modified
-          [224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224 224]
-          nil nil 'center)
-        (define-fringe-bitmap 'git-gutter-fr:deleted
-          [0 0 0 0 0 0 0 0 0 0 0 0 0 128 192 224 240 248]
-          nil nil 'center)
-
-        ;; Refreshing git-gutter
-        (advice-add 'evil-force-normal-state :after 'git-gutter)
-        (add-hook 'focus-in-hook 'git-gutter:update-all-windows))
+        (global-git-gutter+-mode))
 #+end_src
 
 ** Directories
@@ -1783,6 +1761,8 @@ not yet support emacs due to a jupyter bug.
             (find-definitions  "find definitions"  t)
             (find-file         "find assignments"  t)
             (find-references "show usages" nil))))
+#+end_src
+
 ** C/C++
 Company-C-Headers enables the completion of C/C++ header file names using company-mode:
 #+begin_src emacs-lisp
@@ -2456,6 +2436,7 @@ Project builder templates.
 
 **** Templates
 Basic templates
+
 #+begin_src emacs-lisp
   (defconst org-basic-idea-template       (project-idea-template))
   (defconst org-basic-quick-idea-template (project-quick-idea-template))
