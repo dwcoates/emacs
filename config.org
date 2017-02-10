@@ -2550,6 +2550,9 @@ Templates for emacs-related captures.
                                           ; :clock-in t :clock-resume t
           :immediate-finish t
           )
+         ("g;" "Nugget"
+          entry (file nil)
+          ,(org-basic-nugget-template))
          ("gN" "Note" entry (file nil)
           ,(org-basic-quick-note-template)
                                           ; :clock-in t :clock-resume t
