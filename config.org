@@ -2016,7 +2016,8 @@ is highlighted in the other frame because I forgot my mouse cursor on it.
     (when (frame-pointer-visible-p)
       (funcall func args)))
 
-  (advice-add 'org-agenda-highlight-todo :around 'org-agenda-highlight-entry-advice)
+  (add-hook 'after-init-hook 
+            (lambda () (advice-add 'org-agenda-highlight-todo :around 'org-agenda-highlight-entry-advice)))
 #+end_src
 
 
@@ -2299,7 +2300,7 @@ Some components I made for building templates
       ;;;;;;;;; BODY ;;;;;;;;;
     (defconst org-indented-cursor-placement "  %?")
       ;;;;;; WATERMARK ;;;;;;;
-    (defconst org-template/meta-data "Captured on %T by %(system-name) by: %a")
+    (defconst org-template/meta-data "\n Captured on %T by %(system-name) by: %a")
 #+end_src
 
 ***** Project templates builder
