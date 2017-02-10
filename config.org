@@ -61,8 +61,8 @@ chords consist of keys adjacent to one another.
   (use-package key-chord
     :ensure t
     :init
-    (setq key-chord-two-keys-delay 0.1)
-    (setq key-chord-one-key-delay 0.1)
+    (setq key-chord-two-keys-delay 0.05)
+    (setq key-chord-one-key-delay 0.05)
     (key-chord-mode 0)
   )
 #+END_SRC
@@ -516,16 +516,16 @@ This goes before neotree configuration
 ** Basic Settings
 Remaps the other-window command. In general, commands with consecutive 
 #+begin_src emacs-lisp 
-  (global-set-key (kbd "C-x C-o") 'other-window)
-  (global-set-key (kbd "C-x o") 'other-frame)
+  (global-set-key (kbd "C-x o") 'other-window)
+  (global-set-key (kbd "C-x C-o") 'other-frame)
 #+end_src
 
 Quickly move the cursor to the first instance of a character with iy-go-to-char:
 #+begin_src emacs-lisp
 (use-package iy-go-to-char
   :init (progn
-          (key-chord-define-global "fg" 'iy-go-to-char)
-          (key-chord-define-global "df" 'iy-go-to-char-backward))
+          (key-chord-define-global "zl" 'iy-go-to-char)
+          (key-chord-define-global "zj" 'iy-go-to-char-backward))
   )
 #+end_src
 
@@ -2012,6 +2012,18 @@ Hide all Org source blocks by default.
 #+begin_src emacs-lisp
 (add-hook 'org-mode-hook 'org-babel-result-hide-all)
 #+end_src
+
+I add this advice to make the highlights on org agenda disappear when typing is
+going on in another buffer. Very distracting for me when a line an agenda buffer
+is highlighted in the other frame because I forgot my mouse cursor on it.
+#+begin_src emacs-lisp
+  (defun org-agenda-highlight-entry-advice (func &rest args)
+    (when (frame-pointer-visible-p)
+      (funcall func args)))
+
+  (advice-add 'org-agenda-highlight-todo :around 'org-agenda-highlight-entry-advice)
+#+end_src
+
 
 *** Tasks and States
 Tasks have multiple possible states. Below defines them and their transitions
