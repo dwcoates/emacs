@@ -856,25 +856,29 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 ** smartparens
 *use-package smartparents*
 #+BEGIN_SRC emacs-lisp
-  (use-package smartparens
-    :config
-    (sp-pair "'" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
-    (sp-pair "`" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
+    (use-package smartparens
+      :config
+      ;; These are loaded from a file because currently smartparens isn't
+      ;; handling escaped quotations in org well. Funnily enough, smartparens
+      ;; binds requires that I bind to a quotation, which requires an escaped
+      ;; quotation :O
+      (load-file (concat lisp-dir "sp-binds.el"))
+      (sp-pair "'" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
+      (sp-pair "`" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
 
-    (setq sp-base-key-bindings 'paredit)
-    (setq sp-autoskip-closing-pair 'always)
-    (setq sp-hybrid-kill-entire-symbol nil)
-    (setq sp-backward-delete-char 'paredit-backward-delete)
-    (sp-use-paredit-bindings)
+      (setq sp-base-key-bindings 'paredit)
+      (setq sp-autoskip-closing-pair 'always)
+      (setq sp-hybrid-kill-entire-symbol nil)
+      (setq sp-backward-delete-char 'paredit-backward-delete)
+      (sp-use-paredit-bindings)
 
-    (show-smartparens-global-mode +1)
-    (smartparens-global-mode 1)
+      (show-smartparens-global-mode +1)
+      (smartparens-global-mode 1)
 
-    (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
-    (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+      (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
+      (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
-    (diminish 'smartparens-mode)
-    )
+      (diminish 'smartparens-mode))
 #+END_SRC
 
 *** sp-delete-sexp and sp-backward-delete-sexp
@@ -897,15 +901,6 @@ Backward delete sexp:
     (sp-backward-kill-sexp)
     (pop kill-ring)
     )
-#+END_SRC
-
-*** bind-keys
-These are loaded from a file because currently smartparens isn't
-handling escaped quotations in org well. Funnily enough, smartparens
-binds requires that I bind to a quotation, which requires an escaped
-quotation :O
-#+BEGIN_SRC emacs-lisp
-(load-file (concat lisp-dir "sp-binds.el"))
 #+END_SRC
 
 ** yasnippet
