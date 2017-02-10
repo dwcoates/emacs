@@ -3270,6 +3270,99 @@ Get autocompletions in tramp:
   (delete-region (point) (point-min)))
 #+END_SRC
 
+** Integer at point
+
+This code is by Ryan Thompson, and is used to increment/decrement integer at
+point.
+#+begin_src emacs-lisp
+(require 'thingatpt)
+
+(defun thing-at-point-goto-end-of-integer ()
+  "Go to end of integer at point."
+  (let ((inhibit-changing-match-data t))
+    ;; Skip over optional sign
+    (when (looking-at "[+-]")
+      (forward-char 1))
+    ;; Skip over digits
+    (skip-chars-forward "[[:digit:]]")
+    ;; Check for at least one digit
+    (unless (looking-back "[[:digit:]]")
+      (error "No integer here"))))
+(put 'integer 'beginning-op 'thing-at-point-goto-end-of-integer)
+
+(defun thing-at-point-goto-beginning-of-integer ()
+  "Go to end of integer at point."
+  (let ((inhibit-changing-match-data t))
+    ;; Skip backward over digits
+    (skip-chars-backward "[[:digit:]]")
+    ;; Check for digits and optional sign
+    (unless (looking-at "[+-]?[[:digit:]]")
+      (error "No integer here"))
+    ;; Skip backward over optional sign
+    (when (looking-back "[+-]")
+        (backward-char 1))))
+(put 'integer 'beginning-op 'thing-at-point-goto-beginning-of-integer)
+
+(defun thing-at-point-bounds-of-integer-at-point ()
+  "Get boundaries of integer at point."
+  (save-excursion
+    (let (beg end)
+      (thing-at-point-goto-beginning-of-integer)
+      (setq beg (point))
+      (thing-at-point-goto-end-of-integer)
+      (setq end (point))
+      (cons beg end))))
+(put 'integer 'bounds-of-thing-at-point 'thing-at-point-bounds-of-integer-at-point)
+
+(defun thing-at-point-integer-at-point ()
+  "Get integer at point."
+  (let ((bounds (bounds-of-thing-at-point 'integer)))
+    (string-to-number (buffer-substring (car bounds) (cdr bounds)))))
+(put 'integer 'thing-at-point 'thing-at-point-integer-at-point)
+
+(defun increment-integer-at-point (&optional inc)
+  "Increment integer at point by one.
+
+With numeric prefix arg INC, increment the integer by INC amount."
+  (interactive "p")
+  (let ((inc (or inc 1))
+        (n (thing-at-point 'integer))
+        (bounds (bounds-of-thing-at-point 'integer)))
+    (delete-region (car bounds) (cdr bounds))
+    (insert (int-to-string (+ n inc)))))
+
+(defun decrement-integer-at-point (&optional dec)
+  "Decrement integer at point by one.
+
+With numeric prefix arg DEC, decrement the integer by DEC amount."
+  (interactive "p")
+  (increment-integer-at-point (- (or dec 1))))
+#+end_src
+
+Functions I've added for applying this to all integers in the region
+#+begin_src emacs-lisp
+  (defun increment-integers-in-region (beg end &optional inc)
+    "Increment the integers in current region."
+    (interactive (if (use-region-p)
+                     (list (region-beginning) (region-end)))
+                   (list (point) (point)))
+    (save-excursion
+      (goto-char beg)
+      (let ((end (save-excursion (goto-char end)
+                                 (forward-word-strictly) (backward-char) (point))))
+        (while (< (point) end)
+          (ignore-errors (increment-integer-at-point inc))
+          (forward-word-strictly)))))
+
+  (defun decrement-integers-in-region (beg end &optional dec)
+    "Decrement the integers in current region."
+    (interactive (if (use-region-p)
+                     (list (region-beginning) (region-end)))
+                   (list (point) (point)))
+      (increment-integers-in-region beg end (- (or dec 1)))
+      )
+#+end_src
+
 * On Startup
 ** Extremely fast emacs startup with emacs server
 Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn emacs sessions (nearly) instantly. There is a single overhead cost of typical startup timen (~2 seconds) on login, but it means means I can now use emacs for quick edits. I bind `emacsclient -c -a emacs' to a keyboard shortcut.
