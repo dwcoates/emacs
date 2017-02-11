@@ -244,7 +244,7 @@
 (set-face-attribute 'default nil
                     :background "#222222"
                     :foreground "light gray"
-                    :height 128
+                    :height 120
                     :foundry "unknown"
                     :family "Ubuntu Mono")
 
