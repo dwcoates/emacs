@@ -1,5 +1,4 @@
 #+Title: This is my emacs config file.
-
 * Package Management
 #+begin_src emacs-lisp
 ;; Keep emacs-generated custom settings in a separate file so they don't pollute init.el
@@ -30,7 +29,7 @@ https://github.com/purcell/exec-path-from-shell
 *** ~isearch~
 *** ~linum~
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp 
 ;  (set-face-attribute 'linum-mode nil 
 ;                      :background "gray16" 
 ;                      :foreground "dim gray")
@@ -1925,16 +1924,6 @@ I was having some problems with it throwing errors.
 
 ** Org Mode
 *** General
-Org warnings:
-#+begin_src emacs-lisp
-  (set-face-attribute 'org-warning nil :foreground "red3" :weight 'bold)
-#+end_src
-
-Please truncate lines in org-mode. The last thing I want to see is a
-wrapped table, and everything should be paragraphed, anyway (M-q).
-#+begin_src emacs-lisp
-  (setq org-startup-truncated t)
-#+end_src
 
 Allow conversion to markdown. Useful for working with project readmes,
 etc., in org-mode.
@@ -1949,25 +1938,6 @@ content) on export.
   (require 'ox-extra)
   (ox-extras-activate '(ignore-headlines))
 #+end_src
-
-Edit source code in org-mode:
-#+begin_src emacs-lisp
-  (setq org-src-fontify-natively t)    ; syntax highlighting in source blocks
-  (setq org-src-tab-acts-natively t)   ; expected tabbing in source block
-  (bind-keys
-     :map org-src-mode-map
-     ("<C-return>" . org-edit-src-exit))
-#+end_src
-
-Org-mode hook.
-#+BEGIN_SRC emacs-lisp
-  (defun my-org-mode-hook ()
-    (abbrev-mode 1)
-    (toggle-word-wrap)
-    (setq org-src-fontify-natively t))
-
-  (add-hook 'org-mode-hook 'my-org-mode-hook)
-#+END_SRC
 
 Some general defaults:
 #+begin_src emacs-lisp
@@ -2006,6 +1976,36 @@ Some bindings for getting to org files faster
 
 *** Appearance
 
+Org warnings:
+#+begin_src emacs-lisp
+  (set-face-attribute 'org-warning nil :foreground "red3" :weight 'bold)
+#+end_src
+
+Please truncate lines in org-mode. The last thing I want to see is a
+wrapped table, and everything should be paragraphed, anyway (M-q).
+#+begin_src emacs-lisp
+  (setq org-startup-truncated t)
+#+end_src
+
+Edit source code in org-mode:
+#+begin_src emacs-lisp
+  (setq org-src-fontify-natively t)    ; syntax highlighting in source blocks
+  (setq org-src-tab-acts-natively t)   ; expected tabbing in source block
+  (bind-keys
+     :map org-src-mode-map
+     ("<C-return>" . org-edit-src-exit))
+#+end_src
+
+Org-mode hook.
+#+BEGIN_SRC emacs-lisp
+  (defun my-org-mode-hook ()
+    (abbrev-mode 1)
+    (toggle-word-wrap)
+    (setq org-src-fontify-natively t))
+
+  (add-hook 'org-mode-hook 'my-org-mode-hook)
+#+END_SRC
+
 Org will automatically convert the LaTex names for symbols to their utf-8
 encodings (so long as they are preceeded by a backslash.) For example, \Gamma is
 entered by typing "Gamma" preceeded by a slash:
@@ -2028,6 +2028,11 @@ is highlighted in the other frame because I forgot my mouse cursor on it.
 
   ;; (add-hook 'after-init-hook 
   ;;           (lambda () (advice-add 'org-agenda-highlight-todo :around 'org-agenda-highlight-entry-advice)))
+#+end_src
+
+Font lock should hide the emphasis marker characters (inline code, bold, etc)
+#+begin_src emacs-lisp
+(setq org-hide-emphasis-markers t)
 #+end_src
 
 *** Tasks and States

@@ -468,7 +468,7 @@ Please `previous-line' past org-block headers'"
 (add-hook 'window-configuration-change-hook (lambda ()
                                               (when (eq major-mode 'org-mode)
                                                (set-window-fringes
-                                                (selected-window) 18 25))))
+                                                (selected-window) 30 34))))
 
 ;; This hides the asterisks in org headers, so they look like they are indented
 (setq org-hide-leading-stars t)
