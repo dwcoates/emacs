@@ -1366,6 +1366,7 @@ Comment out a line:
 
 (global-semantic-stickyfunc-mode 1)
 #+end_src
+
 *** Compilation
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "<f5>") (lambda ()
@@ -1373,6 +1374,7 @@ Comment out a line:
                                (setq-local compilation-read-command nil)
                                (call-interactively 'compile)))
 #+END_SRC
+
 *** Debugging
 #+BEGIN_SRC emacs-lisp
 ;; Setup GDB
@@ -3003,6 +3005,7 @@ Get autocompletions in tramp:
 #+begin_src emacs-lisp
 (use-package sx)
 #+end_src
+
 ** Email
 #+begin_src emacs-lisp
 (require 'nnir)
