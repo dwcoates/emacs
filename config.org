@@ -2012,14 +2012,13 @@ I add this advice to make the highlights on org agenda disappear when typing is
 going on in another buffer. Very distracting for me when a line an agenda buffer
 is highlighted in the other frame because I forgot my mouse cursor on it.
 #+begin_src emacs-lisp
-  (defun org-agenda-highlight-entry-advice (func &rest args)
-    (when (frame-pointer-visible-p)
-      (funcall func args)))
+  ;; (defun org-agenda-highlight-entry-advice (func &rest args)
+  ;;   (when (frame-pointer-visible-p)
+  ;;     (funcall func args)))
 
-  (add-hook 'after-init-hook 
-            (lambda () (advice-add 'org-agenda-highlight-todo :around 'org-agenda-highlight-entry-advice)))
+  ;; (add-hook 'after-init-hook 
+  ;;           (lambda () (advice-add 'org-agenda-highlight-todo :around 'org-agenda-highlight-entry-advice)))
 #+end_src
-
 
 *** Tasks and States
 Tasks have multiple possible states. Below defines them and their transitions
@@ -2471,32 +2470,39 @@ Project builder templates.
 Basic templates
 
 #+begin_src emacs-lisp
-  (defun org-basic-idea-template (&rest tags)       
-    (apply 'project-idea-template tags))
-  (defun org-basic-quick-idea-template (&rest tags) 
-    (apply 'project-quick-idea-template tags))
-  (defun org-basic-note-template (&rest tags)       
-    (apply 'project-note-template tags))
-  (defun org-basic-quick-note-template (&rest tags) 
-    (apply 'project-quick-note-template tags))
-  (defun org-basic-question-template (&rest tags)   
-    (apply 'project-question-template tags))
-  (defun org-basic-task-template (&rest tags)       
-    (apply 'project-tasks-and-todos-template tags))
-  (defun org-basic-nugget-template (&rest tags)
-    (org-project-template-builder
-     (org-template/next-prompt nil "Thought")
-     (cons "nugget" tags)
-     nil
-     org-indented-cursor-placement
-     org-template/meta-data))
-  (defun org-basic-oh-yeah-template (&rest tags)
-    (org-project-template-builder (org-template/next-prompt nil "Oh yeah...")
-                                  (cons "forgotten" tags)
-                                  nil
-                                  org-indented-cursor-placement
-                                  org-template/meta-data
-                                  ))
+    (defun org-basic-idea-template (&rest tags)       
+      (apply 'project-idea-template tags))
+    (defun org-basic-quick-idea-template (&rest tags) 
+      (apply 'project-quick-idea-template tags))
+    (defun org-basic-note-template (&rest tags)       
+      (apply 'project-note-template tags))
+    (defun org-basic-quick-note-template (&rest tags) 
+      (apply 'project-quick-note-template tags))
+    (defun org-basic-question-template (&rest tags)   
+      (apply 'project-question-template tags))
+    (defun org-basic-task-template (&rest tags)       
+      (apply 'project-tasks-and-todos-template tags))
+    (defun org-basic-nugget-template (&rest tags)
+      (org-project-template-builder
+       (org-template/next-prompt nil "Thought")
+       (cons "nugget" tags)
+       nil
+       org-indented-cursor-placement
+       org-template/meta-data))
+    (defun org-basic-oh-yeah-template (&rest tags)
+      (org-project-template-builder (org-template/next-prompt nil "Oh yeah...")
+                                    (cons "forgotten" tags)
+                                    nil
+                                    org-indented-cursor-placement
+                                    org-template/meta-data
+                                    ))
+    (defun org-basic-quote-template (&rest tags)
+      (org-project-template-builder (org-template/next-prompt nil "Quote:")
+                                    (cons "quote" tags)
+                                    nil
+                                    "  - %^{Coined by}, %^L\n  %?" 
+                                    org-template/meta-data
+                                    ))
 #+end_src
 
 
@@ -2584,7 +2590,11 @@ Templates for emacs-related captures.
           )
          ("gb" "Stretch your legs" entry (file org-default-notes-file)
           "* TAKE A BREAK\nDEADLINE: %^T"
-          )))
+          )
+         ("ge" "Memorable quote" entry (file org-default-notes-file)
+          ,(org-basic-quote-template)
+          )
+         ))
 #+end_src
 
 *** Exports
