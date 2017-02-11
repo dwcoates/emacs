@@ -2980,22 +2980,23 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
   )
 #+end_src
 
-src
 ** SSH
 *** Tramp
 
 I edit ~/.ssh/config to add something like the following
+
 Host my-repo
      HostName mygitserverdomain.com
      Port 22
      User repository
 
-`C-x C-f /ssh:repo/some/path/to/a/file' will ssh via tramp mode corresponding
-the path in user@host (in this case
-repository@mygitserverdomain.com:22/some/path/to/a/file).
+=C-x C-f /ssh:repo/some/path/to/a/file= will ssh via ~tramp-mode~ corresponding the
+path in user@host (my-repo@mygitserverdomain.com:22/some/path/to/a/file).
+
 #+begin_src emacs-lisp
 (setq tramp-default-method "ssh")
 #+end_src
+
 Get autocompletions in tramp:
 #+begin_src emacs-lisp
 (setq my-tramp-ssh-completions
