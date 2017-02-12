@@ -1699,10 +1699,6 @@ My clojure-mode hook
 
   (setq python-shell-enable-font-lock nil)
 #+end_src
-Enable wrapping for single quotes
-#+begin_src emacs-lisp
-(sp-pair "'" nil)
-#+end_src
 
 *** elpy
 #+BEGIN_SRC emacs-lisp
@@ -1713,6 +1709,7 @@ Enable wrapping for single quotes
     (defun elpy-on-python-mode ()
       (elpy-mode)
       (elpy-enable)
+      (sp-pair "'" nil)
     )
     (add-hook 'python-mode-hook
               'elpy-on-python-mode)
