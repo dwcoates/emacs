@@ -524,7 +524,7 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
 Remaps the other-window command. In general, commands with consecutive 
 #+begin_src emacs-lisp 
   (global-set-key (kbd "C-x o") 'other-window)
-  (global-set-key (kbd "C-x C-o") 'other-frame)
+  (global-set-key (kbd "C-x O") 'other-frame)
 #+end_src
 
 Quickly move the cursor to the first instance of a character with iy-go-to-char:
@@ -1999,7 +1999,7 @@ Edit source code in org-mode:
 Org-mode hook.
 #+BEGIN_SRC emacs-lisp
   (defun my-org-mode-hook ()
-    (abbrev-mode 1)
+    (abbrev-mode -1)
     (toggle-word-wrap)
     (setq org-src-fontify-natively t))
 
@@ -2082,6 +2082,16 @@ Compact the block agenda view
   (setq org-agenda-compact-blocks t)
 #+end_src
 
+Pressing =Q= in org agenda shouldn't kill the buffer and window. Usually I just
+want to glance at the agenda, then go back to what I was doing.
+
+#+begin_src emacs-lisp
+;; Don't delete agenda buffer when quitting, just bury it
+;(setq org-agenda-sticky t)
+;; Don't delete window when quitting org agenda
+;(setq org-agenda-restore-windows-after-quit t)
+#+end_src
+
 #+begin_src emacs-lisp
   (require 'org-agenda)
   (define-key org-agenda-mode-map "T" 'org-tags-view)
@@ -2089,6 +2099,8 @@ Compact the block agenda view
 
 
   ;; these functions are in org-misc
+  (global-set-key (kbd "C-c C-j") 'org-switch-to-agenda-other-window)
+  (global-set-key (kbd "C-c C-S-j") 'org-get-agenda-other-window)
   (global-set-key (kbd "C-c j") 'org-switch-to-agenda)
   (global-set-key (kbd "C-c J") 'org-get-agenda)
 #+end_src
@@ -2214,7 +2226,7 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 
 *** Clock
 #+begin_src emacs-lisp
-  (define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
+  ;(define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
 #+end_src
 
 **** tea-time
@@ -2310,7 +2322,7 @@ Some components I made for building templates
       ;;;;;; SCHEDULING ;;;;;;
     (defconst org-template/deadline "DEADLINE: %^t")
     (defconst org-template/schedule "SCHEDULED: %^t")
-    (defconst org-template/timeline-query "%^{Timeline|SCHEDULED|DEADLINE}: %^t")
+    (defconst org-template/timeline-query "%^{Timeline|SCHEDULED|DEADLINE}: %^T")
       ;;;;;;;;; BODY ;;;;;;;;;
     (defconst org-indented-cursor-placement "  %?")
       ;;;;;; WATERMARK ;;;;;;;
@@ -2318,239 +2330,247 @@ Some components I made for building templates
 #+end_src
 
 ***** Project templates builder
+
 #+begin_src emacs-lisp
-    (defun org-project-template-builder (header tags scheduling body watermark)
-      "Builds a template using the org-template componenets."
-      (concat
-       header " "
-       (when tags
-         (concat
-          ":"
-          (if (listp tags)
-              (mapconcat 'identity tags ":")
-            tags)
-          ":"))
-       "\n"
-       (when scheduling (concat scheduling "\n"))
-       (when body (concat body "\n"))
-       watermark))
+  (defun org-project-template-builder (header tags scheduling body watermark &optional properties)
+    "Builds a template using the org-template componenets."
+    (concat
+     header " "
+     (when tags
+       (concat
+        ":"
+        (if (listp tags)
+            (mapconcat 'identity tags ":")
+          tags)
+        ":"))
+     "\n"
+     (when properties
+       (concat ":PROPERTIES:\n"
+               (mapconcat (lambda (p) (concat ":" (car p) ": " (cadr p))) properties "\n")
+               "\n:END:\n"))
+     (when scheduling (concat scheduling "\n"))
+     "\n"
+     (when body (concat body "\n"))
+     (if watermark watermark org-template/meta-data)))
 #+end_src
-
-Project builder templates.
-#+begin_src emacs-lisp
-(defun project-tasks-and-todos-template (tags)
-  (org-project-template-builder (org-template/todo-prompt
-                                 org-template--basic-priority
-                                 "Task")
-                                tags
-                                org-template/timeline-query
-                                org-indented-cursor-placement
-                                org-template/meta-data
-                                ))
-
-(defun project-idea-template (tags)
-  (org-project-template-builder (org-template/next-prompt nil "Idea")
-                                (append '("idea") (if (listp tags) tags (list tags)))
-                                nil
-                                org-indented-cursor-placement
-                                org-template/meta-data
-                                ))
-
-(defun project-quick-note-template (tags)
-  (org-project-template-builder (org-template/next-prompt nil "Quick Note")
-                                (append '("note") (if (listp tags) tags (list tags)))
-                                nil
-                                nil
-                                org-template/meta-data
-                                ))
-
-(defun project-note-template (tags)
-  (org-project-template-builder (org-template/next-prompt nil "Note")
-                                (append '("note") (if (listp tags) tags (list tags)))
-                                nil
-                                org-indented-cursor-placement
-                                org-template/meta-data
-                                ))
-
-(defun project-question-template (tags)
-  (org-project-template-builder (org-template/next-prompt nil "Question")
-                                (append '("question") (if (listp tags) tags (list tags)))
-                                nil
-                                org-indented-cursor-placement
-                                org-template/meta-data
-                                ))
-
-(defun project-quick-question-template (tags)
-  (org-project-template-builder (org-template/next-prompt nil "Question")
-                                (append '("question") (if (listp tags) tags (list tags)))
-                                nil
-                                nil
-                                org-template/meta-data
-                                ))
-#+end_src
-
-***** Templates builders
-#+begin_src emacs-lisp
-  (defun project-tasks-and-todos-template (&rest tags)
-    (org-project-template-builder (org-template/todo-prompt
-                                   org-template--basic-priority
-                                   "Task")
-                                  (append '() (if (listp tags) tags (list tags)))
-                                  org-template/timeline-query
-                                  org-indented-cursor-placement
-                                  org-template/meta-data
-                                  ))
-
-  (defun project-idea-template (&rest tags)
-    (org-project-template-builder (org-template/next-prompt nil "Idea")
-                                  (append '("idea") (if (listp tags) tags (list tags)))
-                                  nil
-                                  org-indented-cursor-placement
-                                  org-template/meta-data
-                                  ))
-
-  (defun project-quick-idea-template (&rest tags)
-    (org-project-template-builder (org-template/next-prompt nil "Idea")
-                                  (append '("idea") (if (listp tags) tags (list tags)))
-                                  nil
-                                  nil
-                                  org-template/meta-data
-                                  ))
-
-
-  (defun project-quick-note-template (&rest tags)
-    (org-project-template-builder (org-template/next-prompt nil "Quick Note")
-                                  (append '("note") (if (listp tags) tags (list tags)))
-                                  nil
-                                  nil
-                                  org-template/meta-data
-                                  ))
-
-  (defun project-note-template (&rest tags)
-    (org-project-template-builder (org-template/next-prompt nil "Note")
-                                  (append '("note") (if (listp tags) tags (list tags)))
-                                  nil
-                                  org-indented-cursor-placement
-                                  org-template/meta-data
-                                  ))
-
-  (defun project-question-template (&rest tags)
-    (org-project-template-builder (org-template/next-prompt nil "Question")
-                                  (append '("question") (if (listp tags) tags (list tags)))
-                                  nil
-                                  org-indented-cursor-placement
-                                  org-template/meta-data
-                                  ))
-
-  (defun project-quick-question-template (&rest tags)
-    (org-project-template-builder (org-template/next-prompt nil "Question")
-                                  (append '("question") (if (listp tags) tags (list tags)))
-                                  nil
-                                  nil
-                                  org-template/meta-data
-                                  ))
-
-  (defun project-issue-template (&rest tags)
-    (org-project-template-builder (org-template/next-prompt 
-                                   org-template--basic-priority
-                                   "Issue")
-                                  (append '("issue") (if (listp tags) tags (list tags)))
-                                  nil
-                                  org-indented-cursor-placement
-                                  org-template/meta-data
-                                  ))
-
-  (defun project-bug-template (&rest tags)
-    (org-project-template-builder (org-template/next-prompt 
-                                   org-template--basic-priority
-                                   "Bug")
-                                  (append '("bug") (if (listp tags) tags (list tags)))
-                                  nil
-                                  org-indented-cursor-placement
-                                  org-template/meta-data
-                                  ))
-
-  (defun project-feature-template (&rest tags)
-    (org-project-template-builder (org-template/next-prompt
-                                   org-template--basic-priority
-                                   "Feature")
-                                  (append '("feature") (if (listp tags) tags (list tags)))
-                                  nil
-                                  org-indented-cursor-placement
-                                  org-template/meta-data
-                                  ))
-#+end_src
-
 **** Templates
 Basic templates
 
 #+begin_src emacs-lisp
-    (defun org-basic-idea-template (&rest tags)       
-      (apply 'project-idea-template tags))
-    (defun org-basic-quick-idea-template (&rest tags) 
-      (apply 'project-quick-idea-template tags))
-    (defun org-basic-note-template (&rest tags)       
-      (apply 'project-note-template tags))
-    (defun org-basic-quick-note-template (&rest tags) 
-      (apply 'project-quick-note-template tags))
-    (defun org-basic-question-template (&rest tags)   
-      (apply 'project-question-template tags))
-    (defun org-basic-task-template (&rest tags)       
-      (apply 'project-tasks-and-todos-template tags))
-    (defun org-basic-nugget-template (&rest tags)
-      (org-project-template-builder
-       (org-template/next-prompt nil "Thought")
-       (cons "nugget" tags)
-       nil
-       org-indented-cursor-placement
-       org-template/meta-data))
-    (defun org-basic-oh-yeah-template (&rest tags)
-      (org-project-template-builder (org-template/next-prompt nil "Oh yeah...")
-                                    (cons "forgotten" tags)
-                                    nil
-                                    org-indented-cursor-placement
-                                    org-template/meta-data
-                                    ))
-    (defun org-basic-quote-template (&rest tags)
-      (org-project-template-builder (org-template/next-prompt nil "Quote:")
-                                    (cons "quote" tags)
-                                    nil
-                                    "  - %^{Coined by}, %^L\n  %?" 
-                                    org-template/meta-data
-                                    ))
+  (defun org-basic-tasks-and-todos-template (&optional tags watermark properties)
+    (org-project-template-builder (org-template/todo-prompt
+                                   org-template--basic-priority
+                                   "Task")
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  properties
+                                  ))
+
+  (defun org-basic-idea-template (&optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Idea")
+                                  (append '("idea") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  watermark
+                                  properties
+                                  ))
+
+  (defun org-basic-quick-idea-template (&optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Idea")
+                                  (append '("idea") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  watermark
+                                  properties
+                                  ))
+
+  (defun org-basic-note-template (&optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Note")
+                                  (append '("note") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  properties
+                                  ))
+
+  (defun org-basic-quick-note-template (&optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Note")
+                                  (append '("note") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  properties
+                                  ))
+
+  (defun org-basic-question-template (&optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Question")
+                                  (append '("question") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  properties
+                                  ))
+
+  (defun org-basic-quick-question-template (&optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Question")
+                                  (append '("question") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  watermark
+                                  properties
+                                  ))
+  (defun org-basic-nugget-template (&optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Thought")
+                                  (cons "nugget" tags)
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  properties))
+
+  (defun org-basic-oh-yeah-template (&optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Oh yeah...")
+                                  (cons "forgotten" tags)
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  properties
+                                  ))
+  (defun org-basic-quote-template (&optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Quote:")
+                                  (cons "quote" tags)
+                                  nil
+                                  "  - %^{Coined by}, %^L\n  %?" 
+                                  org-template/meta-data
+                                  ))
 #+end_src
+
+
+
+#+begin_src emacs-lisp
+  (defun project-tasks-and-todos-template (project-name &optional tags watermark properties)
+    (org-project-template-builder (org-template/todo-prompt
+                                   org-template--basic-priority
+                                   "Task")
+                                  (append '("project") tags)
+                                  org-template/timeline-query
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
+
+  (defun project-idea-template (project-name &optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Idea")
+                                  (append '("project" "idea") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
+
+  (defun project-quick-idea-template (project-name &optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Idea")
+                                  (append '("project" "idea") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  org-template/meta-data
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
+
+  (defun project-quick-note-template (project-name &optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Quick Note")
+                                  (append '("project" "note") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
+
+  (defun project-note-template (project-name &optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Note")
+                                  (append '("project" "note") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
+
+  (defun project-question-template (project-name &optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Question")
+                                  (append '("project" "question") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
+
+  (defun project-quick-question-template (project-name &optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Question")
+                                  (append '("project" "question") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
+
+  (defun project-issue-template (project-name &optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Issue")
+                                  (append '("project" "issue") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
+
+  (defun project-bug-template (project-name &optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Bug")
+                                  (append '("project" "bug") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
+
+  (defun project-feature-template (project-name &optional tags watermark properties)
+    (org-project-template-builder (org-template/next-prompt nil "Feature")
+                                  (append '("project" "feature") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
+#+end_src
+
 
 
 Templates for emacs-related captures.
 #+begin_src emacs-lisp
-  (defun emacs-idea-template (&rest tags)
-    (apply 'project-idea-template
-           (cons "emacs" tags)))
-  (defun emacs-task-template (&rest tags)
-    (apply 'project-tasks-and-todos-template
-           (cons "emacs" tags)))
-  (defun emacs-question-template (&rest tags)
-    (apply 'project-question-template
-           (cons "emacs" tags)))
-  (defun emacs-quick-question-template (&rest tags)
-    (apply 'project-quick-question-template
-           (cons "emacs" tags)))
-  (defun emacs-note-template (&rest tags)
-    (apply 'project-note-template
-           (cons "emacs" tags)))
-  (defun emacs-quick-note-template (&rest tags)
-    (apply 'project-quick-note-template
-           (cons "emacs" tags)))
+  (defun emacs-idea-template (&optional tags watermark properties)
+    (project-idea-template "Emacs" tags watermark properties))
 
-  (defun emacs-feature-template (&rest tags)
-    (apply 'project-feature-template
-           (cons "emacs" tags)))
-  (defun emacs-issue-template (&rest tags)
-    (apply 'project-issue-template
-           (cons "emacs" tags)))
-  (defun emacs-bug-template (&rest tags)
-    (apply 'project-bug-template
-           (cons "emacs" tags)))
+  (defun emacs-task-template (&optional tags watermark properties)
+    (project-tasks-and-todos-template "Emacs" tags watermark properties))
+
+  (defun emacs-question-template (&optional tags watermark properties)
+    (project-question-template "Emacs" tags watermark properties))
+
+  (defun emacs-quick-question-template (&optional tags watermark properties)
+    (project-quick-question-template "Emacs" tags watermark properties))
+
+  (defun emacs-note-template (&optional tags watermark properties)
+    (project-note-template "Emacs" tags watermark properties))
+
+  (defun emacs-quick-note-template (&optional tags watermark properties)
+    (project-quick-note-template "Emacs" tags watermark properties))
+
+  (defun emacs-feature-template (&optional tags watermark properties)
+    (project-feature-template "Emacs" tags watermark properties))
+
+  (defun emacs-issue-template (&optional tags watermark properties)
+    (project-issue-template "Emacs" tags watermark properties))
+
+  (defun emacs-bug-template (&optional tags watermark properties)
+    (project-bug-template "Emacs" tags watermark properties))
 #+end_src
 
 **** Captures
@@ -2559,7 +2579,7 @@ Templates for emacs-related captures.
   (setq org-capture-templates
        `(("g" "General todos and refiles")
          ("gt" "Todo" entry (file nil)
-          ,(org-basic-task-template)
+          ,(org-basic-tasks-and-todos-template)
                                           ; :clock-in t :clock-resume t
           )
          ("gr" "Respond" entry (file nil)
@@ -2603,10 +2623,11 @@ Templates for emacs-related captures.
          ("gh" "Habit" entry (file org-default-notes-file)
           "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"
           )
-         ("gb" "Stretch your legs" entry (file org-default-notes-file)
-          "* TAKE A BREAK\nDEADLINE: %^T"
+         ("gb" "Stretch your legs" entry (file nil)
+          "* TODO *TAKE A BREAK*\nDEADLINE: %^T\n %^{Break Duration|15}" 
+          :immediate-finish t
           )
-         ("ge" "Memorable quote" entry (file org-default-notes-file)
+         ("ge" "Memorable quote" entry (file nil)
           ,(org-basic-quote-template)
           )
          ))
