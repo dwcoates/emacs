@@ -114,7 +114,7 @@
      `(fringe                              ((,c (:background ,bg-l :foreground ,grey-1))))
      `(cursor                              ((,c (:background ,white))))
      `(hl-line                             ((,c (:background ,bg-l))))
-     `(region                              ((,c (:background ,grey-2 :foreground ,white))))
+     `(region                              ((,c (:background ,grey-2 :foreground "Tomato"))))
      `(highlight                           ((,c (:foreground ,yellow :inverse-video t))))
      `(shadow                              ((,c (:foreground ,orange))))
      `(minibuffer-prompt                   ((,c (:foreground ,orange))))
