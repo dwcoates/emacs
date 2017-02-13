@@ -1460,6 +1460,14 @@ Comment out a line:
 (use-package emr)
 #+end_src
 
+*** JSON
+
+#+begin_src emacs-lisp
+(use-package json-snatcher)
+(use-package json-reformat)
+(use-package json-mode)
+#+end_src
+
 ** Lisps
 *** General Lisp Settings
 Define hooks:
@@ -1936,6 +1944,12 @@ I was having some problems with it throwing errors.
 ** Org Mode
 *** General
 
+Htmlize is needed for pretty html syntax highlighting from org exports
+
+#+begin_src emacs-lisp
+(use-package htmlize)
+#+end_src
+
 Allow conversion to markdown. Useful for working with project readmes,
 etc., in org-mode.
 #+begin_src emacs-lisp
@@ -2303,7 +2317,6 @@ Editting source code
 
 (require 'ox-ipynb)
 #+end_src
-
 
 *** Capture
 **** Template Components
