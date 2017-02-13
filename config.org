@@ -1998,7 +1998,8 @@ Org-mode hook.
   (defun my-org-mode-hook ()
     (abbrev-mode -1)
     (toggle-word-wrap)
-    (setq org-src-fontify-natively t))
+    (setq org-src-fontify-natively t)
+    (flyspell-mode-on))
 
   (add-hook 'org-mode-hook 'my-org-mode-hook)
 #+END_SRC
