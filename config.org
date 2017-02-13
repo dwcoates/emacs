@@ -2571,6 +2571,9 @@ Templates for emacs-related captures.
   (defun emacs-quick-tip-template (&optional tags watermark properties)
     (project-quick-idea-template "Emacs" (append '("tip") tags) watermark properties))
 
+  (defun emacs-question-template (&optional tags watermark properties)
+    (project-question-template "Emacs" tags watermark properties))
+
   (defun emacs-quick-question-template (&optional tags watermark properties)
     (project-quick-question-template "Emacs" tags watermark properties))
 
