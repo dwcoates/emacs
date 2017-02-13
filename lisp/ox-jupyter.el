@@ -29,7 +29,7 @@
 ;;; Define Back-End
 
 (org-export-define-derived-backend 'jupyter 'md
-  :export-block '("JUPYTER" "JUPYTER NOTEBOOK")
+;  :export-block '("JUPYTER" "JUPYTER NOTEBOOK")
   :filters-alist '((:filter-parse-tree . org-md-separate-elements))
   :menu-entry
   '(?j "Export to Jupyter Notebook"
@@ -182,65 +182,60 @@ holding export options."
 (defun export-buffer-to-notebook ()
   "Export current buffer to notebook"
   (interactive)
-
-
   (save-excursion
-    (goto-char 1)
-
-
-    (let ((start 1) output (notebook-filename (org-export-output-file-name ".ipynb")))
-
+    (goto-char (point-min))
+    (let ((start (point-min))
+          (notebook-filename (org-export-output-file-name ".ipynb"))
+          output)
       (defun append-cell (cell)
-    (setq output (if output
-             (if cell
-                 (format "%s,\n%s" output cell)
-               output)
-               cell)))
-
+        (setq output (if output
+                         (if cell
+                             (format "%s,\n%s" output cell)
+                           output)
+                       cell)))
       ;; Add title cell to notebook: should probably be part of inner-template.
       ;;; -> change the style of the title hre
       ;;; -> should be customizable variable
       (append-cell (org-jupyter-cell "markdown"
-                     (format "<h1 align=\"center\"><font color=\"0066FF\" size=110>%s</font></h1>"
-                         (substring-no-properties
-                          (car
-                           (plist-get (org-export-get-environment)  :title))))))
-
+                                     (format "<h1 align=\"center\"><font color=\"0066FF\" size=110>%s</font></h1>"
+                                             (substring-no-properties
+                                              (car
+                                               (plist-get (org-export-get-environment)  :title))))))
       (catch 'no-more-blocks
-    (while t
-      (condition-case nil
-          (org-next-block 1)
-        (error (progn
-             (message "DBG: no more blocks")
-             (throw 'no-more-blocks nil)
-             nil)))
+        (while t
+          (condition-case nil
+              (org-next-block 1)
+            (error (progn
+                     (message "DBG: no more blocks")
+                     (throw 'no-more-blocks nil)
+                     nil)))
 
-      ;; Process region until next block as markdown cell
-      (append-cell (export-region-as-markdown start (point)))
-      ;; Update point
-      (setq start (point))
+          ;; Process region until next block as markdown cell
+          (append-cell (export-region-as-markdown start (point)))
+          ;; Update point
+          (setq start (point))
 
-      ;; Process block
-      (org-babel-mark-block)
-      (append-cell (org-jupyter-cell "code"
-                     (buffer-substring-no-properties
-                      (region-beginning) (region-end))))
-      ;; Update point
-      (goto-char (region-end))
-      (forward-line 2)
-      (setq start (point))))
+          ;; Process block
+          (org-babel-mark-block)
+          (append-cell (org-jupyter-cell "code"
+                                         (buffer-substring-no-properties
+                                          (region-beginning) (region-end))))
+          ;; Update point
+          (goto-char (region-end))
+          (forward-line 2)
+          (setq start (point))))
       ;; No more blocks: process region until the end as markdown cell
       (append-cell (export-region-as-markdown start (point-max)))
 
-    ;; Create notebook
-    (with-temp-buffer
-      (insert (org-jupyter-inner-template output nil))
-      (json-mode)
-      (mark-whole-buffer)
-      (indent-for-tab-command)
-      ;;(write-file "simple-notebook-test.ipynb"))
-      (write-file notebook-filename))
-    output)))
+      ;; Create notebook
+      (with-temp-buffer
+        (insert (org-jupyter-inner-template output nil))
+        (json-mode)
+        (mark-whole-buffer)
+        (indent-for-tab-command)
+        ;;(write-file "simple-notebook-test.ipynb"))
+        (write-file notebook-filename))
+      output)))
 
 
 

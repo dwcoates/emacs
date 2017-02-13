@@ -416,9 +416,11 @@ by default.
 
 ** Window behavior
 *** Shackle
-Great package. It allows you to configure how popup messages are
-handled. For instance, please stop creating the magit status buffer in
-another window.
+
+    Great package. It allows you to configure how popup messages are
+    handled. For instance, please stop creating the magit status buffer in
+    another window.
+
 #+begin_src emacs-lisp
   (use-package shackle
     :init
@@ -1698,6 +1700,10 @@ My clojure-mode hook
   ;;          (getenv "HOME") (getenv "HOME")))
 
   (setq python-shell-enable-font-lock nil)
+
+  ;; use helm-dash-install-docset to install docsets
+  (use-package helm-dash
+    :init)
 #+end_src
 
 *** elpy
@@ -1719,8 +1725,7 @@ My clojure-mode hook
       (add-hook 'elpy-mode-hook 'flycheck-mode))
     (use-package py-autopep8
       :init
-      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
-    )
+      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
 #+END_SRC
 
 *** ein
@@ -2237,7 +2242,10 @@ Function to visually delimit priorities in the org-agenda-list buffer.
  #+end_src
 
 *** Babel
-This should be waaaay easier to load, but for some reason I can't get these packages to play nicely and I'm tired and need to go to bed.
+
+This should be waaaay easier to load, but for some reason I can't get these
+packages to play nicely and I'm tired and need to go to bed.
+
 #+begin_src emacs-lisp
   (use-package dash-functional)
   (use-package f)
@@ -2257,6 +2265,7 @@ Stop asking me if I want to evaluate code
 
 
 Display images in the results section of the org buffer (like a normal notebook)
+
 #+begin_src emacs-lisp
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 #+end_src
@@ -2279,6 +2288,13 @@ Editting source code
   (define-key org-mode-map (kbd "C-c RET") 'org-edit-special)
   (define-key org-src-mode-map (kbd "C-c k") 'org-exit-src-code)
 #+end_src
+
+#+begin_src emacs-lisp
+(require 'ox-jupyter)
+
+(require 'ox-ipynb)
+#+end_src
+
 
 *** Capture
 **** Template Components
