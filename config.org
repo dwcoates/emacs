@@ -1,5 +1,5 @@
 #+Title: This is my emacs config file.
-* Package Management
+** Package Management
 #+begin_src emacs-lisp
 ;; Keep emacs-generated custom settings in a separate file so they don't pollute init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -177,9 +177,18 @@ This variables must be set before loading helm-gtags
     (diminish 'helm-mode)
     (set-face-attribute 'helm-candidate-number nil 
                         :background "salmon2" 
-                        :foreground "black")
-    )
+                        :foreground "black"))
 #+END_SRC
+
+Helm-dash is a great package that allows us to look up documentation with
+helm. It is mostly equivalent to Dash, but does not depend on it. Use
+`helm-dash-install-docset' to download a docset fo a particular language (or
+language package).
+
+#+begin_src emacs-lisp
+(use-package helm-dash)
+#+end_src
+
 
 Helm-flx improves helms scoring of results. Helm-fuzzier improves its fuzzy
 matching.
