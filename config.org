@@ -2048,8 +2048,36 @@ Abbrevs:
                                               ("phii" "\\phi")
                                               ("chii" "\\chi")
                                               ("psii" "\\psi")
-                                              ("omegaa" "\\omega")))
+                                              ("omegaa" "\\omega")
+                                            ;; Capitals
+                                              ("Alphaa" "\\Alpha")
+                                              ("Inf" "∞")
+                                              ("Ar" "\\Rightarrow")
+                                              ("Lambdaa" "\\Lambda")
+                                              ("Sigmaa" "\\Sigma")
+                                              ("Rhoo" "\\Rho")
+                                              ("Betaa" "\\Beta")
+                                              ("Etaa" "\\Etaa")
+                                              ("Deltaa" "\\Delta")
+                                              ("Epsilonn" "\\Epsilon")
+                                              ("Zetaa" "\\Zeta")
+                                              ("Thetaa" "\\Theta")
+                                              ("Iotaa" "\\Iota")
+                                              ("Kappaa" "\\Kappa")
+                                              ("Muu" "\\Mu")
+                                              ("Nuu" "\\Nu")
+                                              ("Xii" "\\Xi")
+                                              ("Omicronn" "\\Omicron")
+                                              ("Pii" "\\Pi")
+                                              ("Tauu" "\\Tau")
+                                              ("Upsilonn" "\\Upsilon")
+                                              ("Phii" "\\Phi")
+                                              ("Chii" "\\Chi")
+                                              ("Psii" "\\Psi")
+                                              ("Omegaa" "\\Omega")))
 #+end_src
+
+
 
 Org warnings:
 #+begin_src emacs-lisp
@@ -2077,12 +2105,12 @@ Org-mode hook.
     (abbrev-mode -1)
     (toggle-word-wrap)
     (setq org-src-fontify-natively t)
+    (org-toggle-pretty-entities)
     (setq local-abbrev-table org-abbrev-table)
     (flyspell-mode))
 
   (add-hook 'org-mode-hook 'my-org-mode-hook)
 #+END_SRC
-
 
 Org will automatically convert the LaTex names for symbols to their utf-8
 encodings (so long as they are preceeded by a backslash.) For example, \Gamma is
