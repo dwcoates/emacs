@@ -530,6 +530,14 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
 (setq ido-save-directory-list-file (concat (file-name-as-directory saveplace-dir) "ido.last"))
 #+end_src\n
 
+** Flyspell
+
+#+begin_src emacs-lisp
+(use-package flyspell
+  )
+#+end_src
+
+
 * Navigation
 ** Basic Settings
 Remaps the other-window command. In general, commands with consecutive 
@@ -2027,10 +2035,11 @@ Org-mode hook.
     (abbrev-mode -1)
     (toggle-word-wrap)
     (setq org-src-fontify-natively t)
-    (flyspell-mode-on))
+    (flyspell-mode))
 
   (add-hook 'org-mode-hook 'my-org-mode-hook)
 #+END_SRC
+
 
 Org will automatically convert the LaTex names for symbols to their utf-8
 encodings (so long as they are preceeded by a backslash.) For example, \Gamma is
@@ -2256,12 +2265,14 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 #+end_src
 
 **** tea-time
+
  #+begin_src emacs-lisp
    (use-package tea-time
      :init
      (setq org-clock-sound t)
      (global-set-key (kbd "C-c C-x s") 'tea-show-remaining-time)
-     (global-set-key (kbd "C-c C-x n") 'tea-time))
+     (global-set-key (kbd "C-c C-x n") 'tea-time)
+     (setq tea-time-sound (concat user-emacs-directory "bowshootalert.wav")))
  #+end_src
 
 *** Babel
@@ -2368,7 +2379,7 @@ Some components I made for building templates
 ***** Project templates builder
 
 #+begin_src emacs-lisp
-  (defun org-project-template-builder (header tags scheduling body watermark &optional properties)
+  (defun org-project-template-builder (header tags scheduling body watermark &optional properties more-tags)
     "Builds a template using the org-template componenets."
     (concat
      header " "
@@ -2379,6 +2390,7 @@ Some components I made for building templates
             (mapconcat 'identity tags ":")
           tags)
         ":"))
+     (when more-tags "%^g")
      "\n"
      (when properties
        (concat ":PROPERTIES:\n"
@@ -2484,152 +2496,154 @@ Basic templates
 
 
 #+begin_src emacs-lisp
-    (defun project-tasks-and-todos-template (project-name &optional tags watermark properties)
-      (org-project-template-builder (org-template/todo-prompt
-                                     org-template--basic-priority
-                                     "Task")
-                                    (append '("project") tags)
-                                    org-template/timeline-query
-                                    org-indented-cursor-placement
-                                    org-template/meta-data
-                                    (append `(("CATEGORY" ,project-name)) properties)
-                                    ))
+  (defun project-tasks-and-todos-template (project-name &optional tags watermark properties more-tags)
+    (org-project-template-builder (org-template/todo-prompt
+                                   org-template--basic-priority
+                                   "Task")
+                                  (append '("project") tags)
+                                  org-template/timeline-query
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  more-tags
+                                  ))
 
-    (defun project-idea-template (project-name &optional tags watermark properties)
-      (org-project-template-builder (org-template/next-prompt                                    
-                                     org-template--basic-priority 
-                                     "Idea")
-                                    (append '("project" "idea") (if (listp tags) tags (list tags)))
-                                    nil
-                                    org-indented-cursor-placement
-                                    org-template/meta-data
-                                    (append `(("CATEGORY" ,project-name)) properties)
-                                    ))
+  (defun project-idea-template (project-name &optional tags watermark properties more-tags)
+    (org-project-template-builder (org-template/next-prompt                                    
+                                   org-template--basic-priority 
+                                   "Idea")
+                                  (append '("project" "idea") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  org-template/meta-data
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  more-tags
+                                  ))
 
-    (defun project-quick-idea-template (project-name &optional tags watermark properties)
-      (org-project-template-builder (org-template/next-prompt
-                                     org-template--basic-priority
-                                     "Idea")
-                                    (append '("project" "idea") (if (listp tags) tags (list tags)))
-                                    nil
-                                    nil
-                                    org-template/meta-data
-                                    (append `(("CATEGORY" ,project-name)) properties)
-                                    ))
+  (defun project-quick-idea-template (project-name &optional tags watermark properties more-tags)
+    (org-project-template-builder (org-template/next-prompt
+                                   org-template--basic-priority
+                                   "Idea")
+                                  (append '("project" "idea") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  org-template/meta-data
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
 
-    (defun project-quick-note-template (project-name &optional tags watermark properties)
-      (org-project-template-builder (org-template/next-prompt
-                                     org-template--basic-priority
-                                     "Quick Note")
-                                    (append '("project" "note") (if (listp tags) tags (list tags)))
-                                    nil
-                                    nil
-                                    watermark
-                                    (append `(("CATEGORY" ,project-name)) properties)
-                                    ))
+  (defun project-quick-note-template (project-name &optional tags watermark properties more-tags)
+    (org-project-template-builder (org-template/next-prompt
+                                   org-template--basic-priority
+                                   "Quick Note")
+                                  (append '("project" "note") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties more-tags)
+                                  ))
 
-    (defun project-note-template (project-name &optional tags watermark properties)
-      (org-project-template-builder (org-template/next-prompt
-                                     org-template--basic-priority
-                                     "Note")
-                                    (append '("project" "note") (if (listp tags) tags (list tags)))
-                                    nil
-                                    org-indented-cursor-placement
-                                    watermark
-                                    (append `(("CATEGORY" ,project-name)) properties)
-                                    ))
+  (defun project-note-template (project-name &optional tags watermark properties more-tags)
+    (org-project-template-builder (org-template/next-prompt
+                                   org-template--basic-priority
+                                   "Note")
+                                  (append '("project" "note") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
 
-    (defun project-question-template (project-name &optional tags watermark properties)
-      (org-project-template-builder (org-template/next-prompt
-                                     org-template--basic-priority
-                                     "Question")
-                                    (append '("project" "question") (if (listp tags) tags (list tags)))
-                                    nil
-                                    org-indented-cursor-placement
-                                    watermark
-                                    (append `(("CATEGORY" ,project-name)) properties)
-                                    ))
+  (defun project-question-template (project-name &optional tags watermark properties more-tags)
+    (org-project-template-builder (org-template/next-prompt
+                                   org-template--basic-priority
+                                   "Question")
+                                  (append '("project" "question") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
 
-    (defun project-quick-question-template (project-name &optional tags watermark properties)
-      (org-project-template-builder (org-template/next-prompt
-                                     org-template--basic-priority
-                                     "Question")
-                                    (append '("project" "question") (if (listp tags) tags (list tags)))
-                                    nil
-                                    nil
-                                    watermark
-                                    (append `(("CATEGORY" ,project-name)) properties)
-                                    ))
+  (defun project-quick-question-template (project-name &optional tags watermark properties more-tags)
+    (org-project-template-builder (org-template/next-prompt
+                                   org-template--basic-priority
+                                   "Question")
+                                  (append '("project" "question") (if (listp tags) tags (list tags)))
+                                  nil
+                                  nil
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
 
-    (defun project-issue-template (project-name &optional tags watermark properties)
-      (org-project-template-builder (org-template/next-prompt
-                                     org-template--basic-priority
-                                     "Issue")
-                                    (append '("project" "issue") (if (listp tags) tags (list tags)))
-                                    nil
-                                    org-indented-cursor-placement
-                                    watermark
-                                    (append `(("CATEGORY" ,project-name)) properties)
-                                    ))
+  (defun project-issue-template (project-name &optional tags watermark properties more-tags)
+    (org-project-template-builder (org-template/next-prompt
+                                   org-template--basic-priority
+                                   "Issue")
+                                  (append '("project" "issue") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
 
-    (defun project-bug-template (project-name &optional tags watermark properties)
-      (org-project-template-builder (org-template/next-prompt org-template--basic-priority "Bug")
-                                    (append '("project" "bug") (if (listp tags) tags (list tags)))
-                                    nil
-                                    org-indented-cursor-placement
-                                    watermark
-                                    (append `(("CATEGORY" ,project-name)) properties)
-                                    ))
+  (defun project-bug-template (project-name &optional tags watermark properties more-tags)
+    (org-project-template-builder (org-template/next-prompt org-template--basic-priority "Bug")
+                                  (append '("project" "bug") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
 
-    (defun project-feature-template (project-name &optional tags watermark properties)
-      (org-project-template-builder (org-template/next-prompt org-template--basic-priority "Feature")
-                                    (append '("project" "feature") (if (listp tags) tags (list tags)))
-                                    nil
-                                    org-indented-cursor-placement
-                                    watermark
-                                    (append `(("CATEGORY" ,project-name)) properties)
-                                    ))
+  (defun project-feature-template (project-name &optional tags watermark properties more-tags)
+    (org-project-template-builder (org-template/next-prompt org-template--basic-priority "Feature")
+                                  (append '("project" "feature") (if (listp tags) tags (list tags)))
+                                  nil
+                                  org-indented-cursor-placement
+                                  watermark
+                                  (append `(("CATEGORY" ,project-name)) properties)
+                                  ))
 #+end_src
 
 
 
 Templates for emacs-related captures.
 #+begin_src emacs-lisp
-  (defun emacs-idea-template (&optional tags watermark properties)
-    (project-idea-template "Emacs" tags watermark properties))
+  (defun emacs-idea-template (&optional tags watermark properties more-tags)
+    (project-idea-template "Emacs" tags watermark properties more-tags))
 
-  (defun emacs-task-template (&optional tags watermark properties)
-    (project-tasks-and-todos-template "Emacs" tags watermark properties))
+  (defun emacs-task-template (&optional tags watermark properties more-tags)
+    (project-tasks-and-todos-template "Emacs" tags watermark properties more-tags))
 
-  (defun emacs-task-template (&optional tags watermark properties)
-    (project-tasks-and-todos-template "Emacs" tags watermark properties))
+  (defun emacs-task-template (&optional tags watermark properties more-tags)
+    (project-tasks-and-todos-template "Emacs" tags watermark properties more-tags))
 
-  (defun emacs-tip-template (&optional tags watermark properties)
-    (project-idea-template "Emacs" (append '("tip") tags) watermark properties))
+  (defun emacs-tip-template (&optional tags watermark properties more-tags)
+    (project-idea-template "Emacs" (append '("tip") tags) watermark properties more-tags))
 
-  (defun emacs-quick-tip-template (&optional tags watermark properties)
-    (project-quick-idea-template "Emacs" (append '("tip") tags) watermark properties))
+  (defun emacs-quick-tip-template (&optional tags watermark properties more-tags)
+    (project-quick-idea-template "Emacs" (append '("tip") tags) watermark properties more-tags))
 
-  (defun emacs-question-template (&optional tags watermark properties)
-    (project-question-template "Emacs" tags watermark properties))
+  (defun emacs-question-template (&optional tags watermark properties more-tags)
+    (project-question-template "Emacs" tags watermark properties more-tags))
 
-  (defun emacs-quick-question-template (&optional tags watermark properties)
-    (project-quick-question-template "Emacs" tags watermark properties))
+  (defun emacs-quick-question-template (&optional tags watermark properties more-tags)
+    (project-quick-question-template "Emacs" tags watermark properties more-tags))
 
-  (defun emacs-note-template (&optional tags watermark properties)
-    (project-note-template "Emacs" tags watermark properties))
+  (defun emacs-note-template (&optional tags watermark properties more-tags)
+    (project-note-template "Emacs" tags watermark properties more-tags))
 
-  (defun emacs-quick-note-template (&optional tags watermark properties)
-    (project-quick-note-template "Emacs" tags watermark properties))
+  (defun emacs-quick-note-template (&optional tags watermark properties more-tags)
+    (project-quick-note-template "Emacs" tags watermark properties more-tags))
 
-  (defun emacs-feature-template (&optional tags watermark properties)
-    (project-feature-template "Emacs" tags watermark properties))
+  (defun emacs-feature-template (&optional tags watermark properties more-tags)
+    (project-feature-template "Emacs" tags watermark properties more-tags))
 
-  (defun emacs-issue-template (&optional tags watermark properties)
-    (project-issue-template "Emacs" tags watermark properties))
+  (defun emacs-issue-template (&optional tags watermark properties more-tags)
+    (project-issue-template "Emacs" tags watermark properties more-tags))
 
-  (defun emacs-bug-template (&optional tags watermark properties)
-    (project-bug-template "Emacs" tags watermark properties))
+  (defun emacs-bug-template (&optional tags watermark properties more-tags)
+    (project-bug-template "Emacs" tags watermark properties more-tags))
 #+end_src
 
 **** Captures
