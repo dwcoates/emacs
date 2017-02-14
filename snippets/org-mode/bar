@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# binding: C-c e b
+# name: bar
+# key: bar
+# --
+\bar{$0} 

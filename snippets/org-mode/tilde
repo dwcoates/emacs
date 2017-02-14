@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# binding: C-c e t
+# name: tilde
+# key: tilde
+# --
+\tilde{$0} 

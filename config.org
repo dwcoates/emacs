@@ -2803,8 +2803,6 @@ Templates for emacs-related captures.
 (setq org-html-htmlize-output-type 'css)
 ;; (setq org-html-htmlize-font-prefix "") ;; default
 (setq org-html-htmlize-font-prefix "org-")
-
-
 #+end_src
 
 **** Lots of html

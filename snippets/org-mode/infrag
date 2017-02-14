@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# binding: C-c e w
+# name: infrag
+# key: infrag
+# --
+$$0$
