@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: under-curly
+# binding: C-c e U
+# key: under-curly
+# --
+_{${1:subscript}}$0
