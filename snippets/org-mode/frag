@@ -1,4 +1,5 @@
 # -*- mode: snippet -*-
+# binding: C-c e w
 # name: frag
 # key: frag
 # --
