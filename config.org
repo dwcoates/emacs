@@ -284,6 +284,25 @@ Ido should save its files where everything else does!
      (concat (file-name-as-directory saveplace-dir) "ido.last"))
 #+end_src
 
+** Ivy/Counsel
+
+#+begin_src emacs-lisp
+  (use-package ivy
+    :init
+    (use-package counsel)
+    (use-package swiper))
+#+end_src
+
+** Guide Key
+
+Produces a helpful pop up after a second or two of 
+#+begin_src emacs-lisp
+    (use-package guide-key
+    :init 
+    (guide-key-mode)
+    (setq guide-key/idle-delay 0.5))
+#+end_src
+
 ** Error finding
 *** Flycheck
 
@@ -837,29 +856,29 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 
 ** UTF-8
 #+BEGIN_SRC emacs-lisp
-    (set-terminal-coding-system 'utf-8)
-    (set-keyboard-coding-system 'utf-8)
-    (set-language-environment "UTF-8")
-    (prefer-coding-system 'utf-8)
-    (set-default-coding-systems 'utf-8)
+      (set-terminal-coding-system 'utf-8)
+      (set-keyboard-coding-system 'utf-8)
+      (set-language-environment "UTF-8")
+      (prefer-coding-system 'utf-8)
+      (set-default-coding-systems 'utf-8)
 
-    (setq-default indent-tabs-mode nil)
-    (delete-selection-mode)
-    (global-set-key (kbd "RET") 'newline-and-indent)
+      (setq-default indent-tabs-mode nil)
+      (delete-selection-mode)
+      (global-set-key (kbd "RET") 'newline-and-indent)
 
-    (define-key key-translation-map (kbd "C-c u p") (kbd "φ"))
-    (define-key key-translation-map (kbd "C-c u x") (kbd "ξ"))
-    (define-key key-translation-map (kbd "C-c u i") (kbd "∞"))
-    (define-key key-translation-map (kbd "C-c u l") (kbd "λ"))
-    (define-key key-translation-map (kbd "C-c u <right>") (kbd "→"))
+      (define-key key-translation-map (kbd "C-c u p") (kbd "φ"))
+      (define-key key-translation-map (kbd "C-c u x") (kbd "ξ"))
+      (define-key key-translation-map (kbd "C-c u i") (kbd "∞"))
+      (define-key key-translation-map (kbd "C-c u l") (kbd "λ"))
+      (define-key key-translation-map (kbd "C-c u <right>") (kbd "→"))
 
-    (define-abbrev-table 'global-abbrev-table '(("alpha" "α")
-                                                ("inf" "∞")
-                                                ("ar" "→")
-                                                ("lambda" "λ")
-                                                ))
+      (define-abbrev-table 'global-abbrev-table '(("alpha" "α")
+                                                  ("inf" "∞")
+                                                  ("ar" "→")
+                                                  ("lambda" "λ")
+                                                  ))
 
-    (abbrev-mode 1)
+      (abbrev-mode 1)
 #+END_SRC
 
 *** char-menu
@@ -952,8 +971,7 @@ Backward delete sexp:
         (setq yas-wrap-around-region t) ;; Wrap around region
         (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
         (defun my/yas-term-hook ()
-          (setq yas-dont-activate t)
-  )
+          (setq yas-dont-activate t))
         (add-hook 'term-mode-hook 'my/yas-term-hook)
         (defun my/yas-before-hook ()
           (when (eq yas-minor-mode t) (expand-abbrev))
@@ -961,15 +979,8 @@ Backward delete sexp:
         (add-hook 'yas-before-expand-snippet-hook 'my/yas-before-hook)
         (defun my/yas-after-hook ()
             (setq snippet-mode-abbrev-table local-abbrev-table))
-        (add-hook 'yas-after-exit-snippet-hook 'my/yas-after-hook))
-
-
-      )
+        (add-hook 'yas-after-exit-snippet-hook 'my/yas-after-hook)))
 #+end_src
-
-λ
-
-λ_{lambda - 1}
 
 Inter-field navigation:
 #+begin_src emacs-lisp
@@ -1095,8 +1106,7 @@ Inter-field navigation:
 
 *** goodies
 Use my goodies repository for some stuff I like to use, for instance,
-~helm-insert-color-name~, for selecting colors and inserting their name at
-point.
+~helm-insert-color-name~, for selecting colors and inserting their name at point.
 #+begin_src emacs-lisp
   (add-to-list 'load-path (concat lisp-dir "goodies"))
   (unless (require 'dwc-goodies nil t)
@@ -1105,6 +1115,7 @@ point.
 
 ** Functions
 *** just-one-space
+
 #+begin_src emacs-lisp
 (defun just-one-space-in-region (beg end)
   "replace all whitespace in the region with single spaces"
@@ -1119,6 +1130,7 @@ point.
 
 
 *** unfill-paragraph
+
 #+begin_src emacs-lisp
   ;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph
   (defun unfill-paragraph (&optional region)
@@ -1132,6 +1144,7 @@ point.
 
 
 *** die-tabs
+
 #+BEGIN_SRC emacs-lisp
 (defun die-tabs ()
 "use 2 spaces for tabs"
@@ -1144,6 +1157,7 @@ point.
 
 
 *** prelude-move-beginning-of-line
+
 #+BEGIN_SRC emacs-lisp
 ;; Customized functions
 (defun prelude-move-beginning-of-line (arg)
@@ -1174,6 +1188,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 
 *** defadvice kill-ring-save
+
 #+BEGIN_SRC emacs-lisp
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single
@@ -1187,6 +1202,7 @@ line instead."
 
 
 *** defadvice kill-region
+
 #+BEGIN_SRC emacs-lisp
 (defadvice kill-region (before slick-cut activate compile)
   "When called interactively with no active region, kill a single
@@ -1199,6 +1215,7 @@ line instead."
 
 
 *** defadvice kill-line
+
 #+BEGIN_SRC emacs-lisp
 ;; kill a line, including whitespace characters until next non-whiepsace character
 ;; of next line
@@ -1215,6 +1232,7 @@ line instead."
 
 
 *** variables
+
 yank-indent-modes
 #+BEGIN_SRC emacs-lisp
 ;; taken from prelude-editor.el
@@ -1225,7 +1243,6 @@ yank-indent-modes
 Only modes that don't derive from `prog-mode' should be listed here.")
 #+END_SRC
 
-
 yank-indent-blacklisted-modes
 #+BEGIN_SRC emacs-lisp
 (defvar yank-indent-blacklisted-modes
@@ -1233,13 +1250,11 @@ yank-indent-blacklisted-modes
   "Modes for which auto-indenting is suppressed.")
 #+END_SRC
 
-
 yank-advised-indent-threshol
 #+BEGIN_SRC emacs-lisp
 (defvar yank-advised-indent-threshold 1000
   "Threshold (# chars) over which indentation does not automatically occur.")
 #+END_SRC
-
 
 yank-advised-indent-function
 #+BEGIN_SRC emacs-lisp
@@ -1249,8 +1264,8 @@ yank-advised-indent-function
       (indent-region beg end nil)))
 #+END_SRC
 
-
 *** defadvice yank
+
 #+BEGIN_SRC emacs-lisp
 (defadvice yank (after yank-indent activate)
   "If current mode is one of 'yank-indent-modes,
@@ -1263,8 +1278,8 @@ indent yanked text (with prefix arg don't indent)."
         (yank-advised-indent-function (region-beginning) (region-end)))))
 #+END_SRC
 
-
 *** defadvice yank-pop
+
 #+BEGIN_SRC emacs-lisp
 (defadvice yank-pop (after yank-pop-indent activate)
   "If current mode is one of `yank-indent-modes',
@@ -1277,8 +1292,8 @@ indent yanked text (with prefix arg don't indent)."
       (yank-advised-indent-function (region-beginning) (region-end)))))
 #+END_SRC
 
-
 *** indent-buffer
+
 #+BEGIN_SRC emacs-lisp
 ;; prelude-core.el
 (defun indent-buffer ()
@@ -1287,8 +1302,8 @@ indent yanked text (with prefix arg don't indent)."
   (indent-region (point-min) (point-max)))
 #+END_SRC
 
-
 *** prelude-indent-sensitive-modes
+
 #+BEGIN_SRC emacs-lisp
 ;; prelude-editing.el
 (defcustom prelude-indent-sensitive-modes
@@ -1297,8 +1312,8 @@ indent yanked text (with prefix arg don't indent)."
   :type 'list)
 #+END_SRC
 
-
 *** indent-region-or-buffer
+
 #+BEGIN_SRC emacs-lisp
 (defun indent-region-or-buffer ()
   "Indent a region if selected, otherwise the whole buffer."
@@ -1317,8 +1332,8 @@ indent yanked text (with prefix arg don't indent)."
 (global-set-key (kbd "C-c i") 'indent-region-or-buffer)
 #+END_SRC
 
-
 *** prelude-get-positions-of-line-or-region
+
 #+BEGIN_SRC emacs-lisp
 ;; add duplicate line function from Prelude. taken from prelude-core.el.
 (defun prelude-get-positions-of-line-or-region ()
@@ -1333,7 +1348,6 @@ or region."
     (setq end (line-end-position))
     (cons beg end)))
 #+END_SRC
-
 
 *** prelude-smart-open-line
 
@@ -1352,8 +1366,8 @@ With a prefix ARG open line above the current line."
       (newline-and-indent))))
 #+END_SRC
 
-
 *** prelude-smart-open-line-above
+
 #+BEGIN_SRC emacs-lisp
 (defun prelude-smart-open-line-above ()
   "Insert an empty line above the current line.
@@ -1373,8 +1387,8 @@ Position the cursor at it's beginning, according to the current mode."
               (set (make-local-variable 'company-backends) '(company-elisp))))
 #+END_SRC
 
-
 *** toggle-comment-on-line
+
 Comment out a line:
 #+BEGIN_SRC emacs-lisp
 (defun toggle-comment-on-line ()
@@ -1387,6 +1401,7 @@ Comment out a line:
 * Development Environments
 ** General Settings
 *** Semantic
+
 #+begin_src emacs-lisp
 (semantic-mode 1)
 
@@ -1398,6 +1413,7 @@ Comment out a line:
 #+end_src
 
 *** Compilation
+
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "<f5>") (lambda ()
                                (interactive)
@@ -1406,6 +1422,7 @@ Comment out a line:
 #+END_SRC
 
 *** Debugging
+
 #+BEGIN_SRC emacs-lisp
 ;; Setup GDB
 (setq gdb-many-windows t
@@ -1414,6 +1431,7 @@ Comment out a line:
 #+END_SRC
 
 *** Projectile
+
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :config
@@ -1440,6 +1458,7 @@ Comment out a line:
 #+END_SRC
 
 *** Gtags
+
 #+BEGIN_SRC emacs-lisp
 (use-package helm-gtags
   :commands helm-gtags-mode
@@ -1470,12 +1489,14 @@ Comment out a line:
   )
 #+END_SRC
 
-*** Comint
+*** ~Comint~
+
 #+begin_src emacs-lisp
 (define-key comint-mode-map (kbd "M-r") 'comint-history-isearch-backward)
 #+end_src
 
-*** EMR
+*** ~EMR~
+
 #+begin_src emacs-lisp
 (use-package emr)
 #+end_src
@@ -1490,6 +1511,7 @@ Comment out a line:
 
 ** Lisps
 *** General Lisp Settings
+
 Define hooks:
 General Lisp hook:
 #+begin_src emacs-lisp
@@ -1535,8 +1557,8 @@ Enable eldoc-mode in appropriate emacs lisp hooks
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 #+END_SRC
 
-
 *** Emacs Lisp
+
 #+begin_src emacs-lisp
 (define-prefix-command 'Apropos-Prefix nil "Apropos (a,c,d,i,l,v,C-v)")
 (global-set-key (kbd "C-h C-a") 'Apropos-Prefix)
@@ -1590,9 +1612,9 @@ Display possible symbol completions in a helm buffer:
 (define-key global-map (kbd "C-c l c") 'helm-lisp-completion-at-point)
 #+END_SRC
 
-
 *** Clojure
 **** clojure-mode
+
 My clojure-mode hook
 #+begin_src emacs-lisp
   (defun my/clojure-mode-hook ()
@@ -1632,8 +1654,8 @@ My clojure-mode hook
     )
 #+END_SRC
 
-
 **** CIDER
+
 #+BEGIN_SRC emacs-lisp
   (use-package cider
     :commands cider-mode
@@ -1693,6 +1715,7 @@ My clojure-mode hook
 
 ** Python
 *** iPython
+
 #+begin_src emacs-lisp
         (setq python-shell-prompt-detect-failure-warning nil
     ;         python-shell-prompt-input-regexps '("$ " "\\.\\.\\. " 
@@ -1730,6 +1753,7 @@ My clojure-mode hook
 #+end_src
 
 *** python-mode
+
 #+begin_src emacs-lisp
   ;; (setenv "PYTHONPATH"
   ;;         (format
@@ -1744,6 +1768,7 @@ My clojure-mode hook
 #+end_src
 
 *** elpy
+
 #+BEGIN_SRC emacs-lisp
   (setq elpy-rpc-backend "rope")
   (use-package elpy
@@ -1766,6 +1791,7 @@ My clojure-mode hook
 #+END_SRC
 
 *** ein
+
 Ein is an emacs front end for jupyter notebook.
 #+begin_src emacs-lisp
   ;; (use-package ein
@@ -1797,6 +1823,7 @@ Ein is an emacs front end for jupyter notebook.
 #+end_src
 
 *** ob-ipython
+
 Currently DO NOT attempt to fetch completions from jupyter. It does
 not yet support emacs due to a jupyter bug.
 #+begin_src emacs-lisp
@@ -1804,6 +1831,7 @@ not yet support emacs due to a jupyter bug.
 #+end_src
 
 *** company-anaconda
+
 #+begin_src emacs-lisp
   (use-package company-anaconda
     :after anaconda-mode
@@ -1828,6 +1856,7 @@ not yet support emacs due to a jupyter bug.
 #+end_src
 
 ** C/C++
+
 Company-C-Headers enables the completion of C/C++ header file names using company-mode:
 #+begin_src emacs-lisp
 (use-package company-c-headers
@@ -1916,6 +1945,7 @@ Enable Emacs Development Environment (EDE) only in C/C++:
 #+END_SRC
 
 ** R (statistics)
+
 This is not downloaded via use-package and the package manager because
 I was having some problems with it throwing errors.
 #+begin_src emacs-lisp
@@ -1929,6 +1959,7 @@ I was having some problems with it throwing errors.
 * Organization and Version Control
 ** Git
 *** Magit
+
  #+BEGIN_SRC  emacs-lisp
  (use-package magit
    :commands magit-status
@@ -1936,8 +1967,8 @@ I was having some problems with it throwing errors.
    (bind-key "C-c m s" 'magit-status))
  #+END_SRC
 
-
 **** backup specifics
+
  #+BEGIN_SRC emacs-lisp
  ;; Backup function to target when called.
  (defun my/backup-specifics (file target)
@@ -1947,8 +1978,8 @@ I was having some problems with it throwing errors.
      (copy-file file target t))
  #+END_SRC
 
-
 **** On magit-push
+
  #+BEGIN_SRC emacs-lisp
  ;; Advise magit-push to backup specifics.el to a backup file in home
  (advice-add 'magit-push :around (lambda (push &rest args)
@@ -1957,6 +1988,7 @@ I was having some problems with it throwing errors.
  #+END_SRC
 
 *** gist
+
  #+begin_src emacs-lisp
  (use-package gist)
  #+end_src
@@ -2031,7 +2063,7 @@ Abbrevs:
                                               ("sigmaa" "\\sigma")
                                               ("rhoo" "\\rho")
                                               ("betaa" "\\beta")
-                                              ("etaa" "\\etaa")
+                                              ("etaa" "\\eta")
                                               ("deltaa" "\\delta")
                                               ("epsilonn" "\\epsilon")
                                               ("zetaa" "\\zeta")
@@ -2076,8 +2108,6 @@ Abbrevs:
                                               ("Psii" "\\Psi")
                                               ("Omegaa" "\\Omega")))
 #+end_src
-
-
 
 Org warnings:
 #+begin_src emacs-lisp
@@ -2142,6 +2172,7 @@ Font lock should hide the emphasis marker characters (inline code, bold, etc)
 #+end_src
 
 *** Tasks and States
+
 Tasks have multiple possible states. Below defines them and their transitions
 #+begin_src emacs-lisp
   (setq org-todo-keywords
@@ -2159,6 +2190,7 @@ Tasks have multiple possible states. Below defines them and their transitions
                 ("PHONE" :foreground "forest green" :weight bold))))
 
 #+end_src
+
 Task triggers
 #+begin_src emacs-lisp
   (setq org-todo-state-tags-triggers
@@ -2288,7 +2320,14 @@ Agenda custom commands
                  nil))))
 #+end_src
 
+***** Searching
+
+#+begin_src emacs-lisp
+(define-key org-agenda-mode-map (kbd "y") 'org-search-view)
+#+end_src
+
 **** Delimit prioirites *DISABLED*
+
 Function to visually delimit priorities in the org-agenda-list buffer.
 *NOTE: Currently disabled*
 #+begin_src emacs-lisp
@@ -2312,6 +2351,7 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 #+end_src
 
 **** Update org-agenda-files
+
 #+begin_src emacs-lisp
   (setq org-agenda-file-regexp "\\`[^.].*\\.org\\'") ; default value
   (defvar l '())
@@ -2331,6 +2371,7 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 #+end_src
 
 *** Clock
+
 #+begin_src emacs-lisp
   ;(define-key org-mode-map (kbd "C-c C-x C-o") 'org-clock-in)
 #+end_src
@@ -2482,6 +2523,7 @@ Some components I made for building templates
      (if watermark watermark org-template/meta-data)))
 #+end_src
 **** Templates
+
 Basic templates
 
 #+begin_src emacs-lisp

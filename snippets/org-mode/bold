@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: bold
+# binding: C-c e o
+# key: bold
+# --
+*$0*
