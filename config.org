@@ -144,6 +144,8 @@ Unprettify when symbol is just before point. This doesn't seem to work...
 #+begin_src emacs-lisp
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 #+end_src
+
+
 ** Helm
 This variables must be set before loading helm-gtags
 #+BEGIN_SRC emacs-lisp
@@ -893,8 +895,6 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
                         (" Arrows"     "←" "→" "↑" "↓" "⇐" "⇒" "⇑" "⇓")
                         (" Greek"      "α" "β" "Y" "δ" "ε" "ζ" "η" "θ" "ι" "κ" "λ" "μ"
                          "ν" "ξ" "ο" "π" "ρ" "σ" "τ" "υ" "φ" "χ" "ψ" "ω")))
-
-
 #+END_SRC
 
 ** smartparens
@@ -2145,8 +2145,15 @@ Org-mode hook.
 Org will automatically convert the LaTex names for symbols to their utf-8
 encodings (so long as they are preceeded by a backslash.) For example, \Gamma is
 entered by typing "Gamma" preceeded by a slash:
+
 #+begin_src emacs-lisp
 (setq-default org-pretty-entities-include-sub-superscripts t)
+#+end_src
+
+Make Org latex fragments bigger:
+
+#+begin_src emacs-lisp
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 #+end_src
 
 Hide all Org source blocks by default. 
@@ -2177,7 +2184,7 @@ Tasks have multiple possible states. Below defines them and their transitions
 #+begin_src emacs-lisp
   (setq org-todo-keywords
         (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-                (sequence "BUG(b)" "ISSUE(i)" "FEATURE(f)" | "FIXED(d)")
+                (sequence "BUG(b)" "ISSUE(i)" "FEATURE(f)" "|" "FIXED(d)")
                 (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
 
   (setq org-todo-keyword-faces
