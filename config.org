@@ -2177,15 +2177,22 @@ Tasks have multiple possible states. Below defines them and their transitions
 #+begin_src emacs-lisp
   (setq org-todo-keywords
         (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                (sequence "BUG(b)" "ISSUE(i)" "FEATURE(f)" | "FIXED(d)")
                 (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
 
   (setq org-todo-keyword-faces
-        (quote (("TODO" :foreground "red" :weight bold)
-                ("NEXT" :foreground "blue" :weight bold)
+        (quote (("TODO" :foreground "orange" :weight bold)
                 ("DONE" :foreground "forest green" :weight bold)
+                ("FIXED" :foreground "DarkGreen" :weight bold)
+                ("NOTE" :foreground "blue" :weight bold)
                 ("WAITING" :foreground "orange" :weight bold)
                 ("HOLD" :foreground "magenta" :weight bold)
-                ("CANCELLED" :foreground "forest green" :weight bold)
+                ("CANCELLED" :foreground "gray" :weight bold)
+                ;;
+                ("BUG" :foreground "red" :weight bold)
+                ("ISSUE" :foreground "Brown" :weight bold)
+                ("FEATURE" :foreground "SaddleBrown" :weight bold)
+                ;;
                 ("MEETING" :foreground "forest green" :weight bold)
                 ("PHONE" :foreground "forest green" :weight bold))))
 
@@ -2330,6 +2337,7 @@ Agenda custom commands
 
 Function to visually delimit priorities in the org-agenda-list buffer.
 *NOTE: Currently disabled*
+
 #+begin_src emacs-lisp
   (defun my-custom-agenda-fn ()
     (interactive)

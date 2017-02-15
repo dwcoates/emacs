@@ -44,4 +44,6 @@
  '(mode-line-highlight ((t (:box (:line-width 2 :color "yellow" :style released-button)))))
  '(mode-line-inactive ((t (:background "gray22" :foreground "gray52" :inverse-video nil :box nil))))
  '(org-block-begin-line ((t (:background "SkyBlue4" :foreground "SkyBlue4" :height 0.1))))
- '(org-level-3 ((t (:foreground "deep sky blue" :weight bold)))))
+ '(org-level-3 ((t (:foreground "deep sky blue" :weight bold))))
+ '(sml/global ((((class color) (min-colors 89)) (:foreground "DarkOrange4" :inverse-video nil))))
+ '(sml/modes ((((class color) (min-colors 89)) (:inherit sml/global :foreground "black")))))
