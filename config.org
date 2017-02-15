@@ -284,6 +284,24 @@ Ido should save its files where everything else does!
      (concat (file-name-as-directory saveplace-dir) "ido.last"))
 #+end_src
 
+** Ivy/Counsel
+
+#+begin_src emacs-lisp
+  (use-package ivy
+    :init
+    (use-package counsel)
+    (use-package swiper))
+#+end_src
+
+** Guide Key
+
+#+begin_src emacs-lisp
+  (use-package guide-key
+  :init 
+  (guide-key-mode))
+#+end_src
+
+
 ** Error finding
 *** Flycheck
 
@@ -837,29 +855,29 @@ The same result can also be be achieved by \\[universal-argument] \\[unhighlight
 
 ** UTF-8
 #+BEGIN_SRC emacs-lisp
-    (set-terminal-coding-system 'utf-8)
-    (set-keyboard-coding-system 'utf-8)
-    (set-language-environment "UTF-8")
-    (prefer-coding-system 'utf-8)
-    (set-default-coding-systems 'utf-8)
+      (set-terminal-coding-system 'utf-8)
+      (set-keyboard-coding-system 'utf-8)
+      (set-language-environment "UTF-8")
+      (prefer-coding-system 'utf-8)
+      (set-default-coding-systems 'utf-8)
 
-    (setq-default indent-tabs-mode nil)
-    (delete-selection-mode)
-    (global-set-key (kbd "RET") 'newline-and-indent)
+      (setq-default indent-tabs-mode nil)
+      (delete-selection-mode)
+      (global-set-key (kbd "RET") 'newline-and-indent)
 
-    (define-key key-translation-map (kbd "C-c u p") (kbd "φ"))
-    (define-key key-translation-map (kbd "C-c u x") (kbd "ξ"))
-    (define-key key-translation-map (kbd "C-c u i") (kbd "∞"))
-    (define-key key-translation-map (kbd "C-c u l") (kbd "λ"))
-    (define-key key-translation-map (kbd "C-c u <right>") (kbd "→"))
+      (define-key key-translation-map (kbd "C-c u p") (kbd "φ"))
+      (define-key key-translation-map (kbd "C-c u x") (kbd "ξ"))
+      (define-key key-translation-map (kbd "C-c u i") (kbd "∞"))
+      (define-key key-translation-map (kbd "C-c u l") (kbd "λ"))
+      (define-key key-translation-map (kbd "C-c u <right>") (kbd "→"))
 
-    (define-abbrev-table 'global-abbrev-table '(("alpha" "α")
-                                                ("inf" "∞")
-                                                ("ar" "→")
-                                                ("lambda" "λ")
-                                                ))
+      (define-abbrev-table 'global-abbrev-table '(("alpha" "α")
+                                                  ("inf" "∞")
+                                                  ("ar" "→")
+                                                  ("lambda" "λ")
+                                                  ))
 
-    (abbrev-mode 1)
+      (abbrev-mode 1)
 #+END_SRC
 
 *** char-menu
@@ -2044,7 +2062,7 @@ Abbrevs:
                                               ("sigmaa" "\\sigma")
                                               ("rhoo" "\\rho")
                                               ("betaa" "\\beta")
-                                              ("etaa" "\\etaa")
+                                              ("etaa" "\\eta")
                                               ("deltaa" "\\delta")
                                               ("epsilonn" "\\epsilon")
                                               ("zetaa" "\\zeta")
@@ -2089,8 +2107,6 @@ Abbrevs:
                                               ("Psii" "\\Psi")
                                               ("Omegaa" "\\Omega")))
 #+end_src
-
-
 
 Org warnings:
 #+begin_src emacs-lisp
