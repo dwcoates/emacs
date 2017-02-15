@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: verbatim
+# binding: C-c e v
+# key: verbatim
+# --
+=$0=
