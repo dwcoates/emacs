@@ -295,12 +295,13 @@ Ido should save its files where everything else does!
 
 ** Guide Key
 
+Produces a helpful pop up after a second or two of 
 #+begin_src emacs-lisp
-  (use-package guide-key
-  :init 
-  (guide-key-mode))
+    (use-package guide-key
+    :init 
+    (guide-key-mode)
+    (setq guide-key/idle-delay 0.5))
 #+end_src
-
 
 ** Error finding
 *** Flycheck
@@ -2317,6 +2318,12 @@ Agenda custom commands
                          (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
                          (org-tags-match-list-sublevels nil))))
                  nil))))
+#+end_src
+
+***** Searching
+
+#+begin_src emacs-lisp
+(define-key org-agenda-mode-map (kbd "y") 'org-search-view)
 #+end_src
 
 **** Delimit prioirites *DISABLED*
