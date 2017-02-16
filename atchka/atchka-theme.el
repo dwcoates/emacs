@@ -325,7 +325,7 @@
      `(org-formula                  ((,c (:foreground ,cyan))))
            ;; Headers
      `(org-level-2                  ((,c (,@sans-font :height 1.07 :foreground "Peru"))))
-     `(org-level-3                  ((,c (,@sans-font :foreground "light goldenrod"))))
+     `(org-level-3                  ((,c (,@sans-font :foreground "RosyBrown"))))
      `(org-level-4                  ((,c (:inherit 'outline-4))))
      `(org-level-6                  ((,c (:inherit 'outline-7))))
      `(org-level-7                  ((,c (:foreground "yellow green"))))

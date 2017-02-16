@@ -38,6 +38,13 @@ Make sure emacs gets my bashrc environment variable:
 
 * General
 ** Basic Settings
+
+Goodies contains a lot of custom functions I've written or scavenged or stolen
+
+#+begin_src emacs-lisp
+(require 'dwc-goodies)
+#+end_src
+
 ** General Appearance
 *** ~isearch~
 *** ~linum~  -- *disabled* 
@@ -1274,20 +1281,20 @@ Comment out a line:
 *** General Lisp Settings
 
 Define hooks:
-General Lisp hook:
+
 #+begin_src emacs-lisp
+  ;; General Lisp hook:
   (defun my/general-lisp-hook ()
-    (rainbow-delimiters-mode-enable)
-    )
+    (rainbow-delimiters-mode-enable))
 #+end_src
 
 
 Emacs Lisp hook:
 #+begin_src emacs-lisp
+  ;; General Lisp hook:
   (defun my/emacs-lisp-hook ()
         (my/general-lisp-hook)
-        (turn-on-eldoc-mode)
-        )
+        (turn-on-eldoc-mode))
 #+end_src
 
 
