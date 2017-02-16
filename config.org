@@ -1,6 +1,7 @@
 #+Title: This is my emacs config file.
 
 * Package Management
+
 #+begin_src emacs-lisp
 ;; Keep emacs-generated custom settings in a separate file so they don't pollute init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -24,70 +25,6 @@ https://github.com/purcell/exec-path-from-shell
     (package-install 'exec-path-from-shell)))
 #+END_SRC
 
-* General
-** Basic Settings
-** Basic Appearance
-*** ~isearch~
-*** ~linum~
-
-#+begin_src emacs-lisp 
-;  (set-face-attribute 'linum-mode nil 
-;                      :background "gray16" 
-;                      :foreground "dim gray")
-#+end_src
-
-** Key-Command Interfaces
-Turn on ido. I prefer Ido's approach to find-file over helm's
-approach:
-
-#+begin_src emacs-lisp
-(ido-mode t)
-
-(bind-key* "C-x C-f" 'ido-find-file)
-#+end_src
-
-*** Key Chords
-~key-chord-one-key-delay~ defines the max time delay between two key
-presses to be considered a key chord.  I have this set to be very
-short, short enough that to trigger the command, the keys pretty much
-have to be pressed as one motion, and not in sequence. For example,
-with this setting, I can't (realistically) trigger a command assigned
-to "we" key chord by pressing 'w' and 'e' in sequence as I would
-typing them in a word naturally. This makes two-handed keys chords
-slightly unreliable, at least without practice. So generally, my key
-chords consist of keys adjacent to one another.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package key-chord
-    :ensure t
-    :init
-    (setq key-chord-two-keys-delay 0.05)
-    (setq key-chord-one-key-delay 0.05)
-    (key-chord-mode 0)
-  )
-#+END_SRC
-
-*** ~Hydra~
-
-#+begin_src emacs-lisp
-  (use-package hydra
-    :ensure t)
-#+end_src
-
-** Functions
-*** ~delete-frames~
-
-#+begin_src emacs-lisp
-(defun delete-frames ()
-  (let ((frames (frame-list)))
-    (while frames
-      (let ((frame (pop frames)))
-        (delete-frame frame)
-        ))
-    ))
-#+end_src
-
-** Emacs
 Make sure emacs gets my bashrc environment variable:
 #+begin_src emacs-lisp
   (let ((path (shell-command-to-string ". ~/.bashrc; echo -n $PATH")))
@@ -99,214 +36,33 @@ Make sure emacs gets my bashrc environment variable:
            exec-path)))
 #+end_src
 
-* Interface
-** General appearance
-*** Fringe
-#+begin_src emacs-lisp
-  (setq fringe-mode '(4 . 4))
-#+end_src
+* General
+** Basic Settings
+** General Appearance
+*** ~isearch~
+*** ~linum~  -- *disabled* 
 
-*** Cursor
-Change cursor when idle or in a different buffer. I like the vertical bar
-cursor, so this is nice when I need to find my cursor after not looking at the
-screen for minute.
-#+begin_src emacs-lisp
-  (use-package cursor-chg
-    :init
-    ()
-    :config
-    (curchg-toggle-cursor-type-when-idle)
-    (setq curch-idle-interval 0.5))
-#+end_src
-
-*** COMMENT Macros
-Don't display message "type 'e' to repeat macro" after I execute a macro. This
-interferes sometimes when I want my macro to display a message in the
-minibuffer.
-#+begin_src emacs-lisp
-  ;; (require 'cl) ; for flet
-  ;; (add-to-list 'minor-mode-alist '(kmacro-repeat-mode " MACRO-REPEAT!"))
-  ;; (defadvice kmacro-call-macro (around kmacro-call-macro-without-message activate)
-  ;;   "run kmacro-call-macro without any messages"
-  ;;   (cl-flet ((message (&rest args)))
-  ;;     (let ((kmacro-repeat-mode t))
-  ;;       ad-do-it)))
+#+begin_src emacs-lisp 
+;  (set-face-attribute 'linum-mode nil 
+;                      :background "gray16" 
+;                      :foreground "dim gray")
 #+end_src
 
 *** Pretty Symbols
 
-Prettify certain symbols. For example, use a λ instead of ~lambda~ in elisp code.
+Prettify certain symbols and symbol combinations. For example, use a λ instead of ~lambda~ in elisp code.
+
 #+begin_src emacs-lisp
 (global-prettify-symbols-mode t)
 #+end_src
 
 Unprettify when symbol is just before point. This doesn't seem to work...
+
 #+begin_src emacs-lisp
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 #+end_src
 
-
-** Helm
-This variables must be set before loading helm-gtags
-#+BEGIN_SRC emacs-lisp
-(setq helm-gtags-prefix-key "\C-cg")
-#+END_SRC
-
-*use-package Helm*
-#+BEGIN_SRC emacs-lisp
-  (use-package helm
-    :init
-    (helm-mode 1)
-    (bind-keys
-     ("M-x" . helm-M-x)
-     ("M-y" . helm-show-kill-ring)
-     ("C-h SPC" . helm-all-mark-rings)
-     ("C-x b" . helm-mini)
-     ("C-h SPC" . helm-all-mark-rings)
-     ("C-c s o" . helm-occur)
-     ("C-h F" . 'helm-insert-command-name))
-    :config
-    (setq
-     helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
-     helm-ff-search-library-in-sexp t ; search for library in `require' and
-                                          ; declare-function' sexp.
-     helm-split-window-in-side-p t ; open helm buffer inside current window, not
-                                          ; occupy whole other window
-     helm-candidate-number-limit 500  ; limit the number of displayed canidates
-     helm-ff-file-name-history-use-recentf t
-     helm-move-to-line-cycle-in-source t ; move to end or beginning of source when
-                                          ; reaching top or bottom of source.
-     helm-buffers-fuzzy-matching t)   ; fuzzy matching buffer names when non-nil
-    (diminish 'helm-mode)
-    (set-face-attribute 'helm-candidate-number nil 
-                        :background "salmon2" 
-                        :foreground "black"))
-#+END_SRC
-
-Helm-dash is a great package that allows us to look up documentation with
-helm. It is mostly equivalent to Dash, but does not depend on it. Use
-`helm-dash-install-docset' to download a docset fo a particular language (or
-language package).
-
-#+begin_src emacs-lisp
-(use-package helm-dash)
-#+end_src
-
-
-Helm-flx improves helms scoring of results. Helm-fuzzier improves its fuzzy
-matching.
-#+begin_src emacs-lisp
-  (use-package helm-flx
-    :init (helm-flx-mode 1))
-
-  (use-package helm-fuzzier
-    :init (helm-fuzzier-mode 1))
-#+end_src
-
-
-*** Basic Settings
-Helm size
-#+BEGIN_SRC emacs-lisp
-(helm-autoresize-mode t)
-(setq helm-autoresize-max-height 30)
-(setq helm-autoresize-min-height 20)
-#+end_src
-
-
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-c h") 'helm-command-prefix-key)
-(global-unset-key (kbd "C-x c"))
-
-(define-key helm-map (kbd "C-\-") 'helm-execute-persistent-action) ; rebihnd tab to do persistent action
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)  ; make TAB works in terminal
-(define-key helm-map (kbd "C-z")  'helm-select-action)             ; list actions using C-z
-
-(define-key helm-grep-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
-(define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
-(define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
-
-
-(when (executable-find "curl")
-  (setq helm-google-suggest-use-curl-p t))
-
-(add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-
-(global-set-key (kbd "C-c 7 w") 'helm-wikipedia-suggest)
-(global-set-key (kbd "C-c 7 g") 'helm-google-suggest)
-(global-set-key (kbd "C-c 7 s") 'helm-surfraw)
-
-;(global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
-;(global-set-key (kbd "C-c h c") 'helm-calcul-expression)
-
-;(global-set-key (kbd "C-c h x") 'helm-register)
-;(global-set-key (kbd "C-x r j") 'jump-to-register)
-
-(define-key 'help-command (kbd "C-f") 'helm-apropos)
-(define-key 'help-command (kbd "r") 'helm-info-emacs)
-(define-key 'help-command (kbd "C-l") 'helm-locate-library)
-
-;;; Save current position to mark ring
-(add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
-#+END_SRC
-
-
-Show minibuffer history with Helm
-#+BEGIN_SRC emacs-lisp
-(define-key minibuffer-local-map (kbd "M-p") 'helm-minibuffer-history)
-#+END_SRC
-
-
-Navigating file
-#+BEGIN_SRC emacs-lisp
-(define-key global-map [remap find-tag] 'helm-etags-select)
-
-(define-key global-map [remap list-buffers] 'helm-buffers-list)
-#+END_SRC
-
-
-Use Helm to list eshell history:
-#+BEGIN_SRC emacs-lisp
-(add-hook 'eshell-mode-hook
-          (lambda ()
-              (local-set-key (kbd "C-c C-l") 'helm-eshell-history)))
-#+END_SRC
-
-
-Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "find-file" as one of the possible completions.
-#+BEGIN_SRC emacs-lisp
-(setq helm-lisp-fuzzy-completion t)
-#+END_SRC
-
-** Ido 
-
-Ido should save its files where everything else does!
-#+begin_src emacs-lisp
-  (setq-default 
-   ido-save-directory-list-file 
-     (concat (file-name-as-directory saveplace-dir) "ido.last"))
-#+end_src
-
-** Ivy/Counsel
-
-#+begin_src emacs-lisp
-  (use-package ivy
-    :init
-    (use-package counsel)
-    (use-package swiper))
-#+end_src
-
-** Guide Key
-
-Produces a helpful pop up after a second or two of 
-#+begin_src emacs-lisp
-    (use-package guide-key
-    :init 
-    (guide-key-mode)
-    (setq guide-key/idle-delay 0.5))
-#+end_src
-
-** Error finding
-*** Flycheck
+*** ~flycheck~
 
  *use-package Flycheck*
  #+BEGIN_SRC emacs-lisp
@@ -320,8 +76,35 @@ Produces a helpful pop up after a second or two of
    (diminish 'flycheck-mode))
  #+END_SRC
 
-** Auto completion
-*** Company
+*** ~flyspell~
+
+#+begin_src emacs-lisp
+(use-package flyspell)
+#+end_src
+
+*** ~rainbow-delimiters~
+
+Automatically color parentheses pairs different colors with rainbow-delimiters:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :init
+    (rainbow-delimiters-mode)
+    :config
+    (set-face-attribute 'rainbow-delimiters-depth-1-face nil :foreground "indian red")
+    (set-face-attribute 'rainbow-delimiters-depth-2-face nil :foreground "light sea green")
+    (set-face-attribute 'rainbow-delimiters-depth-3-face nil :foreground "orchid")
+    (set-face-attribute 'rainbow-delimiters-depth-4-face nil :foreground "goldenrod")
+    (set-face-attribute 'rainbow-delimiters-depth-5-face nil :foreground "olive drab")
+    (set-face-attribute 'rainbow-delimiters-depth-6-face nil :foreground "deep sky blue")
+    (set-face-attribute 'rainbow-delimiters-depth-7-face nil :foreground "violet red")
+    (set-face-attribute 'rainbow-delimiters-depth-8-face nil :foreground "SeaGreen2")
+    (set-face-attribute 'rainbow-delimiters-depth-9-face nil :foreground "chocolate")
+    (set-face-attribute 'rainbow-delimiters-unmatched-face nil :foreground "red"))
+#+END_SRC
+
+** Auto Completion
+*** ~company~
  *use-package Company*
  #+begin_src emacs-lisp
  (use-package company 
@@ -344,13 +127,72 @@ Produces a helpful pop up after a second or two of
    )
  #+end_src
 
-*** Autocomplete
+*** ~auto-complete~
  #+begin_src emacs-lisp
  (use-package auto-complete)
  #+end_src
 
-** Search & select
-*** Helm-swoop
+** Selection and Narrowing
+*** ~helm~
+
+ This variables must be set before loading helm-gtags
+
+ #+BEGIN_SRC emacs-lisp
+ (setq helm-gtags-prefix-key "\C-cg")
+ #+END_SRC
+
+ *use-package Helm*
+ #+BEGIN_SRC emacs-lisp
+   (use-package helm
+     :init
+     (helm-mode 1)
+     (bind-keys
+      ("M-x" . helm-M-x)
+      ("M-y" . helm-show-kill-ring)
+      ("C-h SPC" . helm-all-mark-rings)
+      ("C-x b" . helm-mini)
+      ("C-h SPC" . helm-all-mark-rings)
+      ("C-c s o" . helm-occur)
+      ("C-h F" . 'helm-insert-command-name))
+     :config
+     (setq
+      helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
+      helm-ff-search-library-in-sexp t ; search for library in `require' and
+                                           ; declare-function' sexp.
+      helm-split-window-in-side-p t ; open helm buffer inside current window, not
+                                           ; occupy whole other window
+      helm-candidate-number-limit 500  ; limit the number of displayed canidates
+      helm-ff-file-name-history-use-recentf t
+      helm-move-to-line-cycle-in-source t ; move to end or beginning of source when
+                                           ; reaching top or bottom of source.
+      helm-buffers-fuzzy-matching t)   ; fuzzy matching buffer names when non-nil
+     (diminish 'helm-mode)
+     (set-face-attribute 'helm-candidate-number nil 
+                         :background "salmon2" 
+                         :foreground "black"))
+ #+END_SRC
+
+ Helm-dash is a great package that allows us to look up documentation with
+ helm. It is mostly equivalent to Dash, but does not depend on it. Use
+ `helm-dash-install-docset' to download a docset fo a particular language (or
+ language package).
+
+ #+begin_src emacs-lisp
+ (use-package helm-dash)
+ #+end_src
+
+ Helm-flx improves helms scoring of results. Helm-fuzzier improves its fuzzy
+ matching.
+ #+begin_src emacs-lisp
+   (use-package helm-flx
+     :init (helm-flx-mode 1))
+
+   (use-package helm-fuzzier
+     :init (helm-fuzzier-mode 1))
+ #+end_src
+
+ Helm-swoop is an interface for searching for lines in a buffer using helm
+
  *use-package helm-swoop*
  #+BEGIN_SRC emacs-lisp
  (use-package helm-swoop
@@ -374,197 +216,153 @@ Produces a helpful pop up after a second or two of
    )
  #+END_SRC
 
-** Other Packages
+
+**** Basic Settings
+ Helm size
+ #+BEGIN_SRC emacs-lisp
+ (helm-autoresize-mode t)
+ (setq helm-autoresize-max-height 30)
+ (setq helm-autoresize-min-height 20)
+ #+end_src
+
+
+ #+begin_src emacs-lisp
+ (global-set-key (kbd "C-c h") 'helm-command-prefix-key)
+ (global-unset-key (kbd "C-x c"))
+
+ (define-key helm-map (kbd "C-\-") 'helm-execute-persistent-action) ; rebihnd tab to do persistent action
+ (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)  ; make TAB works in terminal
+ (define-key helm-map (kbd "C-z")  'helm-select-action)             ; list actions using C-z
+
+ (define-key helm-grep-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
+ (define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
+ (define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
+
+
+ (when (executable-find "curl")
+   (setq helm-google-suggest-use-curl-p t))
+
+ (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+
+ (global-set-key (kbd "C-c 7 w") 'helm-wikipedia-suggest)
+ (global-set-key (kbd "C-c 7 g") 'helm-google-suggest)
+ (global-set-key (kbd "C-c 7 s") 'helm-surfraw)
+
+ ;(global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
+ ;(global-set-key (kbd "C-c h c") 'helm-calcul-expression)
+
+ ;(global-set-key (kbd "C-c h x") 'helm-register)
+ ;(global-set-key (kbd "C-x r j") 'jump-to-register)
+
+ (define-key 'help-command (kbd "C-f") 'helm-apropos)
+ (define-key 'help-command (kbd "r") 'helm-info-emacs)
+ (define-key 'help-command (kbd "C-l") 'helm-locate-library)
+
+ ;;; Save current position to mark ring
+ (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
+ #+END_SRC
+
+
+ Show minibuffer history with Helm
+ #+BEGIN_SRC emacs-lisp
+ (define-key minibuffer-local-map (kbd "M-p") 'helm-minibuffer-history)
+ #+END_SRC
+
+
+ Navigating file
+ #+BEGIN_SRC emacs-lisp
+ (define-key global-map [remap find-tag] 'helm-etags-select)
+
+ (define-key global-map [remap list-buffers] 'helm-buffers-list)
+ #+END_SRC
+
+
+ Use Helm to list eshell history:
+ #+BEGIN_SRC emacs-lisp
+ (add-hook 'eshell-mode-hook
+           (lambda ()
+               (local-set-key (kbd "C-c C-l") 'helm-eshell-history)))
+ #+END_SRC
+
+
+ Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "find-file" as one of the possible completions.
+ #+BEGIN_SRC emacs-lisp
+ (setq helm-lisp-fuzzy-completion t)
+ #+END_SRC
+
+*** ~ido~ 
+
+ I prefer Ido for find-file. 
+
+ #+begin_src emacs-lisp
+   (ido-mode t)
+   (bind-key* "C-x C-f" 'ido-find-file)
+#+end_src
+
+ Ido should save its files where everything else does!
+
+#+begin_src emacs-lisp
+  (setq-default ido-save-directory-list-file (concat saveplace-dir "ido.last"))
+ #+end_src
+
+*** ~ivy~
+
+ #+begin_src emacs-lisp
+   (use-package ivy
+     :init
+     (use-package counsel)
+     (use-package swiper))
+ #+end_src
+
+*** ~ace~ 
+   
+    Execute commands without switching to other buffers.
+
+**** ~ace-jump-mode~
+
+  Jump quickly to any word using just two key strokes with ace-jump-mode:
+
+  #+BEGIN_SRC emacs-lisp
+  (use-package ace-jump-mode
+    :commands ace-jump-mode
+    :init
+    (key-chord-define-global "cj" 'ace-jump-mode))
+  #+END_SRC
+
+**** ~ace-isearch~
+
+  This is a mix of ace, isearch, and helm swoop. Pretty cool. If only
+  one key is searched, it will use ace, if more than one and less than 6
+  are serached, it will use good ol' isearch, if more than 6 are
+  searched, it will use helm-swoop. Nice idea.
+
+  #+begin_src emacs-lisp
+  (use-package ace-isearch)
+  #+end_src
+
 *** ~guide-key~
-Display possible key binding completions automatically in a small pop-up buffer with guide-key:
-#+BEGIN_SRC emacs-lisp
-(use-package guide-key
-  :init
-  (guide-key-mode 1)
-  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +" "C-w" "C-e"))
-  (setq guide-key/recursive-key-sequence-flag t)
-  (setq guide-key/popup-window-position 'bottom)
-  (diminish 'guide-key-mode)
-)
-#+END_SRC
 
-*** ~rainbow-delimiters~
-Automatically color parentheses pairs different colors with rainbow-delimiters:
-#+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters
-    :init
-    (rainbow-delimiters-mode)
-    :config
-    (set-face-attribute 'rainbow-delimiters-depth-1-face nil :foreground "indian red")
-    (set-face-attribute 'rainbow-delimiters-depth-2-face nil :foreground "light sea green")
-    (set-face-attribute 'rainbow-delimiters-depth-3-face nil :foreground "orchid")
-    (set-face-attribute 'rainbow-delimiters-depth-4-face nil :foreground "goldenrod")
-    (set-face-attribute 'rainbow-delimiters-depth-5-face nil :foreground "olive drab")
-    (set-face-attribute 'rainbow-delimiters-depth-6-face nil :foreground "deep sky blue")
-    (set-face-attribute 'rainbow-delimiters-depth-7-face nil :foreground "violet red")
-    (set-face-attribute 'rainbow-delimiters-depth-8-face nil :foreground "SeaGreen2")
-    (set-face-attribute 'rainbow-delimiters-depth-9-face nil :foreground "chocolate")
-    (set-face-attribute 'rainbow-delimiters-unmatched-face nil :foreground "red"))
-#+END_SRC
+     Display possible key binding completions automatically in a small pop-up buffer with guide-key. For example, 
 
-*** ~golden-ratio~
-Automatically resize buffers to "optimal" size when they gain focus. Turned off
-by default.
-#+BEGIN_SRC emacs-lisp
-  (use-package golden-ratio
-    :commands golden-ratio golden-ratio-mode
-    :init
-    (bind-keys
-     ("C-x w g SPC" . golden-ratio) ; Resize buffers according to golden-ratio
-     ("C-x w g m" . golden-ratio-mode) ;; Enable/disable golden-ratio-mode
-     )
-    :config
-    (progn
-      ;; List of buffers to not be resized by golden-ratio.
-      (setq golden-ratio-exclude-buffer-names
-            '("*Flycheck errors*"
-              "*SPEEDBAR*"))
-      ;; Ensure golden-ratio compatibility with helm.
-      (defun pl/helm-alive-p ()
-        (if (boundp 'helm-alive-p)
-            (symbol-value 'helm-alive-p)))
-      (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p))
-    )
-#+END_SRC
+ #+BEGIN_SRC emacs-lisp
+ (use-package guide-key
+   :init
+   (guide-key-mode 1)
+   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +" "C-w" "C-e" "C-h" "C-c e" "C-c C-v"))
+   (setq guide-key/recursive-key-sequence-flag t)
+   (setq guide-key/popup-window-position 'bottom)
+   (diminish 'guide-key-mode)
+ )
+ #+END_SRC
 
-*** ~speedbar~
-#+BEGIN_SRC emacs-lisp
-(use-package sr-speedbar)
-
-;(setq speedbar-show-unknown-files t)
-#+END_SRC
-
-*** ~zygospore~
-#+BEGIN_SRC emacs-lisp
-(use-package zygospore
-  :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
-#+END_SRC
-
-** Window behavior
-*** Shackle
-
-    Great package. It allows you to configure how popup messages are
-    handled. For instance, please stop creating the magit status buffer in
-    another window.
-
-#+begin_src emacs-lisp
-  (use-package shackle
-    :init
-    (setq shackle-default-rule '(:same t))
-    (setq helm-display-function 'pop-to-buffer) ; make helm play nice
-    (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4))))
-#+end_src
-
-** Diffs
-*** git-gutter
-#+begin_src emacs-lisp
-      (use-package git-gutter+
-        :commands 
-        git-gutter-mode+
-        :init
-        (global-git-gutter+-mode))
-#+end_src
-
-** Directories
-*** dood-neotree
-This goes before neotree configuration
-#+begin_src emacs-lisp
-;      (require 'dood-neotree)
-;      (setq dood-neotree-file-icons nil
-;            dood-neotree-folder-size 0.5
-;            dood-neotree-chevron-size 0.5
-;            doom-neotree-enable-file-icons nil)
-
-#+end_src
-
-*** neotree
-#+begin_src emacs-lisp
-  ;; (use-package neotree
-  ;;   :init
-  ;;   (setq neo-create-file-auto-open t
-  ;;         neo-auto-indent-point nil
-  ;;         neo-mode-line-type 'none
-  ;;         neo-persist-show nil
-  ;;         neo-window-width 25
-  ;;         neo-show-updir-line nil
-  ;;         neo-theme 'ascii ; fallback
-  ;;         neo-banner-message nil
-  ;;         neo-smart-open t)
-  ;;   (defun neotree-advice (nt &rest args)
-  ;;     (let ((ret (apply nt args)))
-  ;;       (with-current-buffer neo-buffer-name
-  ;;         ;; dont displace cursor position in neotree when not
-  ;;         ;; visiting the neotree buffer. Looks ugly.
-  ;;         (setq-local cursor-in-non-selected-windows nil))
-  ;;       ret))
-  ;;   (advice-add 'neotree :around #'neotree-advice)
-  ;;   :config
-  ;;   (setq neo-theme 'ascii)
-  ;;   (defun neotree-project-dir ()
-  ;;     "Open NeoTree using the git root."
-  ;;     (interactive)
-  ;;     (let ((project-dir (ffip-project-root))
-  ;;           (file-name (buffer-file-name)))
-  ;;       (if project-dir
-  ;;           (progn
-  ;;             (neotree-dir project-dir)
-  ;;             (neotree-find file-name))
-  ;;         (message "Could not find git project root."))))
-  ;;   (define-key global-map (kbd "C-c C-P") 'neotree-project-dir)
-
-
-  ;;                                         ;        (defun display-buffer-neotree ()
-  ;;                                         ;          (interactive)
-  ;;                                         ;          (let ((buf-name (current-buffer))
-  ;;                                         ;                (buf-filename (buffer-file-name (current-buffer)))
-  ;;                                         ;       (neo-toggle-window-keep-p t)
-  ;;                                         ;   )
-  ;;   ;; display neo-tree if looking at a file
-  ;;                                         ;            (when buf-filename
-  ;;                                         ;              (neotree))
-  ;;                                         ;            ))
-  ;;                                         ;        (defun neo-new-view-advise (func &rest args)
-  ;;                                         ;          (let ((res (apply func args)))
-  ;;                                         ;            (display-buffer-neotree)
-  ;;                                         ;          res)
-  ;;                                         ;          )
-  ;;                                         ;(advice-add 'other-buffer :around 'neo-new-view-advise)
-  ;;                                         ;(advice-add 'find-file :around 'neo-new-view-advise)
-  ;;   )
-#+end_src
-
-** PDF viewing
-
-pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links, and more.
-#+begin_src emacs-lisp
-  (use-package pdf-tools
-    :init
-    (pdf-tools-install))
-#+end_src
-
-** History
-#+begin_src emacs-lisp
-(setq ido-save-directory-list-file (concat (file-name-as-directory saveplace-dir) "ido.last"))
-#+end_src\n
-
-** Flyspell
-
-#+begin_src emacs-lisp
-(use-package flyspell
-  )
-#+end_src
-
-* Navigation
+* Windows
 ** Basic Settings
 Remaps the other-window command. In general, commands with consecutive 
 #+begin_src emacs-lisp 
   (global-set-key (kbd "C-x o") 'other-window)
   (global-set-key (kbd "C-x O") 'other-frame)
+  (global-set-key (kbd "C-c b") 'switch-to-other-buffer)
+  (global-set-key (kbd "C-x w t") 'transpose-windows)
 #+end_src
 
 Quickly move the cursor to the first instance of a character with iy-go-to-char:
@@ -630,143 +428,106 @@ Key bindings for other files:
                 (lambda ()
                   (interactive)
                   (find-file-other-window "~/.emacs.d/config.org")))
-
 #+end_src
 
-** ~windmove~
-Navigate windows directionally with wind-move:
+** General Appearance
+*** Fringe
+
+The fringe is the area on the left and right edge of Emacs windows. 
+
+#+begin_src emacs-lisp
+  (setq fringe-mode '(4 . 4)) ;; set default fringe width to be 4 pixels on both sides
+#+end_src
+
+*** Cursor
+
+Change cursor when idle or in a different buffer. I like the vertical bar
+cursor, so this is nice when I need to find my cursor after not looking at the
+screen for minute.
+
+#+begin_src emacs-lisp
+  (use-package cursor-chg
+    :init
+    (curchg-toggle-cursor-type-when-idle)
+    (setq curch-idle-interval 0.5))
+#+end_src
+
+** Selection and Narrowing
+*** ~ace-window~
+
+ Jump quickly between windows and frames using just two key strokes
+ with ace-window. Essential package:
+
+ #+BEGIN_SRC emacs-lisp
+   (use-package ace-window
+     :commands ace-window
+     :init
+     (key-chord-define-global "xo" 'ace-window)
+     :config
+     (setq aw-scope 'frame aw-background t)
+     )
+ #+END_SRC
+
+*** ~windmove~
+ Navigate windows directionally with wind-move:
+ #+BEGIN_SRC emacs-lisp
+   (use-package windmove
+     :commands
+     ;; Here because alternative commands (key chords) do not trigger package autoload.
+     (windmove-left windmove-right windmove-up windmove-down)
+     :init
+     (bind-keys
+      ("C-x w j" . windmove-left)
+      ("C-x w l" . windmove-right)
+      ("C-x w i" . windmove-up)
+      ("C-x w k" . windmove-down)))
+ #+END_SRC
+
+** Window Behavior
+*** ~shackle~
+
+    Great package. It allows you to configure how popup messages are
+    handled. For instance, please stop creating the magit status buffer in
+    another window.
+
+#+begin_src emacs-lisp
+  (use-package shackle
+    :init
+    (setq shackle-default-rule '(:same t))
+    (setq helm-display-function 'pop-to-buffer) ; make helm play nice
+    (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4))))
+#+end_src
+
+*** ~golden-ratio~
+Automatically resize buffers to "optimal" size when they gain focus. Turned off
+by default.
 #+BEGIN_SRC emacs-lisp
-  (use-package windmove
-    :commands
-    ;; Here because alternative commands (key chords) do not trigger package autoload.
-    (windmove-left windmove-right windmove-up windmove-down)
+  (use-package golden-ratio
+    :commands golden-ratio golden-ratio-mode
     :init
     (bind-keys
-     ("C-x w j" . windmove-left)
-     ("C-x w l" . windmove-right)
-     ("C-x w i" . windmove-up)
-     ("C-x w k" . windmove-down)))
-#+END_SRC
-
-** ~ace-jump-mode~
-Jump quickly to any word using just two key strokes with ace-jump-mode:
-#+BEGIN_SRC emacs-lisp
-(use-package ace-jump-mode
-  :commands ace-jump-mode
-  :init
-  (key-chord-define-global "cj" 'ace-jump-mode))
-#+END_SRC
-
-** ~ace-isearch~
-This is a mix of ace, isearch, and helm swoop. Pretty cool. If only
-one key is searched, it will use ace, if more than one and less than 6
-are serached, it will use good ol' isearch, if more than 6 are
-searched, it will use helm-swoop. Nice idea.
-#+begin_src emacs-lisp
-(use-package ace-isearch)
-#+end_src
-
-** ~ace-window~
-Jump quickly between windows and frames using just two key strokes
-with ace-window. Essential package:
-#+BEGIN_SRC emacs-lisp
-  (use-package ace-window
-    :commands ace-window
-    :init
-    (key-chord-define-global "xo" 'ace-window)
+     ("C-x w g SPC" . golden-ratio) ; Resize buffers according to golden-ratio
+     ("C-x w g m" . golden-ratio-mode) ;; Enable/disable golden-ratio-mode
+     )
     :config
-    (setq aw-scope 'frame aw-background t)
+    (progn
+      ;; List of buffers to not be resized by golden-ratio.
+      (setq golden-ratio-exclude-buffer-names
+            '("*Flycheck errors*"
+              "*SPEEDBAR*"))
+      ;; Ensure golden-ratio compatibility with helm.
+      (defun pl/helm-alive-p ()
+        (if (boundp 'helm-alive-p)
+            (symbol-value 'helm-alive-p)))
+      (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p))
     )
 #+END_SRC
 
-** Functions
-Switch between the two most recently visited buffers:
+*** ~zygospore~
 #+BEGIN_SRC emacs-lisp
-(defun switch-to-other-buffer ()
-  "Switch to last visited buffer."
-  (interactive)
-  (switch-to-buffer (other-buffer) (current-buffer) 1))
-(global-set-key (kbd "C-c b") 'switch-to-other-buffer)
+(use-package zygospore
+  :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
 #+END_SRC
-
-
-Maximize the current buffer:
-#+BEGIN_SRC emacs-lisp
-(defun toggle-maximize-buffer ()
-  "Maximize/minimize buffer"
-       (interactive)
-       (if (= 1 (length (window-list)))
-           (jump-to-register '_)
-         (progn
-           (window-configuration-to-register '_)
-           (delete-other-windows))))
-;(key-chord-define-global "xm" 'toggle-maximize-buffer)
-#+END_SRC
-
-
-Transpose two windows:
-#+BEGIN_SRC emacs-lisp
-(defun transpose-windows (arg)
-  "Transpose the buffers shown in two windows."
-  (interactive "p")
-  (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
-    (while (/= arg 0)
-      (let ((this-win (window-buffer))
-            (next-win (window-buffer (funcall selector))))
-        (set-window-buffer (selected-window) next-win)
-        (set-window-buffer (funcall selector) this-win)
-        (select-window (funcall selector)))
-      (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
-(global-set-key (kbd "C-x w t") 'transpose-windows)
-#+END_SRC
-
-
-Return a list of regex matches within a string
-#+begin_src emacs-lisp
-(defun re-seq (regexp dwc-str)
-  "Get a list of all regexp matches in a string"
-  (save-match-data
-    (let ((pos 0)
-          matches)
-      (while (string-match regexp dwc-str pos)
-        (push (match-string 0 dwc-str) matches)
-        (setq pos (match-end 0))
-        )
-      matches)
-    )
-  )
-#+end_src
-
-
-Return the current line as a substring
-#+begin_src emacs-lisp
-  (require 'subr-x)
-
-  (defun dwc/get-line (&optional trim-left trim-right)
-    (interactive)
-    "Return current line as a string. Option to trim whitespace from beginning and end of string"
-    (save-excursion
-      (let ((string (buffer-substring-no-properties (progn (beginning-of-line) (point))
-                                                    (progn (end-of-line) (point)))))
-        (when trim-left
-          (setq (string-trim-left string)))
-        (when trim-right
-          (setq (string-trim-right string)))
-        string
-          )))
-#+end_src
-
-
-#+begin_src emacs-lisp
-(require 'hi-lock)
-
-(defun unhighlight-all-in-buffer ()
-  "Remove all highlights made by `hi-lock' from the current buffer.
-The same result can also be be achieved by \\[universal-argument] \\[unhighlight-regexp]."
-  (interactive)
-  (unhighlight-regexp t))
-(define-key search-map "hU" #'my/unhighlight-all-in-buffer)
-#+end_src
 
 * Editing
 ** Basic Settings
@@ -1992,6 +1753,15 @@ I was having some problems with it throwing errors.
  #+begin_src emacs-lisp
  (use-package gist)
  #+end_src
+
+*** git-gutter
+#+begin_src emacs-lisp
+      (use-package git-gutter+
+        :commands 
+        git-gutter-mode+
+        :init
+        (global-git-gutter+-mode))
+#+end_src
 
 ** Org Mode
 *** General
@@ -3370,7 +3140,16 @@ Get autocompletions in tramp:
                               ("Gnus")))))
 #+end_src
 
-* Other Tools
+** PDF viewing
+
+pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links, and more.
+#+begin_src emacs-lisp
+  (use-package pdf-tools
+    :init
+    (pdf-tools-install))
+#+end_src
+
+* Misc
 ** rgrep
 #+BEGIN_SRC emacs-lisp
 (require 'dash)
