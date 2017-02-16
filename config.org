@@ -1,4 +1,4 @@
-#+Title: This is my emacs config file.
+#+Title: This is my emacs configuration file.
 
 * Initialize
 
@@ -575,6 +575,7 @@ by default.
 (use-package zygospore
   :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
 #+END_SRC
+
 
 * Editing
 ** Basic Settings
@@ -1865,6 +1866,12 @@ Some bindings for getting to org files faster
 
   (global-set-key (kbd "C-c C-v ;") 'org-edit-src-headers)
   (global-set-key (kbd "C-c C-v :") 'org-print-src-headers)
+#+end_src
+
+*** Commands
+
+#+begin_src emacs-lisp
+(define-key org-mode-map (kbd "C-c <tab>") (lambda () (interactive) (org-show-children 3)))
 #+end_src
 
 ** Appearance
