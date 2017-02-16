@@ -36,24 +36,64 @@
 The first and last of which are the same as that of LIST."
   (list (car list) (nbutlast list) (car (last list))))
 
+(defun switch-to-other-buffer ()
+  "Switch to last visited buffer."
+  (interactive)
+  (switch-to-buffer (other-buffer) (current-buffer) 1))
+
+(defun toggle-maximize-buffer ()
+  "Maximize/minimize buffer"
+       (interactive)
+       (if (= 1 (length (window-list)))
+           (jump-to-register '_)
+         (progn
+           (window-configuration-to-register '_)
+           (delete-other-windows))))
+
+(defun transpose-windows (arg)
+  "Transpose the buffers shown in two windows."
+  (interactive "p")
+  (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
+    (while (/= arg 0)
+      (let ((this-win (window-buffer))
+            (next-win (window-buffer (funcall selector))))
+        (set-window-buffer (selected-window) next-win)
+        (set-window-buffer (funcall selector) this-win)
+        (select-window (funcall selector)))
+      (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
+
+(defun re-seq (regexp dwc-str)
+  "Get a list of all regexp matches in a string"
+  (save-match-data
+    (let ((pos 0)
+          matches)
+      (while (string-match regexp dwc-str pos)
+        (push (match-string 0 dwc-str) matches)
+        (setq pos (match-end 0))
+        )
+      matches)
+    )
+  )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;; Helm ;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(if (not (require 'helm-color nil t))
-    (warn "Cannot load `helm-color'. Some goodies not avaliable.")
+(if (not (require 'helm nil t))
+    (warn "Cannot load `helm'. Some goodies not avaliable.")
 
-  (defun helm-insert-color-name ()
-    "Insert the color name at point for the color selected via helm"
-    (interactive)
-    (insert (helm-colors)))
+
 
   (defun helm-insert-color-hex ()
     "Insert the hex value at point for the color selected via helm"
     (interactive)
     (insert (apply 'color-rgb-to-hex (color-name-to-rgb (helm-colors)))))
-  )
+
+  (defun helm-insert-command-name ()
+    "Insert command name at point"
+    (interactive)
+    (insert (helm-M-x-read-extended-command))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -76,7 +116,20 @@ The first and last of which are the same as that of LIST."
       ))
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;; hi-lock ;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when (require 'hi-lock nil t)
+  (defun unhighlight-all-in-buffer ()
+    "Remove all highlights made by `hi-lock' from the current buffer.
+The same result can also be be achieved by \\[universal-argument] \\[unhighlight-regexp]."
+    (interactive)
+    (unhighlight-regexp t))
+  (define-key search-map "hU" #'my/unhighlight-all-in-buffer))
+
 
 (provide 'dwc-goodies)
+
 
 ;;; dwc-goodies.el ends here
