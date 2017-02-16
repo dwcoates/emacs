@@ -9,7 +9,7 @@
 
 (require 'org)
 
-(defun org-switch-to-agenda (&optional redo)
+(defun org-switch-to-agenda (&optional redo other-window)
   "Swtich to `org-agenda' buffer if it exists, else create one.
 If an agenda needs to be created, it will be a weekly view.
 If REDO is non-nil, rebuild the agenda view after visiting it."
@@ -17,14 +17,28 @@ If REDO is non-nil, rebuild the agenda view after visiting it."
   (let ((buf (get-buffer "*Org Agenda*")))
     (if buf
         (progn
-          (switch-to-buffer-other-window buf)
+          (if other-window
+              (switch-to-buffer-other-window buf)
+            (switch-to-buffer buf))
           (when redo (org-agenda-redo)))
       (org-agenda nil "a"))))
+
+(defun org-switch-to-agenda-other-window (&optional redo)
+  "Swtich to `org-agenda' buffer if it exists, else create one.
+If an agenda needs to be created, it will be a weekly view.
+If REDO is non-nil, rebuild the agenda view after visiting it."
+  (interactive)
+  (org-switch-to-agenda nil t))
 
 (defun org-get-agenda ()
   "Same as `org-switch-to-agenda' with non-nil REDO."
   (interactive)
   (org-switch-to-agenda t))
+
+(defun org-get-agenda-other-window ()
+  "Same as `org-switch-to-agenda' with non-nil REDO and OTHER-WINDOW."
+  (interactive)
+  (org-switch-to-agenda-other-window t))
 
 (defun org-agenda-kill-entries (beg end)
   "Kill multiple lines in the agenda from BEG to END.

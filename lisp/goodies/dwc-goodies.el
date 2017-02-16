@@ -75,6 +75,51 @@ The first and last of which are the same as that of LIST."
     )
   )
 
+(defun rand-alphanum (length &optional prefix suffix)
+  "Generate a random character of some length"
+  (let
+      ((alpha-num (cdr (split-string
+                        "1234567890abcdefghijklmnopqrstyvwxyzABCDEFGHIJKLMNOPQRSTYVWXYZ"
+                        "")))
+       ret)
+    (dotimes (i length)
+      (push (elt alpha-num (random (length alpha-num))) ret))
+    (concat prefix (mapconcat 'identity ret "") suffix)))
+
+(defun insert-rand-alphanum (&optional length prefix suffix)
+  (interactive)
+  (let ((length (or length 6)))
+    (insert (rand-alphanum length prefix suffix))
+    ))
+
+(defun my/remove-headers ()
+  (goto-char (point-min))
+  (re-search-forward "^$")
+  (goto-char (+ 1 (point)))
+  (delete-region (point) (point-min)))
+
+(defun increment-integers-in-region (beg end &optional inc)
+  "Increment the integers in current region."
+  (interactive (if (use-region-p)
+                   (list (region-beginning) (region-end)))
+               (list (point) (point)))
+  (save-excursion
+    (goto-char beg)
+    (let ((end (save-excursion (goto-char end)
+                               (forward-word-strictly) (backward-char) (point))))
+      (while (< (point) end)
+        (ignore-errors (increment-integer-at-point inc))
+        (forward-word-strictly)))))
+
+(defun decrement-integers-in-region (beg end &optional dec)
+  "Decrement the integers in current region."
+  (interactive (if (use-region-p)
+                   (list (region-beginning) (region-end)))
+               (list (point) (point)))
+  (increment-integers-in-region beg end (- (or dec 1)))
+  )
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;; Helm ;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
