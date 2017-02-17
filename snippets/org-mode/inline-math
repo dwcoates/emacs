@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: inline-math
+# binding: C-c e m
+# key: inline-math
+# --
+\$$0\$ 
+

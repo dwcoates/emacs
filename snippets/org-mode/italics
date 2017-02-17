@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: italics
+# binding: C-c e i
+# key: italics
+# --
+=$0= 

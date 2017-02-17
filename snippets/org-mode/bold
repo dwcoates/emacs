@@ -3,4 +3,4 @@
 # binding: C-c e o
 # key: bold
 # --
-*$0*
+*`yas-selected-text`* $0
