@@ -1,3 +1,9 @@
 [submodule "OfficeCodeProFont"]
 	path = Office-Code-Pro
 	url = https://github.com/nathco/Office-Code-Pro
+[submodule "goodies"]
+	path = lisp/goodies
+	url = git@github.com:dwcoates/goodies.git
+[submodule "org-misc"]
+	path = lisp/org-misc
+	url = git@github.com:dwcoates/org-misc
