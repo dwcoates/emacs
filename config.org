@@ -43,6 +43,17 @@ Make sure emacs gets my bashrc environment variable:
 #+end_src
 
 * General
+** Help
+
+   The following gives us the ~C-h M-k~ binding for the new command
+   ~describe-keymap~. This can be used to look up the current key commands for any
+   mode's map.
+
+#+begin_src emacs-lisp
+(use-package help-fns+) 
+#+end_src
+
+
 ** Basic Settings
 
 Goodies contains a lot of custom functions I've written or scavenged or stolen
