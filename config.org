@@ -1949,6 +1949,12 @@ Some bindings for getting to org files faster
 *** Commands
 ** Appearance
 
+Don't show the =+=TITLE= markup for Org titles
+
+#+begin_src emacs-lisp
+(setq org-hidden-keywords '(title))
+#+end_src
+
 Abbrevs:
 
 #+begin_src emacs-lisp
