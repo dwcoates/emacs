@@ -218,23 +218,25 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
   *use-package helm-swoop*
   #+BEGIN_SRC emacs-lisp
-  (use-package helm-swoop
-    :init (progn
-            (global-set-key (kbd "C-c s") 'helm-swoop)
-            (global-set-key (kbd "C-c S") 'helm-multi-swoop-all))
-    :config (progn
-              ; When doing isearch, hand the word over to helm-swoop
-              (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-              ; From helm-swoop to helm-multi-swoop-all
-              (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-              ; Save buffer when helm-multi-swoop-edit complete
-              (setq helm-multi-swoop-edit-save t))
-              ; If this value is t, split window inside the current window
-              (setq helm-swoop-split-with-multiple-windows t)
-              ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-              (setq helm-swoop-split-direction 'split-window-vertically)
-              ;; If nil, you can slightly boost invoke speed in exchange for text color
-              (setq helm-swoop-speed-or-color t))
+    (use-package helm-swoop
+      :init (progn
+              (global-set-key (kbd "C-c s") 'helm-swoop)
+              (global-set-key (kbd "C-c S") 'helm-multi-swoop-all))
+      :config (progn
+                ; When doing isearch, hand the word over to helm-swoop
+                (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+                ; From helm-swoop to helm-multi-swoop-all
+                (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+                ; Save buffer when helm-multi-swoop-edit complete
+                (setq helm-multi-swoop-edit-save t))
+                ; If this value is t, split window inside the current window
+                (setq helm-swoop-split-with-multiple-windows t)
+                ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+                (setq helm-swoop-split-direction 'split-window-vertically)
+                ;; If nil, you can slightly boost invoke speed in exchange for text color
+                (setq helm-swoop-speed-or-color t)
+                ;; Hack to make helm stop pre-inputting search
+                (setq helm-swoop-pre-input-function (lambda () nil)))
   #+END_SRC
 
 ***** Basic Settings
