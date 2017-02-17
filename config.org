@@ -339,13 +339,15 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 **** ~ivy~
 
   #+begin_src emacs-lisp
-    (use-package ivy
-      :init
-      (use-package counsel)
-      (use-package swiper))
+   (use-package ivy
+     :init
+     (use-package counsel)
+     (use-package swiper)
+     :config
+     (setq ivy-format-function 'ivy-format-function-arrow))
   #+end_src
 
-*** Jumpinhg
+*** Jumping
    
     Execute commands without switching to other buffers. ~avy~ and ~ace~ are
     different approaches to the same idea.
@@ -378,8 +380,8 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
      (use-package ace-jump-mode
        :config
        (use-package ace-jump-zap
-        :commands ace-jump-zap-to-char 
-                  ace-jump-zap-up-to-char)
+       :commands ace-jump-zap-to-char 
+                 ace-jump-zap-up-to-char)
        :bind*
        (("C-j K" . ace-jump-zap-to-char)
         ("C-j k" . ace-jump-zap-up-to-char)))

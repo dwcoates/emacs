@@ -51,10 +51,10 @@
       (dark-cyan      "#8FA1B3")
       (light-cyan     "#CBECFF"))
 
-  (let* ((search-bg      green)
-         (search-fg      black)
-         (search-rest-bg violet)
-         (search-rest-fg black)
+  (let* ((search-bg      "#fa8072")
+         (search-fg      white)
+         (search-rest-bg "gray15")
+         (search-rest-fg "#fa8072")
          (highlight      orange)
          (vertical-bar   grey-2)
          (current-line   "#1F1F1F")
@@ -173,16 +173,23 @@
 ;     `(spaceline-flycheck-info             ((,c (:underline nil :foreground ,black :background ,green))))
      ;`(spaceline-highlight-face            ((,c (:foreground ,black :background ,highlight))))
      ;; Search
-     `(isearch ((,c (:background "DarkOliveGreen3"
-                                 :foreground "#000000"
-                                 :box (:line-width 2 :color "black" :style pressed-button)))))
-     `(isearch-lazy-highlight-face         ((,c (:foreground ,search-rest-fg :background ,search-rest-bg))))
+     `(isearch ((,c (:background "indian red" :foreground "white"
+                                 ))))
 
 
+     `(lazy-highlight-face         ((,c (:foreground ,search-rest-fg :background "white"))))
+     `(swiper-minibuffer-match-face-1 ((t :background "#dddddd")))
+     `(swiper-minibuffer-match-face-2 ((t :background "#bbbbbb" :weight bold)))
+     `(swiper-minibuffer-match-face-3 ((t :background "#bbbbff" :weight bold)))
+     `(swiper-minibuffer-match-face-4 ((t :background "#ffbbff" :weight bold)))
+     `(ivy-current-match ((((class color) (background light))
+                           :background "#1a4b77" :foreground "white")
+                          (((class color) (background dark))
+                           :background "#65a7e2" :foreground "black")))
+     `(ivy-current-match ((t (:background "gray15" :foreground "white"))))
      ;;
      ;; Plugins
      ;;
-
      ;; hide-show
      `(hs-face                     ((,c (:foreground ,comments :background ,black))))
      `(hs-fringe-face              ((,c (:foreground ,orange))))

@@ -3,9 +3,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ace-isearch-function-from-isearch (quote ace-isearch-swiper-from-isearch))
+ '(ace-isearch-use-jump nil)
  '(custom-safe-themes
    (quote
     ("e47656aa61f7f3c65026512699dda0415d17aa3520ec130188ecea57d4976eeb" "945fe66fbc30a7cbe0ed3e970195a7ee79ee34f49a86bc96d02662ab449b8134" "96998f6f11ef9f551b427b8853d947a7857ea5a578c75aa9c4e7c73fe04d10b4" "fa197eae8396863c1ce30faaa5df2eca6449f86fd43506ade97076a85d327753" "9f3181dc1fabe5d58bbbda8c48ef7ece59b01bed606cfb868dd147e8b36af97c" "c282339cadbb13739eeac977665c111dcbcc1cc0da5920084ae3b654db45dcff" "b6a5f05a90e62ce431d6c160211f97389cb3957f44b19afc25c185a6d5726b46" "2bb49eb6badb26059275e75f5710dcb864d85a99cc25155e54ffa89bddab6cbc" "06dbcfac3705aaaa79e1a3264c6fd44ef0cf86ef5ed67930e4007e63a8c1e8ee" "746706a43e02c1cfb531b6b09322665f86eeb0b9fb845c55fee6c4f526c4f729" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+ '(global-ace-isearch-mode t)
  '(org-agenda-files
    (quote
     ("~/personal/projects/" "~/personal/school/bootcamp/" "~/personal/work/" "~/personal/")))
@@ -41,6 +44,8 @@
  ;; If there is more than one, they won't work right.
  '(ido-first-match ((t (:foreground "#228b22" :weight bold))))
  '(ido-subdir ((t (:foreground "deep sky blue"))))
+ '(isearch ((t (:background "white" :foreground "#ff6347"))))
+ '(ivy-minibuffer-match-face-3 ((t (:background "#cd853f" :weight bold))))
  '(mode-line ((t (:background "dark cyan" :foreground "black" :inverse-video nil))))
  '(mode-line-buffer-id ((t (:inherit nil :background "black" :foreground "orange red" :weight bold))))
  '(mode-line-highlight ((t (:box (:line-width 2 :color "yellow" :style released-button)))))
