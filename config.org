@@ -180,14 +180,16 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
     (use-package helm
       :init
       (helm-mode 1)
-      (bind-keys
-       ("M-y" . helm-show-kill-ring)
+      :bind
+      (("M-y" . helm-show-kill-ring)
        ("M-X" . helm-M-x)
        ("C-h SPC" . helm-all-mark-rings)
        ("C-x b" . helm-mini)
        ("C-h SPC" . helm-all-mark-rings)
-       ("C-c s o" . helm-occur)
-       ("C-h F" . 'helm-insert-command-name))
+       ("C-c s" . helm-occur)
+       ("C-h F" . helm-insert-command-name)
+       :map helm-map
+       ("C-c C-y" . helm-yank-selection-and-quit))
       :config
       (setq
        helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
@@ -441,6 +443,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
     (("M-s" . jump-char-forward)
      ("M-r" . jump-char-backward)))
 #+end_src
+
 
 
 *** ~guide-key~
@@ -1906,6 +1909,7 @@ I was having some problems with it throwing errors.
         (global-git-gutter+-mode))
 #+end_src
 
+
 * Org Mode
 ** General
 
@@ -1979,8 +1983,11 @@ Don't show the =+=TITLE= markup for Org titles
 (setq org-hidden-keywords '(title))
 #+end_src
 
-Abbrevs:
-
+Abbreviations. The ~car~ of the list will be substitited for the ~cdr~.  This is
+useful because Org is now set up to prettify =\word=, with the corresponding latex
+symbol, "\_{}alpha" becomes '\alpha'. Don't want to do this directly because it will
+interferes with...
+ 
 #+begin_src emacs-lisp
   (define-abbrev-table 'org-abbrev-table    '(("alphaa" "\\alpha")
                                               ("inf" "∞")
@@ -2057,15 +2064,14 @@ Edit source code in org-mode:
 
 Org-mode hook.
 #+BEGIN_SRC emacs-lisp
-  (defun my-org-mode-hook ()
-    (abbrev-mode -1)
+  (defun dwc-org-mode-appearance-hook ()
     (toggle-word-wrap)
-    (setq org-src-fontify-natively t)
-    (org-toggle-pretty-entities)
-    (setq local-abbrev-table org-abbrev-table)
+    (unless org-pretty-entities (org-toggle-pretty-entities))
+    (setq org-src-fontify-natively t
+          local-abbrev-table org-abbrev-table)
     (flyspell-mode))
 
-  (add-hook 'org-mode-hook 'my-org-mode-hook)
+  (add-hook 'org-mode-hook 'dwc-org-mode-appearance-hook)
 #+END_SRC
 
 Org will automatically convert the LaTex names for symbols to their utf-8
