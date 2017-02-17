@@ -10,7 +10,7 @@
 
 I run linux, but this may be useful for those who use OSX. Description:
 
-   On OS X, an Emacs instance started from the graphical user
+On OS X, an Emacs instance started from the graphical user
 interface will have a different environment than a shell in a
 terminal window, because OS X does not run a shell during the
 login. Obviously this will lead to unexpected results when
@@ -49,6 +49,14 @@ Goodies contains a lot of custom functions I've written or scavenged or stolen
 
 #+begin_src emacs-lisp
 (require 'dwc-goodies)
+#+end_src
+
+** Key Interfaces
+
+*** ~key-chords~
+
+#+begin_src emacs-lisp 
+(use-package key-chord)
 #+end_src
 
 ** General Appearance
@@ -146,212 +154,259 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
  #+end_src
 
 ** Selection and Narrowing
-*** ~helm~
+*** Narrowing
+**** ~helm~
 
- This variables must be set before loading helm-gtags
-
- #+BEGIN_SRC emacs-lisp
- (setq helm-gtags-prefix-key "\C-cg")
- #+END_SRC
-
- *use-package Helm*
- #+BEGIN_SRC emacs-lisp
-   (use-package helm
-     :init
-     (helm-mode 1)
-     (bind-keys
-      ("M-x" . helm-M-x)
-      ("M-y" . helm-show-kill-ring)
-      ("C-h SPC" . helm-all-mark-rings)
-      ("C-x b" . helm-mini)
-      ("C-h SPC" . helm-all-mark-rings)
-      ("C-c s o" . helm-occur)
-      ("C-h F" . 'helm-insert-command-name))
-     :config
-     (setq
-      helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
-      helm-ff-search-library-in-sexp t ; search for library in `require' and
-                                           ; declare-function' sexp.
-      helm-split-window-in-side-p t ; open helm buffer inside current window, not
-                                           ; occupy whole other window
-      helm-candidate-number-limit 500  ; limit the number of displayed canidates
-      helm-ff-file-name-history-use-recentf t
-      helm-move-to-line-cycle-in-source t ; move to end or beginning of source when
-                                           ; reaching top or bottom of source.
-      helm-buffers-fuzzy-matching t)   ; fuzzy matching buffer names when non-nil
-     (diminish 'helm-mode)
-     (set-face-attribute 'helm-candidate-number nil 
-                         :background "salmon2" 
-                         :foreground "black"))
- #+END_SRC
-
- Helm-dash is a great package that allows us to look up documentation with
- helm. It is mostly equivalent to Dash, but does not depend on it. Use
- `helm-dash-install-docset' to download a docset fo a particular language (or
- language package).
-
- #+begin_src emacs-lisp
- (use-package helm-dash)
- #+end_src
-
- Helm-flx improves helms scoring of results. Helm-fuzzier improves its fuzzy
- matching.
- #+begin_src emacs-lisp
-   (use-package helm-flx
-     :init (helm-flx-mode 1))
-
-   (use-package helm-fuzzier
-     :init (helm-fuzzier-mode 1))
- #+end_src
-
- Helm-swoop is an interface for searching for lines in a buffer using helm
-
- *use-package helm-swoop*
- #+BEGIN_SRC emacs-lisp
- (use-package helm-swoop
-   :init (progn
-           (global-set-key (kbd "C-c s s") 'helm-swoop)
-           (global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
-         )
-   :config (progn
-             ; When doing isearch, hand the word over to helm-swoop
-             (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-             ; From helm-swoop to helm-multi-swoop-all
-             (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-             ; Save buffer when helm-multi-swoop-edit complete
-             (setq helm-multi-swoop-edit-save t))
-             ; If this value is t, split window inside the current window
-             (setq helm-swoop-split-with-multiple-windows t)
-             ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-             (setq helm-swoop-split-direction 'split-window-vertically)
-             ;; If nil, you can slightly boost invoke speed in exchange for text color
-             (setq helm-swoop-speed-or-color t)
-   )
- #+END_SRC
-
-
-**** Basic Settings
- Helm size
- #+BEGIN_SRC emacs-lisp
- (helm-autoresize-mode t)
- (setq helm-autoresize-max-height 30)
- (setq helm-autoresize-min-height 20)
- #+end_src
-
-
- #+begin_src emacs-lisp
- (global-set-key (kbd "C-c h") 'helm-command-prefix-key)
- (global-unset-key (kbd "C-x c"))
-
- (define-key helm-map (kbd "C-\-") 'helm-execute-persistent-action) ; rebihnd tab to do persistent action
- (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)  ; make TAB works in terminal
- (define-key helm-map (kbd "C-z")  'helm-select-action)             ; list actions using C-z
-
- (define-key helm-grep-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
- (define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
- (define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
-
-
- (when (executable-find "curl")
-   (setq helm-google-suggest-use-curl-p t))
-
- (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-
- (global-set-key (kbd "C-c 7 w") 'helm-wikipedia-suggest)
- (global-set-key (kbd "C-c 7 g") 'helm-google-suggest)
- (global-set-key (kbd "C-c 7 s") 'helm-surfraw)
-
- ;(global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
- ;(global-set-key (kbd "C-c h c") 'helm-calcul-expression)
-
- ;(global-set-key (kbd "C-c h x") 'helm-register)
- ;(global-set-key (kbd "C-x r j") 'jump-to-register)
-
- (define-key 'help-command (kbd "C-f") 'helm-apropos)
- (define-key 'help-command (kbd "r") 'helm-info-emacs)
- (define-key 'help-command (kbd "C-l") 'helm-locate-library)
-
- ;;; Save current position to mark ring
- (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
- #+END_SRC
-
-
- Show minibuffer history with Helm
- #+BEGIN_SRC emacs-lisp
- (define-key minibuffer-local-map (kbd "M-p") 'helm-minibuffer-history)
- #+END_SRC
-
-
- Navigating file
- #+BEGIN_SRC emacs-lisp
- (define-key global-map [remap find-tag] 'helm-etags-select)
-
- (define-key global-map [remap list-buffers] 'helm-buffers-list)
- #+END_SRC
-
-
- Use Helm to list eshell history:
- #+BEGIN_SRC emacs-lisp
- (add-hook 'eshell-mode-hook
-           (lambda ()
-               (local-set-key (kbd "C-c C-l") 'helm-eshell-history)))
- #+END_SRC
-
-
- Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "find-file" as one of the possible completions.
- #+BEGIN_SRC emacs-lisp
- (setq helm-lisp-fuzzy-completion t)
- #+END_SRC
-
-*** ~ido~ 
-
- I prefer Ido for find-file. 
-
- #+begin_src emacs-lisp
-   (ido-mode t)
-   (bind-key* "C-x C-f" 'ido-find-file)
-#+end_src
-
- Ido should save its files where everything else does!
-
-#+begin_src emacs-lisp
-  (setq-default ido-save-directory-list-file (concat saveplace-dir "ido.last"))
- #+end_src
-
-*** ~ivy~
-
- #+begin_src emacs-lisp
-   (use-package ivy
-     :init
-     (use-package counsel)
-     (use-package swiper))
- #+end_src
-
-*** ~ace~ 
-   
-    Execute commands without switching to other buffers.
-
-**** ~ace-jump-mode~
-
-  Jump quickly to any word using just two key strokes with ace-jump-mode:
+  This variables must be set before loading helm-gtags
 
   #+BEGIN_SRC emacs-lisp
-  (use-package ace-jump-mode
-    :commands ace-jump-mode
-    :init
-    (key-chord-define-global "cj" 'ace-jump-mode))
+  (setq helm-gtags-prefix-key "\C-cg")
   #+END_SRC
+
+  *use-package Helm*
+  #+BEGIN_SRC emacs-lisp
+    (use-package helm
+      :init
+      (helm-mode 1)
+      (bind-keys
+       ("M-y" . helm-show-kill-ring)
+       ("M-X" . helm-M-x)
+       ("C-h SPC" . helm-all-mark-rings)
+       ("C-x b" . helm-mini)
+       ("C-h SPC" . helm-all-mark-rings)
+       ("C-c s o" . helm-occur)
+       ("C-h F" . 'helm-insert-command-name))
+      :config
+      (setq
+       helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
+       helm-ff-search-library-in-sexp t ; search for library in `require' and
+                                            ; declare-function' sexp.
+       helm-split-window-in-side-p t ; open helm buffer inside current window, not
+                                            ; occupy whole other window
+       helm-candidate-number-limit 500  ; limit the number of displayed canidates
+       helm-ff-file-name-history-use-recentf t
+       helm-move-to-line-cycle-in-source t ; move to end or beginning of source when
+                                            ; reaching top or bottom of source.
+       helm-buffers-fuzzy-matching t)   ; fuzzy matching buffer names when non-nil
+      (diminish 'helm-mode)
+      (set-face-attribute 'helm-candidate-number nil 
+                          :background "salmon2" 
+                          :foreground "black"))
+  #+END_SRC
+
+  Helm-dash is a great package that allows us to look up documentation with
+  helm. It is mostly equivalent to Dash, but does not depend on it. Use
+  `helm-dash-install-docset' to download a docset fo a particular language (or
+  language package).
+
+  #+begin_src emacs-lisp
+  (use-package helm-dash)
+  #+end_src
+
+  Helm-flx improves helms scoring of results. Helm-fuzzier improves its fuzzy
+  matching.
+  #+begin_src emacs-lisp
+    (use-package helm-flx
+      :init (helm-flx-mode 1))
+
+    (use-package helm-fuzzier
+      :init (helm-fuzzier-mode 1))
+  #+end_src
+
+  Helm-swoop is an interface for searching for lines in a buffer using helm
+
+  *use-package helm-swoop*
+  #+BEGIN_SRC emacs-lisp
+  (use-package helm-swoop
+    :init (progn
+            (global-set-key (kbd "C-c s s") 'helm-swoop)
+            (global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
+          )
+    :config (progn
+              ; When doing isearch, hand the word over to helm-swoop
+              (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+              ; From helm-swoop to helm-multi-swoop-all
+              (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+              ; Save buffer when helm-multi-swoop-edit complete
+              (setq helm-multi-swoop-edit-save t))
+              ; If this value is t, split window inside the current window
+              (setq helm-swoop-split-with-multiple-windows t)
+              ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+              (setq helm-swoop-split-direction 'split-window-vertically)
+              ;; If nil, you can slightly boost invoke speed in exchange for text color
+              (setq helm-swoop-speed-or-color t)
+    )
+  #+END_SRC
+
+***** Basic Settings
+  Helm size
+  #+BEGIN_SRC emacs-lisp
+  (helm-autoresize-mode t)
+  (setq helm-autoresize-max-height 30)
+  (setq helm-autoresize-min-height 20)
+  #+end_src
+
+
+  #+begin_src emacs-lisp
+  (global-set-key (kbd "C-c h") 'helm-command-prefix-key)
+  (global-unset-key (kbd "C-x c"))
+
+  (define-key helm-map (kbd "C-\-") 'helm-execute-persistent-action) ; rebihnd tab to do persistent action
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)  ; make TAB works in terminal
+  (define-key helm-map (kbd "C-z")  'helm-select-action)             ; list actions using C-z
+
+  (define-key helm-grep-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
+  (define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
+  (define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
+
+
+  (when (executable-find "curl")
+    (setq helm-google-suggest-use-curl-p t))
+
+  (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+
+  (global-set-key (kbd "C-c 7 w") 'helm-wikipedia-suggest)
+  (global-set-key (kbd "C-c 7 g") 'helm-google-suggest)
+  (global-set-key (kbd "C-c 7 s") 'helm-surfraw)
+
+  ;(global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
+  ;(global-set-key (kbd "C-c h c") 'helm-calcul-expression)
+
+  ;(global-set-key (kbd "C-c h x") 'helm-register)
+  ;(global-set-key (kbd "C-x r j") 'jump-to-register)
+
+  (define-key 'help-command (kbd "C-f") 'helm-apropos)
+  (define-key 'help-command (kbd "r") 'helm-info-emacs)
+  (define-key 'help-command (kbd "C-l") 'helm-locate-library)
+
+  ;;; Save current position to mark ring
+  (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
+  #+END_SRC
+
+
+  Show minibuffer history with Helm
+  #+BEGIN_SRC emacs-lisp
+  (define-key minibuffer-local-map (kbd "M-p") 'helm-minibuffer-history)
+  #+END_SRC
+
+
+  Navigating file
+  #+BEGIN_SRC emacs-lisp
+  (define-key global-map [remap find-tag] 'helm-etags-select)
+
+  (define-key global-map [remap list-buffers] 'helm-buffers-list)
+  #+END_SRC
+
+
+  Use Helm to list eshell history:
+  #+BEGIN_SRC emacs-lisp
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+                (local-set-key (kbd "C-c C-l") 'helm-eshell-history)))
+  #+END_SRC
+
+
+  Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "find-file" as one of the possible completions.
+  #+BEGIN_SRC emacs-lisp
+  (setq helm-lisp-fuzzy-completion t)
+  #+END_SRC
+
+**** ~ido~ 
+
+  I prefer Ido for find-file. 
+
+  #+begin_src emacs-lisp
+    (ido-mode t)
+    (bind-key* "C-x C-f" 'ido-find-file)
+ #+end_src
+
+  Ido should save its files where everything else does!
+
+ #+begin_src emacs-lisp
+   (setq-default ido-save-directory-list-file (concat saveplace-dir "ido.last"))
+  #+end_src
+
+***** ~Smex~
+
+ Use smart-M-x for M-x
+
+ #+begin_src emacs-lisp
+   (use-package smex
+     :init (global-set-key (kbd "M-x") 'smex))
+ #+end_src
+
+**** ~ivy~
+
+  #+begin_src emacs-lisp
+    (use-package ivy
+      :init
+      (use-package counsel)
+      (use-package swiper))
+  #+end_src
+
+*** Jumping
+   
+    Execute commands without switching to other buffers. ~avy~ and ~ace~ are
+    different approaches to the same idea.
+
+**** ~avy~
+
+#+begin_src emacs-lisp
+  (use-package avy
+    :init
+    :bind*
+    (("C-j D" . avy-kill-region)
+     ("C-j W" . avy-copy-region)
+     ("C-j w" . avy-copy-line)
+     ("C-j d" . avy-kill-whole-line)
+     ("C-j j" . avy-goto-char)
+     ("C-j l" . avy-goto-line)))
+#+end_src
+
+**** ~ace~
+***** ~ace-jump-mode~
+
+   Jump quickly to any word using just two key strokes with ace-jump-mode:
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package ace-jump-mode
+       :bind*
+       (("C-j k" . ace-jump-zap-to-char-mode)
+        ("C-j K" . ace-jump-zap-to-char-mode)))
+   #+END_SRC
 
 **** ~ace-isearch~
 
-  This is a mix of ace, isearch, and helm swoop. Pretty cool. If only
+  This is a mix of ~ace-isearch~, ~helm-swoop~, and ~avy~. Pretty cool. If only
   one key is searched, it will use ace, if more than one and less than 6
   are serached, it will use good ol' isearch, if more than 6 are
   searched, it will use helm-swoop. Nice idea.
 
   #+begin_src emacs-lisp
-  (use-package ace-isearch)
+    (use-package ace-isearch
+      :init 
+      (global-ace-isearch-mode)
+      :config
+      (setq ace-isearch-jump-delay 0.3
+            ace-isearch-use-jump nil))
   #+end_src
+
+  Use ~swiper~ instead of ~helm-swoop~.
+
+#+begin_src emacs-lisp
+  (defun ace-isearch-swiper-from-isearch ()
+    "Invoke `helm-swoop' from ace-isearch."
+    (interactive)
+    (let (($query (if isearch-regexp
+                      isearch-string
+                    (regexp-quote isearch-string))))
+      (let (search-nonincremental-instead)
+        (ignore-errors (isearch-exit)))
+      (swiper $query)))
+
+  (setq ace-isearch-function-from-isearch 'ace-isearch-swiper-from-isearch)
+#+end_src
+
 
 *** ~guide-key~
 
@@ -530,7 +585,12 @@ screen for minute.
       ("C-x w k" . windmove-down)))
  #+END_SRC
 
-** Window Behavior
+*** ~ace-popup-menu~
+
+#+begin_src emacs-lisp
+(use-package ace-popup-menu)
+#+end_src
+
 *** ~shackle~
 
     Great package. It allows you to configure how popup messages are
@@ -571,11 +631,11 @@ by default.
 #+END_SRC
 
 *** ~zygospore~
+
 #+BEGIN_SRC emacs-lisp
 (use-package zygospore
   :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
 #+END_SRC
-
 
 * Editing
 ** Basic Settings
@@ -599,7 +659,7 @@ by default.
   ;; key-chord for add region to kill ring
   (key-chord-define-global "qw" 'kill-ring-save)
 
-  ;; show whitespace in diff-mode
+  ;; show whitespace i9n diff-mode
   (add-hook 'diff-mode-hook (lambda ()
                               (setq-local whitespace-style
                                           '(face
@@ -1868,12 +1928,13 @@ Some bindings for getting to org files faster
   (global-set-key (kbd "C-c C-v :") 'org-print-src-headers)
 #+end_src
 
-*** Commands
-
 #+begin_src emacs-lisp
-(define-key org-mode-map (kbd "C-c <tab>") (lambda () (interactive) (org-show-children 3)))
+  (defun org-show-children-advice (funct &optional N)
+    (funcall funct 3))
+  (advice-add 'org-show-children :around 'org-show-children-advice)
 #+end_src
 
+*** Commands
 ** Appearance
 
 Abbrevs:
@@ -2288,7 +2349,6 @@ Editting source code
   (add-hook 'org-capture-mode-hook 'my-org-capture-hook)
 #+end_src
 
-
 *** Template Components
 
 org-capture-template is set in a private file. Look up the documention for
@@ -2360,6 +2420,7 @@ Some components I made for building templates
      (when body (concat body "\n"))
      (if watermark watermark org-template/meta-data)))
 #+end_src
+
 *** Templates
 
 Basic templates
