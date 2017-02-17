@@ -863,6 +863,12 @@ Backward delete sexp:
 #+END_SRC
 
 ** yasnippet
+
+~yasnippet~ gives us snippet expansions. You can define your own, and they live in the
+=~/.emacs.d/snippets/= directory. Snippets are performed with the ~C-c k~ binding. So the string
+=src= might expand to a generic our source block markup, offer you some completion opportunities
+that you can fill out and tab through, then leave you between the begin__{}src_{}_
+
 #+BEGIN_SRC emacs-lisp
     (use-package yasnippet
       :commands
@@ -883,7 +889,7 @@ Backward delete sexp:
       :config
       (progn
         (setq yas-verbosity 1) ;; No need to be so verbose
-        (setq yas-wrap-around-region t) ;; Wrap around region
+        (setq yas-wrap-around-region nil) ;; Wrap around region
         (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
         (defun my/yas-term-hook ()
           (setq yas-dont-activate t))
@@ -900,7 +906,7 @@ Backward delete sexp:
 Inter-field navigation:
 #+begin_src emacs-lisp
 ;; Go to end of active field
-(defun yas/goto-end-of-active-field ()
+(defun yas-goto-end-of-active-field ()
   (interactive)
   (let* ((snippet (car (yas--snippets-at-point)))
          (position (yas--field-end (yas--snippet-active-field snippet))))
@@ -909,13 +915,16 @@ Inter-field navigation:
       (goto-char position))))
 
 ;; Go to start of active field
-(defun yas/goto-start-of-active-field ()
+(defun yas-goto-start-of-active-field ()
   (interactive)
   (let* ((snippet (car (yas--snippets-at-point)))
          (position (yas--field-start (yas--snippet-active-field snippet))))
     (if (= (point) position)
         (move-beginning-of-line 1)
       (goto-char position))))
+
+(define-key yas-keymap (kbd "C-a") 'yas/goto-start-of-active-field)
+(define-key yas-keymap (kbd "C-e") 'yas/goto-end-of-active-field)
 #+end_src
 
 ** Other Packages
@@ -3311,10 +3320,9 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
     (pdf-tools-install))
 #+end_src
 
-* On Startup
-** Extremely fast emacs startup with emacs server
-Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn emacs sessions (nearly) instantly. There is a single overhead cost of typical startup timen (~2 seconds) on login, but it means means I can now use emacs for quick edits. I bind `emacsclient -c -a emacs' to a keyboard shortcut.
+* Load Personal
 ** Custom Frames
+
 #+begin_src emacs-lisp
   (defun open-org-agenda-hack ()
    "Splits frame horizontally and switches to left window to open an
@@ -3329,33 +3337,21 @@ Run an emacs daemon on startup (emacs --daemon), then run emacsclient to spawn e
     (windmove-right)
     (switch-to-buffer "*Org Agenda*")
     (windmove-left)
-    (enlarge-window-horizontally 10)
-    )
+    (enlarge-window-horizontally 10))
 
   (defun dwc-create-frame (&optional filename fullscreen)
     "Find file and get rid of annoying frame defaults."
     (interactive)
-    (if filename
+    (when filename
         (find-file-other-frame filename)
       (make-frame)
       (other-frame 1))
-    (if fullscreen
-        (toggle-frame-fullscreen)
-      )
-    )
+    (when fullscreen
+        (toggle-frame-fullscreen)))
 
   (defun  dwc-org-frame (org-filename &optional fullscreen)
     "Open an org file and split frame so that one window contains the corresponding agenda"
     (dwc-create-frame org-filename fullscreen)
-    (open-org-agenda-hack)
-    )
-
-  (defun org-school-frame--bare ()
-    (interactive)
-    (delete-other-frames)
-    (delete-other-windows)
-    (dwc-org-frame (concat org-directory "everything.org")))
-
-  ;; `(on-startup)' defined and called in "exclusive/post.el"
+    (open-org-agenda-hack))
 #+end_src
 
