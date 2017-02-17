@@ -339,12 +339,13 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 **** ~ivy~
 
   #+begin_src emacs-lisp
-   (use-package ivy
-     :init
-     (use-package counsel)
-     (use-package swiper)
-     :config
-     (setq ivy-format-function 'ivy-format-function-arrow))
+    (use-package ivy
+      :init
+      (use-package counsel)
+      (use-package swiper)
+      :config
+      (setq ivy-height 5)
+      (setq ivy-format-function 'ivy-format-function-arrow))
   #+end_src
 
 *** Jumping
@@ -708,7 +709,6 @@ by default.
   (setq-default tab-width 4)
 #+END_SRC
 
-
 *** Key commands
 #+BEGIN_SRC emacs-lisp
 ;; delete region command is useful sometimes where <delete> doesnt work
@@ -1016,7 +1016,6 @@ Use my goodies repository for some stuff I like to use, for instance,
         (replace-match " ")))))
 #+end_src
 
-
 *** unfill-paragraph
 
 #+begin_src emacs-lisp
@@ -1030,7 +1029,6 @@ Use my goodies repository for some stuff I like to use, for instance,
   (define-key global-map (kbd "M-Q") 'unfill-paragraph)
 #+end_src
 
-
 *** die-tabs
 
 #+BEGIN_SRC emacs-lisp
@@ -1042,7 +1040,6 @@ Use my goodies repository for some stuff I like to use, for instance,
   (untabify (region-beginning) (region-end))
   (keyboard-quit))
 #+END_SRC
-
 
 *** prelude-move-beginning-of-line
 
@@ -1074,7 +1071,6 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key (kbd "C-a") 'prelude-move-beginning-of-line)
 #+END_SRC
 
-
 *** defadvice kill-ring-save
 
 #+BEGIN_SRC emacs-lisp
@@ -1088,7 +1084,6 @@ line instead."
            (line-beginning-position 2)))))
 #+END_SRC
 
-
 *** defadvice kill-region
 
 #+BEGIN_SRC emacs-lisp
@@ -1100,7 +1095,6 @@ line instead."
      (list (line-beginning-position)
            (line-beginning-position 2)))))
 #+END_SRC
-
 
 *** defadvice kill-line
 
@@ -1117,7 +1111,6 @@ line instead."
                  (just-one-space 0)
                  (backward-char 1)))))
 #+END_SRC
-
 
 *** variables
 
