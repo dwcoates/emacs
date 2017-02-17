@@ -220,9 +220,8 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
   #+BEGIN_SRC emacs-lisp
   (use-package helm-swoop
     :init (progn
-            (global-set-key (kbd "C-c s s") 'helm-swoop)
-            (global-set-key (kbd "C-c s a") 'helm-multi-swoop-all)
-          )
+            (global-set-key (kbd "C-c s") 'helm-swoop)
+            (global-set-key (kbd "C-c S") 'helm-multi-swoop-all))
     :config (progn
               ; When doing isearch, hand the word over to helm-swoop
               (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
@@ -235,8 +234,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
               ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
               (setq helm-swoop-split-direction 'split-window-vertically)
               ;; If nil, you can slightly boost invoke speed in exchange for text color
-              (setq helm-swoop-speed-or-color t)
-    )
+              (setq helm-swoop-speed-or-color t))
   #+END_SRC
 
 ***** Basic Settings
@@ -347,7 +345,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
       (use-package swiper))
   #+end_src
 
-*** Jumping
+*** Jumpinhg
    
     Execute commands without switching to other buffers. ~avy~ and ~ace~ are
     different approaches to the same idea.
@@ -355,27 +353,36 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 **** ~avy~
 
 #+begin_src emacs-lisp
+  ;; Need this to bind to C-m. 
+  ;; Otherwise Emacs confuses C-m with Return
+  (define-key input-decode-map [?\C-m] [C-m])
+
   (use-package avy
     :init
     :bind*
-    (("C-j D" . avy-kill-region)
+    (("C-j w" . avy-kill-region)
      ("C-j W" . avy-copy-region)
-     ("C-j w" . avy-copy-line)
-     ("C-j d" . avy-kill-whole-line)
-     ("C-j j" . avy-goto-char)
-     ("C-j l" . avy-goto-line)))
+     ("C-j L" . avy-kill-whole-line)
+     ("C-j l" . avy-copy-line)
+     ("C-l"   . avy-goto-line)
+     ("<C-m>" . avy-goto-char-timer)
+     ("C-."   . avy-goto-char)
+     ("C-,"   . avy-goto-char-in-line)))
 #+end_src
 
 **** ~ace~
-***** ~ace-jump-mode~
 
    Jump quickly to any word using just two key strokes with ace-jump-mode:
 
    #+BEGIN_SRC emacs-lisp
      (use-package ace-jump-mode
+       :config
+       (use-package ace-jump-zap
+        :commands ace-jump-zap-to-char 
+                  ace-jump-zap-up-to-char)
        :bind*
-       (("C-j k" . ace-jump-zap-to-char-mode)
-        ("C-j K" . ace-jump-zap-to-char-mode)))
+       (("C-j K" . ace-jump-zap-to-char)
+        ("C-j k" . ace-jump-zap-up-to-char)))
    #+END_SRC
 
 **** ~ace-isearch~
@@ -390,8 +397,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
       :init 
       (global-ace-isearch-mode)
       :config
-      (setq ace-isearch-jump-delay 0.3
-            ace-isearch-use-jump nil))
+      (setq ace-isearch-use-jump nil))
   #+end_src
 
   Use ~swiper~ instead of ~helm-swoop~.
@@ -563,13 +569,22 @@ screen for minute.
  with ace-window. Essential package:
 
  #+BEGIN_SRC emacs-lisp
+   (defun my/other-window ()
+     (other-window 1))
+
    (use-package ace-window
      :commands ace-window
-     :init
-     (key-chord-define-global "xo" 'ace-window)
+     :bind
+     (("C-x C-o" . ace-window))
      :config
-     (setq aw-scope 'frame aw-background t)
-     )
+     (setq aw-scope 'global aw-background t
+           aw-dispatch-alist '((?x aw-delete-window " Ace - Delete Window")
+                               (?m aw-swap-window " Ace - Swap Window")
+                               (?n aw-flip-window)
+                               (?v aw-split-window-vert " Ace - Split Vert Window")
+                               (?b aw-split-window-horz " Ace - Split Horz Window")
+                               (?i delete-other-windows " Ace - Maximize Window")
+                               (?o my/other-window " Ace - Other window"))))
  #+END_SRC
 
 *** ~windmove~
