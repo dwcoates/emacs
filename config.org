@@ -52,7 +52,6 @@ Goodies contains a lot of custom functions I've written or scavenged or stolen
 #+end_src
 
 ** Key Interfaces
-
 *** ~key-chords~
 
 #+begin_src emacs-lisp 
@@ -126,6 +125,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
 ** Auto Completion
 *** ~company~
+
  *use-package Company*
  #+begin_src emacs-lisp
  (use-package company 
@@ -149,6 +149,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
  #+end_src
 
 *** ~auto-complete~
+
  #+begin_src emacs-lisp
  (use-package auto-complete)
  #+end_src
@@ -311,7 +312,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
   (setq helm-lisp-fuzzy-completion t)
   #+END_SRC
 
-**** ~ido~ 
+**** ~ido~
 
   I prefer Ido for find-file. 
 
@@ -332,7 +333,9 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
  #+begin_src emacs-lisp
    (use-package smex
-     :init (global-set-key (kbd "M-x") 'smex))
+     :init (global-set-key (kbd "M-x") 'smex)
+     :config 
+     (smex-initialize))
  #+end_src
 
 **** ~ivy~
@@ -406,7 +409,6 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
   (setq ace-isearch-function-from-isearch 'ace-isearch-swiper-from-isearch)
 #+end_src
-
 
 *** ~guide-key~
 

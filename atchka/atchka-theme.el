@@ -320,7 +320,7 @@
      `(org-block-background         ((,c (:background "gray25"))))
      `(org-block-begin-line         ((,c (:background "SkyBlue4" :foreground "SkyBlue4"  :height ,atchka--org-block-header-height))))
      `(org-block-end-line           ((,c (:inherit org-block-begin-line))))
-     `(org-code                     ((,c (:foreground ,orange))))
+     `(org-code                     ((,c (:foreground "#cd5c5c"))))
      `(org-verbatim                 ((,c (:foreground ,green))))
      `(org-formula                  ((,c (:foreground ,cyan))))
            ;; Headers
