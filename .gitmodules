@@ -6,4 +6,4 @@
 	url = git@github.com:dwcoates/goodies.git
 [submodule "org-misc"]
 	path = lisp/org-misc
-	url = git@github.com:dwcoates/org-misc
+	url = git@github.com:dwcoates/org-misc.git
