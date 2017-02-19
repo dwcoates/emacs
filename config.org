@@ -43,23 +43,49 @@ Make sure emacs gets my bashrc environment variable:
 #+end_src
 
 * General
-** Help
 
-   The following gives us the ~C-h M-k~ binding for the new command
-   ~describe-keymap~. This can be used to look up the current key commands for any
-   mode's map.
-
-#+begin_src emacs-lisp
-(use-package help-fns+) 
-#+end_src
-
-** Basic Settings
-
-Goodies contains a lot of custom functions I've written or scavenged or stolen
+  Goodies contains a lot of custom functions I've written or scavenged or stolen
 
 #+begin_src emacs-lisp
 (require 'dwc-goodies)
 #+end_src
+
+** Help
+
+   The following gives us the ~C-h M-k~ binding for the new command
+   ~describe-keymap~. This can be used to look up the current key commands for any
+   mode's map. It provides the following additional help commands:
+
+     =C-h B=    ~describe-buffer~
+     =C-h c=    ~describe-command~          (replaces ~describe-key-briefly~)
+     =C-h o=    ~describe-option~
+     =C-h C-c=  ~describe-key-briefly~      (replaces =C-h c=)
+     =C-h C-o=  ~describe-option-of-type~
+     =C-h M-c=  ~describe-copying~          (replaces =C-h C-c=)
+     =C-h M-f=  ~describe-file~
+     =C-h M-k=  ~describe-keymap~
+     =C-h M-l=  ~find-function-on-key~
+
+#+begin_src emacs-lisp
+(use-package help-fns+)  
+#+end_src
+
+*** ~guide-key~
+
+   Display possible key binding completions automatically in a small pop-up
+   buffer with ~guide-key~. For example, typing =C-h= will provide a small hint
+   pop-up for commands under this prefix.
+
+ #+BEGIN_SRC emacs-lisp
+ (use-package guide-key
+   :init
+   (guide-key-mode 1)
+   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +" "C-w" "C-e" "C-h" "C-c e" "C-c C-v"))
+   (setq guide-key/recursive-key-sequence-flag t)
+   (setq guide-key/popup-window-position 'bottom)
+   (diminish 'guide-key-mode)
+ )
+ #+END_SRC
 
 ** Key Interfaces
 *** ~key-chords~
@@ -69,7 +95,6 @@ Goodies contains a lot of custom functions I've written or scavenged or stolen
 #+end_src
 
 ** General Appearance
-*** ~isearch~
 *** ~linum~  -- *disabled* 
 
 #+begin_src emacs-lisp 
@@ -80,7 +105,8 @@ Goodies contains a lot of custom functions I've written or scavenged or stolen
 
 *** Pretty Symbols
 
-Prettify certain symbols and symbol combinations. For example, use a λ instead of ~lambda~ in elisp code.
+    Prettify certain symbols and symbol combinations. For example, use a λ
+    instead of =lambda= in elisp code.
 
 #+begin_src emacs-lisp
 (global-prettify-symbols-mode t)
@@ -406,6 +432,9 @@ through Emacs documentation.
 
 **** ~avy~
 
+     ~avy-goto-char-timer~, bound to =C-m=, is the main takeaway from ~avy~, in my
+     opinion. Use it to quickly jump between static buffers.
+
 #+begin_src emacs-lisp
   ;; Need this to bind to C-m. 
   ;; Otherwise Emacs confuses C-m with Return
@@ -420,8 +449,7 @@ through Emacs documentation.
      ("C-j l" . avy-copy-line)
      ("C-l"   . avy-goto-line)
      ("<C-m>" . avy-goto-char-timer)
-     ("C-."   . avy-goto-char)
-     ("C-,"   . avy-goto-char-in-line)))
+     ("C-."   . avy-goto-char)))
 #+end_src
 
 **** ~ace~
@@ -482,21 +510,6 @@ through Emacs documentation.
     (key-chord-define-global "js" 'jump-char-forward)
     (key-chord-define-global "jr" 'jump-char-backward))
 #+end_src
-
-*** ~guide-key~
-
-   Display possible key binding completions automatically in a small pop-up buffer with guide-key. For example, 
-
- #+BEGIN_SRC emacs-lisp
- (use-package guide-key
-   :init
-   (guide-key-mode 1)
-   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +" "C-w" "C-e" "C-h" "C-c e" "C-c C-v"))
-   (setq guide-key/recursive-key-sequence-flag t)
-   (setq guide-key/popup-window-position 'bottom)
-   (diminish 'guide-key-mode)
- )
- #+END_SRC
 
 ** Grep
 
@@ -655,7 +668,9 @@ screen for minute.
  #+END_SRC
 
 *** ~windmove~
+
  Navigate windows directionally with wind-move:
+
  #+BEGIN_SRC emacs-lisp
    (use-package windmove
      :commands
@@ -689,31 +704,6 @@ screen for minute.
     (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4))))
 #+end_src
 
-*** ~golden-ratio~
-Automatically resize buffers to "optimal" size when they gain focus. Turned off
-by default.
-#+BEGIN_SRC emacs-lisp
-  (use-package golden-ratio
-    :commands golden-ratio golden-ratio-mode
-    :init
-    (bind-keys
-     ("C-x w g SPC" . golden-ratio) ; Resize buffers according to golden-ratio
-     ("C-x w g m" . golden-ratio-mode) ;; Enable/disable golden-ratio-mode
-     )
-    :config
-    (progn
-      ;; List of buffers to not be resized by golden-ratio.
-      (setq golden-ratio-exclude-buffer-names
-            '("*Flycheck errors*"
-              "*SPEEDBAR*"))
-      ;; Ensure golden-ratio compatibility with helm.
-      (defun pl/helm-alive-p ()
-        (if (boundp 'helm-alive-p)
-            (symbol-value 'helm-alive-p)))
-      (add-to-list 'golden-ratio-inhibit-functions 'pl/helm-alive-p))
-    )
-#+END_SRC
-
 *** ~zygospore~
 
 #+BEGIN_SRC emacs-lisp
@@ -722,250 +712,327 @@ by default.
 #+END_SRC
 
 * Editing
+
+    Use my goodies repository for some stuff I like to use, for instance,
+    ~helm-insert-color-name~, for selecting colors and inserting their name at
+    point.
+
+#+begin_src emacs-lisp
+  (add-to-list 'load-path (concat lisp-dir "goodies"))
+  (unless (require 'dwc-goodies nil t)
+    (warn "Could not load dwc-goodies"))
+#+end_src
+
 ** Basic Settings
+
 #+BEGIN_SRC emacs-lisp
-  (show-paren-mode 1)
+  (setq global-mark-ring-max 5000      ; increase mark ring to contains 5000 entries
+        mark-ring-max 10000            ; increase kill ring to contains 10000 entries
+        mode-require-final-newline t   ; add a newline to end of file
+        tab-width 4                    ; default to 4 visible spaces to display a tab
+        kill-ring-max 10000            ; increase kill-ring capacity
+        kill-whole-line t)             ; if NIL, kill whole line and move the next line up
+#+END_SRC
 
-  ;; delete tabs with backspace
-  (setq backward-delete-char-untabify-method 'hungry)
+~electric-indent-mode~ provides on-the-fly re-indentation
 
-  (setq global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
-        mark-ring-max 10000                ; increase kill ring to contains 10000 entries
-        mode-require-final-newline t      ; add a newline to end of file
-        tab-width 4)                       ; default to 4 visible spaces to display a tab
-
-  (add-hook 'sh-mode-hook (lambda ()
-                            (setq tab-width 4)))
-
-  (setq kill-ring-max 10000 ; increase kill-ring capacity
-        kill-whole-line t)  ; if NIL, kill whole line and move the next line up
-
-  ;; key-chord for add region to kill ring
-  (key-chord-define-global "qw" 'kill-ring-save)
-
-  ;; show whitespace i9n diff-mode
-  (add-hook 'diff-mode-hook (lambda ()
-                              (setq-local whitespace-style
-                                          '(face
-                                            tabs
-                                            tab-mark
-                                            spaces
-                                            space-mark
-                                            trailing
-                                            indentation::space
-                                            indentation::tab
-                                            newline
-                                            newline-mark))
-                              (whitespace-mode 1)))
-
+#+BEGIN_SRC emacs-lisp
   (setq electric-indent-mode nil)
+#+END_SRC
 
-  (put 'downcase-region 'disabled nil)
-  (put 'upcase-region 'disabled nil)
+*DISABLED* /what does this do?/
 
-  ;; show unncessary whitespace that can mess up your diff
-  (add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
+#+BEGIN_SRC emacs-lisp
+;  (put 'downcase-region 'disabled nil)
+;  (put 'upcase-region 'disabled nil)
+#+END_SRC
 
-  ;; use space to indent by default
+Delete tabs with backspace
+
+#+BEGIN_SRC emacs-lisp
+  (setq backward-delete-char-untabify-method 'hungry)
+#+END_SRC
+
+Use space to indent by default
+
+#+BEGIN_SRC emacs-lisp
   (setq-default indent-tabs-mode nil)
+#+END_SRC
 
-  ;; set appearance of a tab that is represented by 4 spaces
+Set appearance of a tab that is represented by 4 spaces
+
+#+BEGIN_SRC emacs-lisp
   (setq-default tab-width 4)
 #+END_SRC
 
-*** Key commands
+*** Parentheses
+
+ #+BEGIN_SRC emacs-lisp
+   (show-paren-mode 1)
+ #+END_SRC
+
+**** ~smartparens~
+
+ #+BEGIN_SRC emacs-lisp
+     (use-package smartparens
+       :config
+       ;; These are loaded from a file because currently smartparens isn't
+       ;; handling escaped quotations in org well. Funnily enough, smartparens
+       ;; binds requires that I bind to a quotation, which requires an escaped
+       ;; quotation :O
+       (load-file (concat lisp-dir "sp-binds.el"))
+       (sp-pair "'" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
+       (sp-pair "`" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
+
+       (setq sp-base-key-bindings 'paredit)
+       (setq sp-autoskip-closing-pair 'always)
+       (setq sp-hybrid-kill-entire-symbol nil)
+       (setq sp-backward-delete-char 'paredit-backward-delete)
+       (sp-use-paredit-bindings)
+
+       (show-smartparens-global-mode +1)
+       (smartparens-global-mode 1)
+
+       (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
+       (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+
+       (diminish 'smartparens-mode))
+ #+END_SRC
+
+ Delete sexp:
+
+ #+BEGIN_SRC emacs-lisp
+   (defun sp-delete-sexp ()
+     "Deletes sexp at point. Does not save to kill ring."
+     (interactive)
+     (sp-kill-sexp)
+     (pop kill-ring))
+ #+END_SRC
+
+
+ Backward delete sexp:
+
+ #+BEGIN_SRC emacs-lisp
+   (defun sp-backward-delete-sexp ()
+     "Deletes sexp at point. Does not save to kill ring."
+     (interactive)
+     (sp-backward-kill-sexp)
+     (pop kill-ring))
+ #+END_SRC
+
+*** Useful Packages
+**** ~volatile-highlights~
+
+ #+BEGIN_SRC emacs-lisp
+ (use-package volatile-highlights
+   :config
+   (volatile-highlights-mode t)
+   (diminish 'volatile-highlights-mode))
+ #+END_SRC
+
+**** ~clean-auto-indent-mode~
+
+ #+BEGIN_SRC emacs-lisp
+ (use-package clean-aindent-mode
+   :commands clean-aindent-mode
+   :init
+   (add-hook 'prog-mode-hook 'clean-aindent-mode))
+ #+END_SRC
+
+**** ~dtrt-indent~
+
+ #+BEGIN_SRC emacs-lisp
+ (use-package dtrt-indent
+   :config
+   (setq dtrt-indent-verbosity 0)
+   (dtrt-indent-mode 1))
+ #+END_SRC
+
+**** ~ws-butler~
+
+ #+BEGIN_SRC emacs-lisp
+ (use-package ws-butler
+   :commands ws-butler
+   :init
+   (add-hook 'c-mode-common-hook 'ws-butler-mode)
+   (add-hook 'text-mode 'ws-butler-mode)
+   (add-hook 'fundamental-mode 'ws-butler-mode)
+   (add-hook 'prog-mode-hook 'ws-butler-mode))
+ #+END_SRC
+
+**** ~anzu~
+
+ #+BEGIN_SRC emacs-lisp
+ (use-package anzu
+   :commands
+   (anzu-query-replace
+    anzu-query-replace-regexp)
+   :init
+   ;; Bindings
+   (bind-key "M-%" 'anzu-query-replace)
+   (bind-key "C-M-%" 'anzu-query-replace-regexp)
+   :config
+   (global-anzu-mode)
+   )
+ #+END_SRC
+
+**** ~iedit~
+
+     When ~iedit~ mode is turned on, all the occurrences of the current region in
+     the buffer (possibly narrowed) or a region are highlighted.  If one
+     occurrence is modified, the change are applied to all other occurrences
+     simultaneously.
+
+ #+BEGIN_SRC emacs-lisp
+ (use-package iedit
+   :commands iedit-mode
+   :init
+   (bind-key "C-x ;" 'iedit-mode)
+   :config
+   (setq iedit-toggle-key-default nil))
+ #+END_SRC
+
+**** ~expand-region~
+
+ #+BEGIN_SRC emacs-lisp
+     (use-package expand-region
+       :commands er/expand-region
+       :init
+   ;    (key-chord-define-global ";l" 'er/expand-region)
+       )
+ #+END_SRC
+
+**** ~duplicate-thing~
+
+ #+BEGIN_SRC emacs-lisp
+ (use-package duplicate-thing
+   :commands duplicate-thing
+   :init
+   (bind-key "M-c" 'duplicate-thing))
+ #+END_SRC
+
+** Key commands
+*** General
+
+    Automatically indent when pressing =return=.
+
 #+BEGIN_SRC emacs-lisp
-;; delete region command is useful sometimes where <delete> doesnt work
+(global-set-key (kbd "RET") 'newline-and-indent)
+#+END_SRC
+
+Activate whitespace-mode to view all whitespace characters
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-c w") 'whitespace-mode)
+#+END_SRC
+
+Delete region command is useful sometimes where <delete> doesnt work
+
+#+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-c <delete>") 'delete-region)
+#+END_SRC
 
-;; remap backward-char to something more comfortable
-;(setq map (make-sparse-keymap))
-;(define-key map "\C-v" 'backward-char)
+*** Narrowing
 
-;; folding
-(add-hook 'c-mode-common-hook 'hs-minor-mode)
-(global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
-(global-set-key (kbd "C-c f h") 'hs-hide-block)
-(global-set-key (kbd "C-c f s") 'hs-show-block)
-(global-set-key (kbd "C-c f a h") 'hs-hide-all)
-(global-set-key (kbd "C-c f a s") 'hs-show-all)
-;; narrowing
+#+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-x n d") 'narrow-to-defun)
 (global-set-key (kbd "C-x n r") 'narrow-to-region)
 (global-set-key (kbd "C-x n w") 'widen)
-;(key-chord-define-global "m," 'narrow-to-region)
-;(key-chord-define-global ",." 'widen)
-
-; automatically indent when press RET
-(global-set-key (kbd "RET") 'newline-and-indent)
-
-;; activate whitespace-mode to view all whitespace characters
-(global-set-key (kbd "C-c w") 'whitespace-mode)
-
-;(key-chord-define-global "rk" 'delete-whitespace-rectangle)
-
-;(key-chord-define-global ";/" 'comment-region)
-;(key-chord-define-global "" 'uncomment-region)
 #+END_SRC
 
-** UTF-8
+** Diffing
+
+Show whitespace in diff-mode
+
 #+BEGIN_SRC emacs-lisp
-      (set-terminal-coding-system 'utf-8)
-      (set-keyboard-coding-system 'utf-8)
-      (set-language-environment "UTF-8")
-      (prefer-coding-system 'utf-8)
-      (set-default-coding-systems 'utf-8)
-
-      (setq-default indent-tabs-mode nil)
-      (delete-selection-mode)
-      (global-set-key (kbd "RET") 'newline-and-indent)
-
-      (define-key key-translation-map (kbd "C-c u p") (kbd "φ"))
-      (define-key key-translation-map (kbd "C-c u x") (kbd "ξ"))
-      (define-key key-translation-map (kbd "C-c u i") (kbd "∞"))
-      (define-key key-translation-map (kbd "C-c u l") (kbd "λ"))
-      (define-key key-translation-map (kbd "C-c u <right>") (kbd "→"))
-
-      (define-abbrev-table 'global-abbrev-table '(("alpha" "α")
-                                                  ("inf" "∞")
-                                                  ("ar" "→")
-                                                  ("lambda" "λ")
-                                                  ))
-
-      (abbrev-mode 1)
+  (add-hook 'diff-mode-hook (lambda ()
+                              (setq-local whitespace-style
+                                          '(face tabs tab-mark
+                                            spaces space-mark trailing
+                                            indentation::space
+                                            indentation::tab
+                                            newline newline-mark))
+                              (whitespace-mode 1)))
 #+END_SRC
 
-*** char-menu
-#+BEGIN_SRC emacs-lisp
-(use-package char-menu)
+** Undoing/Redoing
+*** ~undo-tree~
 
-(require 'char-menu)
-;(key-chord-define-global "cm" 'char-menu)
-(setq char-menu '("—" "‘’" "“”" "…" "«»" "–"
-                        (" Typography" "•" "©" "†" "‡" "°" "·" "§" "№" "★")
-                        (" Math"       "≈" "≡" "≠" "∞" "×" "±" "∓" "÷" "√" "≤" "≥")
-                        (" Arrows"     "←" "→" "↑" "↓" "⇐" "⇒" "⇑" "⇓")
-                        (" Greek"      "α" "β" "Y" "δ" "ε" "ζ" "η" "θ" "ι" "κ" "λ" "μ"
-                         "ν" "ξ" "ο" "π" "ρ" "σ" "τ" "υ" "φ" "χ" "ψ" "ω")))
-#+END_SRC
+ #+BEGIN_SRC emacs-lisp
+ (use-package undo-tree
+   :config
+   (global-undo-tree-mode)
+   (diminish 'undo-tree-mode))
+ #+END_SRC
 
-** smartparens
-*use-package smartparents*
-#+BEGIN_SRC emacs-lisp
-    (use-package smartparens
-      :config
-      ;; These are loaded from a file because currently smartparens isn't
-      ;; handling escaped quotations in org well. Funnily enough, smartparens
-      ;; binds requires that I bind to a quotation, which requires an escaped
-      ;; quotation :O
-      (load-file (concat lisp-dir "sp-binds.el"))
-      (sp-pair "'" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
-      (sp-pair "`" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
+** Snippet expansion
+*** ~yasnippet~
 
-      (setq sp-base-key-bindings 'paredit)
-      (setq sp-autoskip-closing-pair 'always)
-      (setq sp-hybrid-kill-entire-symbol nil)
-      (setq sp-backward-delete-char 'paredit-backward-delete)
-      (sp-use-paredit-bindings)
+    ~yasnippet~ gives us snippet expansions. You can define your own, and they live in the
+    =~/.emacs.d/snippets/= directory. Snippets are performed with the ~C-c k~ binding. So the string
+    =src= might expand to a generic our source block markup, offer you some completion opportunities
+    that you can fill out and tab through, then leave you between the begin__{}src_{}_
 
-      (show-smartparens-global-mode +1)
-      (smartparens-global-mode 1)
+ #+BEGIN_SRC emacs-lisp
+     (use-package yasnippet
+       :commands
+       (yas-exit-all-snippets
+        yas/goto-end-of-active-field    ;; Defined below
+        yas/goto-start-of-active-field  ;; Defined below
+        yas-expand)
+       :init
+       (yas-global-mode 1)
+       ;; Bindings
+       (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
+       (bind-key "C-e" 'yas/goto-end-of-active-field yas-keymap)
+       (bind-key "C-a" 'yas/goto-start-of-active-field yas-keymap)
+       (bind-key [(tab)] 'nil yas-minor-mode-map)
+       (bind-key (kbd "TAB") 'nil yas-minor-mode-map)
+       (bind-key (kbd "C-c k") 'yas/expand yas-minor-mode-map) ;; this is redefined because an elpy bug breaks yas-expand with tab
+       :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
+       :config
+       (progn
+         (setq yas-verbosity 1) ;; No need to be so verbose
+         (setq yas-wrap-around-region nil) ;; Wrap around region
+         (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
+         (defun my/yas-term-hook ()
+           (setq yas-dont-activate t))
+         (add-hook 'term-mode-hook 'my/yas-term-hook)
+         (defun my/yas-before-hook ()
+           (when (eq yas-minor-mode t) (expand-abbrev))
+           (setq snippet-mode-abbrev-table org-abbrev-table))
+         (add-hook 'yas-before-expand-snippet-hook 'my/yas-before-hook)
+         (defun my/yas-after-hook ()
+             (setq snippet-mode-abbrev-table local-abbrev-table))
+         (add-hook 'yas-after-exit-snippet-hook 'my/yas-after-hook)))
+ #+end_src
 
-      (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
-      (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+ Inter-field navigation:
 
-      (diminish 'smartparens-mode))
-#+END_SRC
+ #+begin_src emacs-lisp
+ ;; Go to end of active field
+ (defun yas-goto-end-of-active-field ()
+   (interactive)
+   (let* ((snippet (car (yas--snippets-at-point)))
+          (position (yas--field-end (yas--snippet-active-field snippet))))
+     (if (= (point) position)
+         (move-end-of-line 1)
+       (goto-char position))))
 
-*** sp-delete-sexp and sp-backward-delete-sexp
-Delete sexp:
-#+BEGIN_SRC emacs-lisp
-  (defun sp-delete-sexp ()
-    "Deletes sexp at point. Does not save to kill ring."
-    (interactive)
-    (sp-kill-sexp)
-    (pop kill-ring)
-    )
-#+END_SRC
+ ;; Go to start of active field
+ (defun yas-goto-start-of-active-field ()
+   (interactive)
+   (let* ((snippet (car (yas--snippets-at-point)))
+          (position (yas--field-start (yas--snippet-active-field snippet))))
+     (if (= (point) position)
+         (move-beginning-of-line 1)
+       (goto-char position))))
 
+ (define-key yas-keymap (kbd "C-a") 'yas/goto-start-of-active-field)
+ (define-key yas-keymap (kbd "C-e") 'yas/goto-end-of-active-field)
+ #+end_src
 
-Backward delete sexp:
-#+BEGIN_SRC emacs-lisp
-  (defun sp-backward-delete-sexp ()
-    "Deletes sexp at point. Does not save to kill ring."
-    (interactive)
-    (sp-backward-kill-sexp)
-    (pop kill-ring)
-    )
-#+END_SRC
-
-** yasnippet
-
-~yasnippet~ gives us snippet expansions. You can define your own, and they live in the
-=~/.emacs.d/snippets/= directory. Snippets are performed with the ~C-c k~ binding. So the string
-=src= might expand to a generic our source block markup, offer you some completion opportunities
-that you can fill out and tab through, then leave you between the begin__{}src_{}_
-
-#+BEGIN_SRC emacs-lisp
-    (use-package yasnippet
-      :commands
-      (yas-exit-all-snippets
-       yas/goto-end-of-active-field    ;; Defined below
-       yas/goto-start-of-active-field  ;; Defined below
-       yas-expand)
-      :init
-      (yas-global-mode 1)
-      ;; Bindings
-      (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
-      (bind-key "C-e" 'yas/goto-end-of-active-field yas-keymap)
-      (bind-key "C-a" 'yas/goto-start-of-active-field yas-keymap)
-      (bind-key [(tab)] 'nil yas-minor-mode-map)
-      (bind-key (kbd "TAB") 'nil yas-minor-mode-map)
-      (bind-key (kbd "C-c k") 'yas/expand yas-minor-mode-map) ;; this is redefined because an elpy bug breaks yas-expand with tab
-      :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
-      :config
-      (progn
-        (setq yas-verbosity 1) ;; No need to be so verbose
-        (setq yas-wrap-around-region nil) ;; Wrap around region
-        (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
-        (defun my/yas-term-hook ()
-          (setq yas-dont-activate t))
-        (add-hook 'term-mode-hook 'my/yas-term-hook)
-        (defun my/yas-before-hook ()
-          (when (eq yas-minor-mode t) (expand-abbrev))
-          (setq snippet-mode-abbrev-table org-abbrev-table))
-        (add-hook 'yas-before-expand-snippet-hook 'my/yas-before-hook)
-        (defun my/yas-after-hook ()
-            (setq snippet-mode-abbrev-table local-abbrev-table))
-        (add-hook 'yas-after-exit-snippet-hook 'my/yas-after-hook)))
-#+end_src
-
-Inter-field navigation:
-#+begin_src emacs-lisp
-;; Go to end of active field
-(defun yas-goto-end-of-active-field ()
-  (interactive)
-  (let* ((snippet (car (yas--snippets-at-point)))
-         (position (yas--field-end (yas--snippet-active-field snippet))))
-    (if (= (point) position)
-        (move-end-of-line 1)
-      (goto-char position))))
-
-;; Go to start of active field
-(defun yas-goto-start-of-active-field ()
-  (interactive)
-  (let* ((snippet (car (yas--snippets-at-point)))
-         (position (yas--field-start (yas--snippet-active-field snippet))))
-    (if (= (point) position)
-        (move-beginning-of-line 1)
-      (goto-char position))))
-
-(define-key yas-keymap (kbd "C-a") 'yas/goto-start-of-active-field)
-(define-key yas-keymap (kbd "C-e") 'yas/goto-end-of-active-field)
-#+end_src
-
-** Other Packages
-*** hippie-expand
+*** ~hippie-expand~
 
 #+BEGIN_SRC emacs-lisp
 ;; Hippie expand-file-name
@@ -979,116 +1046,75 @@ Inter-field navigation:
         try-complete-lisp-symbol))
 #+END_SRC
 
-*** volatile-highlights
+** Non-ASCII symbols
+*** Encoding defaults
 
 #+BEGIN_SRC emacs-lisp
-(use-package volatile-highlights
-  :config
-  (volatile-highlights-mode t)
-  (diminish 'volatile-highlights-mode))
+      (set-terminal-coding-system 'utf-8)
+      (set-keyboard-coding-system 'utf-8)
+      (set-language-environment "UTF-8")
+      (prefer-coding-system 'utf-8)
+      (set-default-coding-systems 'utf-8)
 #+END_SRC
-
-*** clean-auto-indent-mode
 
 #+BEGIN_SRC emacs-lisp
-(use-package clean-aindent-mode
-  :commands clean-aindent-mode
-  :init
-  (add-hook 'prog-mode-hook 'clean-aindent-mode))
+      (setq-default indent-tabs-mode nil)
+      (delete-selection-mode)
+      (global-set-key (kbd "RET") 'newline-and-indent)
 #+END_SRC
 
-*** dtrt-indent
+*** Key translations
 
-#+BEGIN_SRC emacs-lisp
-(use-package dtrt-indent
-  :config
-  (setq dtrt-indent-verbosity 0)
-  (dtrt-indent-mode 1))
-#+END_SRC
-
-*** ws-butler
-
-#+BEGIN_SRC emacs-lisp
-(use-package ws-butler
-  :commands ws-butler
-  :init
-  (add-hook 'c-mode-common-hook 'ws-butler-mode)
-  (add-hook 'text-mode 'ws-butler-mode)
-  (add-hook 'fundamental-mode 'ws-butler-mode)
-  (add-hook 'prog-mode-hook 'ws-butler-mode))
-#+END_SRC
-
-*** undo-tree
-
-#+BEGIN_SRC emacs-lisp
-(use-package undo-tree
-  :config
-  (global-undo-tree-mode)
-  (diminish 'undo-tree-mode))
-#+END_SRC
-
-*** anzu
-
-#+BEGIN_SRC emacs-lisp
-(use-package anzu
-  :commands
-  (anzu-query-replace
-   anzu-query-replace-regexp)
-  :init
-  ;; Bindings
-  (bind-key "M-%" 'anzu-query-replace)
-  (bind-key "C-M-%" 'anzu-query-replace-regexp)
-  :config
-  (global-anzu-mode)
-  )
-#+END_SRC
-
-*** iedit
-
-    When ~iedit~ mode is turned on, all the occurrences of the current region in
-    the buffer (possibly narrowed) or a region are highlighted.  If one
-    occurrence is modified, the change are applied to all other occurrences
-    simultaneously.
-
-#+BEGIN_SRC emacs-lisp
-(use-package iedit
-  :commands iedit-mode
-  :init
-  (bind-key "C-x ;" 'iedit-mode)
-  :config
-  (setq iedit-toggle-key-default nil))
-#+END_SRC
-
-*** expand-region
-
-#+BEGIN_SRC emacs-lisp
-    (use-package expand-region
-      :commands er/expand-region
-      :init
-  ;    (key-chord-define-global ";l" 'er/expand-region)
-      )
-#+END_SRC
-
-*** duplicate-thing
-
-#+BEGIN_SRC emacs-lisp
-(use-package duplicate-thing
-  :commands duplicate-thing
-  :init
-  (bind-key "M-c" 'duplicate-thing))
-#+END_SRC
-
-*** goodies
-
-    Use my goodies repository for some stuff I like to use, for instance,
-    ~helm-insert-color-name~, for selecting colors and inserting their name at
-    point.
+    These are some keyboard translations for symbol assertions. Mostly this is just
+    for English → Greek symbol translation. Need to insert an =alpha=? Type =C-c u= and
+    then the =a= key.
 
 #+begin_src emacs-lisp
-  (add-to-list 'load-path (concat lisp-dir "goodies"))
-  (unless (require 'dwc-goodies nil t)
-    (warn "Could not load dwc-goodies"))
+      (define-key key-translation-map (kbd "C-c u p") (kbd "φ"))
+      (define-key key-translation-map (kbd "C-c u x") (kbd "ξ"))
+      (define-key key-translation-map (kbd "C-c u i") (kbd "∞"))
+      (define-key key-translation-map (kbd "C-c u l") (kbd "λ"))
+      (define-key key-translation-map (kbd "C-c u a") (kbd "α"))
+      (define-key key-translation-map (kbd "C-c u b") (kbd "β"))
+      (define-key key-translation-map (kbd "C-c u e") (kbd "ε"))
+      (define-key key-translation-map (kbd "C-c u d") (kbd "δ"))
+      (define-key key-translation-map (kbd "C-c u z") (kbd "ζ"))
+      (define-key key-translation-map (kbd "C-c u s") (kbd "σ"))
+      (define-key key-translation-map (kbd "C-c u <right>") (kbd "→"))
+      (define-key key-translation-map (kbd "C-c u <left>") (kbd "←"))
+      (define-key key-translation-map (kbd "C-c u <up>") (kbd "↑"))
+      (define-key key-translation-map (kbd "C-c u <down>") (kbd "↓"))
 #+end_src
+
+*** ~abbrev-mode~
+
+#+BEGIN_SRC emacs-lisp
+  (define-abbrev-table 'global-abbrev-table '(("alpha" "α")
+                                              ("inf" "∞")
+                                              ("ar" "→")
+                                              ("lambda" "λ")))
+  (abbrev-mode 1)
+#+END_SRC
+
+*** ~char-menu~
+
+    ~char-menu~ is a useful package that presents a pop-up buffer for selecting
+    non-ascii symbols. They can be categorized, and in that way easily organized,
+    filtered and selected. Bound to =C-c u <RET>= by default.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package char-menu
+    :commands char-menu
+    :bind
+    (("C-c u <RET>" . char-menu))
+    :config
+    (setq char-menu '((" Basic"      "—" "‘’" "“”" "…" "«»" "–")
+                      (" Typography" "•" "©" "†" "‡" "°" "·" "§" "№" "★")
+                      (" Math"       "≈" "≡" "≠" "∞" "×" "±" "∓" "÷" "√" "≤" "≥")
+                      (" Arrows"     "←" "→" "↑" "↓" "⇐" "⇒" "⇑" "⇓")
+                      (" Greek"      "α" "β" "Y" "δ" "ε" "ζ" "η" "θ" "ι" "κ" "λ" "μ"
+                                     "ν" "ξ" "ο" "π" "ρ" "σ" "τ" "υ" "φ" "χ" "ψ" "ω"))))q
+#+END_SRC
 
 ** Functions
 *** just-one-space
@@ -1369,6 +1395,25 @@ Comment out a line:
 #+END_SRC
 
 * Software Development
+
+  Show unncessary whitespace that can mess up your diff
+
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
+#+end_src
+
+  ~hs-minor-mode~ gives us the ability to fold and unfold code and comments
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode 'hs-minor-mode)
+
+  (global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
+  (global-set-key (kbd "C-c f h") 'hs-hide-block)
+  (global-set-key (kbd "C-c f s") 'hs-show-block)
+  (global-set-key (kbd "C-c f a h") 'hs-hide-all)
+  (global-set-key (kbd "C-c f a s") 'hs-show-all)
+#+END_SRC
+
 ** General Settings
 *** Semantic
 
@@ -1916,6 +1961,12 @@ I was having some problems with it throwing errors.
     (defun my/ess-mode-hook-funct ()
       (smartparens-mode))
     (add-hook 'ess-mode-hook 'my/ess-mode-hook-funct)
+#+end_src
+
+** Shell
+
+#+begin_src emacs-lisp
+  (add-hook 'sh-mode-hook (lambda () (setq tab-width 4)))
 #+end_src
 
 ** Git
@@ -3368,40 +3419,5 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
   (use-package pdf-tools
     :init
     (pdf-tools-install))
-#+end_src
-
-* Load Personal
-** Custom Frames
-
-#+begin_src emacs-lisp
-  (defun open-org-agenda-hack ()
-   "Splits frame horizontally and switches to left window to open an
-    agenda buffer. This is here because for whatever reason, org-agenda
-    insists on opening horizontal and I can't be bothered to figure it
-    out."
-    (unless (get-buffer "*Org Agenda*")
-      (org-agenda nil "a")
-      (delete-window)
-      )
-    (split-window-horizontally)
-    (windmove-right)
-    (switch-to-buffer "*Org Agenda*")
-    (windmove-left)
-    (enlarge-window-horizontally 10))
-
-  (defun dwc-create-frame (&optional filename fullscreen)
-    "Find file and get rid of annoying frame defaults."
-    (interactive)
-    (when filename
-        (find-file-other-frame filename)
-      (make-frame)
-      (other-frame 1))
-    (when fullscreen
-        (toggle-frame-fullscreen)))
-
-  (defun  dwc-org-frame (org-filename &optional fullscreen)
-    "Open an org file and split frame so that one window contains the corresponding agenda"
-    (dwc-create-frame org-filename fullscreen)
-    (open-org-agenda-hack))
 #+end_src
 
