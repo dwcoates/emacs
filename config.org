@@ -53,7 +53,6 @@ Make sure emacs gets my bashrc environment variable:
 (use-package help-fns+) 
 #+end_src
 
-
 ** Basic Settings
 
 Goodies contains a lot of custom functions I've written or scavenged or stolen
@@ -365,8 +364,10 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
 *** Jumping
    
-    Execute commands without switching to other buffers. ~avy~ and ~ace~ are
-    different approaches to the same idea.
+    Move cursor immediately to a given location. ~avy~ and ~ace~ are different
+    approaches to the same idea. ~jump-char~ allows us to jump to nearest
+    character, forward or backward. ~ace-isearch~ allows us to use ~isearch~ for
+    searches < 6 characters long and ~swiper~ otherwise.
 
 **** ~avy~
 
@@ -441,14 +442,15 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
     :commands jump-char-forward jump-char-backward
     :bind*
     (("M-s" . jump-char-forward)
-     ("M-r" . jump-char-backward)))
+     ("M-r" . jump-char-backward))
+    :config
+    (key-chord-define-global "js" 'jump-char-forward)
+    (key-chord-define-global "jr" 'jump-char-backward))
 #+end_src
-
-
 
 *** ~guide-key~
 
-     Display possible key binding completions automatically in a small pop-up buffer with guide-key. For example, 
+   Display possible key binding completions automatically in a small pop-up buffer with guide-key. For example, 
 
  #+BEGIN_SRC emacs-lisp
  (use-package guide-key
@@ -929,6 +931,7 @@ Inter-field navigation:
 
 ** Other Packages
 *** hippie-expand
+
 #+BEGIN_SRC emacs-lisp
 ;; Hippie expand-file-name
 (global-set-key (kbd "M-/") 'hippie-expand)
@@ -942,6 +945,7 @@ Inter-field navigation:
 #+END_SRC
 
 *** volatile-highlights
+
 #+BEGIN_SRC emacs-lisp
 (use-package volatile-highlights
   :config
@@ -950,6 +954,7 @@ Inter-field navigation:
 #+END_SRC
 
 *** clean-auto-indent-mode
+
 #+BEGIN_SRC emacs-lisp
 (use-package clean-aindent-mode
   :commands clean-aindent-mode
@@ -958,6 +963,7 @@ Inter-field navigation:
 #+END_SRC
 
 *** dtrt-indent
+
 #+BEGIN_SRC emacs-lisp
 (use-package dtrt-indent
   :config
@@ -966,6 +972,7 @@ Inter-field navigation:
 #+END_SRC
 
 *** ws-butler
+
 #+BEGIN_SRC emacs-lisp
 (use-package ws-butler
   :commands ws-butler
@@ -977,6 +984,7 @@ Inter-field navigation:
 #+END_SRC
 
 *** undo-tree
+
 #+BEGIN_SRC emacs-lisp
 (use-package undo-tree
   :config
@@ -985,6 +993,7 @@ Inter-field navigation:
 #+END_SRC
 
 *** anzu
+
 #+BEGIN_SRC emacs-lisp
 (use-package anzu
   :commands
@@ -1000,37 +1009,46 @@ Inter-field navigation:
 #+END_SRC
 
 *** iedit
+
+    When ~iedit~ mode is turned on, all the occurrences of the current region in
+    the buffer (possibly narrowed) or a region are highlighted.  If one
+    occurrence is modified, the change are applied to all other occurrences
+    simultaneously.
+
 #+BEGIN_SRC emacs-lisp
 (use-package iedit
   :commands iedit-mode
   :init
-  (bind-key "C-;" 'iedit-mode)
+  (bind-key "C-x ;" 'iedit-mode)
   :config
-  (setq iedit-toggle-key-default nil)
-  )
+  (setq iedit-toggle-key-default nil))
 #+END_SRC
 
 *** expand-region
+
 #+BEGIN_SRC emacs-lisp
-(use-package expand-region
-  :commands er/expand-region
-  :init
-  (key-chord-define-global ";l" 'er/expand-region)
- )
+    (use-package expand-region
+      :commands er/expand-region
+      :init
+  ;    (key-chord-define-global ";l" 'er/expand-region)
+      )
 #+END_SRC
 
 *** duplicate-thing
+
 #+BEGIN_SRC emacs-lisp
 (use-package duplicate-thing
   :commands duplicate-thing
   :init
-  (bind-key "M-c" 'duplicate-thing)
- )
+  (bind-key "M-c" 'duplicate-thing))
 #+END_SRC
 
 *** goodies
-Use my goodies repository for some stuff I like to use, for instance,
-~helm-insert-color-name~, for selecting colors and inserting their name at point.
+
+    Use my goodies repository for some stuff I like to use, for instance,
+    ~helm-insert-color-name~, for selecting colors and inserting their name at
+    point.
+
 #+begin_src emacs-lisp
   (add-to-list 'load-path (concat lisp-dir "goodies"))
   (unless (require 'dwc-goodies nil t)
@@ -1041,8 +1059,8 @@ Use my goodies repository for some stuff I like to use, for instance,
 *** just-one-space
 
 #+begin_src emacs-lisp
-(defun just-one-space-in-region (beg end)
-  "replace all whitespace in the region with single spaces"
+(defun just-one-space-in-region (beg end) 
+  "Replace all whitespace in the region with single spaces"
   (interactive "r")
   (save-excursion
     (save-restriction
@@ -1374,7 +1392,7 @@ Comment out a line:
 (setq tramp-default-method "ssh")
 #+END_SRC
 
-*** Gtags
+*** gtags
 
 #+BEGIN_SRC emacs-lisp
 (use-package helm-gtags
@@ -1406,16 +1424,16 @@ Comment out a line:
   )
 #+END_SRC
 
-*** ~Comint~
+*** comint
 
 #+begin_src emacs-lisp
-(define-key comint-mode-map (kbd "M-r") 'comint-history-isearch-backward)
+  (define-key comint-mode-map (kbd "M-r") 'comint-history-isearch-backward)
 #+end_src
 
 *** ~EMR~
 
 #+begin_src emacs-lisp
-(use-package emr)
+  (use-package emr)
 #+end_src
 
 *** JSON
@@ -1687,17 +1705,15 @@ My clojure-mode hook
 *** elpy
 
 #+BEGIN_SRC emacs-lisp
-  (setq elpy-rpc-backend "rope")
   (use-package elpy
     :commands (elpy-mode elpy-enable)
     :init
+    (setq elpy-rpc-backend "rope")
     (defun elpy-on-python-mode ()
       (elpy-mode)
       (elpy-enable)
-      (sp-pair "'" nil)
-    )
-    (add-hook 'python-mode-hook
-              'elpy-on-python-mode)
+      (sp-pair "'" nil))
+    (add-hook 'python-mode-hook 'elpy-on-python-mode)
     :config
     (when (require 'flycheck nil t)
       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
@@ -1709,34 +1725,28 @@ My clojure-mode hook
 
 *** ein
 
-Ein is an emacs front end for jupyter notebook.
+    ~Ein~ is an Emacs front end for ~jupyter notebook~.
+
 #+begin_src emacs-lisp
-  ;; (use-package ein
-  ;;   :config
-  ;;   (setq url-proxy-services '(("no_proxy" . "127.0.0.1")))
+  (use-package ein
+    :config
+    (setq url-proxy-services '(("no_proxy" . "127.0.0.1")))
+    (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
+    (setq ein:use-auto-complete-supe t)
+    (add-hook 'ein:notebook-multilang-mode (lambda ()
+                                             (company-mode -1)
+                                             (auto-complete-mode)))
+    (add-hook 'ein:notebook-python-mode (lambda ()
+                                          (company-mode -1)
+                                          (auto-complete-mode)))
+    (custom-set-faces
+     '(mumamo-background-chunk-major
+       ((((class color) (min-colors 88) (background dark)) nil))))
 
-  ;;   (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
-
-  ;;   (setq ein:use-auto-complete-supe t)
-
-  ;;   (add-hook 'ein:notebook-multilang-mode (lambda ()
-  ;;                                            (company-mode -1)
-  ;;                                            (auto-complete-mode)))
-  ;;   (add-hook 'ein:notebook-python-mode (lambda ()
-  ;;                                         (company-mode -1)
-  ;;                                         (auto-complete-mode)))
-
-  ;;   (custom-set-faces
-  ;;    '(mumamo-background-chunk-major
-  ;;      ((((class color) (min-colors 88) (background dark)) nil))))
-
-  ;;   (ein:enable-enable-autosaves)
-
-  ;;   ;; (defun switch-color ()
-  ;;   ;;   "Switch default bg for ipython notebook."
-  ;;   ;;   (face-remap-add-relative 'default '((:background "white"))))
-  ;;   ;; (add-hook 'ein:notebook-multilang-mode-hook 'switch-color)
-  ;;   )
+    (defun switch-color ()
+      "Switch default bg for ipython notebook."
+      (face-remap-add-relative 'default '((:background "white"))))
+    (add-hook 'ein:notebook-multilang-mode-hook 'switch-color))
 #+end_src
 
 *** ob-ipython
@@ -1918,7 +1928,6 @@ I was having some problems with it throwing errors.
         (global-git-gutter+-mode))
 #+end_src
 
-
 * Org Mode
 ** General
 
@@ -1991,6 +2000,12 @@ Don't show the =+=TITLE= markup for Org titles
 #+begin_src emacs-lisp
 (setq org-hidden-keywords '(title))
 #+end_src
+
+#+begin_src emacs-lisp
+  (use-package org-agenda-property
+  :config)
+#+end_src
+
 
 Abbreviations. The ~car~ of the list will be substitited for the ~cdr~.  This is
 useful because Org is now set up to prettify =\word=, with the corresponding latex

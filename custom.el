@@ -11,10 +11,10 @@
  '(global-ace-isearch-mode t)
  '(org-agenda-files
    (quote
-    ("~/personal/school/bootcamp/" "~/personal/projects/" "~/personal/work/" "~/personal/")))
+    ("~/personal/projects/" "~/personal/school/bootcamp/" "~/personal/work/" "~/personal/")))
  '(package-selected-packages
    (quote
-    (jump-char help-fns+ keychords key-chords helm-smex smex ace-popup-menu ace-jump-zap ace-jump-buffer ace-flyspell magic-latex-buffer counsel dash-functional cider clojure-mode json-reformat json-snatcher projectile iedit yasnippet ace-jump-mode json-mode helm-dash pdf-tools git-gutter-fringe+ helm-fuzzier helm-flx curchg cursor-chg helm-unicode elpy omni-scratch general gist w3m evil nlinum git-gutter+ zygospore xkcd ws-butler volatile-highlights use-package undo-tree tea-time sx sr-speedbar smooth-scroll smartparens smart-mode-line shackle rainbow-delimiters py-autopep8 persistent-scratch org-plus-contrib ob-ipython neotree magit key-chord iy-go-to-char hydra htmlize helm-projectile helm-gtags helm-company guide-key golden-ratio git-gutter-fringe function-args flycheck-clojure expand-region ess emr edit-server duplicate-thing dtrt-indent doom-themes company-quickhelp company-c-headers company-anaconda clojure-mode-extra-font-locking clean-aindent-mode char-menu auto-complete auto-compile anzu ace-window ace-isearch)))
+    (org-agenda-property jump-char ein keychords key-chords helm-smex smex ace-popup-menu ace-jump-zap ace-jump-buffer ace-flyspell magic-latex-buffer counsel dash-functional cider clojure-mode json-reformat json-snatcher projectile iedit yasnippet ace-jump-mode json-mode helm-dash pdf-tools git-gutter-fringe+ helm-fuzzier helm-flx curchg cursor-chg helm-unicode elpy omni-scratch general gist w3m evil nlinum git-gutter+ zygospore xkcd ws-butler volatile-highlights use-package undo-tree tea-time sx sr-speedbar smooth-scroll smartparens smart-mode-line shackle rainbow-delimiters py-autopep8 persistent-scratch org-plus-contrib ob-ipython neotree magit key-chord iy-go-to-char hydra htmlize helm-projectile helm-gtags helm-company guide-key golden-ratio git-gutter-fringe function-args flycheck-clojure expand-region ess emr edit-server duplicate-thing dtrt-indent doom-themes company-quickhelp company-c-headers company-anaconda clojure-mode-extra-font-locking clean-aindent-mode char-menu auto-complete auto-compile anzu ace-window ace-isearch)))
  '(vc-annotate-background "#000000")
  '(vc-annotate-color-map
    (quote
@@ -50,6 +50,7 @@
  '(mode-line-buffer-id ((t (:inherit nil :background "black" :foreground "orange red" :weight bold))))
  '(mode-line-highlight ((t (:box (:line-width 2 :color "yellow" :style released-button)))))
  '(mode-line-inactive ((t (:background "gray22" :foreground "gray52" :inverse-video nil :box nil))))
+ '(mumamo-background-chunk-major ((((class color) (min-colors 88) (background dark)) nil)))
  '(org-block-begin-line ((t (:background "SkyBlue4" :foreground "SkyBlue4" :height 0.1))))
  '(sml/global ((((class color) (min-colors 89)) (:foreground "DarkOrange4" :inverse-video nil))))
  '(sml/modes ((((class color) (min-colors 89)) (:inherit sml/global :foreground "black")))))
