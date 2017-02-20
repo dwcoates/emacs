@@ -87,6 +87,30 @@ Make sure emacs gets my bashrc environment variable:
  )
  #+END_SRC
 
+*** Dictionary
+**** ~dictionary~
+
+#+begin_src emacs-lisp
+(use-package)
+#+end_src
+
+
+**** ~helm-dictionary~
+
+     Use my helm-dictionary package. There is another package on =Melpa= called
+     =helm-dictionary=, so have to be careful with this import.
+
+ #+begin_src emacs-lisp
+   (add-to-list 'load-path (concat lisp-dir "helm-dictionary"))
+#+end_src
+
+#+begin_src emacs-lisp
+   (use-package helm-dictionary
+     :commands (helm-dictionary-lookup)
+     :bind 
+     ("C-c d" . helm-dictionary-lookup))
+ #+end_src
+
 ** Key Interfaces
 *** ~key-chords~
 
@@ -3213,24 +3237,24 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 (defun dwc-spawn-terminal ()
   (interactive)
   (dwc-create-frame nil nil)
-  (term "/bin/bash")
- )
+  (term "/bin/bash"))
 
 (define-key global-map (kbd "C-x t") 'dwc-spawn-terminal)
 #+end_src
 
 ** Edit With Emacs (Google Chrome extension)
+
 #+BEGIN_SRC emacs-lisp
 ;; Edit With Emacs (Google Chrome Extension)
 (add-to-list 'load-path (concat lisp-dir "edit-with-emacs"))
 (use-package edit-server
   :config
   (edit-server-start))
-
 #+END_SRC
 
 ** IRC
 *** ERC
+
 #+begin_src emacs-lisp
 (use-package erc
   :defer t
@@ -3279,11 +3303,13 @@ Get autocompletions in tramp:
 #+end_src
 
 ** StackExchange
+
 #+begin_src emacs-lisp
 (use-package sx)
 #+end_src
 
 ** Email
+
 #+begin_src emacs-lisp
 (require 'nnir)
 
@@ -3415,6 +3441,7 @@ Get autocompletions in tramp:
 ** PDF viewing
 
 pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links, and more.
+
 #+begin_src emacs-lisp
   (use-package pdf-tools
     :init

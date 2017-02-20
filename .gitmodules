@@ -7,3 +7,6 @@
 [submodule "org-misc"]
 	path = lisp/org-misc
 	url = git@github.com:dwcoates/org-misc.git
+[submodule "helm-dictionary"]
+	path = lisp/helm-dictionary
+	url = git@github.com:dwcoates/helm-dictionary.git
