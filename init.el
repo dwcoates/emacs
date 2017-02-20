@@ -7,7 +7,6 @@
   (message "%s: %s" "Creating personal directory for first time" personal-dir)
   (make-directory personal-dir))
 
-
 ;; Directory for emacs saves
 (defconst saveplace-dir
   (concat (file-name-as-directory (concat personal-dir ".emacs-saves")))
@@ -18,7 +17,6 @@
   (file-name-as-directory (concat user-emacs-directory "lisp"))
   "Where Lisp and packages not added by package.el belong.")
 (add-to-list 'load-path lisp-dir)
-
 
 ;; load system-specific settings best loaded first
 (let ((pre (concat personal-dir ".exclusive/pre.el")))
@@ -118,7 +116,7 @@
  scroll-conservatively 1001
  scroll-margin 0
  scroll-preserve-screen-position t
- scroll-bar-mode -1
+ scroll-bar-mode nil
  ;; Regions
  shift-select-mode t
  ;; Whitespace
@@ -130,8 +128,6 @@
  '((tab-mark ?\t [?› ?\t])
    (newline-mark 10 [36 10]))
  ;;          INTERFACE
- ;; don't garbage collect too much, please
- gc-cons-threshold 100000000
  ;; no splash message
  inhibit-startup-message t
  ;; cursor
@@ -144,6 +140,7 @@
  column-number-mode t
  )
 
+(set-scroll-bar-mode nil)
 
 (setq-default cursor-in-non-selected-windows nil)
 ;; no toolbar
@@ -172,6 +169,10 @@
 ;; Setup default window size:
 (add-to-list 'default-frame-alist '(height . 40))
 (add-to-list 'default-frame-alist '(width . 160))
+
+;; No scroll bar
+(set-frame-parameter (selected-frame) 'scroll-bar-mode nil)
+(add-to-list 'default-frame-alist '(scroll-bar-mode nil))
 
 ;; Use 'y' instead of "yes" and 'n' instead of "no" at prompt.
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -237,6 +238,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;; GARBAGE COLLECTION ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; set garbage collection threshold very high for the duration of initialization
 (setq gc-cons-threshold 50000000)
 
 (add-hook 'emacs-startup-hook 'my/set-gc-threshold)
