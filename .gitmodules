@@ -10,3 +10,6 @@
 [submodule "helm-dictionary"]
 	path = lisp/helm-dictionary
 	url = git@github.com:dwcoates/helm-dictionary.git
+[submodule "atchka-org-theme"]
+	path = lisp/atchka-org-theme
+	url = git@github.com:dwcoates/atchka-org-theme.git
