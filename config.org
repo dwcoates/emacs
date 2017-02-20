@@ -90,10 +90,12 @@ Make sure emacs gets my bashrc environment variable:
 *** Dictionary
 **** ~dictionary~
 
-#+begin_src emacs-lisp
-(use-package)
-#+end_src
+     ~dictionary~ provides a way to query offline dictionary servers for looking
+     up definitions, synonyms, etc.
 
+#+begin_src emacs-lisp
+  (use-package dictionary)
+#+end_src
 
 **** ~helm-dictionary~
 
