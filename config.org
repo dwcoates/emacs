@@ -684,6 +684,7 @@ screen for minute.
      (("C-x C-o" . ace-window))
      :config
      (setq aw-scope 'global aw-background t
+           aw-keys '(?j ?k ?l ?\; ?s ?d ?f ?g)
            aw-dispatch-alist '((?x aw-delete-window " Ace - Delete Window")
                                (?m aw-swap-window " Ace - Swap Window")
                                (?n aw-flip-window)
