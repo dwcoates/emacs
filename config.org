@@ -1427,7 +1427,8 @@ Comment out a line:
   Show unncessary whitespace that can mess up your diff
 
 #+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
+  (add-hook 'prog-mode-hook (lambda () (interactive) 
+                              (setq show-trailing-whitespace 1)))
 #+end_src
 
   ~hs-minor-mode~ gives us the ability to fold and unfold code and comments
