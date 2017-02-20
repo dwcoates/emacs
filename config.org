@@ -67,7 +67,7 @@ Make sure emacs gets my bashrc environment variable:
      =C-h M-l=  ~find-function-on-key~
 
 #+begin_src emacs-lisp
-(use-package help-fns+)  
+  (use-package help-fns+)  
 #+end_src
 
 *** ~guide-key~
@@ -1139,8 +1139,10 @@ Show whitespace in diff-mode
                       (" Math"       "≈" "≡" "≠" "∞" "×" "±" "∓" "÷" "√" "≤" "≥")
                       (" Arrows"     "←" "→" "↑" "↓" "⇐" "⇒" "⇑" "⇓")
                       (" Greek"      "α" "β" "Y" "δ" "ε" "ζ" "η" "θ" "ι" "κ" "λ" "μ"
-                                     "ν" "ξ" "ο" "π" "ρ" "σ" "τ" "υ" "φ" "χ" "ψ" "ω"))))q
+                                     "ν" "ξ" "ο" "π" "ρ" "σ" "τ" "υ" "φ" "χ" "ψ" "ω"))))
 #+END_SRC
+
+#+RESULTS:
 
 ** Functions
 *** just-one-space
@@ -2107,75 +2109,15 @@ Some bindings for getting to org files faster
 *** Commands
 ** Appearance
 
-Don't show the =+=TITLE= markup for Org titles
-
 #+begin_src emacs-lisp
-(setq org-hidden-keywords '(title))
+ (add-to-list 'load-path (concat lisp-dir "atchka-org-theme"))
+ (when (require 'atchka-org nil t)
+   (load-theme 'atchka-org))
 #+end_src
 
 #+begin_src emacs-lisp
   (use-package org-agenda-property
   :config)
-#+end_src
-
-
-Abbreviations. The ~car~ of the list will be substitited for the ~cdr~.  This is
-useful because Org is now set up to prettify =\word=, with the corresponding latex
-symbol, "\_{}alpha" becomes '\alpha'. Don't want to do this directly because it will
-interferes with...
- 
-#+begin_src emacs-lisp
-  (define-abbrev-table 'org-abbrev-table    '(("alphaa" "\\alpha")
-                                              ("inf" "∞")
-                                              ("ar" "\\rightarrow")
-                                              ("lambdaa" "\\lambda")
-                                              ("sigmaa" "\\sigma")
-                                              ("rhoo" "\\rho")
-                                              ("betaa" "\\beta")
-                                              ("etaa" "\\eta")
-                                              ("deltaa" "\\delta")
-                                              ("epsilonn" "\\epsilon")
-                                              ("zetaa" "\\zeta")
-                                              ("thetaa" "\\theta")
-                                              ("iotaa" "\\iota")
-                                              ("kappaa" "\\kappa")
-                                              ("muu" "\\mu")
-                                              ("nuu" "\\nu")
-                                              ("xii" "\\xi")
-                                              ("omicronn" "\\omicron")
-                                              ("pii" "\\pi")
-                                              ("tauu" "\\tau")
-                                              ("upsilonn" "\\upsilon")
-                                              ("phii" "\\phi")
-                                              ("chii" "\\chi")
-                                              ("psii" "\\psi")
-                                              ("omegaa" "\\omega")
-                                            ;; Capitals
-                                              ("Alphaa" "\\Alpha")
-                                              ("Inf" "∞")
-                                              ("Ar" "\\Rightarrow")
-                                              ("Lambdaa" "\\Lambda")
-                                              ("Sigmaa" "\\Sigma")
-                                              ("Rhoo" "\\Rho")
-                                              ("Betaa" "\\Beta")
-                                              ("Etaa" "\\Etaa")
-                                              ("Deltaa" "\\Delta")
-                                              ("Epsilonn" "\\Epsilon")
-                                              ("Zetaa" "\\Zeta")
-                                              ("Thetaa" "\\Theta")
-                                              ("Iotaa" "\\Iota")
-                                              ("Kappaa" "\\Kappa")
-                                              ("Muu" "\\Mu")
-                                              ("Nuu" "\\Nu")
-                                              ("Xii" "\\Xi")
-                                              ("Omicronn" "\\Omicron")
-                                              ("Pii" "\\Pi")
-                                              ("Tauu" "\\Tau")
-                                              ("Upsilonn" "\\Upsilon")
-                                              ("Phii" "\\Phi")
-                                              ("Chii" "\\Chi")
-                                              ("Psii" "\\Psi")
-                                              ("Omegaa" "\\Omega")))
 #+end_src
 
 Org warnings:
@@ -2191,8 +2133,6 @@ wrapped table, and everything should be paragraphed, anyway (M-q).
 
 Edit source code in org-mode:
 #+begin_src emacs-lisp
-  (setq org-src-fontify-natively t)    ; syntax highlighting in source blocks
-  (setq org-src-tab-acts-natively t)   ; expected tabbing in source block
   (bind-keys
      :map org-src-mode-map
      ("<C-return>" . org-edit-src-exit))
@@ -2202,9 +2142,6 @@ Org-mode hook.
 #+BEGIN_SRC emacs-lisp
   (defun dwc-org-mode-appearance-hook ()
     (toggle-word-wrap)
-    (unless org-pretty-entities (org-toggle-pretty-entities))
-    (setq org-src-fontify-natively t
-          local-abbrev-table org-abbrev-table)
     (flyspell-mode))
 
   (add-hook 'org-mode-hook 'dwc-org-mode-appearance-hook)
@@ -2326,6 +2263,7 @@ want to glance at the agenda, then go back to what I was doing.
 #+end_src
 
 Agenda custom commands
+
 #+begin_src emacs-lisp
   ;; Custom agenda command definitions
   (setq org-agenda-custom-commands
