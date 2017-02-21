@@ -746,7 +746,7 @@ screen for minute.
   (desktop-save-mode 1)
 
   (setq desktop-basefilename "emacs.desktop"
-        desktop-path saveplace-dir)
+        desktop-path `(,saveplace-dir))
 #+end_src
 
 * Editing
