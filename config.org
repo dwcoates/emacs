@@ -468,6 +468,8 @@ through Emacs documentation.
 
   (use-package avy
     :init
+    :config
+    (setq avy-timeout-seconds .2)
     :bind*
     (("C-j w" . avy-kill-region)
      ("C-j W" . avy-copy-region)

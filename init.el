@@ -99,7 +99,7 @@
 (setq-default
  ;; Formatting
  delete-trailing-lines nil
- fill-column 80
+ fill-column 78
  ;; Spaces, not tabs
  indent-tabs-mode nil
  require-final-newline t
@@ -238,7 +238,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;; GARBAGE COLLECTION ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; set garbage collection threshold very high for the duration of initialization
+;; set garbage collection threshold very high for the duration of
+;; initialization
 (setq gc-cons-threshold 50000000)
 
 (add-hook 'emacs-startup-hook 'my/set-gc-threshold)
@@ -254,7 +255,7 @@
 (set-face-attribute 'default nil
                     :background "#222222"
                     :foreground "light gray"
-                    :height 120
+                    :height 110
                     :foundry "unknown"
                     :family "Ubuntu Mono")
 
