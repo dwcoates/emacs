@@ -3479,3 +3479,47 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
     (pdf-tools-install))
 #+end_src
 
+** Chess *USER SPECIFIC SETTING TO SET*
+
+#+begin_src emacs-lisp
+  (use-package chess
+    :config 
+    (setq chess-images-directory 
+          (concat user-emacs-directory 
+                  "dependencies/chess-2.0.4/pieces/xboard")
+          chess-images-default-size 58
+          ;; I like it in current frame.
+          chess-images-separate-frame nil 
+          ))
+#+end_src
+
+  The following code I've added to fix the undersizing of new chess buffers.
+
+#+begin_src emacs-lisp
+  (defun dwc-chess-images-popup ()
+    (unless chess-images-size
+      (chess-error 'no-images))
+
+    (let* ((size (float (+ (* (or chess-images-border-width 0) 8)
+                           (* chess-images-size 8))))
+           (max-char-height (ceiling (/ size (frame-char-height))))
+           (max-char-width  (ceiling (/ size (frame-char-width)))))
+      ;; create the frame whenever necessary
+      (if chess-images-separate-frame
+          (chess-display-popup-in-frame 
+           (+ max-char-height 2)
+           max-char-width
+           (cdr (assq 'font (frame-parameters))))
+        (dwc-chess-display-popup-in-window nil (+ max-char-height 1)))))
+  (setq chess-images-popup-function 'dwc-chess-images-popup)
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun dwc-chess-display-popup-in-window (&optional max-h min-h max-w min-w)
+    "Popup the given DISPLAY, so that it's visible to the user."
+    (unless (get-buffer-window (current-buffer))
+      (if (> (length (window-list)) 1)
+          (fit-window-to-buffer (display-buffer (current-buffer)) 
+                                max-h min-h max-w min-w)
+        (display-buffer (current-buffer)))))
+#+end_src
