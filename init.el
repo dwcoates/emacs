@@ -98,46 +98,51 @@
 ;;
 (setq-default
  ;; Formatting
- delete-trailing-lines nil
- fill-column 78
+ delete-trailing-lines              nil
+ fill-column                        78
+ apropos-do-all                     t           ; make `apropos' more useful
+ echo-keystrokes                    0.02        ; show me what I type
+ enable-recursive-minibuffers       nil         ; no minibufferception
+ bookmark-save-flag                 t
+ history-length                     1000
  ;; Spaces, not tabs
- indent-tabs-mode nil
- require-final-newline t
- tab-always-indent t
- tab-width 4
+ indent-tabs-mode                   nil
+ require-final-newline              t
+ tab-always-indent                  t
+ tab-width                          4
  ;; Wrapping
- truncate-lines t
- truncate-partial-width-windows 50
- visual-fill-column-center-text nil
- word-wrap t
+ truncate-lines                     t
+ truncate-partial-width-windows     50
+ visual-fill-column-center-text     nil
+ word-wrap                          t
  ;; Scrolling
- hscroll-margin 1
- hscroll-step 1
- scroll-conservatively 1001
- scroll-margin 0
- scroll-preserve-screen-position t
- scroll-bar-mode nil
+ hscroll-margin                     1
+ hscroll-step                       1
+ scroll-conservatively              1001
+ scroll-margin                      0
+ scroll-preserve-screen-position    t
+ scroll-bar-mode                    nil
  ;; Regions
- shift-select-mode t
+ shift-select-mode                  t
  ;; Whitespace
- tabify-regexp "^\t* [ \t]+"
- whitespace-line-column fill-column
- whitespace-style '(face tabs tab-mark
-                         trailing indentation lines-tail)
- whitespace-display-mappings
- '((tab-mark ?\t [?› ?\t])
-   (newline-mark 10 [36 10]))
+ tabify-regexp                      "^\t* [ \t]+"
+ whitespace-line-column             fill-column
+ whitespace-style                   '(face tabs tab-mark
+                                           trailing indentation
+                                           lines-tail)
+ whitespace-display-mappings        '((tab-mark ?\t [?› ?\t])
+                                      (newline-mark 10 [36 10]))
  ;;          INTERFACE
  ;; no splash message
- inhibit-startup-message t
+ inhibit-startup-message            t
  ;; cursor
- blink-cursor-mode nil
- cursor-type 'bar
+ blink-cursor-mode                  nil
+ cursor-type                        'bar
  ;; highlight current line
- global-hl-line-mode nil
- display-time-mode t
+ global-hl-line-mode                nil
+ display-time-mode                  t
  ;; current display column number in modeline
- column-number-mode t
+ column-number-mode                 t
  )
 
 (set-scroll-bar-mode nil)
