@@ -44,10 +44,11 @@ Make sure emacs gets my bashrc environment variable:
 
 * General
 
-  Goodies contains a lot of custom functions I've written or scavenged or stolen
+  Goodies contains a lot of custom functions I've written or scavenged or
+  stolen.
 
 #+begin_src emacs-lisp
-(require 'dwc-goodies)
+  (require 'dwc-goodies)
 #+end_src
 
 ** Help
@@ -346,7 +347,6 @@ through Emacs documentation.
 #+end_src
 
 
-
 #+begin_src emacs-lisp
   (define-key helm-map (kbd "C-z")  'helm-select-action)             ; list actions using C-z
 
@@ -406,6 +406,43 @@ through Emacs documentation.
   (setq helm-lisp-fuzzy-completion t)
   #+END_SRC
 
+***** ~helm-buffers-list~ 
+
+Make helm-buffers-list sort the buffers.
+
+#+begin_src emacs-lisp
+(defun dwc-helm-source-buffers (buffers)
+  "Return sorted source-buffers.  Helm will not sort results by default."
+  (let (dired-buffers
+        other-buffers
+        (buf-sort (lambda (bufs)
+                    (cl-sort bufs
+                     (lambda (a b)
+                       (or (< (length a) (length b))
+                           (and (= (length a) (length b))
+                                (string-lessp a b))))))))
+    (dolist (buf buffers)
+      (if (with-current-buffer buf
+            (eq major-mode 'dired-mode))
+          (push buf dired-buffers)
+        (push buf other-buffers)))
+     (append
+      (funcall buf-sort other-buffers)
+      (funcall buf-sort dired-buffers))))
+
+(defun helm-buffers-sort-dired-buffers (orig-fun &rest args)
+  (dwc-helm-source-buffers (apply orig-fun args)))
+
+(advice-add 'helm-buffers-sort-transformer :around 'helm-buffers-sort-dired-buffers)
+#+end_src
+
+Make helm-buffers-list 
+
+#+begin_src emacs-lisp
+  (set-face-attribute 'helm-buffer-directory nil 
+                      :background nil :underline t :foreground "#00bfff")
+#+end_src
+
 **** ~ido~
 
   I prefer Ido for find-file. 
@@ -437,7 +474,10 @@ through Emacs documentation.
   #+begin_src emacs-lisp
     (use-package ivy
       :init
-      (use-package counsel)
+      (use-package counsel
+        :config
+        :bind*
+        ("C-x y" . ))
       :config
       (setq ivy-height 5)
       (setq ivy-format-function 'ivy-format-function-arrow))
@@ -1115,20 +1155,20 @@ Show whitespace in diff-mode
     then the =a= key.
 
 #+begin_src emacs-lisp
-      (define-key key-translation-map (kbd "C-c u p") (kbd "φ"))
-      (define-key key-translation-map (kbd "C-c u x") (kbd "ξ"))
-      (define-key key-translation-map (kbd "C-c u i") (kbd "∞"))
-      (define-key key-translation-map (kbd "C-c u l") (kbd "λ"))
-      (define-key key-translation-map (kbd "C-c u a") (kbd "α"))
-      (define-key key-translation-map (kbd "C-c u b") (kbd "β"))
-      (define-key key-translation-map (kbd "C-c u e") (kbd "ε"))
-      (define-key key-translation-map (kbd "C-c u d") (kbd "δ"))
-      (define-key key-translation-map (kbd "C-c u z") (kbd "ζ"))
-      (define-key key-translation-map (kbd "C-c u s") (kbd "σ"))
-      (define-key key-translation-map (kbd "C-c u <right>") (kbd "→"))
-      (define-key key-translation-map (kbd "C-c u <left>") (kbd "←"))
-      (define-key key-translation-map (kbd "C-c u <up>") (kbd "↑"))
-      (define-key key-translation-map (kbd "C-c u <down>") (kbd "↓"))
+  (define-key key-translation-map (kbd "C-c u p")       (kbd "φ"))
+  (define-key key-translation-map (kbd "C-c u x")       (kbd "ξ"))
+  (define-key key-translation-map (kbd "C-c u i")       (kbd "∞"))
+  (define-key key-translation-map (kbd "C-c u l")       (kbd "λ"))
+  (define-key key-translation-map (kbd "C-c u a")       (kbd "α"))
+  (define-key key-translation-map (kbd "C-c u b")       (kbd "β"))
+  (define-key key-translation-map (kbd "C-c u e")       (kbd "ε"))
+  (define-key key-translation-map (kbd "C-c u d")       (kbd "δ"))
+  (define-key key-translation-map (kbd "C-c u z")       (kbd "ζ"))
+  (define-key key-translation-map (kbd "C-c u s")       (kbd "σ"))
+  (define-key key-translation-map (kbd "C-c u <right>") (kbd "→"))
+  (define-key key-translation-map (kbd "C-c u <left>")  (kbd "←"))
+  (define-key key-translation-map (kbd "C-c u <up>")    (kbd "↑"))
+  (define-key key-translation-map (kbd "C-c u <down>")  (kbd "↓"))
 #+end_src
 
 *** ~abbrev-mode~
@@ -3528,3 +3568,4 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
                                 max-h min-h max-w min-w)
         (display-buffer (current-buffer)))))
 #+end_src
+
