@@ -730,7 +730,8 @@ screen for minute.
      :bind
      (("C-x C-o" . ace-window))
      :config
-     (setq aw-scope 'global aw-background t
+     (setq aw-scope 'frame
+           aw-background t
            aw-keys '(?j ?k ?l ?\; ?s ?d ?f ?g)
            aw-dispatch-alist '((?x aw-delete-window " Ace - Delete Window")
                                (?m aw-swap-window " Ace - Swap Window")
@@ -2050,6 +2051,13 @@ I was having some problems with it throwing errors.
       (smartparens-mode))
     (add-hook 'ess-mode-hook 'my/ess-mode-hook-funct)
 #+end_src
+
+Don't use that annoying indentation style with the comments, please
+
+#+begin_src emacs-lisp
+(setq ess-fancy-comments nil)
+#+end_src
+
 
 ** Shell
 
