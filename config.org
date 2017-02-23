@@ -266,7 +266,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
                                     ;; then C-i (or TAB) to select an action to perform on
                                     ;; those selected entries.
        :map helm-buffer-map
-       ("C-k" . helm-buffer-run-kill-buffers))
+       ("C-c C-k" . helm-buffer-run-kill-buffers))
       :config
       (setq
        helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
