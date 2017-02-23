@@ -1952,7 +1952,7 @@ My clojure-mode hook
     (defun switch-color ()
       "Switch default bg for ipython notebook."
       (face-remap-add-relative 'default '((:background "white"))))
-    (add-hook 'ein:notebook-multilang-mode-hook 'switch-color))
+m    (add-hook 'ein:notebook-multilang-mode-hook 'switch-color))
 #+end_src
 
 *** ob-ipython

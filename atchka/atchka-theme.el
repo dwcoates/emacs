@@ -12,16 +12,11 @@
 (deftheme atchka "A dark theme.")
 
 (let ((c '((class color) (min-colors 89)))
+      ;; emphasis
       (bold   doom-enable-bold)
       (italic doom-enable-italic)
-      (sans-font (cond ((x-list-fonts "Lucida Grande") '(:font "Lucida Grande"))
-                       ((x-list-fonts "Verdana") '(:font "Verdana"))
-                       ((x-family-fonts "Sans Serif") '(:family "Sans Serif"))
-                       (nil (warn "Cannot find a Sans Serif Font."))))
-      (org-agenda-font (cond ((x-list-fonts "Liberation Serif") '(:font "Liberation Serif"))
-                             (nil (warn "No Agenda Font"))))
       (padding `(:line-width 5))
-
+      ;; colors
       (bg             "#1D1F20")
       (bg-l           "#222425")
       (fg             "#D6D6D4")
@@ -48,7 +43,6 @@
       (green-3        "#86B20E")
       (dark-cyan      "#8FA1B3")
       (light-cyan     "#CBECFF"))
-
   (let* ((search-bg      "#fa8072")
          (search-fg      white)
          (search-rest-bg "gray15")
@@ -148,7 +142,9 @@
      `(font-lock-preprocessor-char-face    ((,c (:foreground ,operators :bold t))))
      `(font-lock-regexp-grouping-backslash ((,c (:foreground ,operators :bold t))))
      `(font-lock-regexp-grouping-construct ((,c (:foreground ,operators :bold t))))
+     ;; Parentheses
      `(show-paren-match                    ((,c (:foreground ,magenta :inverse-video t))))
+     `(sp-pair-overlay-face                ((,c (:foreground ,yellow :bold t))))
 
      ;; Modeline
      `(mode-line-buffer-id                 ((,c (:foreground "aquamarine" ) :weight 'bold)))
