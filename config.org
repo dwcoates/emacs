@@ -442,8 +442,11 @@ Make helm-buffers-list sort the buffers.
 Make helm-buffers-list 
 
 #+begin_src emacs-lisp
-  (set-face-attribute 'helm-buffer-directory nil 
-                      :background nil :underline t :foreground "#00bfff")
+  (add-hook 'after-init-hook 
+            (lambda ()
+              (set-face-attribute 'helm-buffer-directory nil 
+                                  :background nil :underline t 
+                                  :foreground "#00bfff")))
 #+end_src
 
 **** ~ido~
@@ -480,7 +483,7 @@ Make helm-buffers-list
       (use-package counsel
         :config
         :bind*
-        ("C-x y" . ))
+        ("C-x y" . counsel-org-tag))
       :config
       (setq ivy-height 5)
       (setq ivy-format-function 'ivy-format-function-arrow))
