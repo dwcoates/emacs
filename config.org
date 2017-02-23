@@ -779,10 +779,41 @@ screen for minute.
 
 #+begin_src emacs-lisp
   (use-package shackle
-    :init
-    (setq shackle-default-rule '(:same t))
-    (setq helm-display-function 'pop-to-buffer) ; make helm play nice
-    (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4))))
+    :config
+    (shackle-mode 1)
+    (setq 
+     shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4)))
+     helm-display-function 'pop-to-buffer
+     shackle-default-rule '(:same t)
+     shackle-rules
+          `(;; Util
+            ("^\\*.+-Profiler-Report .+\\*$" :align below :size 0.3 :regexp t)
+            ("*esup*"            :align below :size 0.4 :noselect t)
+            ("*minor-modes*"     :align below :size 0.5 :noselect t)
+            ("*eval*"            :align below :size 16  :noselect t)
+            ;; Emacs
+            ("*Pp Eval Output*"  :align below :size 0.3)
+            ("*Apropos*"         :align below :size 0.3)
+            ("*Backtrace*"       :align below :size 25  :noselect t)
+            ("*Help*"            :align below :size 16  :select t)
+            ("*Messages*"        :align below :size 15  :select t)
+            ("*Warnings*"        :align below :size 10  :noselect t)
+            (compilation-mode    :align below :size 15  :noselect t)
+            (eww-mode            :align below :size 30  :select t)
+            ("*command-log*"     :align right :size 28  :noselect t)
+            ;; vcs
+            ("*vc-diff*"         :align below :size 15  :noselect t)
+            ("*vc-change-log*"   :align below :size 15  :select t)
+            (vc-annotate-mode    :same t)))
+#+end_src
+
+Emacs 25.1+ properly shows the completion window at the bottom of the current
+frame.
+
+#+begin_src emacs-lisp
+  (unless (version< emacs-version "25.1")
+    (push '("*Completions*"     :align below :size 30  :noselect t) 
+          shackle-rules))
 #+end_src
 
 *** ~zygospore~
