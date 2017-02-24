@@ -264,22 +264,32 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
        :map helm-map
        ("C-c C-y" . helm-yank-selection-and-quit)
        ("C-i" . helm-select-action) ;; This is a big one. Use C-SPC to select entries,
-                                    ;; then C-i (or TAB) to select an action to perform on
-                                    ;; those selected entries.
+       ;; then C-i (or TAB) to select an action to perform on
+       ;; those selected entries.
        :map helm-buffer-map
        ("C-c C-k" . helm-buffer-run-kill-buffers))
       :config
       (setq
-       helm-scroll-amount 4   ; scroll 4 lines other window using M-<next>/M-<prior>
-       helm-ff-search-library-in-sexp t ; search for library in `require' and
-                                        ; declare-function' sexp.
-       helm-split-window-in-side-p t ; open helm buffer inside current window, not
-                                     ; occupy whole other window
-       helm-candidate-number-limit 500  ; limit the number of displayed canidates
+       ;; scroll 4 lines other window using M-<next>/M-<prior>
+       helm-scroll-amount             4   
+       ;; search for library in `require' and
+       helm-ff-search-library-in-sexp t 
+       ;; declare-function' sexp.
+       ;; open helm buffer inside current window, not
+       helm-split-window-in-side-p    t 
+       ;; occupy whole other window
+       ;; limit the number of displayed canidates
+       helm-candidate-number-limit 500  
+       ;; move to end or beginning of source when
        helm-ff-file-name-history-use-recentf t
-       helm-move-to-line-cycle-in-source t ; move to end or beginning of source when
-                                           ; reaching top or bottom of source.
-       helm-buffers-fuzzy-matching t)   ; fuzzy matching buffer names when non-nil
+       ;; reaching top or bottom of source.
+       helm-move-to-line-cycle-in-source     t 
+       ;; fuzzy matching buffer names when non-nil
+       helm-buffers-fuzzy-matching           t   
+       ;;  Helm size. Don't want it to be too distracting.
+       helm-autoresize-mode                  t
+       helm-autoresize-max-height       18
+       helm-autoresize-min-height       8)
       (diminish 'helm-mode)
       (set-face-attribute 'helm-candidate-number nil 
                           :background "salmon2" 
@@ -299,7 +309,10 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
   matching.
   #+begin_src emacs-lisp
     (use-package helm-flx
-      :init (helm-flx-mode 1))
+      :init (helm-flx-mode 1)
+      :config
+      (setq helm-flx-for-helm-find-files t ;; t by default
+            helm-flx-for-helm-locate t))
 
     (use-package helm-fuzzier
       :init (helm-fuzzier-mode 1))
@@ -329,15 +342,6 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
                 ;; Hack to make helm stop pre-inputting search
                 (setq helm-swoop-pre-input-function (lambda () nil)))
   #+END_SRC
-
-
-  Helm size. Don't want it to be too distracting.
-
-  #+BEGIN_SRC emacs-lisp
-  (helm-autoresize-mode t)
-  (setq helm-autoresize-max-height 18)
-  (setq helm-autoresize-min-height 18)
-  #+end_src
 
 Can use =TAB= and =C-i= to perform the same action as =RETURN=, but without killing
 the ~helm~ process. This is very useful, for example, when you want to sift
@@ -2201,20 +2205,21 @@ Some general defaults:
 #+begin_src emacs-lisp
   (setq org-deadline-warning-days 2 
         ;; Paths to various locations in my personal organization workflow
-        org-directory personal-dir
-        org-default-notes-file (concat org-directory "todo.org")
-        org-journal-file (concat org-directory "journal.org")
-        org-extend-today-until 4
-        org-footnote-section nil
-        org-from-is-user-regexp "\\<Dodge Coates\\>"
-        org-goto-interface 'outline-path-completion
-        org-goto-max-level 10
-        org-scheduled-delay-days 0
-        org-src-fontify-natively t)
-
+        org-directory               personal-dir
+        org-default-notes-file      (concat org-directory "todo.org")
+        org-journal-file            (concat org-directory "journal.org")
+        org-extend-today-until      4
+        org-footnote-section        nil
+        org-from-is-user-regexp     "\\<Dodge Coates\\>"
+        org-goto-interface          'outline-path-completion
+        org-goto-max-level          10
+        org-scheduled-delay-days    0
+        org-src-fontify-natively    t
+        )
   (set-face-attribute 'org-agenda-done nil
                       :foreground "olive drab" 
-                      :weight 'ultra-light)
+                      :weight 'ultra-light
+                      )
 #+end_src
 
 Some bindings for getting to org files faster
