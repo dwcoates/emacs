@@ -334,8 +334,8 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
   #+BEGIN_SRC emacs-lisp
   (helm-autoresize-mode t)
-  (setq helm-autoresize-max-height 30)
-  (setq helm-autoresize-min-height 20)
+  (setq helm-autoresize-max-height 18)
+  (setq helm-autoresize-min-height 18)
   #+end_src
 
 Can use =TAB= and =C-i= to perform the same action as =RETURN=, but without killing
@@ -778,33 +778,50 @@ screen for minute.
     another window.
 
 #+begin_src emacs-lisp
-  (use-package shackle
-    :config
-    (shackle-mode 1)
-    (setq 
-     shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4)))
-     helm-display-function 'pop-to-buffer
-     shackle-default-rule '(:same t)
-     shackle-rules
-          `(;; Util
-            ("^\\*.+-Profiler-Report .+\\*$" :align below :size 0.3 :regexp t)
-            ("*esup*"            :align below :size 0.4 :noselect t)
-            ("*minor-modes*"     :align below :size 0.5 :noselect t)
-            ("*eval*"            :align below :size 16  :noselect t)
-            ;; Emacs
-            ("*Pp Eval Output*"  :align below :size 0.3)
-            ("*Apropos*"         :align below :size 0.3)
-            ("*Backtrace*"       :align below :size 25  :noselect t)
-            ("*Help*"            :align below :size 16  :select t)
-            ("*Messages*"        :align below :size 15  :select t)
-            ("*Warnings*"        :align below :size 10  :noselect t)
-            (compilation-mode    :align below :size 15  :noselect t)
-            (eww-mode            :align below :size 30  :select t)
-            ("*command-log*"     :align right :size 28  :noselect t)
-            ;; vcs
-            ("*vc-diff*"         :align below :size 15  :noselect t)
-            ("*vc-change-log*"   :align below :size 15  :select t)
-            (vc-annotate-mode    :same t)))
+    (use-package shackle
+      :config
+      (shackle-mode 1)
+      (setq 
+       helm-display-function 'pop-to-buffer
+       shackle-default-rule '(:same t :inhibit-window-quit t)
+       shackle-rules
+            `(;; Util
+              ("^\\*.+-Profiler-Report .+\\*$"
+               :align below :size 0.3 :regexp t)
+              ("*esup*"
+               :align below :size 0.4 :noselect t :inhibit-window-quit nil)
+              ("*minor-modes*"
+               :align below :size 0.5 :noselect t :inhibit-window-quit nil)
+              ("*eval*"
+               :align below :size 16  :noselect t :inhibit-window-quit nil)
+              ;; Helm
+              ("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4)
+              ;; Emacs
+              ("*Pp Eval Output*"
+               :align below :size 0.3 :inhibit-window-quit nil)
+              ("*Apropos*"
+               :align below :size 0.3 :inhibit-window-quit t)
+              ("*Backtrace*"
+               :align below :size 25  :noselect t :inhibit-window-quit nil)
+              ("*Help*"
+               :align right :size 80 :select t)
+              ("\\*Help[R]*\\*" :align right :size 80 :select t)
+              ("*Messages*"
+               :align below :size 15  :select t :inhibit-window-quit nil)
+              ("*Warnings*"
+               :align below :size 10  :noselect t :inhibit-window-quit nil)
+              (compilation-mode
+               :align below :size 15  :noselect t :inhibit-window-quit nil)
+              (eww-mode
+               :align below :size 30  :select t :inhibit-window-quit nil)
+              ("*command-log*"
+               :align right :size 28  :noselect t :inhibit-window-quit nil)
+              ;; vcs
+              ("*vc-diff*"
+               :align below :size 15  :noselect t :inhibit-window-quit nil)
+              ("*vc-change-log*"
+               :align below :size 15  :select t :inhibit-window-quit nil)
+              (vc-annotate-mode    :same t :inhibit-window-quit nil)))
 #+end_src
 
 Emacs 25.1+ properly shows the completion window at the bottom of the current
@@ -2092,9 +2109,15 @@ I was having some problems with it throwing errors.
 Don't use that annoying indentation style with the comments, please
 
 #+begin_src emacs-lisp
-(setq ess-fancy-comments nil)
+  (setq ess-fancy-comments nil)
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun dwc-ess-hook ()
+    (smartparens-mode 1))
+
+  (add-hook 'ess-mode-hook 'dwc-ess-hook)
+#+end_src
 
 ** Shell
 
