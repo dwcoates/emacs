@@ -791,51 +791,53 @@ screen for minute.
      another window.
 
  #+begin_src emacs-lisp
-       (use-package shackle
-         :config
-         (shackle-mode 1)
-         (setq 
-          helm-display-function 'pop-to-buffer
-          shackle-default-rule '(:same t :inhibit-window-quit t)
-          shackle-rules
-               `(;; Util
-                 ("^\\*.+-Profiler-Report .+\\*$"
-                  :align below :size 0.3 :regexp t)
-                 ("*esup*"
-                  :align below :size 0.4 :noselect t :inhibit-window-quit nil)
-                 ("*minor-modes*"
-                  :align below :size 0.5 :noselect t :inhibit-window-quit nil)
-                 ("*eval*"
-                  :align below :size 16  :noselect t :inhibit-window-quit nil)
-                 ;; Helm
- ;                ("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4)
-                 ;; Emacs
-                 ("*Pp Eval Output*"
-                  :align below :size 0.3 :inhibit-window-quit nil)
-                 ("*Apropos*"
-                  :align below :size 0.3 :inhibit-window-quit t)
-                 ("*Backtrace*"
-                  :align below :size 25  :noselect t :inhibit-window-quit nil)
-                 ("*Help*"
-                  :align right :size 80 :select t)
-                 ("\\*Help[R]*\\*" :align right :size 80 :select t)
-                 ("*Messages*"
-                  :align below :size 15  :select t :inhibit-window-quit nil)
-                 ("*Warnings*"
-                  :align below :size 10  :noselect t :inhibit-window-quit nil)
-                 (compilation-mode
-                  :align below :size 15  :noselect t :inhibit-window-quit nil)
-                 (eww-mode
-                  :align below :size 30  :select t :inhibit-window-quit nil)
-                 ("*command-log*"
-                  :align right :size 28  :noselect t :inhibit-window-quit nil)
-                 ;; vcs
-                 ("*vc-diff*"
-                  :align below :size 15  :noselect t :inhibit-window-quit nil)
-                 ("*vc-change-log*"
-                  :align below :size 15  :select t :inhibit-window-quit nil)
-                 (vc-annotate-mode    :same t :inhibit-window-quit nil)
-                 ("\\*Org Agenda\\*" :select t :inhibit-window-quit t))))
+   (use-package shackle
+     :config
+     (shackle-mode 1)
+     (setq 
+      helm-display-function 'pop-to-buffer
+      shackle-default-rule '(:same t :inhibit-window-quit t)
+      shackle-rules
+      `(;; Util
+        ("^\\*.+-Profiler-Report .+\\*$"
+         n                  :align below :size 0.3 :regexp t)
+        ("*Ido Completions*"
+         :align right :size 0.3)
+        ("*esup*"
+         :align below :size 0.4 :noselect t :inhibit-window-quit nil)
+        ("*minor-modes*"
+         :align below :size 0.5 :noselect t :inhibit-window-quit nil)
+        ("*eval*"
+         :align below :size 16  :noselect t :inhibit-window-quit nil)
+        ;; Helm
+                                           ;                ("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4)
+        ;; Emacs
+        ("*Pp Eval Output*"
+         :align below :size 0.3 :inhibit-window-quit nil)
+        ("*Apropos*"
+         :align below :size 0.3 :inhibit-window-quit t)
+        ("*Backtrace*"
+         :align below :size 25  :noselect t :inhibit-window-quit nil)
+        ("*Help*"
+         :align right :size 80 :select t)
+        ("\\*Help[R]*\\*" :align right :size 80 :select t)
+        ("*Messages*"
+         :align below :size 15  :select t :inhibit-window-quit nil)
+        ("*Warnings*"
+         :align below :size 10  :noselect t :inhibit-window-quit nil)
+        (compilation-mode
+         :align below :size 15  :noselect t :inhibit-window-quit nil)
+        (eww-mode
+         :align below :size 30  :select t :inhibit-window-quit nil)
+        ("*command-log*"
+         :align right :size 28  :noselect t :inhibit-window-quit nil)
+        ;; vcs
+        ("*vc-diff*"
+         :align below :size 15  :noselect t :inhibit-window-quit nil)
+        ("*vc-change-log*"
+         :align below :size 15  :select t :inhibit-window-quit nil)
+        (vc-annotate-mode    :same t :inhibit-window-quit nil)
+        ("\\*Org Agenda\\*" :select t :inhibit-window-quit t))))
  #+end_src
 
  Emacs 25.1+ properly shows the completion window at the bottom of the current
