@@ -115,14 +115,14 @@ Make sure emacs gets my bashrc environment variable:
  #+end_src
 
 ** Key Interfaces
-*** ~key-chords~
+*** ~key-chords~ :command:keys:binding:
 
 #+begin_src emacs-lisp 
 (use-package key-chord)
 #+end_src
 
 ** General Appearance
-*** ~linum~  -- *disabled* 
+*** ~linum~  -- *disabled* :line:number:fringe:
 
 #+begin_src emacs-lisp 
 ;  (set-face-attribute 'linum-mode nil 
@@ -130,7 +130,7 @@ Make sure emacs gets my bashrc environment variable:
 ;                      :foreground "dim gray")
 #+end_src
 
-*** Pretty Symbols
+*** Pretty Symbols :pretty:appearance:unicode:
 
     Prettify certain symbols and symbol combinations. For example, use a λ
     instead of =lambda= in elisp code.
@@ -145,7 +145,7 @@ Unprettify when symbol is just before point. This doesn't seem to work...
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 #+end_src
 
-*** ~flycheck~
+*** ~flycheck~ :check:fly:
 
  *use-package Flycheck*
  #+BEGIN_SRC emacs-lisp
@@ -159,13 +159,13 @@ Unprettify when symbol is just before point. This doesn't seem to work...
    (diminish 'flycheck-mode))
  #+END_SRC
 
-*** ~flyspell~
+*** ~flyspell~ :spell:check:fly:
 
 #+begin_src emacs-lisp
 (use-package flyspell)
 #+end_src
 
-*** ~rainbow-delimiters~
+*** ~rainbow-delimiters~ :parentheses:appearance:
 
 Automatically color parentheses pairs different colors with rainbow-delimiters:
 
@@ -187,7 +187,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 #+END_SRC
 
 ** Auto Completion
-*** ~company~
+*** ~company~ :completion:popups:
 
  *use-package Company*
  #+begin_src emacs-lisp
@@ -211,7 +211,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
    )
  #+end_src
 
-*** ~auto-complete~
+*** ~auto-complete~ :completion:popups:
 
  #+begin_src emacs-lisp
  (use-package auto-complete)
@@ -239,7 +239,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
    meta-data. Selecting from a list of tags or files in familiar directory, for
    example. ~smex~ is an ~ido~ packaged used for =M-x=.
 
-**** ~helm~
+**** ~helm~ :search:fuzzy:popups:
 
   This variables must be set before loading helm-gtags
 
@@ -411,7 +411,7 @@ through Emacs documentation.
   (setq helm-lisp-fuzzy-completion t)
   #+END_SRC
 
-***** ~helm-buffers-list~ 
+***** ~helm-buffers-list~ :search:fuzzy:popups:
 
 Make helm-buffers-list sort the buffers.
 
@@ -454,7 +454,7 @@ Make helm-buffers-list
                                   :foreground "#00bfff")))
 #+end_src
 
-**** ~ido~
+**** ~ido~ :search:fuzzy:
 
   I prefer Ido for find-file. 
 
@@ -480,7 +480,7 @@ Make helm-buffers-list
      (smex-initialize))
  #+end_src
 
-**** ~ivy~
+**** ~ivy~ :search:fuzzy:popups:
 
   #+begin_src emacs-lisp
     (use-package ivy
@@ -494,7 +494,7 @@ Make helm-buffers-list
       (setq ivy-format-function 'ivy-format-function-arrow))
   #+end_src
 
-***** ~swiper~
+***** ~swiper~ :search:fuzzy:popups:
 
       Sift through a buffer's contents with ~swiper~.
 
@@ -512,7 +512,7 @@ Make helm-buffers-list
     wraps ~isearch~ such that for searches > 6 characters in length, isearch
     automatically switches to ~swiper~ otherwise.
 
-**** ~avy~
+**** ~avy~ :jump:
 
      ~avy-goto-char-timer~, bound to =C-m=, is the main takeaway from ~avy~, in my
      opinion. Use it to quickly jump between static buffers.
@@ -536,7 +536,7 @@ Make helm-buffers-list
      ("C-."   . avy-goto-char)))
 #+end_src
 
-**** ~ace~
+**** ~ace~ :jump:
 
    Jump quickly to any word using just two key strokes with ace-jump-mode:
 
@@ -551,7 +551,7 @@ Make helm-buffers-list
         ("C-j k" . ace-jump-zap-up-to-char)))
    #+END_SRC
 
-**** ~ace-isearch~
+**** ~ace-isearch~ :search:jump:fuzzy:
 
   This is a mix of ~ace-isearch~, ~helm-swoop~, and ~avy~. Pretty cool. If only
   one key is searched, it will use ace, if more than one and less than 6
@@ -582,7 +582,7 @@ Make helm-buffers-list
   (setq ace-isearch-function-from-isearch 'ace-isearch-swiper-from-isearch)
 #+end_src
 
-**** ~jump-char~
+**** ~jump-char~ :jump:
 
 #+begin_src emacs-lisp
   (use-package jump-char
@@ -596,7 +596,7 @@ Make helm-buffers-list
 #+end_src
 
 ** Grep
-
+*** ~rgrep~ :search:regexp:
 Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 
 #+begin_src emacs-lisp
@@ -631,6 +631,7 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 
 * Windowing
 ** Basic Settings
+
 Remaps the other-window command. In general, commands with consecutive 
 #+begin_src emacs-lisp 
   (global-set-key (kbd "C-x o") 'other-window)
@@ -644,8 +645,7 @@ Quickly move the cursor to the first instance of a character with iy-go-to-char:
 (use-package iy-go-to-char
   :init (progn
           (key-chord-define-global "zl" 'iy-go-to-char)
-          (key-chord-define-global "zj" 'iy-go-to-char-backward))
-  )
+          (key-chord-define-global "zj" 'iy-go-to-char-backward)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -705,7 +705,7 @@ Key bindings for other files:
 #+end_src
 
 ** General Appearance
-*** Fringe
+*** Fringe :appearance:general:window:
 
 The fringe is the area on the left and right edge of Emacs windows. 
 
@@ -713,7 +713,7 @@ The fringe is the area on the left and right edge of Emacs windows.
   (setq fringe-mode '(4 . 4)) ;; set default fringe width to be 4 pixels on both sides
 #+end_src
 
-*** Cursor
+*** Cursor :cursor:idle:
 
 Change cursor when idle or in a different buffer. I like the vertical bar
 cursor, so this is nice when I need to find my cursor after not looking at the
@@ -727,7 +727,7 @@ screen for minute.
 #+end_src
 
 ** Selection and Narrowing
-*** ~ace-window~
+*** ~ace-window~ :jump:
 
  Jump quickly between windows and frames using just two key strokes
  with ace-window. Essential package:
@@ -753,7 +753,7 @@ screen for minute.
                                (?o my/other-window " Ace - Other window"))))
  #+END_SRC
 
-*** ~windmove~
+*** ~windmove~ :direction:
 
  Navigate windows directionally with wind-move:
 
@@ -770,85 +770,14 @@ screen for minute.
       ("C-x w k" . windmove-down)))
  #+END_SRC
 
-*** ~ace-popup-menu~
+*** ~ace-popup-menu~ :select:
 
 #+begin_src emacs-lisp
 (use-package ace-popup-menu)
 #+end_src
 
-*** ~shackle~
-
-    Great package. It allows you to configure how popup messages are
-    handled. For instance, please stop creating the magit status buffer in
-    another window.
-
-#+begin_src emacs-lisp
-      (use-package shackle
-        :config
-        (shackle-mode 1)
-        (setq 
-         helm-display-function 'pop-to-buffer
-         shackle-default-rule '(:same t :inhibit-window-quit t)
-         shackle-rules
-              `(;; Util
-                ("^\\*.+-Profiler-Report .+\\*$"
-                 :align below :size 0.3 :regexp t)
-                ("*esup*"
-                 :align below :size 0.4 :noselect t :inhibit-window-quit nil)
-                ("*minor-modes*"
-                 :align below :size 0.5 :noselect t :inhibit-window-quit nil)
-                ("*eval*"
-                 :align below :size 16  :noselect t :inhibit-window-quit nil)
-                ;; Helm
-                ("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4)
-                ;; Emacs
-                ("*Pp Eval Output*"
-                 :align below :size 0.3 :inhibit-window-quit nil)
-                ("*Apropos*"
-                 :align below :size 0.3 :inhibit-window-quit t)
-                ("*Backtrace*"
-                 :align below :size 25  :noselect t :inhibit-window-quit nil)
-                ("*Help*"
-                 :align right :size 80 :select t)
-                ("\\*Help[R]*\\*" :align right :size 80 :select t)
-                ("*Messages*"
-                 :align below :size 15  :select t :inhibit-window-quit nil)
-                ("*Warnings*"
-                 :align below :size 10  :noselect t :inhibit-window-quit nil)
-                (compilation-mode
-                 :align below :size 15  :noselect t :inhibit-window-quit nil)
-                (eww-mode
-                 :align below :size 30  :select t :inhibit-window-quit nil)
-                ("*command-log*"
-                 :align right :size 28  :noselect t :inhibit-window-quit nil)
-                ;; vcs
-                ("*vc-diff*"
-                 :align below :size 15  :noselect t :inhibit-window-quit nil)
-                ("*vc-change-log*"
-                 :align below :size 15  :select t :inhibit-window-quit nil)
-                (vc-annotate-mode    :same t :inhibit-window-quit nil)
-                ("\\*Org Agenda\\*" :select t :inhibit-window-quit t))))
-#+end_src
-
-Emacs 25.1+ properly shows the completion window at the bottom of the current
-frame.
-
-#+begin_src emacs-lisp
-  (unless (version< emacs-version "25.1")
-    (push '("*Completions*"     :align below :size 30  :noselect t) 
-          shackle-rules))
-#+end_src
-
-*** ~zygospore~
-
-#+BEGIN_SRC emacs-lisp
-(use-package zygospore
-  :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
-#+END_SRC
-
-** Saving and Restoring
-
-*** ~desktop-save~ 
+** Saving/Restoring
+*** ~desktop-save~ :save:
 
 #+begin_src emacs-lisp
   (desktop-save-mode 1)
@@ -856,6 +785,77 @@ frame.
   (setq desktop-basefilename "emacs.desktop"
         desktop-path `(,saveplace-dir))
 #+end_src
+
+** Behavior
+*** ~zygospore~
+
+#+BEGIN_SRC emacs-lisp
+(use-package zygospore
+  :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
+#+END_SRC
+
+*** ~shackle~ :popups:
+
+     Great package. It allows you to configure how popup messages are
+     handled. For instance, please stop creating the magit status buffer in
+     another window.
+
+ #+begin_src emacs-lisp
+       (use-package shackle
+         :config
+         (shackle-mode 1)
+         (setq 
+          helm-display-function 'pop-to-buffer
+          shackle-default-rule '(:same t :inhibit-window-quit t)
+          shackle-rules
+               `(;; Util
+                 ("^\\*.+-Profiler-Report .+\\*$"
+                  :align below :size 0.3 :regexp t)
+                 ("*esup*"
+                  :align below :size 0.4 :noselect t :inhibit-window-quit nil)
+                 ("*minor-modes*"
+                  :align below :size 0.5 :noselect t :inhibit-window-quit nil)
+                 ("*eval*"
+                  :align below :size 16  :noselect t :inhibit-window-quit nil)
+                 ;; Helm
+ ;                ("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4)
+                 ;; Emacs
+                 ("*Pp Eval Output*"
+                  :align below :size 0.3 :inhibit-window-quit nil)
+                 ("*Apropos*"
+                  :align below :size 0.3 :inhibit-window-quit t)
+                 ("*Backtrace*"
+                  :align below :size 25  :noselect t :inhibit-window-quit nil)
+                 ("*Help*"
+                  :align right :size 80 :select t)
+                 ("\\*Help[R]*\\*" :align right :size 80 :select t)
+                 ("*Messages*"
+                  :align below :size 15  :select t :inhibit-window-quit nil)
+                 ("*Warnings*"
+                  :align below :size 10  :noselect t :inhibit-window-quit nil)
+                 (compilation-mode
+                  :align below :size 15  :noselect t :inhibit-window-quit nil)
+                 (eww-mode
+                  :align below :size 30  :select t :inhibit-window-quit nil)
+                 ("*command-log*"
+                  :align right :size 28  :noselect t :inhibit-window-quit nil)
+                 ;; vcs
+                 ("*vc-diff*"
+                  :align below :size 15  :noselect t :inhibit-window-quit nil)
+                 ("*vc-change-log*"
+                  :align below :size 15  :select t :inhibit-window-quit nil)
+                 (vc-annotate-mode    :same t :inhibit-window-quit nil)
+                 ("\\*Org Agenda\\*" :select t :inhibit-window-quit t))))
+ #+end_src
+
+ Emacs 25.1+ properly shows the completion window at the bottom of the current
+ frame.
+
+ #+begin_src emacs-lisp
+   (unless (version< emacs-version "25.1")
+     (push '("*Completions*"     :align below :size 30  :noselect t) 
+           shackle-rules))
+ #+end_src
 
 * Editing
 
