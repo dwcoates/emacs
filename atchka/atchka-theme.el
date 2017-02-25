@@ -261,6 +261,7 @@
      `(helm-ff-dotted-directory  ((,c (:foreground ,grey-1))))
      `(helm-ff-directory         ((,c (:foreground ,orange))))
      `(helm-ff-executable        ((,c (:foreground ,white :slant italic))))
+     `(helm-buffer-directory ((,c (:background nil :underline t :foreground "#00bfff"))))
      ;; Avy
      `(avy-lead-face-0    ((,c (:background ,orange :foreground ,black))))
      `(avy-lead-face-1    ((,c (:background ,orange :foreground ,black))))

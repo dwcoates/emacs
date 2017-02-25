@@ -444,16 +444,6 @@ Make helm-buffers-list sort the buffers.
   (advice-add 'helm-buffers-sort-transformer :around 'helm-buffers-sort-dired-buffers)
 #+end_src
 
-Make helm-buffers-list 
-
-#+begin_src emacs-lisp
-  (add-hook 'after-init-hook 
-            (lambda ()
-              (set-face-attribute 'helm-buffer-directory nil 
-                                  :background nil :underline t 
-                                  :foreground "#00bfff")))
-#+end_src
-
 **** ~ido~ :search:fuzzy:
 
   I prefer Ido for find-file. 
