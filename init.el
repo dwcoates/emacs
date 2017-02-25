@@ -286,8 +286,6 @@
   (add-hook 'after-init-hook (lambda ()
                                (load-theme 'atchka t)))
   :config
-  ;; brighten source code buffers
-  (add-hook 'find-file-hook 'doom-buffer-mode)
   ;; brighten minibuffers (does this even work??)
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer))
 
