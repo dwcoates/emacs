@@ -738,7 +738,7 @@ screen for minute.
 
    (use-package ace-window
      :commands ace-window
-     :bind
+     :bind*
      (("C-o" . ace-window))
      :config
      (setq aw-scope 'frame
