@@ -252,12 +252,12 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
     (use-package helm
       :init
       (helm-mode 1)
-      :bind
+      :bind*
       (("M-y" . helm-show-kill-ring)
        ("M-X" . helm-M-x)
        ("C-h SPC" . helm-all-mark-rings)
        ("C-x b" . helm-mini)
-       ("C-x C-o" . helm-buffers-list)
+       ("C-o" . helm-buffers-list)
        ("C-h SPC" . helm-all-mark-rings)
        ("C-c s" . helm-occur)
        ("C-h F" . helm-insert-command-name)
