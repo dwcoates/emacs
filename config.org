@@ -3281,7 +3281,7 @@ It shows org agenda after emacs has been idle for a certain amount of time.
   ;;  (unless (get-buffer-window buf)
   ;;    (org-agenda-goto-calendar)))
   )
-(run-with-idle-timer 200 t 'jump-to-org-agenda)
+(run-with-idle-timer 500 t 'jump-to-org-agenda)
 #+END_SRC
 
 *** create-tasks-heading
