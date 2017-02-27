@@ -2318,6 +2318,7 @@ Tasks have multiple possible states. Below defines them and their transitions
 #+begin_src emacs-lisp
   (setq org-todo-keywords
         (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                (sequence "NOTE(o)" "LEARN(l)" "|" "UNDERSTOOD(d)")
                 (sequence "BUG(b)" "ISSUE(i)" "FEATURE(f)" "|" "FIXED(d)")
                 (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
 
@@ -2325,7 +2326,11 @@ Tasks have multiple possible states. Below defines them and their transitions
         (quote (("TODO" :foreground "orange" :weight bold)
                 ("DONE" :foreground "forest green" :weight bold)
                 ("FIXED" :foreground "DarkGreen" :weight bold)
+
                 ("NOTE" :foreground "blue" :weight bold)
+                ("LEARN" :foreground "#8a2be2" :weight bold)
+                ("UNDERSTOOD" :foreground "forest green" :weight bold)
+
                 ("WAITING" :foreground "orange" :weight bold)
                 ("HOLD" :foreground "magenta" :weight bold)
                 ("CANCELLED" :foreground "gray" :weight bold)
@@ -2711,7 +2716,7 @@ Basic templates
                                   ))
 
   (defun org-basic-note-template (&optional tags watermark properties)
-    (org-project-template-builder (org-template/next-prompt nil "Note")
+    (org-project-template-builder "* NOTE %^{Note}"
                                   (append '("note") (if (listp tags) tags (list tags)))
                                   nil
                                   org-indented-cursor-placement
@@ -2720,7 +2725,7 @@ Basic templates
                                   ))
 
   (defun org-basic-quick-note-template (&optional tags watermark properties)
-    (org-project-template-builder (org-template/next-prompt nil "Note")
+    (org-project-template-builder "* NOTE %^{Note}"
                                   (append '("note") (if (listp tags) tags (list tags)))
                                   nil
                                   org-indented-cursor-placement
@@ -2809,9 +2814,7 @@ Basic templates
                                   ))
 
   (defun project-quick-note-template (project-name &optional tags watermark properties more-tags)
-    (org-project-template-builder (org-template/next-prompt
-                                   org-template--basic-priority
-                                   "Quick Note")
+    (org-project-template-builder "* NOTE %^{Note}"
                                   (append '("project" "note") (if (listp tags) tags (list tags)))
                                   nil
                                   nil
@@ -2820,9 +2823,7 @@ Basic templates
                                   ))
 
   (defun project-note-template (project-name &optional tags watermark properties more-tags)
-    (org-project-template-builder (org-template/next-prompt
-                                   org-template--basic-priority
-                                   "Note")
+    (org-project-template-builder "* NOTE %^{Note}"
                                   (append '("project" "note") (if (listp tags) tags (list tags)))
                                   nil
                                   org-indented-cursor-placement
@@ -2831,9 +2832,7 @@ Basic templates
                                   ))
 
   (defun project-question-template (project-name &optional tags watermark properties more-tags)
-    (org-project-template-builder (org-template/next-prompt
-                                   org-template--basic-priority
-                                   "Question")
+    (org-project-template-builder "* LEARN %^{Learn}"
                                   (append '("project" "question") (if (listp tags) tags (list tags)))
                                   nil
                                   org-indented-cursor-placement
@@ -2842,9 +2841,7 @@ Basic templates
                                   ))
 
   (defun project-quick-question-template (project-name &optional tags watermark properties more-tags)
-    (org-project-template-builder (org-template/next-prompt
-                                   org-template--basic-priority
-                                   "Question")
+    (org-project-template-builder "* LEARN %^{Learn}"
                                   (append '("project" "question") (if (listp tags) tags (list tags)))
                                   nil
                                   nil
@@ -2853,9 +2850,7 @@ Basic templates
                                   ))
 
   (defun project-issue-template (project-name &optional tags watermark properties more-tags)
-    (org-project-template-builder (org-template/next-prompt
-                                   org-template--basic-priority
-                                   "Issue")
+    (org-project-template-builder "* ISSUE %^{Issue}"
                                   (append '("project" "issue") (if (listp tags) tags (list tags)))
                                   nil
                                   org-indented-cursor-placement
@@ -2864,7 +2859,7 @@ Basic templates
                                   ))
 
   (defun project-bug-template (project-name &optional tags watermark properties more-tags)
-    (org-project-template-builder (org-template/next-prompt org-template--basic-priority "Bug")
+    (org-project-template-builder "* BUG %^{Bug}"
                                   (append '("project" "bug") (if (listp tags) tags (list tags)))
                                   nil
                                   org-indented-cursor-placement
@@ -2873,7 +2868,7 @@ Basic templates
                                   ))
 
   (defun project-feature-template (project-name &optional tags watermark properties more-tags)
-    (org-project-template-builder (org-template/next-prompt org-template--basic-priority "Feature")
+    (org-project-template-builder "* FEATURE %^{Feature}"
                                   (append '("project" "feature") (if (listp tags) tags (list tags)))
                                   nil
                                   org-indented-cursor-placement
