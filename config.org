@@ -848,7 +848,6 @@ screen for minute.
      (push '("*Completions*"     :align below :size 30  :noselect t) 
            shackle-rules))
  #+end_src
-
 * Editing
 
     Use my goodies repository for some stuff I like to use, for instance,
@@ -2238,6 +2237,15 @@ Some bindings for getting to org files faster
 *** Commands
 ** Appearance
 
+Org header appearance
+
+#+begin_src emacs-lisp
+  (setq org-bullets-bullet-list '(" " " " " " " "))
+
+  (org-bullets-mode t)
+#+end_src
+
+
 #+begin_src emacs-lisp
  (add-to-list 'load-path (concat lisp-dir "atchka-org-theme"))
  (when (require 'atchka-org nil t)
@@ -3586,6 +3594,14 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
     :init
     (pdf-tools-install))
 #+end_src
+
+** GNUGol
+
+   An interface for Google. Very nice. See [[https://github.com/dtaht/Gnugol/blob/master/doc/installation.org][here]] for installation instructions.
+
+   #+begin_src emacs-lisp
+     (require 'gnugol)
+   #+end_src
 
 ** Chess *USER SPECIFIC SETTING TO SET*
 
