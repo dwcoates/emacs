@@ -795,7 +795,7 @@ screen for minute.
      :config
      (shackle-mode 1)
      (setq 
-      shackle-default-rule '(:same t :inhibit-window-quit t)
+      shackle-default-rule '(:inhibit-window-quit t)
       shackle-rules
       `(;; Util
         ("^\\*.+-Profiler-Report .+\\*$"
@@ -808,8 +808,6 @@ screen for minute.
          :align below :size 0.5 :noselect t :inhibit-window-quit nil)
         ("*eval*"
          :align below :size 16  :noselect t :inhibit-window-quit nil)
-        ;; Helm
-;        ("\\`\\*helm.*\\*" :regexp t :align 'below :size 15)
         ;; Emacs
         ("*Pp Eval Output*"
          :align below :size 0.3 :inhibit-window-quit nil)
@@ -1946,6 +1944,8 @@ My clojure-mode hook
     (when (require 'flycheck nil t)
       (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
       (add-hook 'elpy-mode-hook 'flycheck-mode))
+    (add-hook 'elpy-mode-hook 'flycheck-mode 'elpy-use-ipython)
+    (elpy-use-ipython)
     (use-package py-autopep8
       :init
       (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
@@ -2175,6 +2175,9 @@ Don't use that annoying indentation style with the comments, please
         (global-git-gutter+-mode))
 #+end_src
 
+#+RESULTS:
+: t
+
 * Org Mode
 ** General
 
@@ -2249,8 +2252,6 @@ Org header appearance
 
 #+begin_src emacs-lisp
   (setq org-bullets-bullet-list '(" " " " " " " "))
-
-  (org-bullets-mode t)
 #+end_src
 
 
@@ -2287,7 +2288,8 @@ Org-mode hook.
 #+BEGIN_SRC emacs-lisp
   (defun dwc-org-mode-appearance-hook ()
     (toggle-word-wrap)
-    (flyspell-mode))
+    (flyspell-mode)
+    (org-bullets-mode t))
 
   (add-hook 'org-mode-hook 'dwc-org-mode-appearance-hook)
 #+END_SRC
@@ -2579,12 +2581,11 @@ packages to play nicely and I'm tired and need to go to bed.
    '((ipython . t)))
 #+end_src
 
-
 Stop asking me if I want to evaluate code
+
 #+begin_src emacs-lisp
 (setq org-confirm-babel-evaluate nil)
 #+end_src
-
 
 Display images in the results section of the org buffer (like a normal notebook)
 
