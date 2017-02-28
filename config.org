@@ -795,7 +795,6 @@ screen for minute.
      :config
      (shackle-mode 1)
      (setq 
-      helm-display-function 'pop-to-buffer
       shackle-default-rule '(:same t :inhibit-window-quit t)
       shackle-rules
       `(;; Util
@@ -810,7 +809,7 @@ screen for minute.
         ("*eval*"
          :align below :size 16  :noselect t :inhibit-window-quit nil)
         ;; Helm
-                                           ;                ("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.4)
+;        ("\\`\\*helm.*\\*" :regexp t :align 'below :size 15)
         ;; Emacs
         ("*Pp Eval Output*"
          :align below :size 0.3 :inhibit-window-quit nil)
@@ -1535,11 +1534,19 @@ Comment out a line:
 
 * Software Development
 
+  ~nlinum~ mode, a line numbering minor-mode, is much faster than ~linum~ mode.
+
+#+begin_src emacs-lisp
+  (use-package nlinum)
+#+end_src
+
+
   Show unncessary whitespace that can mess up your diff
 
 #+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook (lambda () (interactive) 
-                              (setq show-trailing-whitespace 1)))
+  (add-hook 'prog-mode-hook (lambda () (interactive)
+                              (setq show-trailing-whitespace 1)
+                              (nlinum-mode t)))
 #+end_src
 
   ~hs-minor-mode~ gives us the ability to fold and unfold code and comments
@@ -1928,7 +1935,8 @@ My clojure-mode hook
   (use-package elpy
     :commands (elpy-mode elpy-enable)
     :init
-    (setq elpy-rpc-backend "rope")
+    (setq elpy-rpc-backend "rope"
+          elpy-syntax-check-command "pylint")
     (defun elpy-on-python-mode ()
       (elpy-mode)
       (elpy-enable)
