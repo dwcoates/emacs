@@ -302,7 +302,9 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
   language package).
 
   #+begin_src emacs-lisp
-  (use-package helm-dash)
+    (use-package helm-dash
+     :bind*
+     (("C-c C-?" . helm-dash-at-point)))
   #+end_src
 
   Helm-flx improves helms scoring of results. Helm-fuzzier improves its fuzzy
@@ -508,7 +510,7 @@ distracting, useless, and unsightly. The following code was grabbed from
 
 #+begin_src emacs-lisp
   (defun helm-mode-line-hook ()
-    (let ((color "#008b8b"))
+    (let ((color "#8b475d"))
       (face-remap-add-relative
        'mode-line `((:foreground ,color :background ,color) mode-line))
       (face-remap-add-relative
@@ -873,7 +875,7 @@ screen for minute.
       shackle-rules
       `(;; Util
         ("^\\*.+-Profiler-Report .+\\*$"
-         n                  :align below :size 0.3 :regexp t)
+         :align below :size 0.3 :regexp t)
         ("*Ido Completions*"
          :align right :size 0.3)
         ("*esup*"

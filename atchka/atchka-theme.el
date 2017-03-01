@@ -255,7 +255,7 @@
      `(helm-selection              ((,c (:background "gray18" :bold t))))
      `(helm-match                  ((,c (:foreground ,magenta))))
      `(helm-source-header          ((,c (:background ,current-line :foreground ,grey-1))))
-     `(helm-swoop-target-line-face ((,c (:foreground ,highlight :inverse-video t))))
+     `(helm-header                 ((,c (:background "#8b475d" :foreground "#8b475d"))))
      `(helm-ff-file              ((,c (:foreground ,grey))))
      `(helm-ff-prefix            ((,c (:foreground ,magenta))))
      `(helm-ff-dotted-directory  ((,c (:foreground ,grey-1))))
