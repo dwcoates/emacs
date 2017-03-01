@@ -520,6 +520,20 @@ distracting, useless, and unsightly. The following code was grabbed from
   (add-hook 'helm-major-mode-hook 'helm-mode-line-hook)
 #+end_src
 
+***** ~helm-dash~
+
+      ~helm-dash~ is a wonderful utility for looking up docs using the ~dash~
+      utility. Install dash docs with ~helm-dash-install-docset~ (Docs are
+      searchable by package name, so you can download the ~Pandas~ docs for
+      python or the ~node.js~ docs for javascript).
+
+#+begin_src emacs-lisp
+  (use-package helm-dash
+  :config
+  (setq helm-dash-browser-func 'eww ; don't open the docs in chrome/firefox/whatever
+        ))
+#+end_src
+
 **** ~ido~ :search:fuzzy:
 
   I prefer Ido for find-file. 
