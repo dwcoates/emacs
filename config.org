@@ -891,7 +891,8 @@ screen for minute.
          :align below :size 25  :noselect t :inhibit-window-quit nil)
         ("*Help*"
          :align right :size 80 :select t)
-        ("\\*Help[R]*\\*" :align right :size 80 :select t)
+        ("\\*Help[R]*\\*" :regexp t :align right :size 80 :select t)
+        ("\\**Python Doc**\\*" :regexp t :align right :size 80 :select t)
         ("*Messages*"
          :align below :size 15  :select t :inhibit-window-quit nil)
         ("*Warnings*"
