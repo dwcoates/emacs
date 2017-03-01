@@ -147,7 +147,7 @@
      `(sp-pair-overlay-face                ((,c (:foreground ,yellow :bold t))))
 
      ;; Modeline
-     `(mode-line-buffer-id                 ((,c (:foreground "aquamarine" ) :weight 'bold)))
+     `(mode-line-buffer-id                 ((,c (:foreground "aquamarine"  :weight 'bold))))
      `(mode-line-highlight                 ((,c (:box (:line-width 2 :color "yellow" :style released-button)))))
      `(mode-line-inactive                  ((,c (:background "gray22" ) :foreground "gray52" :inverse-video nil :box nil)))
      `(mode-line                           ((,c (:background "burlywood4" ) :foreground "gray60"  :inverse-video nil :box nil)))
