@@ -920,6 +920,7 @@ screen for minute.
      (push '("*Completions*"     :align below :size 30  :noselect t) 
            shackle-rules))
  #+end_src
+
 * Editing
 
     Use my goodies repository for some stuff I like to use, for instance,
@@ -1612,7 +1613,6 @@ Comment out a line:
 #+begin_src emacs-lisp
   (use-package nlinum)
 #+end_src
-
 
   Show unncessary whitespace that can mess up your diff
 
@@ -2317,9 +2317,9 @@ Some bindings for getting to org files faster
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun org-show-children-advice (funct &optional N)
-    (funcall funct 3))
-  (advice-add 'org-show-children :around 'org-show-children-advice)
+  ; (defun org-show-children-advice (funct &optional N) }
+  ;   (funcall funct 3)) }
+  ; (advice-add 'org-show-children :around 'org-show-children-advice) }
 #+end_src
 
 *** Commands
