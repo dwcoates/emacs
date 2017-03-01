@@ -269,6 +269,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
        :map helm-buffer-map
        ("C-c C-k" . helm-buffer-run-kill-buffers))
       :config
+      (helm-autoresize-mode t)
       (setq
        ;; scroll 4 lines other window using M-<next>/M-<prior>
        helm-scroll-amount             4   
@@ -287,9 +288,8 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
        ;; fuzzy matching buffer names when non-nil
        helm-buffers-fuzzy-matching           t   
        ;;  Helm size. Don't want it to be too distracting.
-       helm-autoresize-mode                  t
-       helm-autoresize-max-height       18
-       helm-autoresize-min-height       8)
+       helm-autoresize-max-height       25
+       helm-autoresize-min-height       18)
       (diminish 'helm-mode)
       (set-face-attribute 'helm-candidate-number nil 
                           :background "salmon2" 
@@ -442,6 +442,65 @@ Make helm-buffers-list sort the buffers.
     (dwc-helm-source-buffers (apply orig-fun args)))
 
   (advice-add 'helm-buffers-sort-transformer :around 'helm-buffers-sort-dired-buffers)
+#+end_src
+
+***** hide modelines under helm
+
+Don't display the modeline in bottom buffers when helm is active. It's
+distracting, useless, and unsightly. The following code was grabbed from
+StackExchange.
+
+1. Collect bottom buffers
+
+#+begin_src emacs-lisp
+(defvar bottom-buffers nil
+  "List of bottom buffers before helm session.
+    Its element is a pair of `buffer-name' and `mode-line-format'.")
+#+end_src
+
+#+begin_src emacs-lisp
+(defun bottom-buffers-init ()
+  (setq bottom-buffers
+        (cl-loop for w in (window-list)
+                 when (window-at-side-p w 'bottom)
+                 collect (with-current-buffer (window-buffer w)
+                           (cons (buffer-name) mode-line-format)))))
+
+(add-hook 'helm-before-initialize-hook #'bottom-buffers-init)
+#+end_src
+
+2. Hide mode line
+
+#+begin_src emacs-lisp
+(defun bottom-buffers-hide-mode-line ()
+  (mapc (lambda (elt)
+          (with-current-buffer (car elt)
+            (setq-local mode-line-format nil)))
+        bottom-buffers))
+
+(add-hook 'helm-after-initialize-hook #'bottom-buffers-hide-mode-line)
+#+end_src
+
+3. Restore mode line
+
+#+begin_src emacs-lisp
+(defun bottom-buffers-show-mode-line ()
+  (when bottom-buffers
+    (mapc (lambda (elt)
+            (with-current-buffer (car elt)
+              (setq-local mode-line-format (cdr elt))))
+          bottom-buffers)
+    (setq bottom-buffers nil)))
+
+(add-hook 'helm-exit-minibuffer-hook #'bottom-buffers-show-mode-line)
+#+end_src
+
+#+begin_src emacs-lisp
+(defun helm-keyboard-quit-advice (orig-func &rest args)
+  (bottom-buffers-show-mode-line)
+  (apply orig-func args))
+
+(advice-add 'helm-keyboard-quit :around #'helm-keyboard-quit-advice)
 #+end_src
 
 **** ~ido~ :search:fuzzy:
