@@ -893,6 +893,8 @@ screen for minute.
          :align right :size 80 :select t)
         ("\\*Help[R]*\\*" :regexp t :align right :size 80 :select t)
         ("\\**Python Doc**\\*" :regexp t :align right :size 80 :select t)
+        ("\\**magit*"
+         :regexp t :same t :select t :inhibit-window-quit nil)
         ("*Messages*"
          :align below :size 15  :select t :inhibit-window-quit nil)
         ("*Warnings*"
@@ -2319,7 +2321,7 @@ Some bindings for getting to org files faster
 #+begin_src emacs-lisp
   ; (defun org-show-children-advice (funct &optional N) }
   ;   (funcall funct 3)) }
-  ; (advice-add 'org-show-children :around 'org-show-children-advice) }
+  ; (advice-add 'org-show-children :around 'org-show-children-advice)
 #+end_src
 
 *** Commands
