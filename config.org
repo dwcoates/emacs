@@ -383,30 +383,31 @@ through Emacs documentation.
   (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
   #+END_SRC
 
-
   Show minibuffer history with Helm
+
   #+BEGIN_SRC emacs-lisp
   (define-key minibuffer-local-map (kbd "M-p") 'helm-minibuffer-history)
   #+END_SRC
 
-
   Navigating file
+
   #+BEGIN_SRC emacs-lisp
   (define-key global-map [remap find-tag] 'helm-etags-select)
 
   (define-key global-map [remap list-buffers] 'helm-buffers-list)
   #+END_SRC
 
-
   Use Helm to list eshell history:
+
   #+BEGIN_SRC emacs-lisp
   (add-hook 'eshell-mode-hook
             (lambda ()
                 (local-set-key (kbd "C-c C-l") 'helm-eshell-history)))
   #+END_SRC
 
+  Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will
+  have "find-file" as one of the possible completions.
 
-  Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will have "find-file" as one of the possible completions.
   #+BEGIN_SRC emacs-lisp
   (setq helm-lisp-fuzzy-completion t)
   #+END_SRC
@@ -444,11 +445,11 @@ Make helm-buffers-list sort the buffers.
   (advice-add 'helm-buffers-sort-transformer :around 'helm-buffers-sort-dired-buffers)
 #+end_src
 
-***** hide modelines under helm
+***** Hide mode-lines under helm
 
 Don't display the modeline in bottom buffers when helm is active. It's
 distracting, useless, and unsightly. The following code was grabbed from
-StackExchange.
+[[http://emacs.stackexchange.com/questions/15233/hide-modeline-in-all-bottom-windows-while-helm-is-active][StackExchange]].
 
 1. Collect bottom buffers
 
@@ -501,6 +502,20 @@ StackExchange.
   (apply orig-func args))
 
 (advice-add 'helm-keyboard-quit :around #'helm-keyboard-quit-advice)
+#+end_src
+
+***** Change helm mode-line appearance
+
+#+begin_src emacs-lisp
+  (defun helm-mode-line-hook ()
+    (let ((color "#008b8b"))
+      (face-remap-add-relative
+       'mode-line `((:foreground ,color :background ,color) mode-line))
+      (face-remap-add-relative
+       'helm-candidate-number `((:foreground ,color :background ,color) mode-line))
+      (face-remap-set-base 'mode-line-buffer-id '(:foreground "black"))))
+
+  (add-hook 'helm-major-mode-hook 'helm-mode-line-hook)
 #+end_src
 
 **** ~ido~ :search:fuzzy:
