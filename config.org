@@ -907,7 +907,8 @@ screen for minute.
          :align below :size 25  :noselect t :inhibit-window-quit nil)
         ("*Help*"
          :align right :size 80 :select t)
-        ("\\*Help[R]*\\*" :regexp t :align right :size 80 :select t)
+        ("\\*[hH]elp\[R\]*\\*" :regexp t :align right :size 80 :select t)
+        ("\\*help\[R\]*\\*" :regexp t :align right :size 80 :select t)
         ("\\**Python Doc**\\*" :regexp t :align right :size 80 :select t)
         ("\\**magit*"
          :regexp t :same t :select t :inhibit-window-quit nil)
@@ -1977,7 +1978,7 @@ My clojure-mode hook
       ;                                           "In : " "\\.\\.\\.: ")
                 )
 
-  (setq-default py-shell-interpreter "ipython")
+  (setq-default py-shell-interpreter "python")
 
     ;      (setenv "JUPYTER_CONSOLE_TEST" "1")
   ;  (setq python-shell-interpreter-args 
@@ -2040,8 +2041,7 @@ My clojure-mode hook
       (when (require 'flycheck nil t)
         (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
         (add-hook 'elpy-mode-hook 'flycheck-mode))
-      (add-hook 'elpy-mode-hook 'flycheck-mode 'elpy-use-ipython)
-      (elpy-use-ipython)
+      (add-hook 'elpy-mode-hook 'flycheck-mode)
       (use-package py-autopep8
         :init
         (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
@@ -2203,7 +2203,7 @@ I was having some problems with it throwing errors.
     (add-to-list 'load-path "~/ess/lisp/")
     (load "ess-site")
     (defun my/ess-mode-hook-funct ()
-      (smartparens-mode))
+      (smartparens-mode t))
     (add-hook 'ess-mode-hook 'my/ess-mode-hook-funct)
 #+end_src
 
@@ -2215,7 +2215,7 @@ Don't use that annoying indentation style with the comments, please
 
 #+begin_src emacs-lisp
   (defun dwc-ess-hook ()
-    (smartparens-mode 1))
+    (smartparens-mode t))
 
   (add-hook 'ess-mode-hook 'dwc-ess-hook)
 #+end_src
