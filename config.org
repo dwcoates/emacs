@@ -3696,7 +3696,7 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
 #+begin_src emacs-lisp
   (use-package pdf-tools
     :init
-    (pdf-tools-install))
+    (pdf-tools-install nil t t))
 #+end_src
 
 ** GNUGol
@@ -3751,4 +3751,5 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
                                 max-h min-h max-w min-w)
         (display-buffer (current-buffer)))))
 #+end_src
+
 
