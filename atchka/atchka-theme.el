@@ -252,7 +252,7 @@
      `(rainbow-delimiters-depth-5-face   ((,c (:foreground ,cyan))))
      `(rainbow-delimiters-unmatched-face ((,c (:foreground ,red :inverse-video t))))
      ;; Helm
-     `(helm-selection              ((,c (:background "#7ac5cd" :foreground ,magenta))))
+     `(helm-selection              ((,c (:background "gray18" :bold t))))
      `(helm-match                  ((,c (:foreground ,magenta))))
      `(helm-source-header          ((,c (:background ,current-line :foreground ,grey-1))))
      `(helm-swoop-target-line-face ((,c (:foreground ,highlight :inverse-video t))))
