@@ -274,11 +274,11 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
        ;; scroll 4 lines other window using M-<next>/M-<prior>
        helm-scroll-amount             4   
        ;; search for library in `require' and
-       helm-ff-search-library-in-sexp t 
        ;; declare-function' sexp.
+       helm-ff-search-library-in-sexp t 
        ;; open helm buffer inside current window, not
-       helm-split-window-in-side-p    t 
        ;; occupy whole other window
+       helm-split-window-in-side-p    t 
        ;; limit the number of displayed canidates
        helm-candidate-number-limit 500  
        ;; move to end or beginning of source when
@@ -286,7 +286,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
        ;; reaching top or bottom of source.
        helm-move-to-line-cycle-in-source     t 
        ;; fuzzy matching buffer names when non-nil
-       helm-buffers-fuzzy-matching           t   
+       helm-buffers-fuzzy-matching           nil   
        ;;  Helm size. Don't want it to be too distracting.
        helm-autoresize-max-height       25
        helm-autoresize-min-height       18)
@@ -311,13 +311,15 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
   matching.
   #+begin_src emacs-lisp
     (use-package helm-flx
-      :init (helm-flx-mode 1)
+      :init ;(helm-flx-mode 1)
       :config
-      (setq helm-flx-for-helm-find-files t ;; t by default
-            helm-flx-for-helm-locate t))
+      ;(setq helm-flx-for-helm-find-files t ;; t by default
+;            helm-flx-for-helm-locate t)
+      )
 
     (use-package helm-fuzzier
-      :init (helm-fuzzier-mode 1))
+      :init ;(helm-fuzzier-mode 1)
+      )
   #+end_src
 
   Helm-swoop is an interface for searching for lines in a buffer using helm
@@ -514,8 +516,7 @@ distracting, useless, and unsightly. The following code was grabbed from
       (face-remap-add-relative
        'mode-line `((:foreground ,color :background ,color) mode-line))
       (face-remap-add-relative
-       'helm-candidate-number `((:foreground ,color :background ,color) mode-line))
-      (face-remap-set-base 'mode-line-buffer-id '(:foreground "black"))))
+       'helm-candidate-number `((:foreground "black" :background ,color) mode-line))))
 
   (add-hook 'helm-major-mode-hook 'helm-mode-line-hook)
 #+end_src
@@ -1972,40 +1973,17 @@ My clojure-mode hook
 *** iPython
 
 #+begin_src emacs-lisp
-          (setq python-shell-prompt-detect-failure-warning nil
-      ;         python-shell-prompt-input-regexps '("$ " "\\.\\.\\. " 
-      ;                                           "In \\[[0-9]+\\]: " 
-      ;                                           "In : " "\\.\\.\\.: ")
-                )
+  (setq python-shell-prompt-detect-failure-warning nil)
 
-  (setq-default py-shell-interpreter "python")
-
-    ;      (setenv "JUPYTER_CONSOLE_TEST" "1")
-  ;  (setq python-shell-interpreter-args 
-  ;        "-i ~/.local/anaconda2/bin/jupyter-console")
-    ;            python-shell-interpreter-interactive-arg "--existing")
-
-
-          ;(setq-default py-which-bufname "IPython")
-          ;; use the wx backend, for both mayavi and matplotlib
-          ;(setq py-python-command-args '("--matplotlib" "--colors" "LightBG"))
-          ;(setq python-shell-interpreter-args "--existing kernel-7967.json")
-          ;(setq python-shell-interpreter-args "--matplotlib --gui=qt4")
-          ; "--colors" "LightBG" "Linux" "--pylab=wx"
-          ;(setq py-force-py-shell-name-p t)
-
-          ;; switch to the interpreter after executing code
-          ;(setq py-shell-switch-buffers-on-execute-p t)
-          ;(setq py-switch-buffers-on-execute-p t)
-          ;; don't split windows
-          ;(setq py-split-windows-on-execute-p nil)
-          ;; try to automagically figure out indentation
-          ;(setq py-smart-indentation t)
-
-
-          ; see http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0
-          ; for explanation.
+  (setq-default py-shell-interpreter "ipython"
+                ;; use the wx backend, for both mayavi and matplotlib
+                python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
+                py-shell-switch-buffers-on-execute-p t
+                setq py-smart-indentation t
+                py-which-bufname "IPython")
 #+end_src
+
+see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0][here]] for info on IPython5 not working properly in Emacs.
 
 *** python-mode
 
@@ -2025,26 +2003,27 @@ My clojure-mode hook
 *** elpy
 
 #+BEGIN_SRC emacs-lisp
-    (use-package elpy
-      :commands (elpy-mode elpy-enable)
+  (use-package elpy
+    :commands (elpy-mode elpy-enable)
+    :init
+    (setq elpy-rpc-backend "rope"
+          elpy-syntax-check-command "pylint")
+    (defun elpy-on-python-mode ()
+      (elpy-mode)
+      (elpy-enable)
+      (sp-pair "'" nil))
+    (add-hook 'python-mode-hook 'elpy-on-python-mode)
+    :bind
+    (("C-c ?" . elpy-doc))
+    :config
+    (elpy-use-ipython)
+    (when (require 'flycheck nil t)
+      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+      (add-hook 'elpy-mode-hook 'flycheck-mode))
+    (add-hook 'elpy-mode-hook 'flycheck-mode)
+    (use-package py-autopep8
       :init
-      (setq elpy-rpc-backend "rope"
-            elpy-syntax-check-command "pylint")
-      (defun elpy-on-python-mode ()
-        (elpy-mode)
-        (elpy-enable)
-        (sp-pair "'" nil))
-      (add-hook 'python-mode-hook 'elpy-on-python-mode)
-      :bind
-      (("C-c ?" . elpy-doc))
-      :config
-      (when (require 'flycheck nil t)
-        (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-        (add-hook 'elpy-mode-hook 'flycheck-mode))
-      (add-hook 'elpy-mode-hook 'flycheck-mode)
-      (use-package py-autopep8
-        :init
-        (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
+      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
 #+END_SRC
 
 *** ein
@@ -2069,7 +2048,7 @@ My clojure-mode hook
 
     (defun switch-color ()
       "Switch default bg for ipython notebook."
-      (face-remap-add-relative 'default '((:background "white"))))
+      (face-remap-add-relative 'default '((:background "gray20"))))
     (add-hook 'ein:notebook-multilang-mode-hook 'switch-color))
 #+end_src
 
@@ -3755,7 +3734,6 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
                                 max-h min-h max-w min-w)
         (display-buffer (current-buffer)))))
 #+end_src
-
 
 ** Calculator
 
