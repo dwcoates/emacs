@@ -3699,7 +3699,10 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
     (pdf-tools-install nil t t))
 #+end_src
 
-** GNUGol
+#+RESULTS:
+
+** Google
+*** ~gnugol~
 
    An interface for Google. Very nice. See [[https://github.com/dtaht/Gnugol/blob/master/doc/installation.org][here]] for installation instructions.
 
@@ -3752,4 +3755,12 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
         (display-buffer (current-buffer)))))
 #+end_src
 
+
+** Calculator
+
+   Emacs calculator is very cool once you get used to it.
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c u =") 'calc)
+#+end_src
 
