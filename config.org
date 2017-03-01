@@ -1951,39 +1951,39 @@ My clojure-mode hook
 *** iPython
 
 #+begin_src emacs-lisp
-        (setq python-shell-prompt-detect-failure-warning nil
-    ;         python-shell-prompt-input-regexps '("$ " "\\.\\.\\. " 
-    ;                                           "In \\[[0-9]+\\]: " 
-    ;                                           "In : " "\\.\\.\\.: ")
-              )
+          (setq python-shell-prompt-detect-failure-warning nil
+      ;         python-shell-prompt-input-regexps '("$ " "\\.\\.\\. " 
+      ;                                           "In \\[[0-9]+\\]: " 
+      ;                                           "In : " "\\.\\.\\.: ")
+                )
 
-  (setq-default py-shell-interpreter "python")
+  (setq-default py-shell-interpreter "ipython")
 
-  ;      (setenv "JUPYTER_CONSOLE_TEST" "1")
-;  (setq python-shell-interpreter-args 
-;        "-i ~/.local/anaconda2/bin/jupyter-console")
-  ;            python-shell-interpreter-interactive-arg "--existing")
-
-
-        ;(setq-default py-which-bufname "IPython")
-        ;; use the wx backend, for both mayavi and matplotlib
-        ;(setq py-python-command-args '("--matplotlib" "--colors" "LightBG"))
-        ;(setq python-shell-interpreter-args "--existing kernel-7967.json")
-        ;(setq python-shell-interpreter-args "--matplotlib --gui=qt4")
-        ; "--colors" "LightBG" "Linux" "--pylab=wx"
-        ;(setq py-force-py-shell-name-p t)
-
-        ;; switch to the interpreter after executing code
-        ;(setq py-shell-switch-buffers-on-execute-p t)
-        ;(setq py-switch-buffers-on-execute-p t)
-        ;; don't split windows
-        ;(setq py-split-windows-on-execute-p nil)
-        ;; try to automagically figure out indentation
-        ;(setq py-smart-indentation t)
+    ;      (setenv "JUPYTER_CONSOLE_TEST" "1")
+  ;  (setq python-shell-interpreter-args 
+  ;        "-i ~/.local/anaconda2/bin/jupyter-console")
+    ;            python-shell-interpreter-interactive-arg "--existing")
 
 
-        ; see http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0
-        ; for explanation.
+          ;(setq-default py-which-bufname "IPython")
+          ;; use the wx backend, for both mayavi and matplotlib
+          ;(setq py-python-command-args '("--matplotlib" "--colors" "LightBG"))
+          ;(setq python-shell-interpreter-args "--existing kernel-7967.json")
+          ;(setq python-shell-interpreter-args "--matplotlib --gui=qt4")
+          ; "--colors" "LightBG" "Linux" "--pylab=wx"
+          ;(setq py-force-py-shell-name-p t)
+
+          ;; switch to the interpreter after executing code
+          ;(setq py-shell-switch-buffers-on-execute-p t)
+          ;(setq py-switch-buffers-on-execute-p t)
+          ;; don't split windows
+          ;(setq py-split-windows-on-execute-p nil)
+          ;; try to automagically figure out indentation
+          ;(setq py-smart-indentation t)
+
+
+          ; see http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0
+          ; for explanation.
 #+end_src
 
 *** python-mode
@@ -2004,25 +2004,27 @@ My clojure-mode hook
 *** elpy
 
 #+BEGIN_SRC emacs-lisp
-  (use-package elpy
-    :commands (elpy-mode elpy-enable)
-    :init
-    (setq elpy-rpc-backend "rope"
-          elpy-syntax-check-command "pylint")
-    (defun elpy-on-python-mode ()
-      (elpy-mode)
-      (elpy-enable)
-      (sp-pair "'" nil))
-    (add-hook 'python-mode-hook 'elpy-on-python-mode)
-    :config
-    (when (require 'flycheck nil t)
-      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-      (add-hook 'elpy-mode-hook 'flycheck-mode))
-    (add-hook 'elpy-mode-hook 'flycheck-mode 'elpy-use-ipython)
-    (elpy-use-ipython)
-    (use-package py-autopep8
+    (use-package elpy
+      :commands (elpy-mode elpy-enable)
       :init
-      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
+      (setq elpy-rpc-backend "rope"
+            elpy-syntax-check-command "pylint")
+      (defun elpy-on-python-mode ()
+        (elpy-mode)
+        (elpy-enable)
+        (sp-pair "'" nil))
+      (add-hook 'python-mode-hook 'elpy-on-python-mode)
+      :bind
+      (("C-c ?" . elpy-doc))
+      :config
+      (when (require 'flycheck nil t)
+        (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+        (add-hook 'elpy-mode-hook 'flycheck-mode))
+      (add-hook 'elpy-mode-hook 'flycheck-mode 'elpy-use-ipython)
+      (elpy-use-ipython)
+      (use-package py-autopep8
+        :init
+        (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
 #+END_SRC
 
 *** ein
