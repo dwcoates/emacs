@@ -1637,7 +1637,8 @@ Comment out a line:
 #+begin_src emacs-lisp
   (add-hook 'prog-mode-hook (lambda () (interactive)
                               (setq show-trailing-whitespace 1)
-                              (nlinum-mode t)))
+                              (linum-mode t) ; use linum, not nlinum
+                              ))
 #+end_src
 
   ~hs-minor-mode~ gives us the ability to fold and unfold code and comments
@@ -3758,9 +3759,55 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
 
 ** Calculator
 
-   Emacs calculator is very cool once you get used to it.
+   Emacs calculator is very cool once you get used to it. Access it with =C-x *
+   *=, view the rest of the options with =C-x *= prefix.
 
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-c u =") 'calc)
+  (global-set-key (kbd "C-c u =") 'calc) ;; directly access calculator
 #+end_src
 
+*** Usage
+
+Calc normally uses RPN notation. You may be familiar with the RPN system from
+Hewlett-Packard calculators, FORTH, or PostScript. (Reverse Polish Notation,
+RPN, is named after the Polish mathematician Jan Lukasiewicz.)
+
+The central component of an RPN calculator is the stack. A calculator stack is
+like a stack of dishes. New dishes (numbers) are added at the top of the
+stack, and numbers are normally only removed from the top of the stack.
+
+In an operation like ‘2+3’, the 2 and 3 are called the operands and the ‘+’ is
+the operator. In an RPN calculator you always enter the operands first, then
+the operator. Each time you type a number, Calc adds or pushes it onto the top
+of the Stack. When you press an operator key like +, Calc pops the appropriate
+number of operands from the stack and pushes back the result.
+
+[[https://www.gnu.org/software/emacs/manual/html_node/calc/RPN-Tutorial.html#RPN-Tutorial][More here]].
+
+*** Algebraic Notation (infix)
+
+If you are not used to RPN notation, you may prefer to operate the Calculator
+in Algebraic mode, which is closer to the way non-RPN calculators work. In
+Algebraic mode, you enter formulas in traditional ‘2+3’ notation.
+
+*NOTE*: Calc gives ‘/’ lower precedence than ‘*’, so that ‘a/b*c’ is
+interpreted as ‘a/(b*c)’; this is not standard across all computer
+languages. See below for details.
+
+You don’t really need any special “mode” to enter algebraic formulas. You can
+enter a formula at any time by pressing the apostrophe (') key. Answer the
+prompt with the desired formula, then press RET. The formula is evaluated and
+the result is pushed onto the RPN stack. If you don’t want to think in RPN at
+all, you can enter your whole computation as a formula, read the result from
+the stack, then press DEL to delete it from the stack.
+
+Try pressing the apostrophe key, then 2+3+4, then RET. The result should be
+the number 9.
+
+[[https://www.gnu.org/software/emacs/manual/html_node/calc/Algebraic-Tutorial.html#Algebraic-Tutorial][More here]].
+
+*** Undo
+
+If you make a mistake, you can usually correct it by pressing =U=, the
+“undo” command. First, clear the stack (=M-0 DEL=) and exit and restart Calc
+to make sure things start off with a clean slate.
