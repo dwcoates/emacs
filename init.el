@@ -133,7 +133,7 @@
  whitespace-display-mappings        '((tab-mark ?\t [?› ?\t])
                                       (newline-mark 10 [36 10]))
  ;;          INTERFACE
- ;; no splash message
+ ;v; no splash message
  inhibit-startup-message            t
  ;; cursor
  blink-cursor-mode                  nil

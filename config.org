@@ -1975,12 +1975,12 @@ My clojure-mode hook
 #+begin_src emacs-lisp
   (setq python-shell-prompt-detect-failure-warning nil)
 
-  (setq-default py-shell-interpreter "ipython"
-                ;; use the wx backend, for both mayavi and matplotlib
-                python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
-                py-shell-switch-buffers-on-execute-p t
-                setq py-smart-indentation t
-                py-which-bufname "IPython")
+  (setq py-shell-interpreter "ipython"
+        ;; use the wx backend, for both mayavi and matplotlib
+        python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
+        py-shell-switch-buffers-on-execute-p t
+        py-smart-indentation t
+        py-which-bufname "IPython")
 #+end_src
 
 see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0][here]] for info on IPython5 not working properly in Emacs.
@@ -2035,7 +2035,8 @@ see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-
     :config
     (setq url-proxy-services '(("no_proxy" . "127.0.0.1")))
     (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
-    (setq ein:use-auto-complete-supe t)
+    (setq ein:use-auto-complete-supe t
+          ein:console-executable "/user/local/bin/ipython")
     (add-hook 'ein:notebook-multilang-mode (lambda ()
                                              (company-mode -1)
                                              (auto-complete-mode)))
@@ -2047,8 +2048,10 @@ see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-
        ((((class color) (min-colors 88) (background dark)) nil))))
 
     (defun switch-color ()
+    (interactive)
       "Switch default bg for ipython notebook."
-      (face-remap-add-relative 'default '((:background "gray20"))))
+      (face-remap-add-relative 'default '((:background "gray15")))
+      (face-remap-add-relative ' '((:foreground "red"))))
     (add-hook 'ein:notebook-multilang-mode-hook 'switch-color))
 #+end_src
 

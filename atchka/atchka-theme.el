@@ -262,12 +262,18 @@
      `(helm-ff-directory         ((,c (:foreground ,orange))))
      `(helm-ff-executable        ((,c (:foreground ,white :slant italic))))
      `(helm-buffer-directory ((,c (:background nil :underline t :foreground "#00bfff"))))
+     ;; EIN
+     `(ein:cell-heading-1       ((,c (:foreground "red"))))
+     `(ein:cell-heading-2       ((,c (:foreground "red"))))
+     `(ein:cell-heading-3       ((,c (:foreground "red"))))
+     `(ein:cell-heading-4       ((,c (:foreground "red"))))
+     `(ein:cell-heading-5       ((,c (:foreground "red"))))
+     `(ein:cell-heading-6       ((,c (:foreground "red"))))
      ;; Avy
      `(avy-lead-face-0    ((,c (:background ,orange :foreground ,black))))
      `(avy-lead-face-1    ((,c (:background ,orange :foreground ,black))))
      `(avy-lead-face-2    ((,c (:background ,orange :foreground ,black))))
      `(avy-lead-face      ((,c (:background ,orange :foreground ,black))))
-
      ;;
      ;; Language-specific
      ;;
