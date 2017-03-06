@@ -2483,6 +2483,13 @@ Task triggers
   (require 'ag-misc)
 #+end_src
 
+Don't show me tags in the agenda view.
+
+#+begin_src emacs-lisp
+  (setq org-agenda-hide-tags-regexp "\\|*")
+#+end_src
+
+
 Do not dim blocked tasks
 #+begin_src emacs-lisp
   (setq org-agenda-dim-blocked-tasks nil)
