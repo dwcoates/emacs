@@ -1459,9 +1459,10 @@ line instead."
                  (backward-char 1)))))
 #+END_SRC
 
-*** variables
+*** yank-advised-indent-function
 
 yank-indent-modes
+
 #+BEGIN_SRC emacs-lisp
 ;; taken from prelude-editor.el
 ;; automatically indenting yanked text if in programming-modes
@@ -1472,6 +1473,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
 #+END_SRC
 
 yank-indent-blacklisted-modes
+
 #+BEGIN_SRC emacs-lisp
 (defvar yank-indent-blacklisted-modes
   '(python-mode slim-mode haml-mode)
@@ -1479,12 +1481,14 @@ yank-indent-blacklisted-modes
 #+END_SRC
 
 yank-advised-indent-threshol
+
 #+BEGIN_SRC emacs-lisp
 (defvar yank-advised-indent-threshold 1000
   "Threshold (# chars) over which indentation does not automatically occur.")
 #+END_SRC
 
 yank-advised-indent-function
+
 #+BEGIN_SRC emacs-lisp
 (defun yank-advised-indent-function (beg end)
   "Do indentation, as long as the region isn't too large."
@@ -1644,7 +1648,6 @@ Comment out a line:
 
     (global-set-key (kbd "C-x f") 'add-file-name-to-clipboard)
 #+end_src
-
 
 * Software Development
 

@@ -318,3 +318,4 @@
 (let ((post (concat personal-dir ".exclusive/post.el")))
   (if (file-exists-p post)
       (load post)))
+(put 'upcase-region 'disabled nil)
