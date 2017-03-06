@@ -1626,6 +1626,26 @@ Comment out a line:
 (key-chord-define-global ";'" 'toggle-comment-on-line)
 #+END_SRC
 
+*** add-file-name-to-clipboard
+
+#+begin_src emacs-lisp
+    (defun add-file-name-to-clipboard ()
+      "Put the current file name on the clipboard"
+      (interactive)
+      (let ((filename (if (equal major-mode 'dired-mode)
+                          default-directory
+                        (buffer-file-name))))
+        (message
+         (if filename
+             (with-temp-buffer
+               (insert filename)
+               (clipboard-kill-region (point-min) (point-max))))
+           (kill-new default-directory))))
+
+    (global-set-key (kbd "C-x f") 'add-file-name-to-clipboard)
+#+end_src
+
+
 * Software Development
 
   ~nlinum~ mode, a line numbering minor-mode, is much faster than ~linum~ mode.
