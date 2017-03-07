@@ -1996,14 +1996,12 @@ My clojure-mode hook
 *** iPython
 
 #+begin_src emacs-lisp
-  (setq python-shell-prompt-detect-failure-warning nil)
-
-  (setq py-shell-interpreter "ipython"
+  (setq python-shell-prompt-detect-failure-warning nil
+        py-shell-interpreter "python"
         ;; use the wx backend, for both mayavi and matplotlib
-        python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
+        ;; python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
         py-shell-switch-buffers-on-execute-p t
-        py-smart-indentation t
-        py-which-bufname "IPython")
+        py-smart-indentation t)
 #+end_src
 
 see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0][here]] for info on IPython5 not working properly in Emacs.
@@ -2026,27 +2024,27 @@ see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-
 *** elpy
 
 #+BEGIN_SRC emacs-lisp
-  (use-package elpy
-    :commands (elpy-mode elpy-enable)
-    :init
-    (setq elpy-rpc-backend "rope"
-          elpy-syntax-check-command "pylint")
-    (defun elpy-on-python-mode ()
-      (elpy-mode)
-      (elpy-enable)
-      (sp-pair "'" nil))
-    (add-hook 'python-mode-hook 'elpy-on-python-mode)
-    :bind
-    (("C-c ?" . elpy-doc))
-    :config
-    (elpy-use-ipython)
-    (when (require 'flycheck nil t)
-      (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-      (add-hook 'elpy-mode-hook 'flycheck-mode))
-    (add-hook 'elpy-mode-hook 'flycheck-mode)
-    (use-package py-autopep8
+    (use-package elpy
+      :commands (elpy-mode elpy-enable)
       :init
-      (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
+      (setq elpy-rpc-backend "rope"
+            elpy-syntax-check-command "pylint")
+      (defun elpy-on-python-mode ()
+        (elpy-mode)
+        (elpy-enable)
+        (sp-pair "'" nil))
+      (add-hook 'python-mode-hook 'elpy-on-python-mode)
+      :bind
+      (("C-c ?" . elpy-doc))
+      :config
+      ;; (elpy-use-ipython)
+      (when (require 'flycheck nil t)
+        (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+        (add-hook 'elpy-mode-hook 'flycheck-mode))
+      (add-hook 'elpy-mode-hook 'flycheck-mode)
+      (use-package py-autopep8
+        :init
+        (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
 #+END_SRC
 
 *** ein
