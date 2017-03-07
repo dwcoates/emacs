@@ -2492,13 +2492,14 @@ Don't show me tags in the agenda view.
   (setq org-agenda-hide-tags-regexp "\\|*")
 #+end_src
 
-
 Do not dim blocked tasks
+
 #+begin_src emacs-lisp
   (setq org-agenda-dim-blocked-tasks nil)
 #+end_src
 
 Compact the block agenda view
+
 #+begin_src emacs-lisp
   (setq org-agenda-compact-blocks t)
 #+end_src
@@ -2507,12 +2508,14 @@ Pressing =Q= in org agenda shouldn't kill the buffer and window. Usually I just
 want to glance at the agenda, then go back to what I was doing.
 
 #+begin_src emacs-lisp
-;; Don't delete agenda buffer when quitting, just bury it
-(setq org-agenda-sticky t)
-(define-key org-agenda-mode-map (kbd "q") 'quit-window)
-(define-key org-agenda-mode-map (kbd "C-q") 'org-agenda-quit)
-;; Don't delete window when quitting org agenda
-;(setq org-agenda-restore-windows-after-quit t)
+  (define-key org-agenda-mode-map (kbd "q") 'quit-window)
+#+end_src
+
+Don't delete agenda buffer when quitting, just bury it
+
+#+begin_src emacs-lisp
+  (setq org-agenda-sticky t)
+  (define-key org-agenda-mode-map (kbd "C-q") 'org-agenda-quit)
 #+end_src
 
 #+begin_src emacs-lisp
