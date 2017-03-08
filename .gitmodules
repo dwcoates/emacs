@@ -13,3 +13,6 @@
 [submodule "atchka-org-theme"]
 	path = lisp/atchka-org-theme
 	url = git@github.com:dwcoates/atchka-org-theme.git
+[submodule "org-capture-builder"]
+	path = lisp/org-capture-builder
+	url = https://github.com/dwcoates/org-capture-builder
