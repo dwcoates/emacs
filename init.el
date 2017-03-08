@@ -192,6 +192,7 @@
 ;; Dont ask me if I want to use these features before I do:
 (put 'narrow-to-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
+(put 'upcase-region 'disabled nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;; SAVES ;;;;;;;;;;;;;;;;;;;;;;;
@@ -318,4 +319,3 @@
 (let ((post (concat personal-dir ".exclusive/post.el")))
   (if (file-exists-p post)
       (load post)))
-(put 'upcase-region 'disabled nil)
