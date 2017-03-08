@@ -1993,18 +1993,32 @@ My clojure-mode hook
 #+END_SRC
 
 ** Python
-*** iPython
+*** IPython *DISABLED*
+
+see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0][here]] for info on IPython 5 is not working properly in Emacs.
+
+#+begin_src emacs-lisp
+;  (setq python-shell-prompt-detect-failure-warning nil
+;        py-shell-interpreter "ipython"
+;        ;; use the wx backend, for both mayavi and matplotlib
+;        python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
+;        py-shell-switch-buffers-on-execute-p t
+;        py-smart-indentation t)
+#+end_src
+
+*** CPython
+
+I currently prefer using the =CPython= interpreter. 
 
 #+begin_src emacs-lisp
   (setq python-shell-prompt-detect-failure-warning nil
         py-shell-interpreter "python"
-        ;; use the wx backend, for both mayavi and matplotlib
-        ;; python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
+        ;; setup the matplotlib backend
+        python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg')\"" 
         py-shell-switch-buffers-on-execute-p t
         py-smart-indentation t)
 #+end_src
 
-see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0][here]] for info on IPython5 not working properly in Emacs.
 
 *** python-mode
 
