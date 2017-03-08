@@ -3,16 +3,16 @@
 	url = https://github.com/nathco/Office-Code-Pro
 [submodule "goodies"]
 	path = lisp/goodies
-	url = git@github.com:dwcoates/goodies.git
+	url = https://github.com/dwcoates/goodies
 [submodule "org-misc"]
 	path = lisp/org-misc
-	url = git@github.com:dwcoates/org-misc.git
+	url = https://github.com/dwcoates/org-misc
 [submodule "helm-dictionary"]
 	path = lisp/helm-dictionary
-	url = git@github.com:dwcoates/helm-dictionary.git
+	url = https://github.com/dwcoates/helm-dictionary
 [submodule "atchka-org-theme"]
 	path = lisp/atchka-org-theme
-	url = git@github.com:dwcoates/atchka-org-theme.git
+	url = https://github.com/dwcoates/atchka-org-theme
 [submodule "org-capture-builder"]
 	path = lisp/org-capture-builder
 	url = https://github.com/dwcoates/org-capture-builder
