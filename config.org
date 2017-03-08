@@ -2028,9 +2028,12 @@ I currently prefer using the =CPython= interpreter.
         ;; setup the matplotlib backend
         python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg')\"" 
         py-shell-switch-buffers-on-execute-p t
+        python-shell-enable-font-lock t
         py-smart-indentation t)
+  ;; subtly gray commmands
+  (set-face-attribute 'comint-highlight-input nil  
+                      :foreground "gray63" :weight 'bold)
 #+end_src
-
 
 *** python-mode
 
@@ -2039,9 +2042,6 @@ I currently prefer using the =CPython= interpreter.
   ;;         (format
   ;;          "/usr/bin/python:%s/.local/bin/:%s/workspace/leven-squash"
   ;;          (getenv "HOME") (getenv "HOME")))
-
-  (setq python-shell-enable-font-lock nil)
-
   ;; use helm-dash-install-docset to install docsets
   (use-package helm-dash
     :init)
