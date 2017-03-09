@@ -1016,29 +1016,29 @@ Remap =M-k= to ~kill-whole-line~
 **** ~smartparens~
 
  #+BEGIN_SRC emacs-lisp
-     (use-package smartparens
-       :config
-       ;; These are loaded from a file because currently smartparens isn't
-       ;; handling escaped quotations in org well. Funnily enough, smartparens
-       ;; binds requires that I bind to a quotation, which requires an escaped
-       ;; quotation :O
-       (load-file (concat lisp-dir "sp-binds.el"))
-       (sp-pair "'" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
-       (sp-pair "`" nil :when '(not (eq major-mode (or 'org-mode 'lisp-mode))) :actions nil) 
+   (use-package smartparens
+     :config
+     ;; These are loaded from a file because currently smartparens isn't
+     ;; handling escaped quotations in org well. Funnily enough, smartparens
+     ;; binds requires that I bind to a quotation, which requires an escaped
+     ;; quotation :O
+     (load-file (concat lisp-dir "sp-binds.el"))
+     (sp-pair "'" nil :when '(eq major-mode (or 'org-mode 'lisp-mode)) :actions nil) 
+     (sp-pair "`" nil :when '(eq major-mode (or 'org-mode 'lisp-mode)) :actions nil) 
 
-       (setq sp-base-key-bindings 'paredit)
-       (setq sp-autoskip-closing-pair 'always)
-       (setq sp-hybrid-kill-entire-symbol nil)
-       (setq sp-backward-delete-char 'paredit-backward-delete)
-       (sp-use-paredit-bindings)
+     (setq sp-base-key-bindings 'paredit)
+     (setq sp-autoskip-closing-pair 'always)
+     (setq sp-hybrid-kill-entire-symbol nil)
+     (setq sp-backward-delete-char 'paredit-backward-delete)
+     (sp-use-paredit-bindings)
 
-       (show-smartparens-global-mode +1)
-       (smartparens-global-mode 1)
+     (show-smartparens-global-mode +1)
+     (smartparens-global-mode 1)
 
-       (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
-       (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
+     (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
+     (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
 
-       (diminish 'smartparens-mode))
+     (diminish 'smartparens-mode))
  #+END_SRC
 
  Delete sexp:
@@ -2057,8 +2057,7 @@ I currently prefer using the =CPython= interpreter.
             elpy-syntax-check-command "pylint")
       (defun elpy-on-python-mode ()
         (elpy-mode)
-        (elpy-enable)
-        (sp-pair "'" nil))
+        (elpy-enable))
       (add-hook 'python-mode-hook 'elpy-on-python-mode)
       :bind
       (("C-c ?" . elpy-doc))
