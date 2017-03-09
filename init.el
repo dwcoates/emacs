@@ -145,6 +145,9 @@
  column-number-mode                 t
  )
 
+;; display time in modeline
+(display-time-mode 1)
+
 (set-scroll-bar-mode nil)
 
 (setq-default cursor-in-non-selected-windows nil)
