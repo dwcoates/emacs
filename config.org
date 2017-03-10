@@ -203,12 +203,14 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
              company-idle-delay 0.25
              company-quickhelp-delay nil)
        (bind-key "M-h" 'company-quickhelp-manual-begin))
-     :config 
-     (add-to-list 'company-backends 'company-anaconda)
+    (add-to-list 'company-backends 'company-anaconda)
+     :config      
      (progn
        (setq company-backends (delete 'company-semantic company-backends))
        (use-package helm-company
          :bind ("C-c <tab>" . helm-company)))
+;     (add-to-list 'company-backends 'company-anaconda)
+;     (setq company-backends (delete 'company-capf company-backends))
      (diminish 'company-mode))
  #+end_src
 
@@ -2027,7 +2029,7 @@ I currently prefer using the =CPython= interpreter.
   (setq python-shell-prompt-detect-failure-warning nil
         py-shell-interpreter "python"
         ;; setup the matplotlib backend
-        ; python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg')\"" 
+        python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg')\"" 
         py-shell-switch-buffers-on-execute-p t
         python-shell-enable-font-lock t
         py-smart-indentation t)
@@ -2047,8 +2049,8 @@ I currently prefer using the =CPython= interpreter.
   (use-package helm-dash
     :init)
 
-;  (eval-after-load "python"
-;    '(setq python-shell-setup-code '((python-shell-completion-native-turn-off))))
+  (eval-after-load "python"
+    '(setq python-shell-setup-code '((python-shell-completion-native-turn-off))))
 #+end_src
 
 *** py-autopep8
