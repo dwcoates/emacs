@@ -16,3 +16,6 @@
 [submodule "org-capture-builder"]
 	path = lisp/org-capture-builder
 	url = https://github.com/dwcoates/org-capture-builder
+[submodule "math-symbols"]
+	path = lisp/math-symbols
+	url = https://github.com/dwcoates/math-symbols

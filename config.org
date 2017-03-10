@@ -1363,6 +1363,15 @@ Show whitespace in diff-mode
 
 #+RESULTS:
 
+*** ~math-symbols~ 
+
+#+begin_src emacs-lisp
+  (use-package math-symbols
+    :bind*
+    ("C-c u TAB" . helm-math-sym-get-symbols))
+#+end_src
+
+
 ** Functions
 *** just-one-space
 
