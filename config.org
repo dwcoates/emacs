@@ -191,24 +191,25 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
  *use-package Company*
  #+begin_src emacs-lisp
- (use-package company 
-   :init
-   (add-hook 'after-init-hook 'global-company-mode)
-   ;; provides a little popup for documentation
-   (use-package company-quickhelp
+   (use-package company
      :init
-     (company-quickhelp-mode 1)    
-     :config
-     (setq company-quickhelp-max-lines 10)
-     (setq company-idle-delay 0.25)
-     (setq company-quickhelp-delay nil)
-     (bind-key "M-h" 'company-quickhelp-manual-begin))
-   :config (progn
-             (setq company-backends (delete 'company-semantic company-backends))
-             (use-package helm-company
-               :bind ("C-c <tab>" . helm-company)))
-   (diminish 'company-mode)
-   )
+     (add-hook 'after-init-hook 'global-company-mode)
+     ;; provides a little popup for documentation
+     (use-package company-quickhelp
+       :init
+       (company-quickhelp-mode 1)
+       :config
+       (setq company-quickhelp-max-lines 10
+             company-idle-delay 0.25
+             company-quickhelp-delay nil)
+       (bind-key "M-h" 'company-quickhelp-manual-begin))
+     :config 
+     (add-to-list 'company-backends 'company-anaconda)
+     (progn
+       (setq company-backends (delete 'company-semantic company-backends))
+       (use-package helm-company
+         :bind ("C-c <tab>" . helm-company)))
+     (diminish 'company-mode))
  #+end_src
 
 *** ~auto-complete~ :completion:popups:
@@ -2026,7 +2027,7 @@ I currently prefer using the =CPython= interpreter.
   (setq python-shell-prompt-detect-failure-warning nil
         py-shell-interpreter "python"
         ;; setup the matplotlib backend
-        python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg')\"" 
+        ; python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg')\"" 
         py-shell-switch-buffers-on-execute-p t
         python-shell-enable-font-lock t
         py-smart-indentation t)
@@ -2045,32 +2046,78 @@ I currently prefer using the =CPython= interpreter.
   ;; use helm-dash-install-docset to install docsets
   (use-package helm-dash
     :init)
+
+  (eval-after-load "python"
+    '(setq python-shell-setup-code '((python-shell-completion-native-turn-off))))
 #+end_src
 
-*** elpy
+*** elpy *DISABLED*
 
 #+BEGIN_SRC emacs-lisp
-    (use-package elpy
-      :commands (elpy-mode elpy-enable)
-      :init
-      (setq elpy-rpc-backend "rope"
-            elpy-syntax-check-command "pylint")
-      (defun elpy-on-python-mode ()
-        (elpy-mode)
-        (elpy-enable))
-      (add-hook 'python-mode-hook 'elpy-on-python-mode)
-      :bind
-      (("C-c ?" . elpy-doc))
-      :config
-      ;; (elpy-use-ipython)
-      (when (require 'flycheck nil t)
-        (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-        (add-hook 'elpy-mode-hook 'flycheck-mode))
-      (add-hook 'elpy-mode-hook 'flycheck-mode)
-      (use-package py-autopep8
-        :init
-        (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
+;    (use-package elpy
+;      :commands (elpy-mode elpy-enable)
+;      :init
+;      (setq elpy-rpc-backend "jedi"
+;            elpy-syntax-check-command "pylint")
+;      (defun elpy-on-python-mode ()
+;        (elpy-mode)
+;        (elpy-enable))
+;      (add-hook 'python-mode-hook 'elpy-on-python-mode)
+;      :bind
+;      (("C-c ?" . elpy-doc))
+;      :config
+;      ;; (elpy-use-ipython)
+;      (when (require 'flycheck nil t)
+;        (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+;        (add-hook 'elpy-mode-hook 'flycheck-mode))
+;      (add-hook 'elpy-mode-hook 'flycheck-mode)
+;      (use-package py-autopep8
+;        :init
+;        (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)))
 #+END_SRC
+
+*** anaconda
+
+   =anaconda= (not to be confused with the Python package manager) is an
+   alternative to =elpy=.
+
+#+begin_src emacs-lisp
+  (use-package anaconda-mode
+    :init 
+    (defun my-python-mode-hook ()
+      (anaconda-mode)
+      (anaconda-eldoc-mode))
+    (add-hook 'python-mode-hook 'my-python-mode-hook)
+    (add-hook 'inferior-python-mode-hook 'my-python-mode-hook)
+;    (add-hook 'company-mode-hook
+;              (lambda ()
+;                (add-to-list 'company-backends 'company-anaconda)
+;                (setq company-backends (delete 'company-anaconda company-backends))))
+    (setq python-shell-completion-native-enable nil)
+    :config
+    (use-package company-anaconda
+      :init
+      :after anaconda-mode
+      :config
+      (mapc (lambda (x)
+              (let ((command-name (car x))
+                    (title (cadr x))
+                    (region-p (caddr x))
+                    predicate)
+                (setq predicate (lambda () (and (anaconda-mode-running-p)
+                                                (not (use-region-p))
+                                                (not (sp-point-in-string-or-comment)))
+                                  ))
+                (emr-declare-command (intern
+                                      (format "anaconda-mode-%s"
+                                              (symbol-name command-name)))
+                  :title title :modes 'python-mode :predicate predicate)))
+            '((show-doc          "view documentation" t)
+              (find-assignments  "find assignments"  t)
+              (find-definitions  "find definitions"  t)
+              (find-file         "find assignments"  t)
+              (find-references "show usages" nil)))))
+#+end_src
 
 *** ein
 
@@ -2105,33 +2152,15 @@ I currently prefer using the =CPython= interpreter.
 
 Currently DO NOT attempt to fetch completions from jupyter. It does
 not yet support emacs due to a jupyter bug.
+
 #+begin_src emacs-lisp
-(setq python-shell-completion-native-disabled-interpreters '("jupyter" "pypy"))
+  (setq python-shell-completion-native-disabled-interpreters '("jupyter" "pypy" "python"))
 #+end_src
 
 *** company-anaconda
 
 #+begin_src emacs-lisp
-  (use-package company-anaconda
-    :after anaconda-mode
-    :config
-    (mapc (lambda (x)
-            (let ((command-name (car x))
-                  (title (cadr x))
-                  (region-p (caddr x))
-                  predicate)
-              (setq predicate (lambda () (and (anaconda-mode-running-p)
-                                         (not (use-region-p))
-                                         (not (sp-point-in-string-or-comment)))
-                                         ))
-              (emr-declare-command (intern (format "anaconda-mode-%s" 
-              (symbol-name command-name)))
-                :title title :modes 'python-mode :predicate predicate)))
-          '((show-doc          "view documentation" t)
-            (find-assignments  "find assignments"  t)
-            (find-definitions  "find definitions"  t)
-            (find-file         "find assignments"  t)
-            (find-references "show usages" nil))))
+
 #+end_src
 
 ** C/C++
