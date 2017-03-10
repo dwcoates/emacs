@@ -1,3 +1,4 @@
+/anaconda-mode/*
 auto-save-list
 backups
 *.org
@@ -62,3 +63,6 @@ save
 /snippets/org-mode/olim
 
 ltximg/*
+*.pyc
+/dependencies/ace-isearch-20161107.1730/ace-isearch-autoloads.el
+/dependencies/ace-jump-mode-20140616.115/ace-jump-mode.el

@@ -2018,7 +2018,8 @@ see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-
 ;        ;; use the wx backend, for both mayavi and matplotlib
 ;        python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
 ;        py-shell-switch-buffers-on-execute-p t
-;        py-smart-indentation t)
+;        py-smart-indentation t
+;        python-shell-completion-native-disabled-interpreters '("jupyter" "pypy"))
 #+end_src
 
 *** CPython
@@ -2026,31 +2027,28 @@ see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-
 I currently prefer using the =CPython= interpreter. 
 
 #+begin_src emacs-lisp
-  (setq python-shell-prompt-detect-failure-warning nil
-        py-shell-interpreter "python"
-        ;; setup the matplotlib backend
-        python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg')\"" 
-        py-shell-switch-buffers-on-execute-p t
-        python-shell-enable-font-lock t
-        py-smart-indentation t)
-  ;; subtly gray commmands
-  (set-face-attribute 'comint-highlight-input nil  
-                      :foreground "gray63" :weight 'bold)
+    (setq python-shell-prompt-detect-failure-warning nil
+          py-shell-interpreter "python"
+          ;; setup the matplotlib backend and import pyplot.
+          python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg'); from matplotlib import pyplot as plt\"" 
+          py-shell-switch-buffers-on-execute-p t
+          python-shell-enable-font-lock t
+          py-smart-indentation t
+          python-shell-completion-native-disabled-interpreters '("python" "pypy"))
+
+    ;; subtly gray commmands
+    (set-face-attribute 'comint-highlight-input nil  
+                        :foreground "gray63" :weight 'bold)
+
+    (eval-after-load "python"
+      '(setq python-shell-setup-code '((python-shell-completion-native-turn-off))))
 #+end_src
 
 *** python-mode
 
 #+begin_src emacs-lisp
-  ;; (setenv "PYTHONPATH"
-  ;;         (format
-  ;;          "/usr/bin/python:%s/.local/bin/:%s/workspace/leven-squash"
-  ;;          (getenv "HOME") (getenv "HOME")))
   ;; use helm-dash-install-docset to install docsets
-  (use-package helm-dash
-    :init)
-
-  (eval-after-load "python"
-    '(setq python-shell-setup-code '((python-shell-completion-native-turn-off))))
+  (use-package helm-dash)
 #+end_src
 
 *** py-autopep8
@@ -2161,7 +2159,7 @@ Currently DO NOT attempt to fetch completions from jupyter. It does
 not yet support emacs due to a jupyter bug.
 
 #+begin_src emacs-lisp
-  (setq python-shell-completion-native-disabled-interpreters '("jupyter" "pypy" "python"))
+; none
 #+end_src
 
 *** company-anaconda
