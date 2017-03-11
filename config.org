@@ -717,9 +717,8 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 ** Basic Settings
 
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-c C-b") nil)
+  (global-set-key (kbd "C-x C-b") nil)
 #+end_src
-
 
 Remaps the other-window command. In general, commands with consecutive 
 #+begin_src emacs-lisp 
@@ -750,8 +749,8 @@ Quickly move the cursor to the first instance of a character with iy-go-to-char:
   (add-hook 'find-file-hook 'safe-file-visit-hook)
 #+end_src
 
-
 General navigation bindings:
+
 #+begin_src emacs-lisp
 ;(key-chord-define-global "fp" 'find-file-at-point)
 
@@ -762,8 +761,8 @@ General navigation bindings:
 (global-set-key (kbd "C-x DEL") 'delete-window)
 #+end_src
 
-
 Key bindings for other files:
+
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-c o f e")
                 (lambda ()
