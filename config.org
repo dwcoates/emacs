@@ -716,6 +716,11 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 * Windowing
 ** Basic Settings
 
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c C-b") nil)
+#+end_src
+
+
 Remaps the other-window command. In general, commands with consecutive 
 #+begin_src emacs-lisp 
   (global-set-key (kbd "C-x o") 'other-window)
