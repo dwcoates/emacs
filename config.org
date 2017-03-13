@@ -191,27 +191,25 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
  *use-package Company*
  #+begin_src emacs-lisp
-   (use-package company
-     :init
-     (add-hook 'after-init-hook 'global-company-mode)
-     ;; provides a little popup for documentation
-     (use-package company-quickhelp
-       :init
-       (company-quickhelp-mode 1)
-       :config
-       (setq company-quickhelp-max-lines 10
-             company-idle-delay 0.25
-             company-quickhelp-delay nil)
-       (bind-key "M-h" 'company-quickhelp-manual-begin))
-    (add-to-list 'company-backends 'company-anaconda)
-     :config      
-     (progn
-       (setq company-backends (delete 'company-semantic company-backends))
-       (use-package helm-company
-         :bind ("C-c <tab>" . helm-company)))
-;     (add-to-list 'company-backends 'company-anaconda)
-;     (setq company-backends (delete 'company-capf company-backends))
-     (diminish 'company-mode))
+      (use-package company
+        :init
+        (add-hook 'after-init-hook 'global-company-mode)
+        ;; provides a little popup for documentation
+        (use-package company-quickhelp
+          :init
+          (company-quickhelp-mode 1)
+          :config
+          (setq company-quickhelp-max-lines 10
+                company-idle-delay 0.25
+                company-quickhelp-delay nil)
+          (bind-key "M-h" 'company-quickhelp-manual-begin))
+        (add-to-list 'company-backends 'company-anaconda)
+        :config      
+        (progn
+          (setq company-backends (delete 'company-semantic company-backends))
+          (use-package helm-company
+            :bind ("C-c <tab>" . helm-company)))
+        (diminish 'company-mode))
  #+end_src
 
 *** ~auto-complete~ :completion:popups:
@@ -2063,6 +2061,10 @@ I currently prefer using the =CPython= interpreter.
 #+begin_src emacs-lisp
   ;; use helm-dash-install-docset to install docsets
   (use-package helm-dash)
+
+  (add-hook 'python-mode-hook
+                 '(lambda ()
+                   (setq-local completion-at-point-functions nil)))
 #+end_src
 
 *** py-autopep8
@@ -2107,12 +2109,8 @@ I currently prefer using the =CPython= interpreter.
       (anaconda-mode)
       (anaconda-eldoc-mode))
     (add-hook 'python-mode-hook 'my-python-mode-hook)
-    (add-hook 'inferior-python-mode-hook 'my-python-mode-hook)
-    (add-hook 'company-mode-hook
-              (lambda ()
-                (add-to-list 'company-backends 'company-anaconda)
-                (setq company-backends (delete 'company-anaconda company-backends))))
-    (setq python-shell-completion-native-enable nil)
+    (add-hook 'inferior-python-mode (lambda () (add-to-list 'company-backends 'company-capf)))
+    (eval-after-load "company" '(add-to-list 'company-backends 'company-anaconda))
     :config
     (use-package company-anaconda
       :init
