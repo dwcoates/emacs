@@ -1678,12 +1678,21 @@ Comment out a line:
 
 * Software Development
 
-  Folding code
+  Folding code, vim-style
 
 #+begin_src emacs-lisp
-  (hs-minor-mode 1)
-  (global-set-key (kbd "C-c h") 'hs-hide-block)
-  (global-set-key (kbd "C-c H") 'hs-show-block)
+  (use-package vimish-fold
+    :bind*
+    (("C-c f h" . vimish-fold)
+     ("C-c f s" . vimish-fold-unfold)
+     ("C-c f S" . vimish-fold-unfold-all)
+     ("C-c f d" . vimish-fold-delete)
+     ("C-c f D" . vimish-fold-delete-all)
+     ("C-c f TAB" . vimish-fold-toggle)
+     ("C-c f <C-tab>" . vimish-fold-toggle-all)
+     ("C-c f /" . vimish-fold-refold)
+     ("C-c f ?" . vimish-fold-refold-all)
+     ("C-c f m" . vimish-fold-avy)))
 #+end_src
 
   Code searching with ~imenu~ 
