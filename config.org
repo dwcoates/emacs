@@ -191,25 +191,25 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
  *use-package Company*
  #+begin_src emacs-lisp
-      (use-package company
-        :init
-        (add-hook 'after-init-hook 'global-company-mode)
-        ;; provides a little popup for documentation
-        (use-package company-quickhelp
-          :init
-          (company-quickhelp-mode 1)
-          :config
-          (setq company-quickhelp-max-lines 10
-                company-idle-delay 0.25
-                company-quickhelp-delay nil)
-          (bind-key "M-h" 'company-quickhelp-manual-begin))
-        (add-to-list 'company-backends 'company-anaconda)
-        :config      
-        (progn
-          (setq company-backends (delete 'company-semantic company-backends))
-          (use-package helm-company
-            :bind ("C-c <tab>" . helm-company)))
-        (diminish 'company-mode))
+   (use-package company
+     :init
+     (add-hook 'after-init-hook 'global-company-mode)
+     ;; provides a little popup for documentation
+     (use-package company-quickhelp
+       :config
+       (setq company-quickhelp-max-lines 10
+             company-idle-delay 2.0
+             company-quickhelp-delay 0.25)
+       (bind-key "M-h" 'company-quickhelp-manual-begin company-mode-map)
+       (bind-key "C-;" 'company-manual-begin))
+     (add-to-list 'company-backends 'company-anaconda)
+     :config      
+     (progn
+       (setq company-backends (delete 'company-semantic company-backends))
+       (use-package helm-company
+         :bind ("C-c <tab>" . helm-company)))
+     (diminish 'company-mode)
+     (company-quickhelp-mode 1))
  #+end_src
 
 *** ~auto-complete~ :completion:popups:
