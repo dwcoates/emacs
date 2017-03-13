@@ -1012,15 +1012,6 @@ Remap =M-k= to ~kill-whole-line~
   (global-set-key (kbd "M-k") 'kill-whole-line)
 #+end_src
 
-Folding code
-
-#+begin_src emacs-lisp
-  (hs-minor-mode 1)
-  (global-set-key (kbd "C-c h") 'hs-hide-block)
-  (global-set-key (kbd "C-c H") 'hs-show-block)
-#+end_src
-
-
 *** Parentheses
 
  #+BEGIN_SRC emacs-lisp
@@ -1686,6 +1677,21 @@ Comment out a line:
 #+end_src
 
 * Software Development
+
+  Folding code
+
+#+begin_src emacs-lisp
+  (hs-minor-mode 1)
+  (global-set-key (kbd "C-c h") 'hs-hide-block)
+  (global-set-key (kbd "C-c H") 'hs-show-block)
+#+end_src
+
+  Code searching with ~imenu~ 
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c i") 'imenu)
+#+end_src
+
 
   ~nlinum~ mode, a line numbering minor-mode, is much faster than ~linum~ mode.
 
