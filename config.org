@@ -1681,18 +1681,30 @@ Comment out a line:
   Folding code, vim-style
 
 #+begin_src emacs-lisp
-  (use-package vimish-fold
-    :bind*
-    (("C-c f h" . vimish-fold)
-     ("C-c f s" . vimish-fold-unfold)
-     ("C-c f S" . vimish-fold-unfold-all)
-     ("C-c f d" . vimish-fold-delete)
-     ("C-c f D" . vimish-fold-delete-all)
-     ("C-c f TAB" . vimish-fold-toggle)
-     ("C-c f <C-tab>" . vimish-fold-toggle-all)
-     ("C-c f /" . vimish-fold-refold)
-     ("C-c f ?" . vimish-fold-refold-all)
-     ("C-c f m" . vimish-fold-avy)))
+      (use-package vimish-fold
+        :config
+        (defun vimish-fold-defun-fold () 
+          (interactive)
+          (vimish-fold (save-excursion (beginning-of-defun) (point))
+                       (save-excursion (end-of-defun) (point))))
+        (defun vimish-fold-python-block-fold ()
+          (interactive)
+          (vimish-fold (save-excursion (python-nav-beginning-of-block) (point))
+                       (save-excursion (python-nav-end-of-block) (point))))
+        :bind*
+        (("C-c f RET" . vimish-fold)
+         ("C-c f s" . vimish-fold-unfold)
+         ("C-c f S" . vimish-fold-unfold-all)
+         ("C-c f d" . vimish-fold-delete)
+         ("C-c f D" . vimish-fold-delete-all)
+         ("C-c f TAB" . vimish-fold-toggle)
+         ("C-c f <C-tab>" . vimish-fold-toggle-all)
+         ("C-c f h" . vimish-fold-refold)
+         ("C-c f H" . vimish-fold-refold-all)
+         ("C-c f m" . vimish-fold-avy)
+         ("C-c f f" . vimish-fold-defun-fold)
+         :map python-mode-map
+         ("C-c f b" . vimish-fold-python-block-fold)))
 #+end_src
 
   Code searching with ~imenu~ 

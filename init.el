@@ -137,7 +137,7 @@
  inhibit-startup-message            t
  ;; cursor
  blink-cursor-mode                  nil
- cursor-type                        'bar
+ cursor-type                        'box
  ;; highlight current line
  global-hl-line-mode                nil
  display-time-mode                  t
