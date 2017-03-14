@@ -132,6 +132,7 @@
                                            lines-tail)
  whitespace-display-mappings        '((tab-mark ?\t [?› ?\t])
                                       (newline-mark 10 [36 10]))
+ split-width-threshold 1
  ;;          INTERFACE
  ;v; no splash message
  inhibit-startup-message            t
