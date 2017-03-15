@@ -1837,6 +1837,27 @@ Comment out a line:
   (define-key comint-mode-map (kbd "M-r") 'comint-history-isearch-backward)
 #+end_src
 
+#+begin_src emacs-lisp
+  (defvar python-comint-output-limit 2000)
+
+  (defun python-truncate-comint-output (string)
+    "Does not truncate STRING currently, in order to avoid dangling quotes and parens."
+    (let* ((line-lengths (mapcar 'length (split-string string "\n")))
+           ;; Avoid treating mulitline things like DataFrame output as junk to be removed
+           (size (if (> (apply '+ (mapcar (lambda (l) (if (> l 120) 1 0)) line-lengths)) 0)
+                     (length string)
+                   0)))
+      (if (and (>  size python-comint-output-limit)
+               (equal major-mode 'inferior-python-mode))
+          (format-message
+           "\nOutput character length (%s) exceeds character limit `python-comint-output-limit` (%s).\n"
+           (length string)
+           python-comint-output-limit)
+        string)))
+
+  (add-hook 'comint-preoutput-filter-functions 'python-truncate-comint-output)
+#+end_src
+
 *** ~EMR~
 
 #+begin_src emacs-lisp
