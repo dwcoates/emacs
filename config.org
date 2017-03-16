@@ -197,7 +197,12 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
      ;; provides a little popup for documentation
      :bind*
      (("C-'" . company-files)
-      ("C-;" . company-manual-begin))
+      ("C-;" . company-manual-begin)
+      :map company-active-map
+      ("C-n" . company-select-next)
+      ("C-p" . company-select-previous)
+      ("M-n" . company-next-page)
+      ("M-p" . company-previous-page))
      :config
      (use-package company-quickhelp
        :config
