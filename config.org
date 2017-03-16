@@ -195,15 +195,17 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
      :init
      (add-hook 'after-init-hook 'global-company-mode)
      ;; provides a little popup for documentation
+     :bind*
+     (("C-'" . company-files)
+      ("C-;" . company-manual-begin))
+     :config
      (use-package company-quickhelp
        :config
        (setq company-quickhelp-max-lines 10
              company-idle-delay 2.0
              company-quickhelp-delay 0.25)
-       (bind-key "M-h" 'company-quickhelp-manual-begin company-mode-map)
-       (bind-key "C-;" 'company-manual-begin))
+       (bind-key "M-h" 'company-quickhelp-manual-begin company-mode-map))
      (add-to-list 'company-backends 'company-anaconda)
-     :config      
      (progn
        (setq company-backends (delete 'company-semantic company-backends))
        (use-package helm-company
