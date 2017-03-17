@@ -898,7 +898,7 @@ screen for minute.
      :config
      (shackle-mode 1)
      (setq 
-      shackle-default-rule '(:inhibit-window-quit t)
+      shackle-default-rule '(:inhibit-window-quit t :other t :align right)
       shackle-rules
       `(;; Util
         ("^\\*.+-Profiler-Report .+\\*$"
