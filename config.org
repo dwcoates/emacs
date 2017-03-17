@@ -1695,6 +1695,72 @@ Comment out a line:
 
 * Software Development
 
+  Use helm-dash-install-docset to install docsets. Nice package!!
+
+#+begin_src emacs-lisp
+  (use-package helm-dash)
+#+end_src
+
+  Basic navigation
+
+#+begin_src emacs-lisp
+  (define-key prog-mode-map (kbd "C-c e") 'end-of-defun)
+  (define-key prog-mode-map (kbd "C-c a") 'beginning-of-defun)
+#+end_src
+
+  Code searching with ~imenu~ 
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c i") 'imenu)
+#+end_src
+
+  ~nlinum~ mode, a line numbering minor-mode, is much faster than ~linum~ mode.
+
+#+begin_src emacs-lisp
+  (use-package nlinum)
+#+end_src
+
+  Show unncessary whitespace that can mess up your diff
+
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook (lambda () (interactive)
+                              (setq show-trailing-whitespace 1)
+                              (linum-mode t) ; use linum, not nlinum
+                              ))
+#+end_src
+
+  ~hs-minor-mode~ gives us the ability to fold and unfold code and comments
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode 'hs-minor-mode)
+
+  (global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
+  (global-set-key (kbd "C-c f h") 'hs-hide-block)
+  (global-set-key (kbd "C-c f s") 'hs-show-block)
+  (global-set-key (kbd "C-c f a h") 'hs-hide-all)
+  (global-set-key (kbd "C-c f a s") 'hs-show-all)
+#+END_SRC
+
+  ~dired~ should have a key for launching ~magit~
+
+#+begin_src emacs-lisp
+(define-key dired-mode-map (kbd "z") 'magit-status)
+#+end_src
+
+
+** General Settings
+*** Editing
+
+    In programming modes, replace ~backwards-kill-word~ command with ~backward-kill-sexp~
+
+#+begin_src emacs-lisp
+  (define-key prog-mode-map (kbd "M-S-<backspace>") 'backward-kill-sexp)
+  (define-key smartparens-mode-map (kbd "M-S-<backspace>") 'backward-kill-sexp)
+  (define-key prog-mode-map (kbd "M-S-d") 'kill-sexp)
+  (define-key smartparens-mode-map (kbd "M-S-d") 'kill-sexp)
+#+end_src
+*** 
+
   Folding code, vim-style
 
 #+begin_src emacs-lisp
@@ -1724,52 +1790,6 @@ Comment out a line:
          ("C-c f b" . vimish-fold-python-block-fold)))
 #+end_src
 
-  Code searching with ~imenu~ 
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c i") 'imenu)
-#+end_src
-
-
-  ~nlinum~ mode, a line numbering minor-mode, is much faster than ~linum~ mode.
-
-#+begin_src emacs-lisp
-  (use-package nlinum)
-#+end_src
-
-  Show unncessary whitespace that can mess up your diff
-
-#+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook (lambda () (interactive)
-                              (setq show-trailing-whitespace 1)
-                              (linum-mode t) ; use linum, not nlinum
-                              ))
-#+end_src
-
-  ~hs-minor-mode~ gives us the ability to fold and unfold code and comments
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'prog-mode 'hs-minor-mode)
-
-  (global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
-  (global-set-key (kbd "C-c f h") 'hs-hide-block)
-  (global-set-key (kbd "C-c f s") 'hs-show-block)
-  (global-set-key (kbd "C-c f a h") 'hs-hide-all)
-  (global-set-key (kbd "C-c f a s") 'hs-show-all)
-#+END_SRC
-
-** General Settings
-*** Editing
-
-    In programming modes, replace ~backwards-kill-word~ command with ~backward-kill-sexp~
-
-#+begin_src emacs-lisp
-  (define-key prog-mode-map (kbd "M-S-<backspace>") 'backward-kill-sexp)
-  (define-key smartparens-mode-map (kbd "M-S-<backspace>") 'backward-kill-sexp)
-  (define-key prog-mode-map (kbd "M-S-d") 'kill-sexp)
-  (define-key smartparens-mode-map (kbd "M-S-d") 'kill-sexp)
-#+end_src
-*** 
 *** Semantic
 
 #+begin_src emacs-lisp
@@ -2144,10 +2164,14 @@ I currently prefer using the =CPython= interpreter.
 
 *** python-mode
 
-#+begin_src emacs-lisp
-  ;; use helm-dash-install-docset to install docsets
-  (use-package helm-dash)
+  Basic navigation
 
+#+begin_src emacs-lisp
+  (define-key prog-mode-map (kbd "C-c C-e") 'python-nav-end-of-block)
+  (define-key prog-mode-map (kbd "C-c C-a") 'python-nav-beginning-of-block)
+#+end_src
+
+#+begin_src emacs-lisp
   (add-hook 'python-mode-hook
                  '(lambda ()
                    (setq-local completion-at-point-functions nil)))
