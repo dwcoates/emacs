@@ -1698,6 +1698,47 @@ Comment out a line:
   (define-key prog-mode-map (kbd "C-c a") 'beginning-of-defun)
 #+end_src
 
+  Code searching with ~imenu~ 
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c i") 'imenu)
+#+end_src
+
+  ~nlinum~ mode, a line numbering minor-mode, is much faster than ~linum~ mode.
+
+#+begin_src emacs-lisp
+  (use-package nlinum)
+#+end_src
+
+  Show unncessary whitespace that can mess up your diff
+
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook (lambda () (interactive)
+                              (setq show-trailing-whitespace 1)
+                              (linum-mode t) ; use linum, not nlinum
+                              ))
+#+end_src
+
+  ~hs-minor-mode~ gives us the ability to fold and unfold code and comments
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode 'hs-minor-mode)
+
+  (global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
+  (global-set-key (kbd "C-c f h") 'hs-hide-block)
+  (global-set-key (kbd "C-c f s") 'hs-show-block)
+  (global-set-key (kbd "C-c f a h") 'hs-hide-all)
+  (global-set-key (kbd "C-c f a s") 'hs-show-all)
+#+END_SRC
+
+  ~dired~ should have a key for launching ~magit~
+
+#+begin_src emacs-lisp
+(define-key dired-mode-map (kbd "z") 'magit-status)
+#+end_src
+
+
+** General Settings
 
   Folding code, vim-style
 
@@ -1728,41 +1769,6 @@ Comment out a line:
          ("C-c f b" . vimish-fold-python-block-fold)))
 #+end_src
 
-  Code searching with ~imenu~ 
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c i") 'imenu)
-#+end_src
-
-
-  ~nlinum~ mode, a line numbering minor-mode, is much faster than ~linum~ mode.
-
-#+begin_src emacs-lisp
-  (use-package nlinum)
-#+end_src
-
-  Show unncessary whitespace that can mess up your diff
-
-#+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook (lambda () (interactive)
-                              (setq show-trailing-whitespace 1)
-                              (linum-mode t) ; use linum, not nlinum
-                              ))
-#+end_src
-
-  ~hs-minor-mode~ gives us the ability to fold and unfold code and comments
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'prog-mode 'hs-minor-mode)
-
-  (global-set-key (kbd "C-c f t") 'hs-toggle-hiding)
-  (global-set-key (kbd "C-c f h") 'hs-hide-block)
-  (global-set-key (kbd "C-c f s") 'hs-show-block)
-  (global-set-key (kbd "C-c f a h") 'hs-hide-all)
-  (global-set-key (kbd "C-c f a s") 'hs-show-all)
-#+END_SRC
-
-** General Settings
 *** Semantic
 
 #+begin_src emacs-lisp
