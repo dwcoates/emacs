@@ -1764,10 +1764,12 @@ Comment out a line:
     In programming modes, replace ~backwards-kill-word~ command with ~backward-kill-sexp~
 
 #+begin_src emacs-lisp
-  (define-key prog-mode-map (kbd "M-<backspace>") 'backward-kill-sexp)
-  (define-key smartparens-mode-map (kbd "M-<backspace>") 'backward-kill-sexp)
+  (define-key prog-mode-map (kbd "M-S-<backspace>") 'backward-kill-sexp)
+  (define-key smartparens-mode-map (kbd "M-S-<backspace>") 'backward-kill-sexp)
+  (define-key prog-mode-map (kbd "M-S-d") 'kill-sexp)
+  (define-key smartparens-mode-map (kbd "M-S-d") 'kill-sexp)
 #+end_src
-
+*** 
 *** Semantic
 
 #+begin_src emacs-lisp
