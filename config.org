@@ -911,6 +911,8 @@ screen for minute.
          :align below :size 0.5 :noselect t :inhibit-window-quit nil)
         ("*eval*"
          :align below :size 16  :noselect t :inhibit-window-quit nil)
+        (helm-mode :ignore t)
+        ("\\`\\*helm.*?\\*\\'" :regexp t :align  :size 0.4)
         ;; Emacs
         ("*Pp Eval Output*"
          :align below :size 0.3 :inhibit-window-quit nil)
