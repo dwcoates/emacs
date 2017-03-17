@@ -1685,6 +1685,20 @@ Comment out a line:
 
 * Software Development
 
+  Use helm-dash-install-docset to install docsets. Nice package!!
+
+#+begin_src emacs-lisp
+  (use-package helm-dash)
+#+end_src
+
+  Basic navigation
+
+#+begin_src emacs-lisp
+  (define-key prog-mode-map (kbd "C-c e") 'end-of-defun)
+  (define-key prog-mode-map (kbd "C-c a") 'beginning-of-defun)
+#+end_src
+
+
   Folding code, vim-style
 
 #+begin_src emacs-lisp
@@ -2122,10 +2136,14 @@ I currently prefer using the =CPython= interpreter.
 
 *** python-mode
 
-#+begin_src emacs-lisp
-  ;; use helm-dash-install-docset to install docsets
-  (use-package helm-dash)
+  Basic navigation
 
+#+begin_src emacs-lisp
+  (define-key prog-mode-map (kbd "C-c C-e") 'python-nav-end-of-block)
+  (define-key prog-mode-map (kbd "C-c C-a") 'python-nav-beginning-of-block)
+#+end_src
+
+#+begin_src emacs-lisp
   (add-hook 'python-mode-hook
                  '(lambda ()
                    (setq-local completion-at-point-functions nil)))
