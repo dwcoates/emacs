@@ -1021,6 +1021,14 @@ Remap =M-k= to ~kill-whole-line~
   (global-set-key (kbd "M-k") 'kill-whole-line)
 #+end_src
 
+Use ~subword-mode~, which treats camelcase components as word, so, for example,
+when backwards deleting a word, it will stop at the nearest capital letter.
+
+#+begin_src emacs-lisp
+(global-subword-mode 1)
+#+end_src
+
+
 *** Parentheses
 
  #+BEGIN_SRC emacs-lisp
@@ -1751,6 +1759,15 @@ Comment out a line:
 #+END_SRC
 
 ** General Settings
+*** Editing
+
+    In programming modes, replace ~backwards-kill-word~ command with ~backward-kill-sexp~
+
+#+begin_src emacs-lisp
+  (define-key prog-mode-map (kbd "M-<backspace>") 'backward-kill-sexp)
+  (define-key smartparens-mode-map (kbd "M-<backspace>") 'backward-kill-sexp)
+#+end_src
+
 *** Semantic
 
 #+begin_src emacs-lisp
