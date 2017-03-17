@@ -1850,10 +1850,11 @@ Comment out a line:
   (defun python-truncate-comint-output (string)
     "Does not truncate STRING currently, in order to avoid dangling quotes and parens."
     (let* ((line-lengths (mapcar 'length (split-string string "\n")))
+           (line-max-size 120)
            ;; Avoid treating mulitline things like DataFrame output as junk to be removed
-           (size (if (> (apply '+ (mapcar (lambda (l) (if (> l 120) 1 0)) line-lengths)) 0)
-                     (length string)
-                   0)))
+           (size (apply '+ (mapcar
+                            (lambda (l) (if (< l line-max-size) (* 0.4 l) l))
+                            line-lengths))))
       (if (and (>  size python-comint-output-limit)
                (equal major-mode 'inferior-python-mode))
           (format-message
