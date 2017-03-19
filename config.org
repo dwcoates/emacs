@@ -2176,10 +2176,18 @@ intuitive. Based on ~ESS~.
                           (backward-paragraph)
                           (forward-line)
                           (python-info-current-defun))
-          (python-shell-send-defun)
+          (progn 
+            (python-shell-send-defun)
+            (message (propertize "Sent '%s' function to python interpreter")
+                     (propertize (python-info-current-defun) 'face
+                                 '(:foreground "#66D9EF"))
+                     ))
         (python-shell-send-paragraph-and-step)
           )))
 #+end_src
+
+#+RESULTS:
+: python-shell-send-code
 
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
 improved function.
