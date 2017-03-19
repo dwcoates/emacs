@@ -1939,11 +1939,12 @@ Comment out a line:
     (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
     (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy)
     :config
+    (when (require 'smartparens nil t)
+      (smartparens-mode -1))
     (defun conditionally-enable-lispy ()
       (when (eq this-command 'eval-expression)
         (lispy-mode 1))))
 #+end_src
-
 
 *** General Lisp Settings
 
@@ -2976,7 +2977,6 @@ Display images in the results section of the org buffer (like a normal notebook)
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 #+end_src
 
-
 #+begin_src emacs-lisp
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -2988,8 +2988,8 @@ Display images in the results section of the org buffer (like a normal notebook)
    (R . t)))
 #+end_src
 
-
 Editting source code
+
 #+begin_src emacs-lisp
   (define-key org-mode-map (kbd "C-c RET") 'org-edit-special)
   (define-key org-src-mode-map (kbd "C-c k") 'org-exit-src-code)
@@ -2999,6 +2999,17 @@ Editting source code
 (require 'ox-jupyter)
 
 (require 'ox-ipynb)
+#+end_src
+
+Advice to fix annoying org bug that messes up font-locking after editing
+source blocks.
+
+#+begin_src emacs-lisp
+  (defun org-edit-source-advice (funct &rest args)
+    (funcall funct)
+    (org-restart-font-lock))
+
+  (advice-add 'org-edit-src-exit :around 'org-edit-source-advice)
 #+end_src
 
 ** Capture
