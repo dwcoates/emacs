@@ -2126,6 +2126,40 @@ My clojure-mode hook
 #+END_SRC
 
 ** Python
+
+Some functions that will help make dealing with .py/shell workflow more
+intuitive. Based on ~ESS~.
+
+#+begin_src emacs-lisp
+  (defun python-shell-send-paragraph-and-step ()
+    (interactive)
+    (save-excursion
+      (forward-paragraph)
+      (let ((end (point)))
+        (backward-paragraph)
+        (python-shell-send-region (point) end)))
+    (forward-paragraph)
+    (forward-paragraph)
+    (forward-line -1))
+
+  (defun python-shell-send-code ()
+    (interactive)
+    (interactive "P")
+    (if (and transient-mark-mode mark-active ;; xemacs doesn't have use-region-p
+             (> (region-end) (region-beginning)))
+        (let ((end (region-end)))
+          (python-shell-send-region (region-beginning) end)
+          (goto-char end))
+      (python-shell-send-paragraph-and-step)))
+#+end_src
+
+Replace the normal binding (which is set to ~python-shell-send-file~) with this
+improved function.
+
+#+begin_src emacs-lisp
+  (define-key python-mode-map (kbd "C-c C-c") 'python-shell-send-code)
+#+end_src
+
 *** IPython *DISABLED*
 
 see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0][here]] for info on IPython 5 is not working properly in Emacs.

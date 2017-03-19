@@ -12,7 +12,7 @@
  '(global-ace-isearch-mode t)
  '(org-agenda-files
    (quote
-    ("~/personal/philosophy/" "~/personal/school/bootcamp/" "~/personal/school/" "~/personal/projects/" "~/personal/work/" "~/personal/politics/" "~/personal/computers/" "~/personal/math/" "~/personal/")))
+    ("~/personal/projects/" "~/personal/math/" "~/personal/philosophy/" "~/personal/school/bootcamp/" "~/personal/school/" "~/personal/politics/" "~/personal/computers/" "~/personal/work/" "~/personal/")))
  '(package-selected-packages
    (quote
     (vimish-fold scratch pylint darkroom gnugo chess hlinum org-download atchka-org helm-dictionary dictionary help-fns+ org-agenda-property jump-char ein keychords key-chords helm-smex smex ace-popup-menu ace-jump-zap ace-jump-buffer ace-flyspell magic-latex-buffer counsel dash-functional cider clojure-mode json-reformat json-snatcher projectile iedit yasnippet ace-jump-mode json-mode helm-dash pdf-tools git-gutter-fringe+ helm-fuzzier helm-flx curchg cursor-chg helm-unicode elpy omni-scratch general gist w3m evil nlinum git-gutter+ zygospore xkcd ws-butler volatile-highlights use-package undo-tree tea-time sx sr-speedbar smooth-scroll smartparens smart-mode-line shackle rainbow-delimiters py-autopep8 persistent-scratch org-plus-contrib ob-ipython neotree magit key-chord iy-go-to-char hydra htmlize helm-projectile helm-gtags helm-company guide-key golden-ratio git-gutter-fringe function-args flycheck-clojure expand-region ess emr edit-server duplicate-thing dtrt-indent doom-themes company-quickhelp company-c-headers company-anaconda clojure-mode-extra-font-locking clean-aindent-mode char-menu auto-complete auto-compile anzu ace-window ace-isearch)))
