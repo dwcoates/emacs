@@ -1764,9 +1764,9 @@ Comment out a line:
       ;; Evaluate expression in the current buffer.
       (setq eir-ielm-eval-in-current-buffer t)
       ;; for .el files
-      (define-key emacs-lisp-mode-map (kbd "<C-return>") 'eir-eval-in-ielm)
+      (define-key emacs-lisp-mode-map (kbd "C-x <return>") 'eir-eval-in-ielm)
       ;; for *scratch*
-      (define-key lisp-interaction-mode-map (kbd "<C-return>") 'eir-eval-in-ielm)
+      (define-key lisp-interaction-mode-map (kbd "C-x <return>") 'eir-eval-in-ielm)
       ;; for M-x info
       (define-key Info-mode-map (kbd "<C-return>") 'eir-eval-in-ielm))
     (when (require 'cider nil t)
@@ -1790,6 +1790,10 @@ Comment out a line:
 
 ** General Settings
 *** Editing
+
+#+begin_src emacs-lisp
+    (define-key prog-mode-map (kbd "<return>") 'newline-and-indent)
+#+end_src
 
     In programming modes, replace ~backwards-kill-word~ command with ~backward-kill-sexp~
 
@@ -2297,7 +2301,8 @@ I currently prefer using the =CPython= interpreter.
     (require 'eval-in-repl-python)
     (add-hook 'python-mode-hook
               '(lambda ()
-                 (local-set-key (kbd "<C-return>") 'eir-eval-in-python)))
+                 (local-set-key (kbd "C-x <return>") 'eir-eval-in-python)))
+    (setq-local eir-jump-after-eval nil)
     (define-key python-mode-map (kbd "C-c C-c") 'python-shell-send-code-and-step)
     (define-key prog-mode-map (kbd "C-c C-e") 'python-nav-end-of-block)
     (define-key prog-mode-map (kbd "C-c C-a") 'python-nav-beginning-of-block)
