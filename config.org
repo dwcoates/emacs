@@ -2157,8 +2157,12 @@ intuitive. Based on ~ESS~.
     (if (and transient-mark-mode 
              mark-active 
              (> (region-end) (region-beginning)))
-        (let ((end (region-end)))
-          (python-shell-send-region (region-beginning) end)
+        (let ((end (region-end))
+              (beg (region-beginning)))
+          (python-shell-send-region beg end)
+          (message "Sent region between lines %d and %d to python interpreter"
+                   (line-number-at-pos beg)
+                   (line-number-at-pos end))
           (goto-char end))
       (python-shell-send-paragraph-and-step)))
 #+end_src
