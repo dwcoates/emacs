@@ -1929,6 +1929,22 @@ Comment out a line:
 #+end_src
 
 ** Lisps
+
+~lispy~ is a core lisp-editing package developed by [[https://github.com/abo-abo/lispy][abo-abo]].
+
+#+begin_src emacs-lisp
+  (use-package
+    :commands conditionally-enable-lispy
+    :init
+    (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
+    (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy)
+    :config
+    (defun conditionally-enable-lispy ()
+      (when (eq this-command 'eval-expression)
+        (lispy-mode 1))))
+#+end_src
+
+
 *** General Lisp Settings
 
 Define hooks:
@@ -2138,63 +2154,71 @@ Some functions that will help make dealing with .py/shell workflow more
 intuitive. Based on ~ESS~.
 
 #+begin_src emacs-lisp
-  (defun python-shell-send-paragraph-and-step ()
-    (interactive)
-    (save-excursion
-      (forward-paragraph)
-      (let* ((end (point))
-             (beg (progn (backward-paragraph) (forward-line) (point)))
-             (num-lines (+ (- (line-number-at-pos end)
-                              (line-number-at-pos beg)) 1)))
-        (python-shell-send-region beg end)
-        (message "Sent %d line%s of code to python interpreter"
-                 num-lines
-                 (if (equal num-lines 1) "" "s"))
-        ))
-    (forward-paragraph)
-    ;; when at last paragraph, don't step to beginning of "next" paragraph
-    (unless (equal (line-number-at-pos (point))
-               (progn (forward-paragraph) (line-number-at-pos (point))))
-      (backward-paragraph)
-      (forward-line 1)))
+    (defvar python-shell-send-code-step-on-function nil
+      "If non-nil, step sending a function to the python interpreter.")
 
-  (defun python-shell-send-code ()
-    (interactive)
-    ;; xemacs doesn't have use-region-p
-    (if (and transient-mark-mode 
-             mark-active 
-             (> (region-end) (region-beginning)))
-        (let ((end (region-end))
-              (beg (region-beginning)))
+    (defun python-shell-step-after-defun ()
+      (forward-paragraph)
+      ;; when at last paragraph, don't step to beginning of "next" paragraph
+      (unless (equal (line-number-at-pos (point))
+                     (progn (forward-paragraph) (line-number-at-pos (point))))
+        (backward-paragraph)
+        (forward-line 1)))
+
+    (defun python-shell-send-paragraph-and-step ()
+      "Send current paragraph of code and move point to the beginning of next paragraph."
+      (interactive)
+      (save-excursion
+        (let* ((beg (point))
+               (end (progn (forward-paragraph) (forward-line -1) (point)))
+               (num-lines (+ (- (line-number-at-pos end)
+                                (line-number-at-pos beg)) 1)))
           (python-shell-send-region beg end)
-          (message "Sent region between lines %d and %d to python interpreter"
-                   (line-number-at-pos beg)
-                   (line-number-at-pos end))
-          (goto-char end))
-      ;; send function if in a function, else send block and iterate
-      (if (save-excursion (forward-paragraph)
-                          (backward-paragraph)
-                          (forward-line)
-                          (python-info-current-defun))
-          (progn 
-            (python-shell-send-defun)
-            (message (propertize "Sent '%s' function to python interpreter")
-                     (propertize (python-info-current-defun) 'face
-                                 '(:foreground "#66D9EF"))
-                     ))
-        (python-shell-send-paragraph-and-step)
-          )))
+         (message "Sent %d line%s of code to python interpreter"
+                  num-lines
+                  (if (equal num-lines 1) "" "s"))
+          ))
+      (python-shell-step-after-defun))
+
+    (defun python-current-defun ()
+      "`python-info-current-defun' doesn't when on a blank line, for some reason."
+      (interactive)
+      (save-excursion (forward-paragraph)
+                      (backward-paragraph)
+                      (forward-line)
+                      (python-info-current-defun)))
+
+    (defun python-shell-send-code-and-step ()
+      (interactive)
+      ;; xemacs doesn't have use-region-p
+      (cond ((use-region-p)
+             (let ((end (region-end))
+                   (beg (region-beginning)))
+               (python-shell-send-region beg end)
+               (message "Sent region between lines %d and %d to python interpreter"
+                        (line-number-at-pos beg)
+                        (line-number-at-pos end))
+               (goto-char end)))
+            ;; send function if in a function, else send block and iterate
+            ((python-current-defun)
+             (progn
+              (python-shell-send-defun)
+              (message "Sent '%s' function to python interpreter"
+                       (propertize (python-current-defun) 'face
+                                   '(:foreground "#66D9EF")))
+               (when python-shell-send-code-step-on-function
+                     (python-nav-end-of-defun)
+                     (forward-line -1)
+                     (python-shell-step-after-defun))))
+            (t
+             (python-shell-send-paragraph-and-step))))
 #+end_src
 
 #+RESULTS:
-: python-shell-send-code
+: python-shell-send-code-and-step
 
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
 improved function.
-
-#+begin_src emacs-lisp
-  (define-key python-mode-map (kbd "C-c C-c") 'python-shell-send-code)
-#+end_src
 
 *** IPython *DISABLED*
 
@@ -2234,17 +2258,16 @@ I currently prefer using the =CPython= interpreter.
 
 *** python-mode
 
-  Basic navigation
-
 #+begin_src emacs-lisp
-  (define-key prog-mode-map (kbd "C-c C-e") 'python-nav-end-of-block)
-  (define-key prog-mode-map (kbd "C-c C-a") 'python-nav-beginning-of-block)
-#+end_src
-
-#+begin_src emacs-lisp
-  (add-hook 'python-mode-hook
-                 '(lambda ()
-                   (setq-local completion-at-point-functions nil)))
+  (use-package python-mode
+    :config
+    (define-key python-mode-map (kbd "C-c C-c") 'python-shell-send-code-and-step)
+    (define-key prog-mode-map (kbd "C-c C-e") 'python-nav-end-of-block)
+    (define-key prog-mode-map (kbd "C-c C-a") 'python-nav-beginning-of-block)
+    (setq python-shell-send-code-step-on-function t)
+    (add-hook 'python-mode-hook
+    '(lambda ()
+                     (setq-local completion-at-point-functions nil))))
 #+end_src
 
 *** py-autopep8
