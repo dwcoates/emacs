@@ -2146,7 +2146,8 @@ intuitive. Based on ~ESS~.
         ))
     (forward-paragraph)
     (forward-paragraph)
-    (forward-line -1))
+    (backward-paragraph)
+    (forward-line 1))
 
   (defun python-shell-send-code ()
     (interactive)
