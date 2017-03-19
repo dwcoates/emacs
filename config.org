@@ -51,6 +51,12 @@ Make sure emacs gets my bashrc environment variable:
   (require 'dwc-goodies)
 #+end_src
 
+  This binding is just annoying
+
+#+begin_src emacs-lisp
+  (global-unset-key (kbd "ESC ESC ESC"))
+#+end_src
+
 ** Help
 
    The following gives us the ~C-h M-k~ binding for the new command
