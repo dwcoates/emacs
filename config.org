@@ -1765,7 +1765,8 @@ Comment out a line:
   (define-key prog-mode-map (kbd "M-S-d") 'kill-sexp)
   (define-key smartparens-mode-map (kbd "M-S-d") 'kill-sexp)
 #+end_src
-*** 
+
+*** Folding 
 
   Folding code, vim-style
 
@@ -2170,7 +2171,14 @@ intuitive. Based on ~ESS~.
                    (line-number-at-pos beg)
                    (line-number-at-pos end))
           (goto-char end))
-      (python-shell-send-paragraph-and-step)))
+      ;; send function if in a function, else send block and iterate
+      (if (save-excursion (forward-paragraph)
+                          (backward-paragraph)
+                          (forward-line)
+                          (python-info-current-defun))
+          (python-shell-send-defun)
+        (python-shell-send-paragraph-and-step)
+          )))
 #+end_src
 
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
