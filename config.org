@@ -2145,9 +2145,11 @@ intuitive. Based on ~ESS~.
                  (if (equal num-lines 1) "" "s"))
         ))
     (forward-paragraph)
-    (forward-paragraph)
-    (backward-paragraph)
-    (forward-line 1))
+    ;; when at last paragraph, don't step to beginning of "next" paragraph
+    (unless (equal (line-number-at-pos (point))
+               (progn (forward-paragraph) (line-number-at-pos (point))))
+      (backward-paragraph)
+      (forward-line 1)))
 
   (defun python-shell-send-code ()
     (interactive)
