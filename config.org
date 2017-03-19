@@ -2135,17 +2135,24 @@ intuitive. Based on ~ESS~.
     (interactive)
     (save-excursion
       (forward-paragraph)
-      (let ((end (point)))
-        (backward-paragraph)
-        (python-shell-send-region (point) end)))
+      (let* ((end (point))
+             (beg (progn (backward-paragraph) (forward-line) (point)))
+             (num-lines (- (line-number-at-pos end)
+                           (line-number-at-pos beg))))
+        (python-shell-send-region beg end)
+        (message "Sent %d line%s of code to python interpreter"
+                 num-lines
+                 (if (equal num-lines 1) "" "s"))
+        ))
     (forward-paragraph)
     (forward-paragraph)
     (forward-line -1))
 
   (defun python-shell-send-code ()
     (interactive)
-    (interactive "P")
-    (if (and transient-mark-mode mark-active ;; xemacs doesn't have use-region-p
+    ;; xemacs doesn't have use-region-p
+    (if (and transient-mark-mode 
+             mark-active 
              (> (region-end) (region-beginning)))
         (let ((end (region-end)))
           (python-shell-send-region (region-beginning) end)
