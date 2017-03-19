@@ -1933,17 +1933,16 @@ Comment out a line:
 ~lispy~ is a core lisp-editing package developed by [[https://github.com/abo-abo/lispy][abo-abo]].
 
 #+begin_src emacs-lisp
-  (use-package
-    :commands conditionally-enable-lispy
+  (use-package lispy
     :init
     (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
+    (defun conditionally-enable-lispy ()
+      (when (eq this-command 'eval-expression)
+        (lispy-mode 1)))
     (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy)
     :config
     (when (require 'smartparens nil t)
-      (smartparens-mode -1))
-    (defun conditionally-enable-lispy ()
-      (when (eq this-command 'eval-expression)
-        (lispy-mode 1))))
+      (smartparens-mode -1)))
 #+end_src
 
 *** General Lisp Settings
@@ -2155,64 +2154,66 @@ Some functions that will help make dealing with .py/shell workflow more
 intuitive. Based on ~ESS~.
 
 #+begin_src emacs-lisp
-    (defvar python-shell-send-code-step-on-function nil
-      "If non-nil, step sending a function to the python interpreter.")
+  (defvar python-shell-send-code-step-on-function nil
+    "If non-nil, step sending a function to the python interpreter.")
 
-    (defun python-shell-step-after-defun ()
-      (forward-paragraph)
-      ;; when at last paragraph, don't step to beginning of "next" paragraph
-      (unless (equal (line-number-at-pos (point))
-                     (progn (forward-paragraph) (line-number-at-pos (point))))
-        (backward-paragraph)
-        (forward-line 1)))
+  (defun python-shell-step-after-defun ()
+    (forward-paragraph)
+    ;; when at last paragraph, don't step to beginning of "next" paragraph
+    (unless (equal (line-number-at-pos (point))
+                   (progn (forward-paragraph) (line-number-at-pos (point))))
+      (backward-paragraph)
+      (forward-line 1)))
 
-    (defun python-shell-send-paragraph-and-step ()
-      "Send current paragraph of code and move point to the beginning of next paragraph."
-      (interactive)
-      (save-excursion
-        (let* ((beg (point))
-               (end (progn (forward-paragraph) (forward-line -1) (point)))
-               (num-lines (+ (- (line-number-at-pos end)
-                                (line-number-at-pos beg)) 1)))
-          (python-shell-send-region beg end)
-         (message "Sent %d line%s of code to python interpreter"
-                  num-lines
-                  (if (equal num-lines 1) "" "s"))
-          ))
-      (python-shell-step-after-defun))
+  (defun python-shell-send-paragraph-and-step ()
+    "Send current paragraph of code and move point to the beginning of next paragraph."
+    (interactive)
+    (save-excursion
+      (let* ((beg (point))
+             (end (progn (forward-paragraph) (forward-line -1) (point)))
+             (num-lines (+ (- (line-number-at-pos end)
+                              (line-number-at-pos beg)) 1)))
+        (python-shell-send-region beg end)
+       (message "Sent %d line%s of code to python interpreter"
+                num-lines
+                (if (equal num-lines 1) "" "s"))
+        ))
+    (python-shell-step-after-defun))
 
-    (defun python-current-defun ()
-      "`python-info-current-defun' doesn't when on a blank line, for some reason."
-      (interactive)
-      (save-excursion (forward-paragraph)
-                      (backward-paragraph)
-                      (forward-line)
-                      (python-info-current-defun)))
+  (defun python-current-defun ()
+    "`python-info-current-defun' doesn't when on a blank line, for some reason."
+    (interactive)
+    (save-excursion (forward-paragraph)
+                    (backward-paragraph)
+                    (forward-line)
+                    (python-info-current-defun)))
 
-    (defun python-shell-send-code-and-step ()
-      (interactive)
-      ;; xemacs doesn't have use-region-p
-      (cond ((use-region-p)
-             (let ((end (region-end))
-                   (beg (region-beginning)))
-               (python-shell-send-region beg end)
-               (message "Sent region between lines %d and %d to python interpreter"
-                        (line-number-at-pos beg)
-                        (line-number-at-pos end))
-               (goto-char end)))
-            ;; send function if in a function, else send block and iterate
-            ((python-current-defun)
-             (progn
-              (python-shell-send-defun)
-              (message "Sent '%s' function to python interpreter"
-                       (propertize (python-current-defun) 'face
-                                   '(:foreground "#66D9EF")))
-               (when python-shell-send-code-step-on-function
-                     (python-nav-end-of-defun)
-                     (forward-line -1)
-                     (python-shell-step-after-defun))))
-            (t
-             (python-shell-send-paragraph-and-step))))
+  (defun python-shell-send-code-and-step ()
+    (interactive)
+    ;; xemacs doesn't have use-region-p
+    (unless (python-shell-get-process)
+      (run-python))
+    (cond ((use-region-p)
+           (let ((end (region-end))
+                 (beg (region-beginning)))
+             (python-shell-send-region beg end)
+             (message "Sent region between lines %d and %d to python interpreter"
+                      (line-number-at-pos beg)
+                      (line-number-at-pos end))
+             (goto-char end)))
+          ;; send function if in a function, else send block and iterate
+          ((python-current-defun)
+           (progn
+            (python-shell-send-defun)
+            (message "Sent '%s' function to python interpreter"
+                     (propertize (python-current-defun) 'face
+                                 '(:foreground "#66D9EF")))
+             (when python-shell-send-code-step-on-function
+                   (python-nav-end-of-defun)
+                   (forward-line -1)
+                   (python-shell-step-after-defun))))
+          (t
+           (python-shell-send-paragraph-and-step))))
 #+end_src
 
 #+RESULTS:
@@ -2315,6 +2316,8 @@ I currently prefer using the =CPython= interpreter.
     (add-hook 'python-mode-hook 'my-python-mode-hook)
     (add-hook 'inferior-python-mode (lambda () (add-to-list 'company-backends 'company-capf)))
     (eval-after-load "company" '(add-to-list 'company-backends 'company-anaconda))
+    :bind 
+    ("C-c C-" . run-python)
     :config
     (use-package company-anaconda
       :init
@@ -2988,11 +2991,12 @@ Display images in the results section of the org buffer (like a normal notebook)
    (R . t)))
 #+end_src
 
-Editting source code
+Editing source code
 
 #+begin_src emacs-lisp
   (define-key org-mode-map (kbd "C-c RET") 'org-edit-special)
   (define-key org-src-mode-map (kbd "C-c k") 'org-exit-src-code)
+  (define-key org-src-mode-map (kbd "C-c RET") 'org-edit-src-exit)
 #+end_src
 
 #+begin_src emacs-lisp
