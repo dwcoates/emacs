@@ -1760,33 +1760,29 @@ Comment out a line:
 #+begin_src emacs-lisp
   (use-package eval-in-repl
     :init
-    (use-package 'eval-in-repl-ielm
-      ;; Evaluate expression in the current buffer.
-      (setq eir-ielm-eval-in-current-buffer t)
-      ;; for .el files
-      (define-key emacs-lisp-mode-map (kbd "C-x <return>") 'eir-eval-in-ielm)
-      ;; for *scratch*
-      (define-key lisp-interaction-mode-map (kbd "C-x <return>") 'eir-eval-in-ielm)
-      ;; for M-x info
-      (define-key Info-mode-map (kbd "<C-return>") 'eir-eval-in-ielm))
+    (require 'eval-in-repl-ielm)
+    (define-key emacs-lisp-mode-map (kbd "C-x <return>") 'eir-eval-in-ielm)
+    (define-key lisp-interaction-mode-map (kbd "C-x <return>") 'eir-eval-in-ielm)
+    (setq eir-ielm-eval-in-current-buffer t)
+    (define-key Info-mode-map (kbd "<C-return>") 'eir-eval-in-ielm)
+
     (when (require 'cider nil t)
-      (use-package eval-in-repl-cider
-        :bind
-        ("<C-return>" . eir-eval-in-cider)))
+      (require 'eval-in-repl-cider)
+        (define-key cider-mode-map (kbd "<C-return>") 'eir-eval-in-cider))
+
     (when (require 'slime nil t)
       (require 'eval-in-repl-slime)
       (add-hook 'lisp-mode-hook
                 '(lambda ()
                    (local-set-key (kbd "<C-return>") 'eir-eval-in-slime))))
-    ;; Shell support
-    (use-package eval-in-repl-shell
-      (add-hook 'sh-mode-hook
-                '(lambda()
-                   (local-set-key (kbd "C-<return>") 'eir-eval-in-shell))))
+
+    (require 'eval-in-repl-shell)
+    (add-hook 'sh-mode-hook
+              '(lambda()
+                 (local-set-key (kbd "C-<return>") 'eir-eval-in-shell)))
     :config
     (setq eir-repl-placement 'left))
 #+end_src
-
 
 ** General Settings
 *** Editing
@@ -2208,14 +2204,13 @@ intuitive. Based on ~ESS~.
     (interactive)
     (save-excursion
       (let* ((beg (point))
-             (end (progn (forward-paragraph) (forward-line -1) (point)))
+             (end (progn (forward-paragraph) (forward-line -1) (end-of-line) (point)))
              (num-lines (+ (- (line-number-at-pos end)
                               (line-number-at-pos beg)) 1)))
         (python-shell-send-region beg end)
-       (message "Sent %d line%s of code to python interpreter"
-                num-lines
-                (if (equal num-lines 1) "" "s"))
-        ))
+        (message "Sent %d line%s of code to python interpreter"
+                 num-lines
+                 (if (equal num-lines 1) "" "s"))))
     (python-shell-step-after-defun))
 
   (defun python-current-defun ()
