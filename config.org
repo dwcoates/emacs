@@ -1773,8 +1773,6 @@ Comment out a line:
 (define-key dired-mode-map (kbd "z") 'magit-status)
 #+end_src
 
-
-
 ** Eval in REPL
 
 #+begin_src emacs-lisp
@@ -2276,41 +2274,53 @@ intuitive. Based on ~ESS~.
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
 improved function.
 
-*** IPython *DISABLED*
+*** Python Shell
 
-see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0][here]] for info on IPython 5 is not working properly in Emacs.
-
-#+begin_src emacs-lisp
-;  (setq python-shell-prompt-detect-failure-warning nil
-;        py-shell-interpreter "ipython"
-;        ;; use the wx backend, for both mayavi and matplotlib
-;        python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
-;        py-shell-switch-buffers-on-execute-p t
-;        py-smart-indentation t
-;        python-shell-completion-native-disabled-interpreters '("jupyter" "pypy"))
+#+begin_src emacs-lisp 
+  (defun python-switch-to-shell-same-window ()
+    (interactive)
+    (let ((python-buffer (python-shell-get-buffer)))
+      (if python-buffer
+          (switch-to-buffer python-buffer)
+        (message "No python process running"))))
 #+end_src
 
-*** CPython
 
-I currently prefer using the =CPython= interpreter. 
+**** IPython *DISABLED*
 
-#+begin_src emacs-lisp
-    (setq python-shell-prompt-detect-failure-warning nil
-          py-shell-interpreter "python"
-          ;; setup the matplotlib backend and import pyplot.
-          python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg'); from matplotlib import pyplot as plt\"" 
-          py-shell-switch-buffers-on-execute-p t
-          python-shell-enable-font-lock t
-          py-smart-indentation t
-          python-shell-completion-native-disabled-interpreters '("python" "pypy"))
+ see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0][here]] for info on IPython 5 is not working properly in Emacs.
 
-    ;; subtly gray commmands
-    (set-face-attribute 'comint-highlight-input nil  
-                        :foreground "gray63" :weight 'bold)
+ #+begin_src emacs-lisp
+ ;  (setq python-shell-prompt-detect-failure-warning nil
+ ;        py-shell-interpreter "ipython"
+ ;        ;; use the wx backend, for both mayavi and matplotlib
+ ;        python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
+ ;        py-shell-switch-buffers-on-execute-p t
+ ;        py-smart-indentation t
+ ;        python-shell-completion-native-disabled-interpreters '("jupyter" "pypy"))
+ #+end_src
 
-    (eval-after-load "python"
-      '(setq python-shell-setup-code '((python-shell-completion-native-turn-off))))
-#+end_src
+**** CPython
+
+ I currently prefer using the =CPython= interpreter. 
+
+ #+begin_src emacs-lisp
+     (setq python-shell-prompt-detect-failure-warning nil
+           py-shell-interpreter "python"
+           ;; setup the matplotlib backend and import pyplot.
+           python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg'); from matplotlib import pyplot as plt\"" 
+           py-shell-switch-buffers-on-execute-p t
+           python-shell-enable-font-lock t
+           py-smart-indentation t
+           python-shell-completion-native-disabled-interpreters '("python" "pypy"))
+
+     ;; subtly gray commmands
+     (set-face-attribute 'comint-highlight-input nil  
+                         :foreground "gray63" :weight 'bold)
+
+     (eval-after-load "python"
+       '(setq python-shell-setup-code '((python-shell-completion-native-turn-off))))
+ #+end_src
 
 *** python-mode
 
@@ -2324,7 +2334,9 @@ I currently prefer using the =CPython= interpreter.
     (setq-local eir-jump-after-eval nil)
     (define-key python-mode-map (kbd "C-c C-c") 'python-shell-send-code-and-step)
     (define-key prog-mode-map (kbd "C-c C-e") 'python-nav-end-of-block)
-    (define-key prog-mode-map (kbd "C-c C-a") 'python-nav-beginning-of-block)
+    (define-key prog-mode-map (kbd "C-c C-a") 'python-nav-beginning-of-block) 
+    (define-key python-mode-map (kbd "C-c SPC") 'py-switch-to-shell) 
+    (define-key python-mode-map (kbd "C-c C-SPC") 'python-switch-to-shell-same-window) 
     (setq python-shell-send-code-step-on-function t)
     (add-hook 'python-mode-hook
               '(lambda ()
