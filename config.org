@@ -880,7 +880,7 @@ screen for minute.
 (use-package ace-popup-menu)
 #+end_src
 
-** Saving/Restoring
+** Saving/Restoring/Killing
 *** ~desktop-save~ :save:
 
 #+begin_src emacs-lisp
@@ -888,6 +888,18 @@ screen for minute.
 
   (setq desktop-basefilename "emacs.desktop"
         desktop-path `(,saveplace-dir))
+#+end_src
+
+*** ~volatile-kill-buffers~
+
+#+begin_src emacs-lisp
+(defun volatile-kill-buffers ()
+   "Kill current buffer unconditionally."
+   (interactive)
+   (let ((buffer-modified-p nil))
+     (kill-buffer (current-buffer))))
+
+(global-set-key (kbd "C-x M-K") 'volatile-kill-buffers)
 #+end_src
 
 ** Behavior
@@ -3806,3 +3818,12 @@ the number 9.
 If you make a mistake, you can usually correct it by pressing =U=, the
 “undo” command. First, clear the stack (=M-0 DEL=) and exit and restart Calc
 to make sure things start off with a clean slate.
+* Final :unimportant:
+
+Remove any buffers spawned during start-up
+
+#+begin_src emacs-lisp
+  (volatile-kill-buffers)
+#+end_src
+
+Done.
