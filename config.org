@@ -728,6 +728,11 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 ** Basic Settings
 
 #+begin_src emacs-lisp
+  (global-set-key (kbd "M-o") 'other-frame)
+#+end_src
+
+
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-x C-b") nil)
 #+end_src
 
@@ -1341,6 +1346,8 @@ Show whitespace in diff-mode
 
 #+begin_src emacs-lisp
   (define-key key-translation-map (kbd "C-c u p")       (kbd "φ"))
+  (define-key key-translation-map (kbd "C-c u \"")       (kbd "\""))
+  (define-key key-translation-map (kbd "C-c u '")       (kbd "'"))
   (define-key key-translation-map (kbd "C-c u x")       (kbd "ξ"))
   (define-key key-translation-map (kbd "C-c u i")       (kbd "∞"))
   (define-key key-translation-map (kbd "C-c u l")       (kbd "λ"))
@@ -1975,6 +1982,10 @@ Comment out a line:
         (lispy-mode 1)))
     (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy)
     :config
+    (lispy-define-key lispy-mode-map "u" 'lispy-backward)
+    (lispy-define-key lispy-mode-map "o" 'lispy-forward)
+    (define-key lispy-mode-map (kbd "C-c (") (lambda () (interactive) (insert "(")))
+    (define-key lispy-mode-map (kbd "C-c )") (lambda () (interactive) (insert ")")))
     (when (require 'smartparens nil t)
       (smartparens-mode -1)))
 #+end_src
@@ -2711,7 +2722,8 @@ encodings (so long as they are preceeded by a backslash.) For example, \Gamma is
 entered by typing "Gamma" preceeded by a slash:
 
 #+begin_src emacs-lisp
-(setq-default org-pretty-entities-include-sub-superscripts t)
+  (setq-default org-pretty-entities-include-sub-superscripts t
+                org-use-sub-superscripts nil)
 #+end_src
 
 Make Org latex fragments bigger:
@@ -3036,7 +3048,6 @@ Editing source code
 
 #+begin_src emacs-lisp
 (require 'ox-jupyter)
-
 (require 'ox-ipynb)
 #+end_src
 
