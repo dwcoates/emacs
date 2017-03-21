@@ -1219,6 +1219,14 @@ Delete region command is useful sometimes where <delete> doesnt work
 (global-set-key (kbd "C-c <delete>") 'delete-region)
 #+END_SRC
 
+Great, simple package. Makes =C-w= and =M-w= act as ~kill-whole-line~ or copy whole
+line when no region is active, and normal ~kill-region~ or ~yank~ otherwise.
+
+#+begin_src emacs-lisp
+(use-package whole-line-or-region)
+#+end_src
+
+
 *** Narrowing
 
 #+BEGIN_SRC emacs-lisp
