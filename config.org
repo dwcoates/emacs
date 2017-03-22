@@ -2225,7 +2225,7 @@ intuitive. Based on ~ESS~.
     "Send current paragraph of code and move point to the beginning of next paragraph."
     (interactive)
     (save-excursion
-      (let* ((beg (point))
+      (let* ((beg (progn (forward-paragraph) (backward-paragraph) (unless (equal (line-number-at-pos) 1) (forward-line)) (point)))
              (end (progn (forward-paragraph) (forward-line -1) (end-of-line) (point)))
              (num-lines (+ (- (line-number-at-pos end)
                               (line-number-at-pos beg)) 1)))
