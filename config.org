@@ -478,14 +478,16 @@ distracting, useless, and unsightly. The following code was grabbed from
 #+end_src
 
 #+begin_src emacs-lisp
-(defun bottom-buffers-init ()
-  (setq bottom-buffers
-        (cl-loop for w in (window-list)
-                 when (window-at-side-p w 'bottom)
-                 collect (with-current-buffer (window-buffer w)
-                           (cons (buffer-name) mode-line-format)))))
+  (defun bottom-buffers-init ()
+    (when bottom-buffers
+      (bottom-buffers-show-mode-line))
+    (setq bottom-buffers
+          (cl-loop for w in (window-list)
+                   when (window-at-side-p w 'bottom)
+                   collect (with-current-buffer (window-buffer w)
+                             (cons (buffer-name) mode-line-format)))))
 
-(add-hook 'helm-before-initialize-hook #'bottom-buffers-init)
+  (add-hook 'helm-before-initialize-hook #'bottom-buffers-init)
 #+end_src
 
 2. Hide mode line
@@ -727,11 +729,12 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 * Windowing
 ** Basic Settings
 
+Add a more convenient ~other-frame~ binding
+
 #+begin_src emacs-lisp
   (bind-keys*
    ("M-o" . other-frame))
 #+end_src
-
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x C-b") nil)
