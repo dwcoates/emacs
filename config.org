@@ -728,7 +728,8 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 ** Basic Settings
 
 #+begin_src emacs-lisp
-  (global-set-key (kbd "M-o") 'other-frame)
+  (bind-keys*
+   ("M-o" . other-frame))
 #+end_src
 
 

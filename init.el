@@ -165,6 +165,9 @@
                              (horizontal-scroll-bars . nil))))
 (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 
+;; never, ever, ever show me another damn menu pop up again
+(fset 'menu-bar-open nil)
+
 ;; key binding for turning the menu bar on and off
 (defun toggle-menu-bar ()
   (interactive)
