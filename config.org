@@ -587,6 +587,7 @@ distracting, useless, and unsightly. The following code was grabbed from
         :bind*
         ("C-x y" . counsel-org-tag))
       :config
+      (set-face-attribute 'ivy-current-match nil :background "#ffb6c1" :foreground "black")
       (setq ivy-height 5)
       (setq ivy-format-function 'ivy-format-function-arrow))
   #+end_src
