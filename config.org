@@ -1043,6 +1043,22 @@ Remap =C-z= to ~just-one-space~.
   (global-set-key (kbd "C-z") 'just-one-space)
 #+end_src
 
+Remap =M-z= to 
+
+#+begin_src emacs-lisp
+  (defun delete-space ()
+    "Kill the whitespace between two non-whitespace characters"
+    (interactive "*")
+    (save-excursion
+      (save-restriction
+        (save-match-data
+          (progn
+            (re-search-backward "[^ \t\r]" nil t)
+            (re-search-forward "[ \t\r]+" nil t)
+            (replace-match "" nil nil))))))
+  (global-set-key (kbd "M-z") 'delete-space)
+#+end_src
+
 Remap =M-k= to ~kill-whole-line~ 
 
 #+begin_src emacs-lisp
