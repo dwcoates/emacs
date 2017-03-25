@@ -1049,13 +1049,23 @@ Remap =M-z= to
   (defun delete-space ()
     "Kill the whitespace between two non-whitespace characters"
     (interactive "*")
-    (save-excursion
+    (if (and (region-active-p) (interactive-p))
+        (let* ((beg (region-beginning))
+              (end (region-end))
+              (num-lines (count-lines beg end)))
+          (save-excursion
+            (goto-char beg)
+            (cl-loop for i from 1 to num-lines
+                     do (progn (beginning-of-line)
+                               (delete-space)
+                               (forward-line)))))    
+      (save-excursion
       (save-restriction
         (save-match-data
           (progn
             (re-search-backward "[^ \t\r]" nil t)
             (re-search-forward "[ \t\r]+" nil t)
-            (replace-match "" nil nil))))))
+            (replace-match "" nil nil)))))))
   (global-set-key (kbd "M-z") 'delete-space)
 #+end_src
 
