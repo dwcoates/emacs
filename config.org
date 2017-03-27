@@ -2810,6 +2810,13 @@ Font lock should hide the emphasis marker characters (inline code, bold, etc)
 (setq org-hide-emphasis-markers t)
 #+end_src
 
+** Drill
+
+#+begin_src emacs-lisp
+(require 'org-drill)
+#+end_src
+
+
 ** Tasks and States
 
 Tasks have multiple possible states. Below defines them and their transitions
