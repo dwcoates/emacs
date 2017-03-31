@@ -696,23 +696,30 @@ distracting, useless, and unsightly. The following code was grabbed from
 **** ~isearcher~
 
 #+begin_src emacs-lisp
-  (defvar isearcher-register nil)
+  (defvar isearcher--register nil)
+  (defvar isearcher--end-register nil)
 
   (defun isearcher ()
     (interactive)
-    (when isearcher-register
-      (goto-char isearcher-register)))
+    (when (and isearcher--register isearcher--end-register)
+      (if (not (equal (point) (marker-position isearcher--register)))
+          (goto-char isearcher--register)
+        (goto-char isearcher--end-register))))
 
-  (defun dwc-exchange-point-and-mark ()
+  (defun isearcher-exchange-point-and-mark ()
     (interactive)
     (if (use-region-p)
         (call-interactively 'exchange-point-and-mark)
       (isearcher)))
 
   (defun isearcher--set-isearcher-register ()
-    (setq isearcher-register (point-marker)))
+    (setq isearcher--register (point-marker)))
+  (defun isearcher--set-end-isearcher-register ()
+    (setq isearcher--end-register (point-marker)))
 
   (add-hook 'isearch-mode-hook 'isearcher--set-isearcher-register)
+  (add-hook 'isearch-mode-end-hook 'isearcher--set-end-isearcher-register)
+
   (global-set-key (kbd "C-x C-x") 'dwc-exchange-point-and-mark)
 #+end_src
 
