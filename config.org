@@ -693,6 +693,30 @@ distracting, useless, and unsightly. The following code was grabbed from
     (key-chord-define-global "jr" 'jump-char-backward))
 #+end_src
 
+**** ~isearcher~
+
+#+begin_src emacs-lisp
+  (defvar isearcher-register nil)
+
+  (defun isearcher ()
+    (interactive)
+    (when isearcher-register
+      (goto-char isearcher-register)))
+
+  (defun dwc-exchange-point-and-mark ()
+    (interactive)
+    (if (use-region-p)
+        (call-interactively 'exchange-point-and-mark)
+      (isearcher)))
+
+  (defun isearcher--set-isearcher-register ()
+    (setq isearcher-register (point-marker)))
+
+  (add-hook 'isearch-mode-hook 'isearcher--set-isearcher-register)
+  (global-set-key (kbd "C-x C-x") 'dwc-exchange-point-and-mark)
+#+end_src
+
+
 ** Grep
 *** ~rgrep~ :search:regexp:
 Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
