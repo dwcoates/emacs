@@ -2764,14 +2764,13 @@ Some bindings for getting to org files faster
 Org header appearance
 
 #+begin_src emacs-lisp
-  (setq org-bullets-bullet-list '(" " " " " " " "))
+  (setq org-bullets-bullet-list '("•" "•" "•" "•"))
 #+end_src
 
-
 #+begin_src emacs-lisp
-; (add-to-list 'load-path (concat lisp-dir "atchka-org-theme"))
-; (when (require 'atchka-org nil t)
-;   (load-theme 'atchka-org))
+  (add-to-list 'load-path (concat lisp-dir "atchka-org-theme"))
+  (when (require 'atchka-org nil t)
+    (load-theme 'atchka-org))
 #+end_src
 
 #+begin_src emacs-lisp
