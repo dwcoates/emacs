@@ -1130,8 +1130,12 @@ when backwards deleting a word, it will stop at the nearest capital letter.
      ;; binds requires that I bind to a quotation, which requires an escaped
      ;; quotation :O
      (load-file (concat lisp-dir "sp-binds.el"))
-     (sp-pair "'" nil :when '(eq major-mode (or 'org-mode 'lisp-mode)) :actions nil) 
-     (sp-pair "`" nil :when '(eq major-mode (or 'org-mode 'lisp-mode)) :actions nil) 
+     (sp-pair "'" nil :when 
+              '(not (or (eq major-mode 'org-mode) '(eq major-mode 'lisp-mode)))
+              :actions '(insert wrap))
+     (sp-pair "`" nil :when 
+              '(not (or (eq major-mode 'org-mode) '(eq major-mode 'lisp-mode)))
+              :actions nil) 
 
      (setq sp-base-key-bindings 'paredit)
      (setq sp-autoskip-closing-pair 'always)
