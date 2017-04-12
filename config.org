@@ -842,6 +842,11 @@ Key bindings for other files:
                 (lambda ()
                   (interactive)
                   (find-file-other-window "~/.emacs.d/config.org")))
+
+(global-set-key (kbd "C-c o m")
+                (lambda () (interactive) (switch-to-buffer "*Messages*")))
+(global-set-key (kbd "C-c o s")
+                (lambda () (interactive) (switch-to-buffer "*Scratch*")))
 #+end_src
 
 ** General Appearance
