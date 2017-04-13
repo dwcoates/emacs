@@ -1,5 +1,6 @@
 # -*- mode: snippet -*-
 # name: superscript
 # key: sp
+# command: C-c e c
 # --
 ${1:base}^{${2:superscript}}$0

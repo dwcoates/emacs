@@ -4,6 +4,4 @@
 # key: verbatim
 # type: command
 # --
-(if (region-active-p)
-    (yas-expand-snippet "=`yas-selected-text`=$0")
-  (yas-expand-snippet "=${1:Insert Snippet}=$0"))
+=${1:verbatim}= $0

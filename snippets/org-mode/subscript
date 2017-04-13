@@ -1,5 +1,6 @@
 # -*- mode: snippet -*-
 # name: subscript
 # key: sb
+# command: C-c e x
 # --
 ${1:base}_{${2:subscript}}$0
