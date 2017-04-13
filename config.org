@@ -2511,11 +2511,11 @@ improved function.
 
 #+begin_src emacs-lisp
   (use-package ein
-    :bind*
-    ("C-c v n" . ein:worksheet-insert-cell-below)
-    ("C-c k" . ein:worksheet-kill-cell)
-    ("C-c v p" . ein:worksheet-insert-cell-above)
-    ("C-c v d" . ein:worksheet-split-cell-at-point)
+    ;; :bind*
+    ;; ("C-c v n" . ein:worksheet-insert-cell-below)
+    ;; ("C-c k" . ein:worksheet-kill-cell)
+    ;; ("C-c v p" . ein:worksheet-insert-cell-above)
+    ;; ("C-c v d" . ein:worksheet-split-cell-at-point)
     :config
     (setq url-proxy-services '(("no_proxy" . "127.0.0.1")))
     (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
