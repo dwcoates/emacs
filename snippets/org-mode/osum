@@ -4,4 +4,4 @@
 # group: math
 # name: \sum_{n}^{}
 # --
-\[ \sum_{${1:N} = ${2:start}}^{${3:end}} \]$0
+\sum_{${1:N} = ${2:start}}^{${3:end}}$0
