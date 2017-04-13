@@ -703,6 +703,9 @@ distracting, useless, and unsightly. The following code was grabbed from
     (interactive)
     (when (and isearcher--register isearcher--end-register)
       (if (not (equal (point) (marker-position isearcher--register)))
+
+
+
           (goto-char isearcher--register)
         (goto-char isearcher--end-register))))
 
@@ -2786,6 +2789,49 @@ Some bindings for getting to org files faster
 #+end_src
 
 *** Commands
+
+#+begin_src emacs-lisp
+(defun insert-char-with-wrap (char &optional wrap-char-beg wrap-char-end)
+  (let ((wrap-char-beg (or wrap-char-beg char))
+        (wrap-char-end (or wrap-char-end char))
+        (beg-marker (set-marker (make-marker) (region-beginning)))
+        (end-marker (set-marker (make-marker) (region-end))))
+    (if (not (region-active-p))
+      (insert-char char)
+      (save-excursion
+        (goto-char (marker-position beg-marker))
+        (insert wrap-char-beg)
+        (goto-char (marker-position end-marker))
+        (insert wrap-char-end)))))
+
+(defun insert-dollar ()
+  (interactive)
+  (insert-char-with-wrap (string-to-char "$")))
+
+(defun insert-latex ()
+  (interactive)
+  (insert-char-with-wrap (string-to-char "\\") "\\[ " " \\]"))
+
+(defun insert-italics ()
+  (interactive)
+  (insert-char-with-wrap (string-to-char "/")))
+
+(defun insert-verbatim ()
+  (interactive)
+  (insert-char-with-wrap (string-to-char "=")))
+
+(defun insert-bold ()
+  (interactive)
+  (insert-char-with-wrap (string-to-char "*")))
+
+(define-key org-mode-map (kbd "\\") 'insert-latex)
+(define-key org-mode-map (kbd "/") 'insert-italics)
+(define-key org-mode-map (kbd "=") 'insert-verbatim)
+(define-key org-mode-map (kbd "*") 'insert-bold)
+(define-key org-mode-map (kbd "$") 'insert-dollar)
+#+end_src
+
+
 ** Appearance
 
 Org header appearance
