@@ -2791,44 +2791,66 @@ Some bindings for getting to org files faster
 *** Commands
 
 #+begin_src emacs-lisp
-(defun insert-char-with-wrap (char &optional wrap-char-beg wrap-char-end)
-  (let ((wrap-char-beg (or wrap-char-beg char))
-        (wrap-char-end (or wrap-char-end char))
-        (beg-marker (set-marker (make-marker) (region-beginning)))
-        (end-marker (set-marker (make-marker) (region-end))))
-    (if (not (region-active-p))
-      (insert-char char)
-      (save-excursion
-        (goto-char (marker-position beg-marker))
-        (insert wrap-char-beg)
-        (goto-char (marker-position end-marker))
-        (insert wrap-char-end)))))
+  (defun insert-char-with-wrap (char &optional wrap-char-beg wrap-char-end)
+    (let ((wrap-char-beg (or wrap-char-beg char))
+          (wrap-char-end (or wrap-char-end char))
+          (beg-marker (set-marker (make-marker) (region-beginning)))
+          (end-marker (set-marker (make-marker) (region-end))))
+      (if (not (region-active-p))
+        (insert char)
+        (save-excursion
+          (goto-char (marker-position beg-marker))
+          (insert wrap-char-beg)
+          (goto-char (marker-position end-marker))
+          (insert wrap-char-end)))))
 
-(defun insert-dollar ()
-  (interactive)
-  (insert-char-with-wrap (string-to-char "$")))
+  (defun insert-dollar ()
+    (interactive)
+    (insert-char-with-wrap (string-to-char "$")))
 
-(defun insert-latex ()
-  (interactive)
-  (insert-char-with-wrap (string-to-char "\\") "\\[ " " \\]"))
+  (defun insert-latex ()
+    (interactive)
+    (insert-char-with-wrap (string-to-char "\\") "\\[ " " \\]"))
 
-(defun insert-italics ()
-  (interactive)
-  (insert-char-with-wrap (string-to-char "/")))
+  (defun insert-italics ()
+    (interactive)
+    (insert-char-with-wrap (string-to-char "/")))
 
-(defun insert-verbatim ()
-  (interactive)
-  (insert-char-with-wrap (string-to-char "=")))
+  (defun insert-verbatim ()
+    (interactive)
+    (insert-char-with-wrap (string-to-char "=")))
 
-(defun insert-bold ()
-  (interactive)
-  (insert-char-with-wrap (string-to-char "*")))
+  (defun insert-bold ()
+    (interactive)
+    (insert-char-with-wrap (string-to-char "*")))
 
-(define-key org-mode-map (kbd "\\") 'insert-latex)
-(define-key org-mode-map (kbd "/") 'insert-italics)
-(define-key org-mode-map (kbd "=") 'insert-verbatim)
-(define-key org-mode-map (kbd "*") 'insert-bold)
-(define-key org-mode-map (kbd "$") 'insert-dollar)
+  (defun insert-super-script ()
+    (interactive)
+    (let ((end 
+           (if (region-active-p) (set-marker (make-marker) (region-end)) 
+             nil)))
+      (insert-char-with-wrap "^" "^{" "} ")
+      (when end
+        (goto-char (marker-position end))
+        (forward-char)))) 
+
+  (defun insert-sub-script ()
+    (interactive)
+    (let ((end 
+           (if (region-active-p) (set-marker (make-marker) (region-end)) 
+             nil)))
+      (insert-char-with-wrap "_" "_{" "} ")  
+      (when end
+        (goto-char (marker-position end))
+        (forward-char))))
+
+  (define-key org-mode-map (kbd "\\") 'insert-latex)
+  (define-key org-mode-map (kbd "^") 'insert-super-script)
+  (define-key org-mode-map (kbd "_") 'insert-sub-script)
+  (define-key org-mode-map (kbd "/") 'insert-italics)
+  (define-key org-mode-map (kbd "=") 'insert-verbatim)
+  (define-key org-mode-map (kbd "*") 'insert-bold)
+  (define-key org-mode-map (kbd "$") 'insert-dollar)
 #+end_src
 
 
