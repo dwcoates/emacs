@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: align
+# key: ali
+# binding: C-c e a
+# --
+\begin{align*}
+$0
+\end{align*}
+$0
