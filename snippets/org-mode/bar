@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# binding: C-c e b
+# binding: C-c e r
 # name: bar
 # key: bar
 # --
-\bar{$0} 
+\bar{${1:string}}$0

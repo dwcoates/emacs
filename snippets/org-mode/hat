@@ -3,4 +3,4 @@
 # name: hat
 # key: hat
 # --
-\hat{$0} 
+\hat{${1:hat}}$0 

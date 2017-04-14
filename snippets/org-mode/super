@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: super
 # key: super
-# command: C-c e i
+# binding: C-c e i
 # --
 ^{${1:superscript}}$0

@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: sub
 # key: sub
-# command: C-c e u
+# binding: C-c e u
 # --
 _{${1:sub}}$0

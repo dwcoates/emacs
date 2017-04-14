@@ -1,7 +1,6 @@
 # -*- mode: snippet -*-
-# contributor: Song Qiang <tsiangsung@gmail.com>
 # key: osum
 # group: math
-# name: \sum_{n}^{}
+# binding: C-c e s
 # --
 \sum_{${1:N} = ${2:start}}^{${3:end}}$0
