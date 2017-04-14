@@ -3281,6 +3281,34 @@ source blocks.
   (add-hook 'org-capture-mode-hook 'my-org-capture-hook)
 #+end_src
 
+This code turns off pretty symbols in org-capture. It is necessary at the
+moment due to a bug in org-mode that causes font-locking to crash when
+pretty-entities is toggled.
+
+#+begin_src emacs-lisp
+  (defun org-capture-pretty-advice (funct &rest args)
+    (setq-default org-pretty-entities nil)
+    (setq-default org-pretty-entities-include-sub-superscripts nil)
+    (remove-hook 'yas-before-expand-snippet-hook 'yas-turn-off-org-pretty-symbols)
+    (remove-hook 'yas-after-exit-snippet-hook 'yas-turn-on-org-pretty-symbols)
+    (remove-hook 'org-mode-hook 'atchka-org/pretty-symbols-org-mode-hook)
+    (funcall funct args))
+
+  (defun org-capture-pretty-post-hook ()
+    (setq-default org-pretty-entities t)
+    (setq-default  org-pretty-entities-include-sub-superscripts t)
+    (add-hook 'yas-before-expand-snippet-hook 'yas-turn-off-org-pretty-symbols)
+    (add-hook 'yas-after-exit-snippet-hook 'yas-turn-on-org-pretty-symbols)
+    (add-hook 'org-mode-hook 'atchka-org/pretty-symbols-org-mode-hook))
+
+  (add-hook 'org-capture-after-finalize-hook 'org-capture-pretty-post-hook)
+  (advice-add 'org-capture :around 'org-capture-pretty-advice)
+#+end_src
+
+
+
+#+RESULTS:
+
 *** Template Components
 
 org-capture-template is set in a private file. Look up the documention for
@@ -3311,15 +3339,14 @@ Basic org capture set. I set many more in my =post.el= file in ~/personal.
 
 ** Exports
 *** html
+
 #+begin_src emacs-lisp
 (setq org-html-table-default-attributes
       '(:border "2" :cellspacing "0" :cellpadding "6" :rules "all" :frame
                "all"))
 
 ;; Style from http://gongzhitaao.org/orgcss/
-
-#+end_src
-
+#+end_src 
 
 #+begin_src emacs-lisp
 ;; (setq org-html-htmlize-output-type 'inline-css) ;; default
