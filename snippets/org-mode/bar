@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# binding: C-c e r
+# binding: C-c e b
 # name: bar
 # key: bar
 # --
