@@ -2807,54 +2807,44 @@ manageable
           (beg-marker (set-marker (make-marker) (region-beginning)))
           (end-marker (set-marker (make-marker) (region-end))))
       (if (not (region-active-p))
-        (insert char)
+          (insert char)
         (save-excursion
           (goto-char (marker-position beg-marker))
           (insert wrap-char-beg)
           (goto-char (marker-position end-marker))
-          (insert wrap-char-end)))))
-
-  (defun insert-dollar ()
-    (interactive)
-    (insert-char-with-wrap (string-to-char "$"))
-    (org-toggle-latex-fragment))
+          (insert wrap-char-end))
+        (goto-char (marker-position end-marker))
+        (forward-char))))
 
   (defun insert-latex ()
     (interactive)
     (insert-char-with-wrap (string-to-char "\\") "\\[ " " \\]")
     (org-toggle-latex-fragment))
 
+  (defun insert-dollar ()
+    (interactive)
+    (insert-char-with-wrap "$")
+    (org-toggle-latex-fragment))
+
   (defun insert-italics ()
     (interactive)
-    (insert-char-with-wrap (string-to-char "/")))
+    (insert-char-with-wrap "/"))
 
   (defun insert-verbatim ()
     (interactive)
-    (insert-char-with-wrap (string-to-char "=")))
+    (insert-char-with-wrap "="))
 
   (defun insert-bold ()
     (interactive)
-    (insert-char-with-wrap (string-to-char "*")))
+    (insert-char-with-wrap "*"))
 
   (defun insert-super-script ()
     (interactive)
-    (let ((end 
-           (if (region-active-p) (set-marker (make-marker) (region-end)) 
-             nil)))
-      (insert-char-with-wrap "^" "^{" "} ")
-      (when end
-        (goto-char (marker-position end))
-        (forward-char)))) 
+    (insert-char-with-wrap "^" "^{" "} ")) 
 
   (defun insert-sub-script ()
     (interactive)
-    (let ((end 
-           (if (region-active-p) (set-marker (make-marker) (region-end)) 
-             nil)))
-      (insert-char-with-wrap "_" "_{" "} ")  
-      (when end
-        (goto-char (marker-position end))
-        (forward-char))))
+    (insert-char-with-wrap "_" "_{" "} "))
 
   (define-key org-mode-map (kbd "\\") 'insert-latex)
   (define-key org-mode-map (kbd "^") 'insert-super-script)
