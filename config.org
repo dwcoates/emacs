@@ -2102,8 +2102,8 @@ Define hooks:
     (rainbow-delimiters-mode-enable))
 #+end_src
 
-
 Emacs Lisp hook:
+
 #+begin_src emacs-lisp
   ;; General Lisp hook:
   (defun my/emacs-lisp-hook ()
@@ -2111,15 +2111,15 @@ Emacs Lisp hook:
         (turn-on-eldoc-mode))
 #+end_src
 
-
 Add hooks:
+
 #+begin_src emacs-lisp
 (add-hook 'emacs-lisp-mode-hook 'my/emacs-lisp-hook)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 #+end_src
 
-
 Enable rainbow-delimiters for lisp modes
+
 #+BEGIN_SRC emacs-lisp
 ;(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'eval-expression-minibuffer-setup-hook 'my/general-lisp-hook)
@@ -2131,8 +2131,8 @@ Enable rainbow-delimiters for lisp modes
 
 #+end_src
 
-
 Enable eldoc-mode in appropriate emacs lisp hooks
+
 #+begin_src emacs-lisp
 ;; eldoc-mode shows documentation in the minibuffer when writing code
 ;; http://www.emacswiki.org/emacs/ElDoc
@@ -2798,7 +2798,7 @@ manageable
 (require 'yas-org-pretty-symbols)
 #+end_src
 
-*** Commands
+*** Commandsn
 
 #+begin_src emacs-lisp
   (defun insert-char-with-wrap (char &optional wrap-char-beg wrap-char-end)
@@ -2816,11 +2816,13 @@ manageable
 
   (defun insert-dollar ()
     (interactive)
-    (insert-char-with-wrap (string-to-char "$")))
+    (insert-char-with-wrap (string-to-char "$"))
+    (org-toggle-latex-fragment))
 
   (defun insert-latex ()
     (interactive)
-    (insert-char-with-wrap (string-to-char "\\") "\\[ " " \\]"))
+    (insert-char-with-wrap (string-to-char "\\") "\\[ " " \\]")
+    (org-toggle-latex-fragment))
 
   (defun insert-italics ()
     (interactive)
