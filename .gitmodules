@@ -19,3 +19,6 @@
 [submodule "math-symbols"]
 	path = lisp/math-symbols
 	url = https://github.com/dwcoates/math-symbols
+[submodule "lisp/yas-org-pretty-symbols"]
+	path = lisp/yas-org-pretty-symbols
+	url = https://github.com/dwcoates/yas-org-pretty-symbols
