@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# key: osum
+# key: sum
 # group: math
 # binding: C-c e s
 # --
-\sum_{${1:N} = ${2:start}}^{${3:end}}$0
+\sum_{${1:i} = ${2:initial}}^{${3:final}}$0
