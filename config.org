@@ -2801,11 +2801,11 @@ manageable
 *** Commandsn
 
 #+begin_src emacs-lisp
-  (defun insert-char-with-wrap (char &optional wrap-char-beg wrap-char-end)
+  (defun insert-char-with-wrap (char wrap-char-beg wrap-char-end &optional beg end)
     (let ((wrap-char-beg (or wrap-char-beg char))
           (wrap-char-end (or wrap-char-end char))
-          (beg-marker (set-marker (make-marker) (region-beginning)))
-          (end-marker (set-marker (make-marker) (region-end))))
+          (beg-marker (set-marker (make-marker) beg))
+          (end-marker (set-marker (make-marker) end)))
       (if (not (region-active-p))
           (progn
             (insert char)
@@ -2819,37 +2819,37 @@ manageable
         (forward-char)
         t)))
 
-  (defun insert-latex ()
-    (interactive)
-    (when (insert-char-with-wrap "\\" "\\[ " " \\]")
+  (defun insert-latex (beg end)
+    (interactive "r")
+    (when (insert-char-with-wrap "\\" "\\[ " " \\]" beg end)
       (org-toggle-latex-fragment)
       ))
 
-  (defun insert-dollar ()
-    (interactive)
-    (when (insert-char-with-wrap "$")
+  (defun insert-dollar (beg end)
+    (interactive "r")
+    (when (insert-char-with-wrap "$" nil nil beg end)
       (org-toggle-latex-fragment)
       ))
 
-  (defun insert-italics ()
-    (interactive)
-    (insert-char-with-wrap "/"))
+  (defun insert-italics (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "/" nil nil beg end))
 
-  (defun insert-verbatim ()
-    (interactive)
-    (insert-char-with-wrap "="))
+  (defun insert-verbatim (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "=" nil nil beg end))
 
-  (defun insert-bold ()
-    (interactive)
-    (insert-char-with-wrap "*"))
+  (defun insert-bold (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "*" nil nil beg end))
 
-  (defun insert-super-script ()
-    (interactive)
-    (insert-char-with-wrap "^" "^{" "} ")) 
+  (defun insert-super-script (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "^" "^{" "} " beg end)) 
 
-  (defun insert-sub-script ()
-    (interactive)
-    (insert-char-with-wrap "_" "_{" "} "))
+  (defun insert-sub-script (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "_" "_{" "} " beg end))
 
   (define-key org-mode-map (kbd "\\") 'insert-latex)
   (define-key org-mode-map (kbd "^") 'insert-super-script)
