@@ -2794,7 +2794,7 @@ Use my yas-org-pretty-symbols package for making snippet expansion more
 manageable
 
 #+begin_src emacs-lisp
-(add-to-list 'load-path lisp-dir)
+(add-to-list 'load-path (concat lisp-dir "yas-org-pretty-symbols"))
 (require 'yas-org-pretty-symbols)
 #+end_src
 
