@@ -2768,7 +2768,7 @@ Some general defaults:
                       )
 #+end_src
 
-Some bindings for getting to org files faster
+Soqme bindings for getting to org files faster
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c o e")
