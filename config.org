@@ -2093,6 +2093,23 @@ Comment out a line:
       (smartparens-mode -1)))
 #+end_src
 
+~lispy~ has really annoying behavior for beginning of line movement. It will go
+to beginning of line, unless it's already there, in which case it will
+=backward-to-indentation=. This should be the other way around.
+
+#+begin_src emacs-lisp
+  (defun lispy-move-beginning-of-line ()
+    "Rewrite lispy-move-beginning-of-line to replace unintuitive
+  behavior"
+    (interactive)
+    (lispy--ensure-visible)
+    (if (equal (point) (save-excursion (back-to-indentation) (point)))
+        (move-beginning-of-line 1)
+      (back-to-indentation)))
+#+end_src
+
+
+
 *** General Lisp Settings
 
 Define hooks:
