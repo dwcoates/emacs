@@ -25,3 +25,6 @@
 [submodule "lisp/atchka-org-blocks"]
 	path = lisp/atchka-org-blocks
 	url = https://github.com/dwcoates/atchka-org-blocks
+[submodule "lisp/atchka-org"]
+	path = lisp/atchka-org
+	url = https://github.com/dwcoates/atchka-org-theme
