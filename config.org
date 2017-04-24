@@ -2868,10 +2868,12 @@ Org header appearance
   (setq org-bullets-bullet-list '("•" "•" "•" "•"))
 #+end_src
 
+Load atchka-org-theme
+
 #+begin_src emacs-lisp
-  (add-to-list 'load-path (concat lisp-dir "atchka-org-theme"))
-  (when (require 'atchka-org nil t)
-    (load-theme 'atchka-org))
+  ;; (add-to-list 'load-path (concat lisp-dir "atchka-org-theme"))
+  ;; (when (require 'atchka-org nil t)
+  ;;   (load-theme 'atchka-org))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2880,22 +2882,16 @@ Org header appearance
 #+end_src
 
 Org warnings:
+
 #+begin_src emacs-lisp
   (set-face-attribute 'org-warning nil :foreground "red3" :weight 'bold)
 #+end_src
 
 Please truncate lines in org-mode. The last thing I want to see is a
 wrapped table, and everything should be paragraphed, anyway (M-q).
+
 #+begin_src emacs-lisp
   (setq org-startup-truncated t)
-#+end_src
-
-Edit source code in org-mode:
-
-#+begin_src emacs-lisp
-  (bind-keys
-     :map org-src-mode-map
-     ("<C-return>" . org-edit-src-exit))
 #+end_src
 
 Org-mode hook
@@ -2931,6 +2927,15 @@ Make Org latex fragments bigger:
 (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 #+end_src
 
+Hide certain symbols and markup
+
+#+begin_src emacs-lisp
+(setq org-hide-emphasis-markers t ;; Font lock should hide the emphasis marker 
+                                  ;; characters (inline code, bold, etc).
+      org-hidden-keywords '(title) 
+      org-hide-leading-stars t)
+#+end_src
+
 Hide all Org source blocks by default. 
 
 #+begin_src emacs-lisp
@@ -2950,10 +2955,14 @@ is highlighted in the other frame because I forgot my mouse cursor on it.
   ;;           (lambda () (advice-add 'org-agenda-highlight-todo :around 'org-agenda-highlight-entry-advice)))
 #+end_src
 
-Font lock should hide the emphasis marker characters (inline code, bold, etc)
+** Commands
+
+Edit source code in org-mode:
 
 #+begin_src emacs-lisp
-(setq org-hide-emphasis-markers t)
+  (bind-keys
+     :map org-src-mode-map
+     ("<C-return>" . org-edit-src-exit))
 #+end_src
 
 ** Drill
