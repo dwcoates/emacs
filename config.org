@@ -2835,9 +2835,8 @@ Load =atchka-org-theme=
   (add-to-list 'load-path (concat lisp-dir "atchka-org-blocks"))
 
   (require 'atchka-org-blocks)
-  (atchka-org-minor-mode)
 
-  (when (require 'atchka-org-blocks nil t)
+  (when (require 'atchka-org-theme nil t)
     (load-theme 'atchka-org))
 #+end_src
 
@@ -3335,8 +3334,8 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 
 ** Babel
 
-This should be waaaay easier to load, but for some reason I can't get these
-packages to play nicely and I'm tired and need to go to bed.
+   This should be waaaay easier to load, but for some reason I can't get these
+   packages to play nicely and I'm tired and need to go to bed.
 
 #+begin_src emacs-lisp
   (use-package dash-functional)
@@ -3349,13 +3348,13 @@ packages to play nicely and I'm tired and need to go to bed.
    '((ipython . t)))
 #+end_src
 
-Stop asking me if I want to evaluate code
+    Stop asking me if I want to evaluate code
 
 #+begin_src emacs-lisp
 (setq org-confirm-babel-evaluate nil)
 #+end_src
 
-Display images in the results section of the org buffer (like a normal notebook)
+    Display images in the results section of the org buffer (like a normal notebook)
 
 #+begin_src emacs-lisp
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
@@ -3372,7 +3371,7 @@ Display images in the results section of the org buffer (like a normal notebook)
    (R . t)))
 #+end_src
 
-Editing source code
+    Editing source code
 
 #+begin_src emacs-lisp
   (define-key org-mode-map (kbd "C-c RET") 'org-edit-special)
@@ -3385,8 +3384,8 @@ Editing source code
 (require 'ox-ipynb)
 #+end_src
 
-Advice to fix annoying org bug that messes up font-locking after editing
-source blocks.
+    Advice to fix annoying org bug that messes up font-locking after editing
+    source blocks.
 
 #+begin_src emacs-lisp
   (defun org-edit-source-advice (funct &rest args)
@@ -3405,9 +3404,9 @@ source blocks.
   (add-hook 'org-capture-mode-hook 'my-org-capture-hook)
 #+end_src
 
-This code turns off pretty symbols in org-capture. It is necessary at the
-moment due to a bug in org-mode that causes font-locking to crash when
-pretty-entities is toggled.
+    This code turns off pretty symbols in org-capture. It is necessary at the
+    moment due to a bug in org-mode that causes font-locking to crash when
+    pretty-entities is toggled.
 
 #+begin_src emacs-lisp
   (defun org-capture-pretty-advice (funct &rest args)
@@ -3429,26 +3428,22 @@ pretty-entities is toggled.
   (advice-add 'org-capture :around 'org-capture-pretty-advice)
 #+end_src
 
-
-
-#+RESULTS:
-
 *** Template Components
 
-org-capture-template is set in a private file. Look up the documention for
-org-capture-template (and org-capture in general) to see how it might look.
-Some components I made for building templates
+    org-capture-template is set in a private file. Look up the documention for
+    org-capture-template (and org-capture in general) to see how it might
+    look.  Some components I made for building templates
 
 *** Captures
 
-I use my org-capture-builder convenience package
+    I use my org-capture-builder convenience package
 
 #+begin_src emacs-lisp
   (add-to-list 'load-path (concat lisp-dir "org-capture-builder"))
   (require 'org-capture-builder)
 #+end_src
 
-Basic org capture set. I set many more in my =post.el= file in ~/personal.
+    Basic org capture set. I set many more in my =post.el= file in ~/personal.
 
 #+begin_src emacs-lisp
   (setq org-capture-templates
@@ -3480,6 +3475,7 @@ Basic org capture set. I set many more in my =post.el= file in ~/personal.
 #+end_src
 
 *** Lots of html
+
 #+begin_src emacs-lisp
 (setq org-html-style-default
 "<style type=\"text/css\">
@@ -3694,80 +3690,87 @@ Basic org capture set. I set many more in my =post.el= file in ~/personal.
 ** Functions
 
 #+begin_src emacs-lisp
-(define-key org-mode-map (kbd "C-M-<return>") 'org-insert-subheading)
+  (define-key org-mode-map (kbd "C-M-<return>") 'org-insert-subheading)
 #+end_src
 
 *** org-path-completion
+
 #+BEGIN_SRC emacs-lisp
-(setq org-goto-interface 'outline-path-completion
-      org-goto-max-level 10)
+  (setq org-goto-interface 'outline-path-completion
+        org-goto-max-level 10)
 #+END_SRC
 
 *** org-capture
-org-capture allows you to take a note anywhere, which it will write to the org-default-notes-file.
+
+    org-capture allows you to take a note anywhere, which it will write to the
+    org-default-notes-file.
+
 #+BEGIN_SRC emacs-lisp
-;; this is set in ~/.emacs.d/custom/setup-specifics.el
-(global-set-key (kbd "C-c c") 'org-capture)
+  ;; this is set in ~/.emacs.d/custom/setup-specifics.el
+  (global-set-key (kbd "C-c c") 'org-capture)
 #+END_SRC
 
 *** org-back-to-top-level-heading
-#+BEGIN_SRC emacs-lisp
-;; move point to top-level heading
-(defun org-back-to-top-level-heading ()
-  "Go back to the current top level heading."
-  (interactive)
-  (or (re-search-backward "^\* " nil t)
-      (goto-char (point-min))))
 
-;; make todo's check recursively when determining the number of todo's under it
-(setq org-hierarchical-todo-statistics nil)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      ;; move point to top-level heading
+      (defun org-back-to-top-level-heading ()
+        "Go back to the current top level heading."
+        (interactive)
+        (or (re-search-backward "^\* " nil t)
+            (goto-char (point-min))))
+
+      ;; make todo's check recursively when determining the number of todo's under it
+      (setq org-hierarchical-todo-statistics nil)
+    #+END_SRC
 
 *** org-summary-todo
-This is for making sure that the top-level todo automatically is marked DONE if all sub-levels are DONE.
-TODO otherwise.
 
-#+BEGIN_SRC emacs-lisp
-(defun org-summary-todo (n-done n-not-done)
-  "Switch entry to DONE when all subentries are done, to TODO otherwise."
-  (let (org-log-done org-log-states)   ; turn off logging
-    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+    This is for making sure that the top-level todo automatically is marked
+    DONE if all sub-levels are DONE.  TODO otherwise.
 
-(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (defun org-summary-todo (n-done n-not-done)
+        "Switch entry to DONE when all subentries are done, to TODO otherwise."
+        (let (org-log-done org-log-states)   ; turn off logging
+          (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+      (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+    #+END_SRC
 
 *** jump-to-org-agenda
-This is a snippet from John Wiegley.
-It shows org agenda after emacs has been idle for a certain amount of time.
 
-#+BEGIN_SRC emacs-lisp
-  (defun jump-to-org-agenda ()
-    (interactive)
-    (unless (> (apply '+ (mapcar
-                        (lambda (buf) (if (string-match "Org Agenda*" (buffer-name buf)) 1 0))
-                        (buffer-list))) 0)
-      (let ((buf (get-buffer "*Org Agenda*"))
-            wind)
-        (if buf
-            (if (setq wind (get-buffer-window buf))
-                (select-window wind)
-              (if (called-interactively-p)
-                  (progn
-                    (select-window (display-buffer buf t t))
-                    (org-fit-window-to-buffer)
-                    ;; (org-agenda-redo)
-                    )
-                (with-selected-window (display-buffer buf)
-                  (org-fit-window-to-buffer)
-                  ;; (org-agenda-redo)
-                  )))
-          (call-interactively 'org-agenda-list))))
-    ;;(let ((buf (get-buffer "*Calendar*")))
-    ;;  (unless (get-buffer-window buf)
-    ;;    (org-agenda-goto-calendar)))
-    )
+    This is a snippet from John Wiegley. It shows org agenda after emacs has
+    been idle for a certain amount of time.
 
-  (run-with-idle-timer 500 t 'jump-to-org-agenda)
+    #+BEGIN_SRC emacs-lisp
+      (defun jump-to-org-agenda ()
+        (interactive)
+        (unless (> (apply '+ (mapcar
+                              (lambda (buf) (if (string-match "Org Agenda*" (buffer-name buf)) 1 0))
+                              (buffer-list))) 0)
+          (let ((buf (get-buffer "*Org Agenda*"))
+                wind)
+            (if buf
+                (if (setq wind (get-buffer-window buf))
+                    (select-window wind)
+                  (if (called-interactively-p)
+                      (progn
+                        (select-window (display-buffer buf t t))
+                        (org-fit-window-to-buffer)
+                        ;; (org-agenda-redo)
+                        )
+                    (with-selected-window (display-buffer buf)
+                      (org-fit-window-to-buffer)
+                      ;; (org-agenda-redo)
+                      )))
+              (call-interactively 'org-agenda-list))))
+        ;;(let ((buf (get-buffer "*Calendar*")))
+        ;;  (unless (get-buffer-window buf)
+        ;;    (org-agenda-goto-calendar)))
+        )
+
+      (run-with-idle-timer 500 t 'jump-to-org-agenda)
 #+END_SRC
 
 *** create-tasks-heading
