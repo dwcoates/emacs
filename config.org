@@ -49,6 +49,8 @@ Make sure emacs gets my bashrc environment variable:
 
 #+begin_src emacs-lisp
   (require 'dwc-goodies)
+
+  (global-set-key (kbd "C-c u c") 'helm-insert-color-hex)
 #+end_src
 
   This binding is just annoying
@@ -775,6 +777,7 @@ Add a more convenient ~other-frame~ binding
 #+end_src
 
 Remaps the other-window command. In general, commands with consecutive 
+
 #+begin_src emacs-lisp 
   (global-set-key (kbd "C-x o") 'other-window)
   (global-set-key (kbd "C-x O") 'other-frame)
@@ -783,6 +786,7 @@ Remaps the other-window command. In general, commands with consecutive
 #+end_src
 
 Quickly move the cursor to the first instance of a character with iy-go-to-char:
+
 #+begin_src emacs-lisp
 (use-package iy-go-to-char
   :init (progn
