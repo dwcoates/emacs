@@ -2831,9 +2831,13 @@ Org header appearance
 Load =atchka-org-theme=
 
 #+begin_src emacs-lisp
-  ;; (add-to-list 'load-path (concat lisp-dir "atchka-org-theme"))
-  (add-to-list 'load-path "/home/dodge/workspace/emacs/atchka-org")
-  (when (require 'atchka-org nil t)
+  (add-to-list 'load-path (concat lisp-dir "atchka-org"))
+  (add-to-list 'load-path (concat lisp-dir "atchka-org-blocks"))
+
+  (require 'atchka-org-blocks)
+  (atchka-org-minor-mode)
+
+  (when (require 'atchka-org-blocks nil t)
     (load-theme 'atchka-org))
 #+end_src
 
