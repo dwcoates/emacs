@@ -198,6 +198,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 *** ~company~ :completion:popups:
 
  *use-package Company*
+
  #+begin_src emacs-lisp
    (use-package company
      :init
@@ -257,7 +258,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
 **** ~helm~ :search:fuzzy:popups:
 
-  This variables must be set before loading helm-gtags
+  This variables must be set before loading ~helm-gtags~
 
   #+BEGIN_SRC emacs-lisp
   (setq helm-gtags-prefix-key "\C-cg")
@@ -324,13 +325,14 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
   #+end_src
 
   Helm-flx improves helms scoring of results. Helm-fuzzier improves its fuzzy
-  matching.
+  matching. Seems useless.
+
   #+begin_src emacs-lisp
     (use-package helm-flx
       :init ;(helm-flx-mode 1)
       :config
-      ;(setq helm-flx-for-helm-find-files t ;; t by default
-;            helm-flx-for-helm-locate t)
+      ; (setq helm-flx-for-helm-find-files t ;; t by default
+      ;       helm-flx-for-helm-locate t)
       )
 
     (use-package helm-fuzzier
@@ -2746,29 +2748,29 @@ Don't use that annoying indentation style with the comments, please
 * Org Mode
 ** General
 
-Htmlize is needed for pretty html syntax highlighting from org exports
+   ~htmlize~ is needed for pretty html syntax highlighting from org exports
 
 #+begin_src emacs-lisp
 (use-package htmlize)
 #+end_src
 
-Allow conversion to markdown. Useful for working with project readmes,
-etc., in org-mode.
+   Allow conversion to markdown. Useful for working with project readmes,
+   etc., in org-mode.
 
 #+begin_src emacs-lisp
   (eval-after-load "org"
     '(require 'ox-md nil t))
 #+end_src
 
-Now can use the :ignore: tag to ignore just headings (not their
-content) on export.
+   Now can use the :ignore: tag to ignore just headings (not their
+   content) on export.
 
 #+begin_src emacs-lisp
   (require 'ox-extra)
   (ox-extras-activate '(ignore-headlines))
 #+end_src
 
-Some general defaults:
+   Some general defaults:
 
 #+begin_src emacs-lisp
   (setq org-deadline-warning-days 2 
@@ -2782,15 +2784,14 @@ Some general defaults:
         org-goto-interface          'outline-path-completion
         org-goto-max-level          10
         org-scheduled-delay-days    0
-        org-src-fontify-natively    t
-        )
+        org-src-fontify-natively    t)
   (set-face-attribute 'org-agenda-done nil
                       :foreground "olive drab" 
                       :weight 'ultra-light
                       )
 #+end_src
 
-Soqme bindings for getting to org files faster
+   Some bindings for getting to org files faster
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c o e")
@@ -2812,8 +2813,8 @@ Soqme bindings for getting to org files faster
   ; (advice-add 'org-show-children :around 'org-show-children-advice)
 #+end_src
 
-Use my yas-org-pretty-symbols package for making snippet expansion more
-manageable
+   Use my yas-org-pretty-symbols package for making snippet expansion more
+   manageable
 
 #+begin_src emacs-lisp
 (add-to-list 'load-path (concat lisp-dir "yas-org-pretty-symbols"))
@@ -3000,49 +3001,54 @@ Abbreviations
     Define commands for wrapping regions with org-mode markup:
 
 #+begin_src emacs-lisp
-    (defun insert-latex (beg end)
-      (interactive "r")
-      (when (insert-char-with-wrap "\\" "\\[ " " \\]" beg end)
-        (org-toggle-latex-fragment)))
+  (defun insert-latex (beg end)
+    (interactive "r")
+    (when (insert-char-with-wrap "\\" "\\[ " " \\]" beg end)
+      (org-toggle-latex-fragment)))
 
-    (defun insert-dollar (beg end)
-      (interactive "r")
-      (when (insert-char-with-wrap "$" nil nil beg end)
-        (org-toggle-latex-fragment)))
+  (defun insert-dollar (beg end)
+    (interactive "r")
+    (when (insert-char-with-wrap "$" nil nil beg end)
+      (org-toggle-latex-fragment)))
 
-    (defun insert-italics (beg end)
-      (interactive "r")
-      (insert-char-with-wrap "/" nil nil beg end))
+  (defun insert-italics (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "/" nil nil beg end))
 
-    (defun insert-verbatim (beg end)
-      (interactive "r")
-      (insert-char-with-wrap "=" nil nil beg end))
+  (defun insert-code (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "~" nil nil beg end))
 
-    (defun insert-bold (beg end)
-      (interactive "r")
-      (insert-char-with-wrap "*" nil nil beg end))
+  (defun insert-verbatim (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "=" nil nil beg end))
 
-    (defun insert-super-script (beg end)
-      (interactive "r")
-      (insert-char-with-wrap "^" "^{" "} " beg end)) 
+  (defun insert-bold (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "*" nil nil beg end))
 
-    (defun insert-sub-script (beg end)
-      (interactive "r")
-      (insert-char-with-wrap "_" "_{" "} " beg end))
+  (defun insert-super-script (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "^" "^{" "} " beg end)) 
+
+  (defun insert-sub-script (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "_" "_{" "} " beg end))
 #+end_src
 
     Bind the previously defined commands to their corresponding keys:
 
 #+begin_src emacs-lisp
-    (bind-keys
-     :map org-mode-map
-     ("\\" . insert-latex)
-     ("^" . insert-super-script)
-     ("_" . insert-sub-script)
-     ("/" . insert-italics)
-     ("=" . insert-verbatim)
-     ("*" . insert-bold)
-     ("$" . insert-dollar))
+  (bind-keys
+   :map org-mode-map
+   ("\\" . insert-latex)
+   ("^" . insert-super-script)
+   ("_" . insert-sub-script)
+   ("/" . insert-italics)
+   ("=" . insert-verbatim)
+   ("*" . insert-bold)
+   ("~" . insert-code)
+   ("$" . insert-dollar))
 #+end_src
 
 ** Drill
