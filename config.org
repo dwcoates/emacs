@@ -2895,6 +2895,43 @@ is highlighted in the other frame because I forgot my mouse cursor on it.
   ;;           (lambda () (advice-add 'org-agenda-highlight-todo :around 'org-agenda-highlight-entry-advice)))
 #+end_src
 
+*** Abbrevs
+
+Abbreviations 
+
+#+begin_src emacs-lisp
+  (defun org-create-org-abbrev-table (latex-keywords)
+    "Produce an `abbrev-table' for org mode using LATEX-KEYWORDS.
+  LATEX-KEYWORDS is a list of latex keywords without backslashes
+  that orgmode also recognizes as the corresponding UTF-8 symbol.
+  For example, '('alpha' 'beta') will return (('alphaa'
+  '\\alpha') ('Alphaa' '\\Alpha') ('betaa' '\\beta') ('Betaa'
+  '\\Beta')), the idea being that one types the symbol name with an
+  extra character on the end, and abbrev will translate it to the
+  corresponding latex keyword, which org-mdoe will render as the
+  corresponding Unicode symbol."
+    (apply 'append
+           (mapcar
+            (lambda (word-pair)
+              (mapcar
+               (lambda (wp)
+                 (list (cdr wp) (concat "\\" (car wp))))
+               (list word-pair (cons (capitalize (car word-pair))
+                                     (capitalize (cdr word-pair))))))
+            latex-keywords)))
+
+  (define-abbrev-table 'org-abbrev-table
+    (org-create-org-abbrev-table
+     '(("alpha" . "alp") ("lambda" . "lam") ("sigma" . "sig") ("rho" . "rho")
+       ("beta" . "bta") ("eta" . "eta") ("delta" . "delt") ("zeta" . "zet")
+       ("theta" . "tht") ("iota" . "iot") ("kappa" . "kap") ("mu" . "mu")
+       ("nu" . "np") ("xi" . "xi") ("omicron" . "omi") ("pi" . "pi") ("tau" . "ta")
+       ("upsilon" . "ups") ("phi" . "phi") ("chi" . "chi") ("psi" . "psi")
+       ("omega" . "ome"))))
+
+  (setq local-abbrev-table org-abbrev-table)
+#+end_src
+
 ** Commands
 
    Edit source code in org-mode:
