@@ -1120,7 +1120,6 @@ when backwards deleting a word, it will stop at the nearest capital letter.
 (global-subword-mode 1)
 #+end_src
 
-
 *** Parentheses
 
  #+BEGIN_SRC emacs-lisp
@@ -1283,11 +1282,13 @@ when backwards deleting a word, it will stop at the nearest capital letter.
              (if (equal major-mode 'org-mode)
                  (org-beginning-of-line)
                (beginning-of-line)))))
+#+end_src
+
+#+begin_src emacs-lisp
   (global-set-key [home] 'smart-beginning-of-line)
   (global-set-key (kbd "C-a") 'smart-beginning-of-line)
   (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
 #+end_src
-
 
 ** Key commands
 *** General
@@ -1298,25 +1299,25 @@ when backwards deleting a word, it will stop at the nearest capital letter.
 (global-set-key (kbd "RET") 'newline-and-indent)
 #+END_SRC
 
-Activate whitespace-mode to view all whitespace characters
+    Activate whitespace-mode to view all whitespace characters
 
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-c w") 'whitespace-mode)
 #+END_SRC
 
-Delete region command is useful sometimes where <delete> doesnt work
+    Delete region command is useful sometimes where <delete> doesnt work
 
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-c <delete>") 'delete-region)
 #+END_SRC
 
-Great, simple package. Makes =C-w= and =M-w= act as ~kill-whole-line~ or copy whole
-line when no region is active, and normal ~kill-region~ or ~yank~ otherwise.
+    Great, simple package. Makes =C-w= and =M-w= act as ~kill-whole-line~ or copy
+    whole line when no region is active, and normal ~kill-region~ or ~yank~
+    otherwise.
 
 #+begin_src emacs-lisp
 (use-package whole-line-or-region)
 #+end_src
-
 
 *** Narrowing
 
@@ -2798,68 +2799,6 @@ manageable
 (require 'yas-org-pretty-symbols)
 #+end_src
 
-*** Commandsn
-
-#+begin_src emacs-lisp
-  (defun insert-char-with-wrap (char wrap-char-beg wrap-char-end &optional beg end)
-    (let ((wrap-char-beg (or wrap-char-beg char))
-          (wrap-char-end (or wrap-char-end char))
-          (beg-marker (set-marker (make-marker) beg))
-          (end-marker (set-marker (make-marker) end)))
-      (if (not (region-active-p))
-          (progn
-            (insert char)
-            nil)
-        (save-excursion
-          (goto-char (marker-position beg-marker))
-          (insert wrap-char-beg)
-          (goto-char (marker-position end-marker))
-          (insert wrap-char-end))
-        (goto-char (marker-position end-marker))
-        (forward-char)
-        t)))
-
-  (defun insert-latex (beg end)
-    (interactive "r")
-    (when (insert-char-with-wrap "\\" "\\[ " " \\]" beg end)
-      (org-toggle-latex-fragment)
-      ))
-
-  (defun insert-dollar (beg end)
-    (interactive "r")
-    (when (insert-char-with-wrap "$" nil nil beg end)
-      (org-toggle-latex-fragment)
-      ))
-
-  (defun insert-italics (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "/" nil nil beg end))
-
-  (defun insert-verbatim (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "=" nil nil beg end))
-
-  (defun insert-bold (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "*" nil nil beg end))
-
-  (defun insert-super-script (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "^" "^{" "} " beg end)) 
-
-  (defun insert-sub-script (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "_" "_{" "} " beg end))
-
-  (define-key org-mode-map (kbd "\\") 'insert-latex)
-  (define-key org-mode-map (kbd "^") 'insert-super-script)
-  (define-key org-mode-map (kbd "_") 'insert-sub-script)
-  (define-key org-mode-map (kbd "/") 'insert-italics)
-  (define-key org-mode-map (kbd "=") 'insert-verbatim)
-  (define-key org-mode-map (kbd "*") 'insert-bold)
-  (define-key org-mode-map (kbd "$") 'insert-dollar)
-#+end_src
-
 ** Appearance
 
 Org header appearance
@@ -2868,7 +2807,7 @@ Org header appearance
   (setq org-bullets-bullet-list '("•" "•" "•" "•"))
 #+end_src
 
-Load atchka-org-theme
+Load =atchka-org-theme=
 
 #+begin_src emacs-lisp
   ;; (add-to-list 'load-path (concat lisp-dir "atchka-org-theme"))
@@ -2957,12 +2896,91 @@ is highlighted in the other frame because I forgot my mouse cursor on it.
 
 ** Commands
 
-Edit source code in org-mode:
+   Edit source code in org-mode:
 
 #+begin_src emacs-lisp
   (bind-keys
      :map org-src-mode-map
      ("<C-return>" . org-edit-src-exit))
+#+end_src
+
+*** Automatically wrap org-mode markup
+
+    Define functions for wrapping org text with markup when region is active, and
+    simply entering the corresponding key, otherwise. For example, pressing =$= with
+    region active will insert a dollar sign at the beginning and end of the
+    region, and will simply insert a dollar sign at point, i.e., the expected
+    behavior, if no region is active.
+
+    Base function for wrapping region with certain characters, or insert a certain
+    character if no region present:
+
+#+begin_src emacs-lisp
+    (defun insert-char-with-wrap (char wrap-char-beg wrap-char-end &optional beg end)
+      (let ((wrap-char-beg (or wrap-char-beg char))
+            (wrap-char-end (or wrap-char-end char))
+            (beg-marker (set-marker (make-marker) beg))
+            (end-marker (set-marker (make-marker) end)))
+        (if (not (region-active-p))
+            (progn
+              (insert char)
+              nil)
+          (save-excursion
+            (goto-char (marker-position beg-marker))
+            (insert wrap-char-beg)
+            (goto-char (marker-position end-marker))
+            (insert wrap-char-end))
+          (goto-char (marker-position end-marker))
+          (forward-char)
+          t)))
+#+end_src
+
+    Define commands for wrapping regions with org-mode markup:
+
+#+begin_src emacs-lisp
+    (defun insert-latex (beg end)
+      (interactive "r")
+      (when (insert-char-with-wrap "\\" "\\[ " " \\]" beg end)
+        (org-toggle-latex-fragment)))
+
+    (defun insert-dollar (beg end)
+      (interactive "r")
+      (when (insert-char-with-wrap "$" nil nil beg end)
+        (org-toggle-latex-fragment)))
+
+    (defun insert-italics (beg end)
+      (interactive "r")
+      (insert-char-with-wrap "/" nil nil beg end))
+
+    (defun insert-verbatim (beg end)
+      (interactive "r")
+      (insert-char-with-wrap "=" nil nil beg end))
+
+    (defun insert-bold (beg end)
+      (interactive "r")
+      (insert-char-with-wrap "*" nil nil beg end))
+
+    (defun insert-super-script (beg end)
+      (interactive "r")
+      (insert-char-with-wrap "^" "^{" "} " beg end)) 
+
+    (defun insert-sub-script (beg end)
+      (interactive "r")
+      (insert-char-with-wrap "_" "_{" "} " beg end))
+#+end_src
+
+    Bind the previously defined commands to their corresponding keys:
+
+#+begin_src emacs-lisp
+    (bind-keys
+     :map org-mode-map
+     ("\\" . insert-latex)
+     ("^" . insert-super-script)
+     ("_" . insert-sub-script)
+     ("/" . insert-italics)
+     ("=" . insert-verbatim)
+     ("*" . insert-bold)
+     ("$" . insert-dollar))
 #+end_src
 
 ** Drill
@@ -3018,6 +3036,38 @@ Task triggers
 #+end_src
 
 ** Agenda
+*** Appearance
+
+#+begin_src emacs-lisp
+  (defface org-agenda-small-font-face
+    '((t :height 85))
+    "Temporary buffer-local face")
+
+  (defconst org-agenda-standard-height (face-attribute 'default :height))
+
+  (defvar org-agenda-window-width-threshold 80
+    "Window width at which org agenda shrinks its font.")
+
+  (defun org-agenda-text-rescale ()
+    (if (< (window-width) org-agenda-window-width-threshold)
+        (buffer-face-set 'org-agenda-small-font-face)
+      (buffer-face-set 'default)))
+
+  (defun toggle-agenda-text-rescale ()
+    (interactive)
+    (if (and (or
+              (member 'org-agenda-text-rescale 'window-configuration-change-hook)
+              (member 'org-agenda-text-rescale 'org-agenda-mode-hook))
+             (eq (major-mode) 'org-mode))
+        (progn
+          (remove-hook 'org-agenda-mode-hook 'org-agenda-text-rescale)
+          (remove-hook 'window-configuration-change-hook 'org-agenda-text-rescale)
+          (cl-loop for buf in (buffer-list) do
+                   (with-current-buffer buf (buffer-face-set 'default))))
+      (add-hook 'org-agenda-mode-hook 'org-agenda-text-rescale)
+      (add-hook 'window-configuration-change-hook 'org-agenda-text-rescale)))
+#+end_src
+
 *** Interface for agenda
 
 #+begin_src emacs-lisp
