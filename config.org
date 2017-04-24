@@ -2811,8 +2811,9 @@ Load =atchka-org-theme=
 
 #+begin_src emacs-lisp
   ;; (add-to-list 'load-path (concat lisp-dir "atchka-org-theme"))
-  ;; (when (require 'atchka-org nil t)
-  ;;   (load-theme 'atchka-org))
+  (add-to-list 'load-path "/home/dodge/workspace/emacs/atchka-org")
+  (when (require 'atchka-org nil t)
+    (load-theme 'atchka-org))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3040,7 +3041,7 @@ Task triggers
 
 #+begin_src emacs-lisp
   (defface org-agenda-small-font-face
-    '((t :height 85))
+    '((t :height 95))
     "Temporary buffer-local face")
 
   (defconst org-agenda-standard-height (face-attribute 'default :height))
@@ -3049,23 +3050,25 @@ Task triggers
     "Window width at which org agenda shrinks its font.")
 
   (defun org-agenda-text-rescale ()
-    (if (< (window-width) org-agenda-window-width-threshold)
-        (buffer-face-set 'org-agenda-small-font-face)
-      (buffer-face-set 'default)))
+    (when (eq major-mode 'org-mode)
+      (if (< (window-width) org-agenda-window-width-threshold)
+          (buffer-face-set 'org-agenda-small-font-face)
+        (buffer-face-set 'default))))
 
   (defun toggle-agenda-text-rescale ()
     (interactive)
-    (if (and (or
-              (member 'org-agenda-text-rescale 'window-configuration-change-hook)
-              (member 'org-agenda-text-rescale 'org-agenda-mode-hook))
-             (eq (major-mode) 'org-mode))
+    (if (or
+         (member 'org-agenda-text-rescale 'window-configuration-change-hook)
+         (member 'org-agenda-text-rescale 'org-agenda-mode-hook))
         (progn
+          (message "Turning OFF agenda text rescaling...")
           (remove-hook 'org-agenda-mode-hook 'org-agenda-text-rescale)
-          (remove-hook 'window-configuration-change-hook 'org-agenda-text-rescale)
-          (cl-loop for buf in (buffer-list) do
-                   (with-current-buffer buf (buffer-face-set 'default))))
+          (remove-hook 'window-configuration-change-hook 'org-agenda-text-rescale))
+      (message "Turning ON agenda text rescaling...")
       (add-hook 'org-agenda-mode-hook 'org-agenda-text-rescale)
-      (add-hook 'window-configuration-change-hook 'org-agenda-text-rescale)))
+      (add-hook 'window-configuration-change-hook 'org-agenda-text-rescale))
+    (cl-loop for buf in (buffer-list) do
+             (with-current-buffer buf (org-agenda-text-rescale))))
 #+end_src
 
 *** Interface for agenda
