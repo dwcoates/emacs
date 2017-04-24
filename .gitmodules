@@ -22,3 +22,6 @@
 [submodule "lisp/yas-org-pretty-symbols"]
 	path = lisp/yas-org-pretty-symbols
 	url = https://github.com/dwcoates/yas-org-pretty-symbols
+[submodule "lisp/atchka-org-blocks"]
+	path = lisp/atchka-org-blocks
+	url = https://github.com/dwcoates/atchka-org-blocks
