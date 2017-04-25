@@ -92,8 +92,7 @@ Make sure emacs gets my bashrc environment variable:
    (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +" "C-w" "C-e" "C-h" "C-c e" "C-c C-v"))
    (setq guide-key/recursive-key-sequence-flag t)
    (setq guide-key/popup-window-position 'bottom)
-   (diminish 'guide-key-mode)
- )
+   (diminish 'guide-key-mode))
  #+END_SRC
 
 *** Dictionary
@@ -265,6 +264,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
   #+END_SRC
 
   *use-package Helm*
+
   #+BEGIN_SRC emacs-lisp
     (use-package helm
       :init
