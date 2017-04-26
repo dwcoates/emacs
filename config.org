@@ -3041,7 +3041,7 @@ Abbreviations
 
   (defun insert-strike-through (beg end)
     (interactive "r")
-    (insert-char-with-wrap "+" nil nil beg end))
+    (insert-char-with-wrap "-" "+" "+" beg end))
 
   (defun insert-bold (beg end)
     (interactive "r")
@@ -3053,7 +3053,7 @@ Abbreviations
 
   (defun insert-sub-script (beg end)
     (interactive "r")
-    (insert-char-with-wrap "_" "_{" "} " beg end))
+    (insert-char-with-wrap "v" "_{" "} " beg end))
 #+end_src
 
     Bind the previously defined commands to their corresponding keys:
