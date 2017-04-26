@@ -2821,6 +2821,10 @@ Don't use that annoying indentation style with the comments, please
 (require 'yas-org-pretty-symbols)
 #+end_src
 
+#+begin_src emacs-lisp
+(setq org-log-into-drawer t)
+#+end_src
+
 ** Appearance
 
 Org header appearance
