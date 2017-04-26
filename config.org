@@ -2821,8 +2821,16 @@ Don't use that annoying indentation style with the comments, please
 (require 'yas-org-pretty-symbols)
 #+end_src
 
+Log notes into a drawer for a cleaner, less ambiguous presentation
+
 #+begin_src emacs-lisp
 (setq org-log-into-drawer t)
+#+end_src
+
+Log notes with active headings
+
+#+begin_src emacs-lisp
+(setcdr (assoc 'note org-log-note-headings) "Note taken on %T")
 #+end_src
 
 ** Appearance
@@ -3027,6 +3035,14 @@ Abbreviations
     (interactive "r")
     (insert-char-with-wrap "=" nil nil beg end))
 
+  (defun insert-underline (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "_" nil nil beg end))
+
+  (defun insert-strike-through (beg end)
+    (interactive "r")
+    (insert-char-with-wrap "+" nil nil beg end))
+
   (defun insert-bold (beg end)
     (interactive "r")
     (insert-char-with-wrap "*" nil nil beg end))
@@ -3047,7 +3063,9 @@ Abbreviations
    :map org-mode-map
    ("\\" . insert-latex)
    ("^" . insert-super-script)
-   ("_" . insert-sub-script)
+   ("v" . insert-sub-script)
+   ("_" . insert-underline)
+   ("-" . insert-strike-through)
    ("/" . insert-italics)
    ("=" . insert-verbatim)
    ("*" . insert-bold)
