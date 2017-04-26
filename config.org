@@ -3420,15 +3420,13 @@ Function to visually delimit priorities in the org-agenda-list buffer.
     (setq-default org-pretty-entities-include-sub-superscripts nil)
     (remove-hook 'yas-before-expand-snippet-hook 'yas-turn-off-org-pretty-symbols)
     (remove-hook 'yas-after-exit-snippet-hook 'yas-turn-on-org-pretty-symbols)
-    (remove-hook 'org-mode-hook 'atchka-org/pretty-symbols-org-mode-hook)
     (funcall funct args))
 
   (defun org-capture-pretty-post-hook ()
     (setq-default org-pretty-entities t)
     (setq-default  org-pretty-entities-include-sub-superscripts t)
     (add-hook 'yas-before-expand-snippet-hook 'yas-turn-off-org-pretty-symbols)
-    (add-hook 'yas-after-exit-snippet-hook 'yas-turn-on-org-pretty-symbols)
-    (add-hook 'org-mode-hook 'atchka-org/pretty-symbols-org-mode-hook))
+    (add-hook 'yas-after-exit-snippet-hook 'yas-turn-on-org-pretty-symbols))
 
   (add-hook 'org-capture-after-finalize-hook 'org-capture-pretty-post-hook)
   (advice-add 'org-capture :around 'org-capture-pretty-advice)
