@@ -707,9 +707,6 @@ distracting, useless, and unsightly. The following code was grabbed from
     (interactive)
     (when (and isearcher--register isearcher--end-register)
       (if (not (equal (point) (marker-position isearcher--register)))
-
-
-
           (goto-char isearcher--register)
         (goto-char isearcher--end-register))))
 
@@ -2889,13 +2886,6 @@ entered by typing "Gamma" preceded by a slash:
 #+begin_src emacs-lisp
   (setq-default org-pretty-entities-include-sub-superscripts t
                 org-use-sub-superscripts nil)
-#+end_src
-
-This makes snippet expansion cleaner and easier to read
-
-#+begin_src emacs-lisp
-  (add-hook 'yas-before-expand-snippet-hook 'org-toggle-pretty-entities)
-  (add-hook 'yas-after-exit-snippet-hook 'org-toggle-pretty-entities)
 #+end_src
 
 Make Org latex fragments bigger:
