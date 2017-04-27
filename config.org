@@ -2744,6 +2744,12 @@ Don't use that annoying indentation style with the comments, please
 
 * Org Mode
 ** General
+   :PROPERTIES:
+   :ID:       b5eac278-7f1d-4579-bce0-d371673803e7
+   :END:
+   :LINKS:
+   :>: [[id:c7ccb4d6-2f20-4423-affb-0e3045d2d4fc][Comparison of Logistic Regression and LDA: A simulation study]]
+   :END:
 
    ~htmlize~ is needed for pretty html syntax highlighting from org exports
 
@@ -2759,13 +2765,15 @@ Don't use that annoying indentation style with the comments, please
     '(require 'ox-md nil t))
 #+end_src
 
-
+  Add my ~org-notes~ package. This package allows you to link two notes
+  together.
 
 #+begin_src emacs-lisp
   (add-to-list 'load-path (concat lisp-dir "org-notes"))
   (require 'org-notes)
-#+end_src
 
+  (define-key org-mode-map (kbd "C-c L") 'org-notes-helm-link-notes)
+#+end_src
 
    Now can use the :ignore: tag to ignore just headings (not their
    content) on export.
