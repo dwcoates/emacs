@@ -2083,6 +2083,7 @@ Comment out a line:
   (use-package lispy
     :init
     (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
+    (add-hook 'ielm-mode-hook (lambda () (lispy-mode 1)))
     (defun conditionally-enable-lispy ()
       (when (eq this-command 'eval-expression)
         (lispy-mode 1)))
@@ -2826,7 +2827,7 @@ Don't use that annoying indentation style with the comments, please
   ; (advice-add 'org-show-children :around 'org-show-children-advice)
 #+end_src
 
-   Use my yas-org-pretty-symbols package for making snippet expansion more
+   Use my ~yas-org-pretty-symbols~ package for making snippet expansion more
    manageable
 
 #+begin_src emacs-lisp
@@ -4193,3 +4194,4 @@ Remove any buffers spawned during start-up
 #+end_src
 
 Done.
+
