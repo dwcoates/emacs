@@ -28,3 +28,6 @@
 [submodule "lisp/atchka-org"]
 	path = lisp/atchka-org
 	url = https://github.com/dwcoates/atchka-org-theme
+[submodule "lisp/org-notes"]
+	path = lisp/org-notes
+	url = https://github.com/dwcoates/org-notes.git
