@@ -3422,28 +3422,6 @@ Function to visually delimit priorities in the org-agenda-list buffer.
   (add-hook 'org-capture-mode-hook 'my-org-capture-hook)
 #+end_src
 
-    This code turns off pretty symbols in org-capture. It is necessary at the
-    moment due to a bug in org-mode that causes font-locking to crash when
-    pretty-entities is toggled.
-
-#+begin_src emacs-lisp
-  (defun org-capture-pretty-advice (funct &rest args)
-    (setq-default org-pretty-entities nil)
-    (setq-default org-pretty-entities-include-sub-superscripts nil)
-    (remove-hook 'yas-before-expand-snippet-hook 'yas-turn-off-org-pretty-symbols)
-    (remove-hook 'yas-after-exit-snippet-hook 'yas-turn-on-org-pretty-symbols)
-    (funcall funct args))
-
-  (defun org-capture-pretty-post-hook ()
-    (setq-default org-pretty-entities t)
-    (setq-default  org-pretty-entities-include-sub-superscripts t)
-    (add-hook 'yas-before-expand-snippet-hook 'yas-turn-off-org-pretty-symbols)
-    (add-hook 'yas-after-exit-snippet-hook 'yas-turn-on-org-pretty-symbols))
-
-  (add-hook 'org-capture-after-finalize-hook 'org-capture-pretty-post-hook)
-  (advice-add 'org-capture :around 'org-capture-pretty-advice)
-#+end_src
-
 *** Template Components
 
     org-capture-template is set in a private file. Look up the documention for
