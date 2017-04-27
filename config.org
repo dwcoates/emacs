@@ -2762,7 +2762,8 @@ Don't use that annoying indentation style with the comments, please
 
 
 #+begin_src emacs-lisp
-(add-to-list "")
+  (add-to-list 'load-path (concat lisp-dir "org-notes"))
+  (require 'org-notes)
 #+end_src
 
 
