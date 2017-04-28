@@ -1133,6 +1133,9 @@ when backwards deleting a word, it will stop at the nearest capital letter.
 
  #+BEGIN_SRC emacs-lisp
    (use-package smartparens
+     :bind 
+     (:map smartparens-mode-map
+           ("M-[" . sp-unwrap-sexp))
      :config
      ;; These are loaded from a file because currently smartparens isn't
      ;; handling escaped quotations in org well. Funnily enough, smartparens
