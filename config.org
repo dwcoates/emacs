@@ -1161,6 +1161,10 @@ when backwards deleting a word, it will stop at the nearest capital letter.
      (diminish 'smartparens-mode))
  #+END_SRC
 
+#+begin_src emacs-lisp
+  (define-key smartparens-mode-map (kbd "M-[") 'sp-unwrap-sexp)
+#+end_src
+
  Delete sexp:
 
  #+BEGIN_SRC emacs-lisp
