@@ -717,14 +717,15 @@ distracting, useless, and unsightly. The following code was grabbed from
       (isearcher)))
 
   (defun isearcher--set-isearcher-register ()
-    (setq isearcher--register (point-marker)))
+    (setq-local isearcher--register (point-marker)))
+
   (defun isearcher--set-end-isearcher-register ()
-    (setq isearcher--end-register (point-marker)))
+    (setq-local isearcher--end-register (point-marker)))
 
   (add-hook 'isearch-mode-hook 'isearcher--set-isearcher-register)
   (add-hook 'isearch-mode-end-hook 'isearcher--set-end-isearcher-register)
 
-  (global-set-key (kbd "C-x C-x") 'dwc-exchange-point-and-mark)
+  (global-set-key (kbd "C-x C-x") 'isearcher-exchange-point-and-mark)
 #+end_src
 
 ** Grep
