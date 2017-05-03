@@ -2346,18 +2346,35 @@ intuitive. Based on ~ESS~.
     "Send current paragraph of code and move point to the beginning of next paragraph."
     (interactive)
     (save-excursion
-      (let* ((beg (progn (forward-paragraph) (backward-paragraph) (unless (equal (line-number-at-pos) 1) (forward-line)) (point)))
-             (end (progn (forward-paragraph) (forward-line -1) (end-of-line) (point)))
-             (num-lines (+ (- (line-number-at-pos end)
-                              (line-number-at-pos beg)) 1)))
+      (let* ((beg (progn (forward-paragraph)
+                         (backward-paragraph)
+                         (unless (equal (line-number-at-pos) 1) 
+                           (forward-line)) (point)))
+             (end (progn (forward-paragraph) 
+                         (unless (equal (line-number-at-pos (point))
+                                        (line-number-at-pos (point-max)))
+                           (forward-line -1))
+                         (end-of-line)
+                         (point)))
+             (num-lines (1+ (- (line-number-at-pos end)
+                               (line-number-at-pos beg)))))
         (python-shell-send-region beg end)
-        (message "Sent %d line%s of code to python interpreter"
-                 num-lines
-                 (if (equal num-lines 1) "" "s"))))
+        (message (concat 
+                  (format "Sent %d line%s "
+                          num-lines
+                          (if (equal num-lines 1) "" "s"))
+                  (if (equal num-lines 1) 
+                      (format "(line %d)" (line-number-at-pos end))
+                    (format "(lines %d-%d)" 
+                            (line-number-at-pos beg) 
+                            (line-number-at-pos end)))
+                  " to Python interpreter")
+                 (line-number-at-pos beg)
+                 (line-number-at-pos end))))
     (python-shell-step-after-defun))
 
   (defun python-current-defun ()
-    "`python-info-current-defun' doesn't when on a blank line, for some reason."
+    "`python-info-current-defun' doesn't work when on a blank line, for some reason."
     (interactive)
     (save-excursion (forward-paragraph)
                     (backward-paragraph)
@@ -2380,14 +2397,14 @@ intuitive. Based on ~ESS~.
           ;; send function if in a function, else send block and iterate
           ((python-current-defun)
            (progn
-            (python-shell-send-defun)
-            (message "Sent '%s' function to python interpreter"
-                     (propertize (python-current-defun) 'face
-                                 '(:foreground "#66D9EF")))
+             (python-shell-send-defun)
+             (message "Sent '%s' function to python interpreter"
+                      (propertize (python-current-defun) 'face
+                                  '(:foreground "#66D9EF")))
              (when python-shell-send-code-step-on-function
-                   (python-nav-end-of-defun)
-                   (forward-line -1)
-                   (python-shell-step-after-defun))))
+               (python-nav-end-of-defun)
+               (forward-line -1)
+               (python-shell-step-after-defun))))
           (t
            (python-shell-send-paragraph-and-step))))
 #+end_src
