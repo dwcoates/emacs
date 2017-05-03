@@ -2903,6 +2903,7 @@ Log notes with active headings
 
 #+begin_src emacs-lisp
 (setcdr (assoc 'note org-log-note-headings) "Note taken on %T")
+(setcdr (assoc 'state org-log-note-headings) "State changed to %-12s from %-12S %T")
 #+end_src
 
 ** Appearance
