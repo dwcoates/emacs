@@ -3156,11 +3156,12 @@ Tasks have multiple possible states. Below defines them and their transitions
                 (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
 
   (setq org-todo-keyword-faces
-        (quote (("TODO" :foreground "orange" :weight bold)
+        (quote (("TODO" :foreground "#cd2626" :weight bold)
+                ("NEXT" :foreground "#ff8c00" :weight bold)
                 ("DONE" :foreground "forest green" :weight bold)
-                ("FIXED" :foreground "DarkGreen" :weight bold)
+                ("FIXED" :foreground "#20b2aa" :weight bold)
 
-                ("NOTE" :foreground "blue" :weight bold)
+                ("NOTE" :foreground "#1c86ee" :weight bold)
                 ("LEARN" :foreground "#8a2be2" :weight bold)
                 ("REVIEW" :foreground "#a020f0" :weight bold)
                 ("QUIZ" :foreground "#8b008b" :weight bold)
