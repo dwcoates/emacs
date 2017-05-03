@@ -1,11 +1,15 @@
-;; Keep track of loading time
-(defconst emacs-start-time (current-time))
+;; inhibit minibuffer messages.
+;; This must be set to nil at end of config.
+(setq inhibit-message t)
 
 ;; Directory for personal stuff. Personal org documents, emacs history, etc.
 (defconst personal-dir (file-name-as-directory "~/personal"))
 (unless (file-exists-p personal-dir)
   (message "%s: %s" "Creating personal directory for first time" personal-dir)
   (make-directory personal-dir))
+
+(let ((inhibit-message nil))
+  (message "Loading basic settings in init.el..."))
 
 ;; Directory for emacs saves
 (defconst saveplace-dir
@@ -197,6 +201,7 @@
 
 ;; Dont ask me if I want to use these features before I do:
 (put 'narrow-to-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
 (put 'scroll-left 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
@@ -285,6 +290,9 @@
   (setq sml/no-confirm-load-theme t)
   (add-hook 'after-init-hook 'smart-mode-line-enable))
 
+(let ((inhibit-message nil))
+  (message "Loading atchka theme..."))
+
 ;; load up the main theme
 (add-to-list 'load-path (concat user-emacs-directory "atchka"))
 (use-package doom-themes
@@ -301,6 +309,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;; LOAD CONFIG.ORG AND SAVE ITS ELISP TO CONFIG.EL ;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(let ((inhibit-message nil))
+  (message "Loading configuration file, config.org..."))
 
 ;; This use-package call will ensure that the correct, up-to-date
 ;; version of org installed, along with all its subpackages (that's
@@ -321,8 +332,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; WRAP UP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(setq inhibit-message nil)
+
 ;; Load system-specific personal settings
 (let ((post (concat personal-dir ".exclusive/post.el")))
-  (if (file-exists-p post)
+  (when (file-exists-p post)
       (load post)))
-(put 'downcase-region 'disabled nil)

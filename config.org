@@ -3,6 +3,12 @@
 * Initialize
 
 #+begin_src emacs-lisp
+  (let ((inhibit-message nil))
+    (message "Initializing package manager..."))
+#+end_src
+
+
+#+begin_src emacs-lisp
 ;; Keep emacs-generated custom settings in a separate file so they don't pollute init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file)
@@ -43,6 +49,11 @@ Make sure emacs gets my bashrc environment variable:
 #+end_src
 
 * General
+
+#+begin_src emacs-lisp
+  (let ((inhibit-message nil))
+    (message "Configuring general settings..."))
+#+end_src
 
   Goodies contains a lot of custom functions I've written or scavenged or
   stolen.
@@ -763,6 +774,12 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 #+end_src
 
 * Windowing
+
+#+begin_src emacs-lisp
+  (let ((inhibit-message nil))
+    (message "Configuring window/buffer/frame management..."))
+#+end_src
+
 ** Basic Settings
 
 Add a more convenient ~other-frame~ binding
@@ -1026,6 +1043,11 @@ screen for minute.
  #+end_src
 
 * Editing
+
+#+begin_src emacs-lisp
+  (let ((inhibit-message nil))
+    (message "Configuring editing settings..."))
+#+end_src
 
     Use my goodies repository for some stuff I like to use, for instance,
     ~helm-insert-color-name~, for selecting colors and inserting their name at
@@ -1830,6 +1852,11 @@ Comment out a line:
 #+end_src
 
 * Software Development
+
+#+begin_src emacs-lisp
+  (let ((inhibit-message nil))
+    (message "Configuring development environments..."))
+#+end_src
 
   Use helm-dash-install-docset to install docsets. Nice package!!
 
@@ -2769,6 +2796,12 @@ Don't use that annoying indentation style with the comments, please
 : t
 
 * Org Mode
+
+#+begin_src emacs-lisp
+  (let ((inhibit-message nil))
+    (message "Configuring org-mode..."))
+#+end_src
+
 ** General
    :PROPERTIES:
    :ID:       b5eac278-7f1d-4579-bce0-d371673803e7
@@ -3114,11 +3147,12 @@ Abbreviations
 ** Tasks and States
 
 Tasks have multiple possible states. Below defines them and their transitions
+
 #+begin_src emacs-lisp
   (setq org-todo-keywords
         (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-                (sequence "NOTE(o)" "LEARN(l)" "REVIEW(r)" "QUIZ(z)" "|" "UNDERSTOOD(d)")
-                (sequence "BUG(b)" "ISSUE(i)" "FEATURE(f)" "|" "FIXED(d)")
+                (sequence "LEARN(l)" "REVIEW(r)" "QUIZ(z)" "|" "NOTE(o)" )
+                (sequence "BUG(b)" "ISSUE(i)" "FEATURE(f)" "|" "FIXED(x)")
                 (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
 
   (setq org-todo-keyword-faces
@@ -3146,6 +3180,7 @@ Tasks have multiple possible states. Below defines them and their transitions
 #+end_src
 
 Task triggers
+
 #+begin_src emacs-lisp
   (setq org-todo-state-tags-triggers
         (quote (("CANCELLED" ("CANCELLED" . t))
@@ -3825,6 +3860,11 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 #+end_src
 
 * Emacs as a Auxiliary Interface
+
+#+begin_src emacs-lisp
+(message "Configuring Emacs as foreign interface...")
+#+end_src
+
 ** Terminal
 
 #+begin_src emacs-lisp
@@ -4212,11 +4252,29 @@ If you make a mistake, you can usually correct it by pressing =U=, the
 to make sure things start off with a clean slate.
 * Final :unimportant:
 
+Display start-up time and play a notification message.
+
+#+begin_src emacs-lisp
+(defun display-startup-echo-area-message ()
+  "Redefine the startup message to be more informative."
+  (interactive)
+  (tea-time-play-sound)
+  (message (concat
+            "Emacs initialization complete after "
+            (message "'%s'" (propertize "%.2f" 'face '(:foreground "#66D9EF")))
+            " seconds.")
+           (- (float-time) emacs-start-time)))
+#+end_src
+
 Remove any buffers spawned during start-up
 
 #+begin_src emacs-lisp
   (volatile-kill-buffers)
 #+end_src
 
-Done.
+#+begin_src emacs-lisp
+  (let ((inhibit-message nil))
+      (message "Finished loading base Emacs config."))
+#+end_src
+
 
