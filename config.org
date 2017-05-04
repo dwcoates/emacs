@@ -3151,8 +3151,8 @@ Tasks have multiple possible states. Below defines them and their transitions
 
 #+begin_src emacs-lisp
   (setq org-todo-keywords
-        (quote ((sequence "TODO(t)" "IDEA(e) ""NEXT(n)" "|" "DONE(d)")
-                (sequence "LEARN(l)" "REVIEW(r)" "QUIZ(z)" "|" "NOTE(o)" "CLARIFY(c)" )
+        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                (sequence "LEARN(l)" "REVIEW(r)" "IDEA(e)" "QUIZ(z)" "|" "NOTE(o)" "CLARIFY(c)" )
                 (sequence "BUG(b)" "ISSUE(i)" "FEATURE(f)" "|" "FIXED(x)")
                 (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
 
@@ -3162,7 +3162,7 @@ Tasks have multiple possible states. Below defines them and their transitions
                 ("DONE" :foreground "forest green" :weight bold)
                 ("FIXED" :foreground "#20b2aa" :weight bold)
 
-                ("IDEA" :foreground "#ff8c00" :weight bold)
+                ("IDEA" :foreground "#ff6347" :weight bold)
                 ("NOTE" :foreground "#1c86ee" :weight bold)
                 ("CLARIFY" :foreground "#551a8b" :weight bold)
                 ("LEARN" :foreground "#8a2be2" :weight bold)
