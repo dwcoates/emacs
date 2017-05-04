@@ -2967,7 +2967,7 @@ entered by typing "Gamma" preceded by a slash:
 Make Org latex fragments bigger:
 
 #+begin_src emacs-lisp
-(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
 #+end_src
 
 Hide certain symbols and markup
