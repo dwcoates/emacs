@@ -2801,8 +2801,8 @@ Don't use that annoying indentation style with the comments, please
   (let ((inhibit-message nil))
     (message "Configuring org-mode..."))
 #+end_src
-
-** General
+*
+* General
    :PROPERTIES:
    :ID:       b5eac278-7f1d-4579-bce0-d371673803e7
    :END:
@@ -2921,6 +2921,7 @@ Load =atchka-org-theme=
   (add-to-list 'load-path (concat lisp-dir "atchka-org-blocks"))
 
   (require 'atchka-org-blocks)
+  (atchka-org-minor-mode t)
 
   (when (require 'atchka-org-theme nil t)
     (load-theme 'atchka-org))
