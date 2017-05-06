@@ -2806,15 +2806,8 @@ Don't use that annoying indentation style with the comments, please
   (let ((inhibit-message nil))
     (message "Configuring org-mode..."))
 #+end_src
-*
-* General
-   :PROPERTIES:
-   :ID:       b5eac278-7f1d-4579-bce0-d371673803e7
-   :END:
-   :LINKS:
-   :>: [[id:c7ccb4d6-2f20-4423-affb-0e3045d2d4fc][Comparison of Logistic Regression and LDA: A simulation study]]
-   :END:
 
+** General
    ~htmlize~ is needed for pretty html syntax highlighting from org exports
 
 #+begin_src emacs-lisp
@@ -2907,8 +2900,8 @@ Log notes into a drawer for a cleaner, less ambiguous presentation
 Log notes with active headings
 
 #+begin_src emacs-lisp
-(setcdr (assoc 'note org-log-note-headings) "Note taken on %T")
-(setcdr (assoc 'state org-log-note-headings) "State changed to %-12s from %-12S %T")
+(setcdr (assoc 'note org-log-note-headings) "_Note taken on_ %T")
+(setcdr (assoc 'state org-log-note-headings) "_State changed from_ *%S* $\\rightarrow$ *%s* %T")
 #+end_src
 
 ** Appearance
@@ -2994,7 +2987,7 @@ Hide all Org source blocks by default.
 I add this advice to make the highlights on org agenda disappear when typing is
 going on in another buffer. Very distracting for me when a line an agenda buffer
 is highlighted in the other frame because I forgot my mouse cursor on it.
-
+yn
 #+begin_src emacs-lisp
   ;; (defun org-agenda-highlight-entry-advice (func &rest args)
   ;;   (when (frame-pointer-visible-p)
@@ -3063,6 +3056,95 @@ Abbreviations
     character if no region present:
 
 #+begin_src emacs-lisp
+  (defun org-notes-sp-wrap-with-pair (pair key &optional beg end)
+    (if (or (use-region-p) (and beg end (> end beg)))
+        (let* ((arg (or current-prefix-arg 1))
+               (active-pair (progn (--first (equal (car it) pair)
+                                            sp-pair-list)))
+               (rb (or beg (region-beginning)))
+               (re (or end (region-end))))
+          (goto-char re)
+          (save-excursion
+            (insert (cdr active-pair))
+            (goto-char rb)
+            (insert (car active-pair))
+            (sp--indent-region rb re))
+          (forward-char (length (cdr active-pair)))
+          (sp-get-thing t))
+      (insert key)))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun org-notes-wrap-with-meta-latex-and-execute (beg end &optional key long-latex)
+    (let ((open-delim (if long-latex "\\[" "$")))
+      (when (org-notes-sp-wrap-with-pair open-delim key beg end)
+       (org-toggle-latex-fragment))))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun org-notes--create-latex-wrapper (open close key) 
+    `(progn
+       (sp-pair ,open ,close :actions '(navigate))
+       (define-key org-mode-map (kbd ,key)
+         (lambda (beg end)
+           (interactive (if (region-active-p)
+                            (list (region-beginning)
+                                  (region-end))
+                          (list nil nil)))
+           (print beg) 
+           (print end)
+           (org-notes-sp-wrap-with-pair ,open ,key beg end)))
+       (define-key org-mode-map (kbd ,(upcase key))
+         (lambda (beg end)
+           (interactive (if (region-active-p)
+                            (list (region-beginning)
+                                  (region-end))
+                          (list nil nil)))
+           (let*  ((latex (org-notes-sp-wrap-with-pair
+                          ,open ,(upcase key) beg end))
+                   (lb (plist-get latex :beg))
+                   (le (plist-get latex :end))
+                   (sp-max-pair-length (- le lb)))
+             ;; this is a bad hack.
+             ;; Robust solution will be quite a bit more code
+             (org-notes-wrap-with-meta-latex-and-execute
+              lb le "" (> sp-max-pair-length 70)))))))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defmacro org-notes-create-latex-wrapper (open close key)
+    (org-notes--create-latex-wrapper open close key))
+#+end_src
+
+#+begin_src emacs-lisp
+  ;; normal latex wrappers
+  (org-notes-create-latex-wrapper "\\mathcal{" "}" "m")
+  (org-notes-create-latex-wrapper "\\begin{align*}\n" "\n\\end{align*}" "a")
+  (org-notes-create-latex-wrapper "^{" "}" "i")
+  (org-notes-create-latex-wrapper "_{" "}" "u")
+  (org-notes-create-latex-wrapper "\\hat{" "}" "h")
+
+  ;; special latex meta wrappers
+  (sp-pair "$" "$")
+  (define-key org-mode-map (kbd "$")
+    (lambda (beg end)
+      (interactive (if (region-active-p)
+                            (list (region-beginning)
+                                  (region-end))
+                          (list nil nil)))
+      (org-notes-wrap-with-meta-latex-and-execute beg end "$")))
+
+  (sp-pair "\\[" "\\]" :actions '(navigate))
+  (define-key org-mode-map (kbd "\\")
+    (lambda (beg end)
+      (interactive (if (region-active-p)
+                            (list (region-beginning)
+                                  (region-end))
+                          (list nil nil)))
+      (org-notes-wrap-with-meta-latex-and-execute beg end "\\" t)))
+#+end_src
+
+#+begin_src emacs-lisp
     (defun insert-char-with-wrap (char wrap-char-beg wrap-char-end &optional beg end)
       (let ((wrap-char-beg (or wrap-char-beg char))
             (wrap-char-end (or wrap-char-end char))
@@ -3082,18 +3164,22 @@ Abbreviations
           t)))
 #+end_src
 
-    Define commands for wrapping regions with org-mode markup:
-
 #+begin_src emacs-lisp
-  (defun insert-latex (beg end)
-    (interactive "r")
-    (when (insert-char-with-wrap "\\" "\\[ " " \\]" beg end)
-      (org-toggle-latex-fragment)))
+  ;; (defun insert-latex-long (beg end)
+  ;;   (interactive "r")
+  ;;   (if (use-region-p)
+  ;;       (progn
+  ;;         (insert-char-with-wrap nil "\\[" "\\]" beg end)
+  ;;         (org-toggle-latex-fragment))
+  ;;     (self-insert-command 1)))
 
-  (defun insert-dollar (beg end)
-    (interactive "r")
-    (when (insert-char-with-wrap "$" nil nil beg end)
-      (org-toggle-latex-fragment)))
+  ;; (defun insert-latex-short (beg end)
+  ;;   (interactive "r")
+  ;;   (if (use-region-p)
+  ;;       (progn 
+  ;;         (insert-char-with-wrap nil "$" "$" beg end)
+  ;;         (org-toggle-latex-fragment))
+  ;;     (self-insert-command 1)))
 
   (defun insert-italics (beg end)
     (interactive "r")
@@ -3118,14 +3204,6 @@ Abbreviations
   (defun insert-bold (beg end)
     (interactive "r")
     (insert-char-with-wrap "*" nil nil beg end))
-
-  (defun insert-super-script (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "^" "^{" "} " beg end)) 
-
-  (defun insert-sub-script (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "v" "_{" "} " beg end))
 #+end_src
 
     Bind the previously defined commands to their corresponding keys:
@@ -3133,16 +3211,14 @@ Abbreviations
 #+begin_src emacs-lisp
   (bind-keys
    :map org-mode-map
-   ("\\" . insert-latex)
-   ("^" . insert-super-script)
-   ("v" . insert-sub-script)
+   ;; ("\\". insert-latex-long) 
+   ;; ("$". insert-latex-short) 
    ("_" . insert-underline)
    ("-" . insert-strike-through)
    ("/" . insert-italics)
    ("=" . insert-verbatim)
    ("*" . insert-bold)
-   ("~" . insert-code)
-   ("$" . insert-dollar))
+   ("~" . insert-code))
 #+end_src
 
 ** Drill
@@ -3202,6 +3278,11 @@ Task triggers
 #+end_src
 
 ** Agenda
+
+#+begin_src emacs-lisp
+  (add-hook 'org-agenda-after-show-hook 'recenter)
+#+end_src
+
 *** Appearance
 
 #+begin_src emacs-lisp
