@@ -70,6 +70,11 @@ Make sure emacs gets my bashrc environment variable:
   (global-unset-key (kbd "ESC ESC ESC"))
 #+end_src
 
+#+begin_src emacs-lisp
+  (setq default-major-mode 'emacs-lisp-mode)
+#+end_src
+
+
 ** Help
 
    The following gives us the ~C-h M-k~ binding for the new command
@@ -1167,7 +1172,7 @@ when backwards deleting a word, it will stop at the nearest capital letter.
      (load-file (concat lisp-dir "sp-binds.el"))
      (defun sp-lisp-pair-pred (_ _ _)
        (interactive) 
-       (not (or (eq major-mode 'lisp-mode) (eq major-mode 'org-mode))))
+       (not (or (eq major-mode 'emacs-lisp-mode) (eq major-mode 'org-mode))))
      (sp-pair "'" nil :when '(sp-lisp-pair-pred) :actions '(insert wrap)) 
      (setq sp-base-key-bindings 'paredit)
      (setq sp-autoskip-closing-pair 'always)
