@@ -3056,19 +3056,16 @@ Abbreviations
     character if no region present:
 
 #+begin_src emacs-lisp
-  (defun org-notes-sp-wrap-with-pair (pair key &optional beg end)
-    (if (or (use-region-p) (and beg end (> end beg)))
-        (let* ((arg (or current-prefix-arg 1))
-               (active-pair (progn (--first (equal (car it) pair)
-                                            sp-pair-list)))
-               (rb (or beg (region-beginning)))
-               (re (or end (region-end))))
-          (goto-char re)
+  (defun org-notes-sp-wrap-with-pair (pair key beg end)
+    (if (and beg end (> end beg))
+        (let* ((active-pair (progn (--first (equal (car it) pair)
+                                            sp-pair-list))))
+          (goto-char end)
           (save-excursion
             (insert (cdr active-pair))
-            (goto-char rb)
+            (goto-char beg)
             (insert (car active-pair))
-            (sp--indent-region rb re))
+            (sp--indent-region beg end))
           (forward-char (length (cdr active-pair)))
           (sp-get-thing t))
       (insert key)))
@@ -3091,8 +3088,6 @@ Abbreviations
                             (list (region-beginning)
                                   (region-end))
                           (list nil nil)))
-           (print beg) 
-           (print end)
            (org-notes-sp-wrap-with-pair ,open ,key beg end)))
        (define-key org-mode-map (kbd ,(upcase key))
          (lambda (beg end)
@@ -3101,14 +3096,15 @@ Abbreviations
                                   (region-end))
                           (list nil nil)))
            (let*  ((latex (org-notes-sp-wrap-with-pair
-                          ,open ,(upcase key) beg end))
-                   (lb (plist-get latex :beg))
-                   (le (plist-get latex :end))
-                   (sp-max-pair-length (- le lb)))
+                           ,open ,(upcase key) beg end)))
              ;; this is a bad hack.
              ;; Robust solution will be quite a bit more code
-             (org-notes-wrap-with-meta-latex-and-execute
-              lb le "" (> sp-max-pair-length 70)))))))
+             (when latex
+               (let ((lb (plist-get latex :beg))
+                     (le (plist-get latex :end))
+                     (sp-max-pair-length (- le lb)))
+                 (org-notes-wrap-with-meta-latex-and-execute
+                  lb le "" (> sp-max-pair-length 70)))))))))
 #+end_src
 
 #+begin_src emacs-lisp
