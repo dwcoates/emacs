@@ -1413,7 +1413,6 @@ Show whitespace in diff-mode
        (bind-key "C-a" 'yas-goto-start-of-active-field yas-keymap)
        (bind-key [(tab)] 'nil yas-minor-mode-map)
        (bind-key (kbd "<tab>") 'yas-expand yas-minor-mode-map)
-       (bind-key (kbd "C-c k") 'yas-expand yas-minor-mode-map) ;; this is redefined because an elpy bug breaks yas-expand with tab
        :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
        :config
        (progn
@@ -3179,8 +3178,9 @@ Abbreviations
                (save-excursion (backward-char 2) (looking-at "[^\\\s-] "))
                (org-notes-wrap-previous-latex))
     (org-self-insert-command 1)))
-                                                                                                                   
+
 (define-key org-mode-map (kbd "SPC") 'org-notes-auto-render-latex)
+(define-key org-mode-map (kbd "C-c k") 'org-cycle)
 #+end_src
 
 #+begin_src emacs-lisp
