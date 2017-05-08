@@ -3045,7 +3045,7 @@ Abbreviations
 #+end_src
 
 *** Automatically wrap org-mode markup
-
+    
     Define functions for wrapping org text with markup when region is active, and
     simply entering the corresponding key, otherwise. For example, pressing =$= with
     region active will insert a dollar sign at the beginning and end of the
@@ -3073,9 +3073,12 @@ Abbreviations
 
 #+begin_src emacs-lisp
   (defun org-notes-wrap-with-meta-latex-and-execute (beg end &optional key long-latex)
-    (let ((open-delim (if long-latex "\\[" "$")))
-      (when (org-notes-sp-wrap-with-pair open-delim key beg end)
-       (org-toggle-latex-fragment))))
+    (let* ((open-delim (if long-latex "\\[" "$"))
+          (latex (org-notes-sp-wrap-with-pair open-delim key 
+                   beg  end)))
+      (when latex
+       (org-toggle-latex-fragment)
+       latex)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3100,7 +3103,7 @@ Abbreviations
              ;; this is a bad hack.
              ;; Robust solution will be quite a bit more code
              (when latex
-               (let ((lb (plist-get latex :beg))
+               (let* ((lb (plist-get latex :beg))
                      (le (plist-get latex :end))
                      (sp-max-pair-length (- le lb)))
                  (org-notes-wrap-with-meta-latex-and-execute
@@ -3138,6 +3141,34 @@ Abbreviations
                                   (region-end))
                           (list nil nil)))
       (org-notes-wrap-with-meta-latex-and-execute beg end "\\" t)))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun org-notes-wrap-previous-latex (&optional keep-whitespace)
+    "temporary and very sloppy. Doing much better would require a
+  cfg, but this works pretty well."
+    (interactive)
+    (unless keep-whitespace
+      (while (and (not (looking-at "^"))
+ (not (save-excursion
+                    (backward-char)
+                    (looking-at "[^\\\s-] "))))
+        (backward-char)))
+    (let* ((limit (line-beginning-position))
+(beg (save-excursion
+                  (when (looking-back "[)}]" (line-beginning-position))
+                     (sp-backward-sexp)
+                    (when (looking-back "[)}]" (line-beginning-position))
+                       (sp-backward-sexp)))
+                  (unless (save-excursion (backward-char) (looking-at " [^\\\s-]" ))
+                     (backward-word)
+                    (when (looking-back "\\\\" (line-beginning-position))
+                       (backward-char 1)))
+                  (point)))
+           (latex (and (not (equal (point) beg)) (> (point) limit))))
+      (and latex 
+           (org-notes-wrap-with-meta-latex-and-execute beg (point))
+           (just-one-space))))
 #+end_src
 
 #+begin_src emacs-lisp
