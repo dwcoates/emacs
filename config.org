@@ -1409,11 +1409,11 @@ Show whitespace in diff-mode
        (yas-global-mode 1)
        ;; Bindings
        (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
-       (bind-key "C-e" 'yas/goto-end-of-active-field yas-keymap)
-       (bind-key "C-a" 'yas/goto-start-of-active-field yas-keymap)
+       (bind-key "C-e" 'yas-goto-end-of-active-field yas-keymap)
+       (bind-key "C-a" 'yas-goto-start-of-active-field yas-keymap)
        (bind-key [(tab)] 'nil yas-minor-mode-map)
-       (bind-key (kbd "TAB") 'nil yas-minor-mode-map)
-       (bind-key (kbd "C-c k") 'yas/expand yas-minor-mode-map) ;; this is redefined because an elpy bug breaks yas-expand with tab
+       (bind-key (kbd "<tab>") 'yas-expand yas-minor-mode-map)
+       (bind-key (kbd "C-c k") 'yas-expand yas-minor-mode-map) ;; this is redefined because an elpy bug breaks yas-expand with tab
        :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
        :config
        (progn
@@ -3161,22 +3161,6 @@ Abbreviations
 #+end_src
 
 #+begin_src emacs-lisp
-  ;; (defun insert-latex-long (beg end)
-  ;;   (interactive "r")
-  ;;   (if (use-region-p)
-  ;;       (progn
-  ;;         (insert-char-with-wrap nil "\\[" "\\]" beg end)
-  ;;         (org-toggle-latex-fragment))
-  ;;     (self-insert-command 1)))
-
-  ;; (defun insert-latex-short (beg end)
-  ;;   (interactive "r")
-  ;;   (if (use-region-p)
-  ;;       (progn 
-  ;;         (insert-char-with-wrap nil "$" "$" beg end)
-  ;;         (org-toggle-latex-fragment))
-  ;;     (self-insert-command 1)))
-
   (defun insert-italics (beg end)
     (interactive "r")
     (insert-char-with-wrap "/" nil nil beg end))
