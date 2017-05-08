@@ -1,6 +1,5 @@
 # -*- mode: snippet -*-
 # name: ofrac
-# key: frac
-# binding: C-c e f
+# key: f
 # --
 \frac{${1:numerator}}{${2:denominator}}$0

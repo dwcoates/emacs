@@ -1,6 +1,5 @@
 # -*- mode: snippet -*-
-# binding: C-c e h
 # name: hat
-# key: hat
+# key: h
 # --
 \hat{${1:hat}}$0 

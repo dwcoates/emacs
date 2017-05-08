@@ -1,6 +1,5 @@
 # -*- mode: snippet -*-
 # name: subscript
-# key: sb
-# binding: C-c e x
+# key: uu
 # --
 ${1:base}_{${2:subscript}}$0

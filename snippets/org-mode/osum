@@ -1,6 +1,5 @@
 # -*- mode: snippet -*-
-# key: sum
+# key: s
 # group: math
-# binding: C-c e s
 # --
 \sum_{${1:i}${2: = ${3:initial}}}^{${4:final}}$0
