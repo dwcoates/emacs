@@ -1411,13 +1411,13 @@ Show whitespace in diff-mode
        (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
        (bind-key "C-e" 'yas-goto-end-of-active-field yas-keymap)
        (bind-key "C-a" 'yas-goto-start-of-active-field yas-keymap)
-       (bind-key [(tab)] 'nil yas-minor-mode-map)
-       (bind-key (kbd "<tab>") 'yas-expand yas-minor-mode-map)
+;       (bind-key [(tab)] 'nil yas-minor-mode-map)
+;       (bind-key (kbd "<tab>") 'yas-expand yas-minor-mode-map)
        :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
        :config
        (progn
          (setq yas-verbosity 1) ;; No need to be so verbose
-         (setq yas-wrap-around-region nil) ;; Wrap around region
+;         (setq yas-wrap-around-region nil) ;; Wrap around region
          (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
          (defun my/yas-term-hook ()
            (setq yas-dont-activate t))
@@ -3211,66 +3211,43 @@ Abbreviations
 #+end_src
 
 #+begin_src emacs-lisp
-    (defun insert-char-with-wrap (char wrap-char-beg wrap-char-end &optional beg end)
-      (let ((wrap-char-beg (or wrap-char-beg char))
-            (wrap-char-end (or wrap-char-end char))
-            (beg-marker (set-marker (make-marker) beg))
-            (end-marker (set-marker (make-marker) end)))
-        (if (not (region-active-p))
-            (progn
-              (insert char)
-              nil)
+  (defun insert-char-with-wrap (wrap-char-beg wrap-char-end &optional beg end)
+    "Wrap region with wrap"
+    (if (and beg end)
+        (let ((beg-marker (set-marker (make-marker) beg))
+              (end-marker (set-marker (make-marker) end)))
           (save-excursion
             (goto-char (marker-position beg-marker))
             (insert wrap-char-beg)
             (goto-char (marker-position end-marker))
-            (insert wrap-char-end))
+            (insert (or wrap-char-end wrap-char-beg)))
           (goto-char (marker-position end-marker))
-          (forward-char)
-          t)))
-#+end_src
+          (forward-char) t)
+      (self-insert-command 1)))
 
-#+begin_src emacs-lisp
-  (defun insert-italics (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "/" nil nil beg end))
+  (defun -insert-symbol (wrap-char-beg wrap-char-end)
+    `(lambda (beg end) 
+       (interactive (if (region-active-p)
+                        (list (region-beginning)
+                              (region-end))
+                      (list nil nil)))
+       (insert-char-with-wrap ,wrap-char-beg ,wrap-char-end beg end)))
 
-  (defun insert-code (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "~" nil nil beg end))
-
-  (defun insert-verbatim (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "=" nil nil beg end))
-
-  (defun insert-underline (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "_" nil nil beg end))
-
-  (defun insert-strike-through (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "-" "+" "+" beg end))
-
-  (defun insert-bold (beg end)
-    (interactive "r")
-    (insert-char-with-wrap "*" nil nil beg end))
+  (defmacro insert-symbol (wrap-char-beg &optional wrap-char-end)
+    (-insert-symbol wrap-char-beg wrap-char-end))
 #+end_src
 
     Bind the previously defined commands to their corresponding keys:
 
 #+begin_src emacs-lisp
-  (bind-keys
-   :map org-mode-map
-   ;; ("\\". insert-latex-long) 
-   ;; ("$". insert-latex-short) 
-   ("_" . insert-underline)
-   ("-" . insert-strike-through)
-   ("/" . insert-italics)
-   ("=" . insert-verbatim)
-   ("*" . insert-bold)
-   ("~" . insert-code))
+  (define-key org-mode-map (kbd "_") (insert-symbol "_"))
+  (define-key org-mode-map (kbd "-") (insert-symbol "+"))
+  (define-key org-mode-map (kbd "/") (insert-symbol "/"))
+  (define-key org-mode-map (kbd "=") (insert-symbol "="))
+  (define-key org-mode-map (kbd "*") (insert-symbol "*"))
+  (define-key org-mode-map (kbd "~") (insert-symbol "~"))
 #+end_src
-
+  
 ** Drill
 
 #+begin_src emacs-lisp
