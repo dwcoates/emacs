@@ -2807,6 +2807,20 @@ Don't use that annoying indentation style with the comments, please
 #+end_src
 
 ** General
+
+   Modify org syntax table to treat the following characters as word
+   constituents. This way, commands like forward-word will not treat them as word
+   separators, which is annoying in org-mode.
+
+#+begin_src emacs-lisp
+  (modify-syntax-entry ?_ "w" org-mode-syntax-table)
+  (modify-syntax-entry ?- "w" org-mode-syntax-table)
+  (modify-syntax-entry ?= "w" org-mode-syntax-table)
+  (modify-syntax-entry ?$ "w" org-mode-syntax-table)
+  (modify-syntax-entry ?# "w" org-mode-syntax-table)
+  (modify-syntax-entry ?* "w" org-mode-syntax-table)
+#+end_src
+
    ~htmlize~ is needed for pretty html syntax highlighting from org exports
 
 #+begin_src emacs-lisp
@@ -3070,16 +3084,16 @@ Abbreviations
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun org-notes-sp-wrap-with-pair (pair key beg end)
+  (defun org-notes-sp-wrap-with-pair (pair beg end)
     (or (org-notes-wrap-with-pair pair beg end)
-        (insert key)))
+        (self-insert-command 1) ; retruns nil
+        ))
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun org-notes-wrap-with-meta-latex-and-execute (beg end &optional key long-latex)
+  (defun org-notes-wrap-with-meta-latex-and-execute (beg end &optional long-latex)
     (let* ((open-delim (if long-latex "\\[" "$"))
-          (latex (org-notes-sp-wrap-with-pair open-delim key 
-                   beg  end)))
+           (latex (org-notes-sp-wrap-with-pair open-delim beg end)))
       (when latex
        (org-toggle-latex-fragment)
        latex)))
@@ -3087,16 +3101,15 @@ Abbreviations
 
 #+begin_src emacs-lisp
 (defun org-notes-wrap-latex-with-delims-and-render (open key beg end)
-     (let*  ((latex (org-notes-sp-wrap-with-pair
-                           open (upcase key) beg end)))
+     (let*  ((latex (org-notes-sp-wrap-with-pair open beg end)))
              ;; this is a bad hack.
              ;; Robust solution will be quite a bit more code
              (when latex
                (let* ((lb (plist-get latex :beg))
-                     (le (plist-get latex :end))
-                     (sp-max-pair-length (- le lb)))
+                      (le (plist-get latex :end))
+                      (sp-max-pair-length (- le lb)))
                  (org-notes-wrap-with-meta-latex-and-execute
-                  lb le "" (> sp-max-pair-length 70))))))
+                  lb le (> sp-max-pair-length 70))))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3109,15 +3122,14 @@ Abbreviations
                             (list (region-beginning)
                                   (region-end))
                           (list nil nil)))
-           (org-notes-sp-wrap-with-pair ,open ,key beg end)))
+           (org-notes-sp-wrap-with-pair ,open beg end)))
        (define-key org-mode-map (kbd ,(upcase key))
          (lambda (beg end)
            (interactive (if (region-active-p)
                             (list (region-beginning)
                                   (region-end))
                           (list nil nil)))
-           (org-notes-wrap-latex-with-delims-and-render ,open ,close beg end)))
-   ))
+           (org-notes-wrap-latex-with-delims-and-render ,open ,close beg end)))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -3153,7 +3165,7 @@ Abbreviations
                'org-notes-wrap-with-meta-latex-and-execute) beg (point))
            (or (just-one-space) t))))
 #+end_src
-
+  
 #+begin_src emacs-lisp
   (defun org-notes-auto-render-latex ()
     "Replaces space"
@@ -3198,7 +3210,7 @@ Abbreviations
                             (list (region-beginning)
                                   (region-end))
                           (list nil nil)))
-      (org-notes-wrap-with-meta-latex-and-execute beg end "$")))
+      (org-notes-wrap-with-meta-latex-and-execute beg end)))
 
   (sp-pair "\\[" "\\]" :actions '(navigate))
   (define-key org-mode-map (kbd "\\")
@@ -3207,7 +3219,7 @@ Abbreviations
                             (list (region-beginning)
                                   (region-end))
                           (list nil nil)))
-      (org-notes-wrap-with-meta-latex-and-execute beg end "\\" t)))
+      (org-notes-wrap-with-meta-latex-and-execute beg end t)))
 #+end_src
 
 #+begin_src emacs-lisp
