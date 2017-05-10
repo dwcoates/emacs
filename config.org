@@ -74,7 +74,6 @@ Make sure emacs gets my bashrc environment variable:
   (setq default-major-mode 'emacs-lisp-mode)
 #+end_src
 
-
 ** Help
 
    The following gives us the ~C-h M-k~ binding for the new command
@@ -249,29 +248,38 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
  (use-package auto-complete)
  #+end_src
 
-** Selection and Narrowing
-*** Narrowing
+** Searching
 
-   ~helm~ and ~ivy~ are menu-based selection/narrowing libraries. They give you a
-   way to sift through lists with pop-up fuzzy-searchable menus. ~helm~ and ~ivy~
-   are used as =M-x= interfaces, for example. Binding =M-x= to ~helm-M-x~ is a much
-   nicer way to select commands than the Emacs default. These libraries are easy
-   to use and extend, so there are many ~helm~ / ~ivy~ based packages available on
-   =Melpa= and other Emacs package repositories. ~counsel~ is then name for the
-   collection of ~ivy~ interfaces for common Emacs commands, such as helm commands
-   and file finding.
+   Make iterative searching default to regexp searching, which I find much
+   better for building keyboard macros.
 
-   ~helm-swoop~ is a helm-based packaged for sifting through buffer
-   contents. ~helm-multi-swoop~ lets us do it across all open buffers. ~swiper~ is
-   the ~helm-swoop~ equivalent for ~ivy~.
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-s") 'isearch-forward-regexp)
+  (global-set-key (kbd "C-r") 'isearch-backward-regexp)
+#+end_src
 
-   ~ido~ is a selection/narrowing package a bit different than ~helm~ and ~ivy~. It
-   uses the =minibuffer= instead of a pop-up list, and I generally consider it
-   best for selecting from a well-known list for which there isn't attached
-   meta-data. Selecting from a list of tags or files in familiar directory, for
-   example. ~smex~ is an ~ido~ packaged used for =M-x=.
+** Narrowing
 
-**** ~helm~ :search:fuzzy:popups:
+  ~helm~ and ~ivy~ are menu-based selection/narrowing libraries. They give you a
+  way to sift through lists with pop-up fuzzy-searchable menus. ~helm~ and ~ivy~
+  are used as =M-x= interfaces, for example. Binding =M-x= to ~helm-M-x~ is a much
+  nicer way to select commands than the Emacs default. These libraries are easy
+  to use and extend, so there are many ~helm~ / ~ivy~ based packages available on
+  =Melpa= and other Emacs package repositories. ~counsel~ is then name for the
+  collection of ~ivy~ interfaces for common Emacs commands, such as helm commands
+  and file finding.
+
+  ~helm-swoop~ is a helm-based packaged for sifting through buffer
+  contents. ~helm-multi-swoop~ lets us do it across all open buffers. ~swiper~ is
+  the ~helm-swoop~ equivalent for ~ivy~.
+
+  ~ido~ is a selection/narrowing package a bit different than ~helm~ and ~ivy~. It
+  uses the =minibuffer= instead of a pop-up list, and I generally consider it
+  best for selecting from a well-known list for which there isn't attached
+  meta-data. Selecting from a list of tags or files in familiar directory, for
+  example. ~smex~ is an ~ido~ packaged used for =M-x=.
+
+*** ~helm~                                              :search:fuzzy:popups:
 
   This variables must be set before loading ~helm-gtags~
 
@@ -450,7 +458,7 @@ through Emacs documentation.
   (setq helm-lisp-fuzzy-completion t)
   #+END_SRC
 
-***** ~helm-buffers-list~ :search:fuzzy:popups:
+**** ~helm-buffers-list~                                :search:fuzzy:popups:
 
 Make helm-buffers-list sort the buffers.
 
@@ -483,7 +491,7 @@ Make helm-buffers-list sort the buffers.
   (advice-add 'helm-buffers-sort-transformer :around 'helm-buffers-sort-dired-buffers)
 #+end_src
 
-***** Hide mode-lines under helm
+**** Hide mode-lines under helm
 
 Don't display the modeline in bottom buffers when helm is active. It's
 distracting, useless, and unsightly. The following code was grabbed from
@@ -544,7 +552,7 @@ distracting, useless, and unsightly. The following code was grabbed from
 (advice-add 'helm-keyboard-quit :around #'helm-keyboard-quit-advice)
 #+end_src
 
-***** Change helm mode-line appearance
+**** Change helm mode-line appearance
 
 #+begin_src emacs-lisp
   (defun helm-mode-line-hook ()
@@ -557,7 +565,7 @@ distracting, useless, and unsightly. The following code was grabbed from
   (add-hook 'helm-major-mode-hook 'helm-mode-line-hook)
 #+end_src
 
-***** ~helm-dash~
+**** ~helm-dash~
 
       ~helm-dash~ is a wonderful utility for looking up docs using the ~dash~
       utility. Install dash docs with ~helm-dash-install-docset~ (Docs are
@@ -571,48 +579,48 @@ distracting, useless, and unsightly. The following code was grabbed from
         ))
 #+end_src
 
-**** ~ido~ :search:fuzzy:
+*** ~ido~                                                      :search:fuzzy:
 
-  I prefer Ido for find-file. 
-
-  #+begin_src emacs-lisp
-    (ido-mode t)
-    (bind-key* "C-x C-f" 'ido-find-file)
- #+end_src
-
-  Ido should save its files where everything else does!
+ I prefer Ido for find-file. 
 
  #+begin_src emacs-lisp
-   (setq-default ido-save-directory-list-file (concat saveplace-dir "ido.last"))
-  #+end_src
+   (ido-mode t)
+   (bind-key* "C-x C-f" 'ido-find-file)
+#+end_src
 
-***** ~smex~
+ Ido should save its files where everything else does!
 
-      Use smart-M-x for =M-x=.
-
- #+begin_src emacs-lisp
-   (use-package smex
-     :init (global-set-key (kbd "M-x") 'smex)
-     :config 
-     (smex-initialize))
+#+begin_src emacs-lisp
+  (setq-default ido-save-directory-list-file (concat saveplace-dir "ido.last"))
  #+end_src
 
-**** ~ivy~ :search:fuzzy:popups:
+**** ~smex~
 
-  #+begin_src emacs-lisp
-    (use-package ivy
-      :init
-      (use-package counsel
-        :config
-        :bind*
-        ("C-x y" . counsel-org-tag))
-      :config
-      (set-face-attribute 'ivy-current-match nil :background "#ffb6c1" :foreground "black")
-      (setq ivy-height 5)
-      (setq ivy-format-function 'ivy-format-function-arrow))
-  #+end_src
+     Use smart-M-x for =M-x=.
 
-***** ~swiper~ :search:fuzzy:popups:
+#+begin_src emacs-lisp
+  (use-package smex
+    :init (global-set-key (kbd "M-x") 'smex)
+    :config 
+    (smex-initialize))
+#+end_src
+
+*** ~ivy~                                               :search:fuzzy:popups:
+
+ #+begin_src emacs-lisp
+   (use-package ivy
+     :init
+     (use-package counsel
+       :config
+       :bind*
+       ("C-x y" . counsel-org-tag))
+     :config
+     (set-face-attribute 'ivy-current-match nil :background "#ffb6c1" :foreground "black")
+     (setq ivy-height 5)
+     (setq ivy-format-function 'ivy-format-function-arrow))
+ #+end_src
+
+**** ~swiper~                                           :search:fuzzy:popups:
 
       Sift through a buffer's contents with ~swiper~.
 
@@ -620,17 +628,17 @@ distracting, useless, and unsightly. The following code was grabbed from
   (use-package swiper)
 #+end_src
 
-*** Jumping
+** Jumping
    
-    Move cursor immediately to a given location. ~avy~ and ~ace~ are different
-    approaches to the same idea. They overlay letters on top of all character
-    instances to which you'd like to jump. ~jump-char~ allows us to jump to
-    nearest character, forward or backward; same idea, but goes to the nearest
-    character instead of requiring that you specify the character. ~ace-isearch~
-    wraps ~isearch~ such that for searches > 6 characters in length, isearch
-    automatically switches to ~swiper~ otherwise.
+   Move cursor immediately to a given location. ~avy~ and ~ace~ are different
+   approaches to the same idea. They overlay letters on top of all character
+   instances to which you'd like to jump. ~jump-char~ allows us to jump to
+   nearest character, forward or backward; same idea, but goes to the nearest
+   character instead of requiring that you specify the character. ~ace-isearch~
+   wraps ~isearch~ such that for searches > 6 characters in length, isearch
+   automatically switches to ~swiper~ otherwise.
 
-**** ~avy~ :jump:
+*** ~avy~                                                              :jump:
 
      ~avy-goto-char-timer~, bound to =C-m=, is the main takeaway from ~avy~, in my
      opinion. Use it to quickly jump between static buffers.
@@ -654,22 +662,22 @@ distracting, useless, and unsightly. The following code was grabbed from
      ("C-."   . avy-goto-char)))
 #+end_src
 
-**** ~ace~ :jump:
+*** ~ace~                                                              :jump:
 
-   Jump quickly to any word using just two key strokes with ace-jump-mode:
+  Jump quickly to any word using just two key strokes with ace-jump-mode:
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package ace-jump-mode
-       :config
-       (use-package ace-jump-zap
-       :commands ace-jump-zap-to-char 
-                 ace-jump-zap-up-to-char)
-       :bind*
-       (("C-j K" . ace-jump-zap-to-char)
-        ("C-j k" . ace-jump-zap-up-to-char)))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package ace-jump-mode
+      :config
+      (use-package ace-jump-zap
+      :commands ace-jump-zap-to-char 
+                ace-jump-zap-up-to-char)
+      :bind*
+      (("C-j K" . ace-jump-zap-to-char)
+       ("C-j k" . ace-jump-zap-up-to-char)))
+  #+END_SRC
 
-**** ~ace-isearch~ :search:jump:fuzzy:
+*** ~ace-isearch~                                         :search:jump:fuzzy:
 
   This is a mix of ~ace-isearch~, ~helm-swoop~, and ~avy~. Pretty cool. If only
   one key is searched, it will use ace, if more than one and less than 6
@@ -700,7 +708,7 @@ distracting, useless, and unsightly. The following code was grabbed from
   (setq ace-isearch-function-from-isearch 'ace-isearch-swiper-from-isearch)
 #+end_src
 
-**** ~jump-char~ :jump:
+*** ~jump-char~                                                        :jump:
 
 #+begin_src emacs-lisp
   (use-package jump-char
@@ -713,7 +721,7 @@ distracting, useless, and unsightly. The following code was grabbed from
     (key-chord-define-global "jr" 'jump-char-backward))
 #+end_src
 
-**** ~isearcher~
+*** ~isearcher~
 
 #+begin_src emacs-lisp
   (defvar isearcher--register nil)
@@ -2816,9 +2824,11 @@ Don't use that annoying indentation style with the comments, please
   (modify-syntax-entry ?_ "w" org-mode-syntax-table)
   (modify-syntax-entry ?- "w" org-mode-syntax-table)
   (modify-syntax-entry ?= "w" org-mode-syntax-table)
+  (modify-syntax-entry ?| "w" org-mode-syntax-table)
   (modify-syntax-entry ?$ "w" org-mode-syntax-table)
   (modify-syntax-entry ?# "w" org-mode-syntax-table)
   (modify-syntax-entry ?* "w" org-mode-syntax-table)
+  (modify-syntax-entry '(133 . 140) "w" org-mode-syntax-table) ; ascii characters with codes 133-140
 #+end_src
 
    ~htmlize~ is needed for pretty html syntax highlighting from org exports
@@ -3320,6 +3330,16 @@ Task triggers
 
 #+begin_src emacs-lisp
   (add-hook 'org-agenda-after-show-hook 'recenter)
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq org-lowest-priority 69) ; make lowest priority possible 'E'
+  (setq org-priority-faces
+        '((65 . (:foreground "gray100" :weight ultrabold)) ; A
+          (66 . (:foreground "gray80" :weight bold))       ; B
+          (67 . (:foreground "gray70" :weight light))      ; C
+          (68 . (:foreground "gray42" :slant italic))      ; D
+          (69 . (:foreground "gray33" :slant italic))))    ; E
 #+end_src
 
 *** Appearance
