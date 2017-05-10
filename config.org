@@ -101,13 +101,23 @@ Make sure emacs gets my bashrc environment variable:
    pop-up for commands under this prefix.
 
  #+BEGIN_SRC emacs-lisp
- (use-package guide-key
-   :init
-   (guide-key-mode 1)
-   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x v" "C-x 8" "C-x +" "C-w" "C-e" "C-h" "C-c e" "C-c C-v"))
-   (setq guide-key/recursive-key-sequence-flag t)
-   (setq guide-key/popup-window-position 'bottom)
-   (diminish 'guide-key-mode))
+   (use-package guide-key
+     :init
+     (guide-key-mode 1)
+     (setq guide-key/guide-key-sequence '("C-x r" 
+                                          "C-x 4"
+                                          "C-x v"
+                                          "C-x 8"
+                                          "C-x +"
+                                          "C-w"
+                                          "C-e"
+                                          "C-h"
+                                          "C-c e"
+                                          "C-c C-v"
+                                          "C-c o"))
+     (setq guide-key/recursive-key-sequence-flag t)
+     (setq guide-key/popup-window-position 'bottom)
+     (diminish 'guide-key-mode))
  #+END_SRC
 
 *** Dictionary
@@ -247,6 +257,36 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
  #+begin_src emacs-lisp
  (use-package auto-complete)
  #+end_src
+
+** Finding files
+
+   ~get-personal-file-binding~ is used to binding a key to a file. Results in a
+   function, named appropriately, that is called to find =file= when =key= is
+   pressed. The advantage of this is that ~guide-key~ will display the binding
+   nicely.
+
+#+begin_src emacs-lisp
+  (defun make-get-personal-file-key (file key)
+    "Doesn't handle duplicate filenames very well.
+  Does handle files and directorys with same basename, though"
+    (let ((function-symbol (make-symbol
+                            (concat "get-personal-"
+                                    (if (file-directory-p file)
+                                        (concat "dir:" )
+                                      (concat"file:" (file-name-base file)))
+                                    ))))
+      `(progn
+         (defun ,function-symbol ()
+           (find-file ,file))
+         (global-set-key (kbd ,key) ',function-symbol))))
+
+  (defmacro get-personal-file-binding (file key)
+    (make-get-personal-file-key (file-truename (directory-file-name
+                                                (if (stringp file)
+                                                    file
+                                                  (symbol-value file))))
+                                key))
+#+end_src
 
 ** Searching
 
