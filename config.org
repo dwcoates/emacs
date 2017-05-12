@@ -268,15 +268,16 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 #+begin_src emacs-lisp
   (defun make-get-personal-file-key (file key)
     "Doesn't handle duplicate filenames very well.
-  Does handle files and directorys with same basename, though"
+    Does handle files and directorys with same basename, though"
     (let ((function-symbol (make-symbol
                             (concat "get-personal-"
                                     (if (file-directory-p file)
-                                        (concat "dir:" )
-                                      (concat"file:" (file-name-base file)))
+                                        (concat "dir:" (file-name-nondirectory file))
+                                        (concat"file:" (file-name-base file)))
                                     ))))
       `(progn
          (defun ,function-symbol ()
+           (interactive)
            (find-file ,file))
          (global-set-key (kbd ,key) ',function-symbol))))
 
@@ -286,16 +287,6 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
                                                     file
                                                   (symbol-value file))))
                                 key))
-#+end_src
-
-** Searching
-
-   Make iterative searching default to regexp searching, which I find much
-   better for building keyboard macros.
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-s") 'isearch-forward-regexp)
-  (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 #+end_src
 
 ** Narrowing
@@ -717,6 +708,20 @@ distracting, useless, and unsightly. The following code was grabbed from
        ("C-j k" . ace-jump-zap-up-to-char)))
   #+END_SRC
 
+*** ~jump-char~                                                        :jump:
+
+#+begin_src emacs-lisp
+  (use-package jump-char
+    :commands jump-char-forward jump-char-backward
+    :bind*
+    (("M-s" . jump-char-forward)
+     ("M-r" . jump-char-backward))
+    :config
+    (key-chord-define-global "js" 'jump-char-forward)
+    (key-chord-define-global "jr" 'jump-char-backward))
+#+end_src
+
+** Searching
 *** ~ace-isearch~                                         :search:jump:fuzzy:
 
   This is a mix of ~ace-isearch~, ~helm-swoop~, and ~avy~. Pretty cool. If only
@@ -732,6 +737,14 @@ distracting, useless, and unsightly. The following code was grabbed from
       (setq ace-isearch-use-jump nil))
   #+end_src
 
+  Make iterative searching default to regexp searching, which I find much
+  better for building keyboard macros.
+
+#+begin_src emacs-lisp
+  ;(setq search-default-mode t)
+#+end_src
+
+
   Use ~swiper~ instead of ~helm-swoop~.
 
 #+begin_src emacs-lisp
@@ -746,19 +759,6 @@ distracting, useless, and unsightly. The following code was grabbed from
       (swiper $query)))
 
   (setq ace-isearch-function-from-isearch 'ace-isearch-swiper-from-isearch)
-#+end_src
-
-*** ~jump-char~                                                        :jump:
-
-#+begin_src emacs-lisp
-  (use-package jump-char
-    :commands jump-char-forward jump-char-backward
-    :bind*
-    (("M-s" . jump-char-forward)
-     ("M-r" . jump-char-backward))
-    :config
-    (key-chord-define-global "js" 'jump-char-forward)
-    (key-chord-define-global "jr" 'jump-char-backward))
 #+end_src
 
 *** ~isearcher~
@@ -2836,16 +2836,16 @@ Don't use that annoying indentation style with the comments, please
  #+end_src
 
 *** git-gutter
-#+begin_src emacs-lisp
-      (use-package git-gutter+
-        :commands 
-        git-gutter-mode+
-        :init
-        (global-git-gutter+-mode))
-#+end_src
 
-#+RESULTS:
-: t
+#+begin_src emacs-lisp
+  (use-package git-gutter+
+    :commands 
+    git-gutter-mode+
+    :init
+    (global-git-gutter+-mode)
+    :config
+    (setq git-gutter+-disabled-modes '(org-mode org)))
+#+end_src
 
 * Org Mode
 
@@ -3244,6 +3244,7 @@ Abbreviations
   (org-notes-wrap-previous "^{" "i")
   (org-notes-wrap-previous "_{" "u")
   (org-notes-wrap-previous "\\hat{" "h")
+  (org-notes-wrap-previous "\\bar{" "b")
 
   ;; normal latex wrappers
   (org-notes-create-latex-wrapper "\\mathcal{" "}" "m")
@@ -3251,6 +3252,7 @@ Abbreviations
   (org-notes-create-latex-wrapper "^{" "}" "i")
   (org-notes-create-latex-wrapper "_{" "}" "u")
   (org-notes-create-latex-wrapper "\\hat{" "}" "h")
+  (org-notes-create-latex-wrapper "\\bar{" "}" "b")
 
   ;; special latex meta wrappers
   (sp-pair "$" "$")
@@ -3374,6 +3376,7 @@ Task triggers
 
 #+begin_src emacs-lisp
   (setq org-lowest-priority 69) ; make lowest priority possible 'E'
+  (setq org-default-priority 67) ; make default priority 'C'
   (setq org-priority-faces
         '((65 . (:foreground "gray100" :weight ultrabold)) ; A
           (66 . (:foreground "gray80" :weight bold))       ; B
@@ -4057,17 +4060,17 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 ** Terminal
 
 #+begin_src emacs-lisp
-(defun dwc-spawn-terminal ()
-  (interactive)
-  (dwc-create-frame nil nil)
-  (term "/bin/bash"))
+  (defun dwc-spawn-terminal ()
+    (interactive)
+    (dwc-create-frame nil nil)
+    (term "/bin/bash"))
 
-(define-key global-map (kbd "C-x t") 'dwc-spawn-terminal)
+  (define-key global-map (kbd "C-x t") 'dwc-spawn-terminal)
 #+end_src
 
-~eshell~ is useful for quick shell stuff. It's not a full-fledged terminal, so
-it's usage is limited. The following code snippet is taken [[http://blog.liangzan.net/blog/2012/12/12/customizing-your-emacs-eshell-prompt/][from here]], and is by
-/Liang Zan/.
+  ~eshell~ is useful for quick shell stuff. It's not a full-fledged terminal, so
+  it's usage is limited. The following code snippet is taken [[http://blog.liangzan.net/blog/2012/12/12/customizing-your-emacs-eshell-prompt/][from here]], and is
+  by /Liang Zan/.
 
 #+begin_src emacs-lisp
   (setq eshell-history-size 1024)
