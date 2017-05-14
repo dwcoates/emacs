@@ -2490,6 +2490,11 @@ intuitive. Based on ~ESS~.
 
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
 improved function.
+*** Commands and Bindings
+
+#+begin_src emacs-lisp
+  (define-key python-mode-map (kbd "<return>") 'py-newline-and-indent)
+#+end_src
 
 *** Python Shell
 
