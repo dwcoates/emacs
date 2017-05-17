@@ -2857,6 +2857,15 @@ Don't use that annoying indentation style with the comments, please
     (message "Configuring org-mode..."))
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun outline-down-heading ()
+    (interactive)
+    (org-up-heading-safe)
+    (outline-forward-same-level 1))
+  (define-key org-mode-map (kbd "C-c C-.") 'outline-down-heading)
+  (define-key org-mode-map (kbd "C-c C-,") 'outline-up-heading)
+#+end_src
+
 ** General
 
    Modify org syntax table to treat the following characters as word
@@ -3728,6 +3737,11 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 
 #+begin_src emacs-lisp
   (setq org-footnote-auto-label 'confirm)
+#+end_src
+
+
+#+begin_src emacs-lisp
+  (define-key org-mode-map (kbd "C-c C-SPC") 'org-footnote-new)
 #+end_src
 
 ** Exports
