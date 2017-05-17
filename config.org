@@ -1226,6 +1226,8 @@ when backwards deleting a word, it will stop at the nearest capital letter.
      (setq sp-autoskip-closing-pair 'always)
      (setq sp-hybrid-kill-entire-symbol nil)
      (setq sp-backward-delete-char 'paredit-backward-delete)
+     (global-set-key (kbd "C-M-w") 'sp-copy-sexp)
+     (define-key smartparens-mode-map (kbd "C-M-d") 'sp-delete-sexp)
      (sp-use-paredit-bindings)
 
      (show-smartparens-global-mode +1)
@@ -2491,11 +2493,6 @@ intuitive. Based on ~ESS~.
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
 improved function.
 *** Commands and Bindings
-
-#+begin_src emacs-lisp
-  (define-key python-mode-map (kbd "<return>") 'py-newline-and-indent)
-#+end_src
-
 *** Python Shell
 
 #+begin_src emacs-lisp 
@@ -2556,6 +2553,7 @@ improved function.
     (setq-local eir-jump-after-eval nil)
     (define-key python-mode-map (kbd "C-c C-c") 'python-shell-send-code-and-step)
     (define-key prog-mode-map (kbd "C-c C-e") 'python-nav-end-of-block)
+    (define-key python-mode-map (kbd "<return>") 'py-newline-and-indent)
     (define-key prog-mode-map (kbd "C-c C-a") 'python-nav-beginning-of-block) 
     (define-key python-mode-map (kbd "C-c SPC") 'py-switch-to-shell) 
     (define-key python-mode-map (kbd "C-c C-SPC") 'python-switch-to-shell-same-window) 
@@ -2621,10 +2619,10 @@ improved function.
                     (title (cadr x))
                     (region-p (caddr x))
                     predicate)
-                (setq predicate (lambda () (and (anaconda-mode-running-p)
-                                                (not (use-region-p))
-                                                (not (sp-point-in-string-or-comment)))
-                                  ))
+                (setq predicate (lambda () 
+                                  (and (anaconda-mode-running-p)
+                                       (not (use-region-p))
+                                       (not (sp-point-in-string-or-comment)))))
                 (emr-declare-command (intern
                                       (format "anaconda-mode-%s"
                                               (symbol-name command-name)))
@@ -3722,6 +3720,14 @@ Function to visually delimit priorities in the org-agenda-list buffer.
          `(file nil)
          :study t
          :project nil))
+#+end_src
+
+** Footnotes
+
+   Prompt for footnote label instead of automatically producing one.
+
+#+begin_src emacs-lisp
+  (setq org-footnote-auto-label 'confirm)
 #+end_src
 
 ** Exports
