@@ -1211,7 +1211,8 @@ when backwards deleting a word, it will stop at the nearest capital letter.
    (use-package smartparens
      :bind 
      (:map smartparens-mode-map
-           ("M-[" . sp-unwrap-sexp))
+           ("M-[" . sp-unwrap-sexp)
+           ("C-M-d" . sp-delete-sexp))
      :config
      ;; These are loaded from a file because currently smartparens isn't
      ;; handling escaped quotations in org well. Funnily enough, smartparens
@@ -1227,15 +1228,11 @@ when backwards deleting a word, it will stop at the nearest capital letter.
      (setq sp-hybrid-kill-entire-symbol nil)
      (setq sp-backward-delete-char 'paredit-backward-delete)
      (global-set-key (kbd "C-M-w") 'sp-copy-sexp)
-     (define-key smartparens-mode-map (kbd "C-M-d") 'sp-delete-sexp)
      (sp-use-paredit-bindings)
-
      (show-smartparens-global-mode +1)
      (smartparens-global-mode 1)
-
      (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
      (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
-
      (diminish 'smartparens-mode))
  #+END_SRC
 
