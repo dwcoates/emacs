@@ -3099,17 +3099,6 @@ Abbreviations
                (list word-pair (cons (capitalize (car word-pair))
                                      (capitalize (cdr word-pair))))))
             latex-keywords)))
-
-  (define-abbrev-table 'org-abbrev-table
-    (org-create-org-abbrev-table
-     '(("alpha" . "alp") ("lambda" . "lam") ("sigma" . "sig") ("rho" . "rho")
-       ("beta" . "bta") ("eta" . "eta") ("delta" . "delt") ("zeta" . "zet")
-       ("theta" . "tht") ("iota" . "iot") ("kappa" . "kap") ("mu" . "mu")
-       ("nu" . "np") ("xi" . "xi") ("omicron" . "omi") ("pi" . "pi") ("tau" . "ta")
-       ("upsilon" . "ups") ("phi" . "phi") ("chi" . "chi") ("psi" . "psi")
-       ("omega" . "ome"))))
-
-  (setq local-abbrev-table org-abbrev-table)
 #+end_src
 
 ** Commands
@@ -3698,14 +3687,6 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 #+end_src
 
 ** Capture
-
-#+begin_src emacs-lisp
-  (defun my-org-capture-hook ()
-    (setq local-abbrev-table org-abbrev-table))
-
-  (add-hook 'org-capture-mode-hook 'my-org-capture-hook)
-#+end_src
-
 *** Template Components
 
     org-capture-template is set in a private file. Look up the documention for
