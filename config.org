@@ -3059,7 +3059,7 @@ Hide all Org source blocks by default.
 I add this advice to make the highlights on org agenda disappear when typing is
 going on in another buffer. Very distracting for me when a line an agenda buffer
 is highlighted in the other frame because I forgot my mouse cursor on it.
-yn
+
 #+begin_src emacs-lisp
   ;; (defun org-agenda-highlight-entry-advice (func &rest args)
   ;;   (when (frame-pointer-visible-p)
@@ -3067,6 +3067,12 @@ yn
 
   ;; (add-hook 'after-init-hook 
   ;;           (lambda () (advice-add 'org-agenda-highlight-todo :around 'org-agenda-highlight-entry-advice)))
+#+end_src
+
+Display inline images with a certain width to prevent overly large images
+
+#+begin_src emacs-lisp
+  (setq org-image-actual-width '(600))
 #+end_src
 
 *** Abbrevs
