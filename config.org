@@ -1209,10 +1209,11 @@ when backwards deleting a word, it will stop at the nearest capital letter.
 
  #+BEGIN_SRC emacs-lisp
    (use-package smartparens
-     :bind 
+     :bind*
      (:map smartparens-mode-map
            ("M-[" . sp-unwrap-sexp)
-           ("C-M-d" . sp-delete-sexp))
+           ("C-M-d" . sp-delete-sexp)
+           ("C-M-k" . sp-kill-sexp))
      :config
      ;; These are loaded from a file because currently smartparens isn't
      ;; handling escaped quotations in org well. Funnily enough, smartparens
@@ -3192,32 +3193,49 @@ Abbreviations
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun org-notes-wrap-previous-latex (&optional keep-whitespace funct)
-    "temporary and very sloppy. Doing much better would require a
-  cfg, but this works pretty well."
-    (interactive)
-    (unless keep-whitespace
-      (while (and (not (looking-at "^"))
-         (not (save-excursion
-            (backward-char)
-            (looking-at "[^\\\s-] "))))
-        (backward-char)))
-    (let* ((limit (line-beginning-position))
-           (beg (save-excursion
-                  (when (save-excursion (backward-char) (looking-at "[)}]"))
-                     (sp-backward-sexp)
-                    (when (save-excursion (backward-char) (looking-at "[)}]"))
-                       (sp-backward-sexp)))
-                  (unless (save-excursion (backward-char) (looking-at " [^\\\s-]" ))
-                     (backward-word)
-                    (when (save-excursion (backward-char) (looking-at "\\\\"))
-                       (backward-char 1)))
-                  (point)))
-           (latex (and (not (equal (point) beg)) (> (point) limit))))
-      (and latex 
-           (funcall (or funct
-               'org-notes-wrap-with-meta-latex-and-execute) beg (point))
-           (or (just-one-space) t))))
+    (defun org-notes-wrap-previous-latex (&optional keep-whitespace funct)
+      "temporary and very sloppy. Doing much better would require a
+    cfg, but this works pretty well."
+      (interactive)
+      (unless keep-whitespace
+        (while (and (not (looking-at "^"))
+           (not (save-excursion
+              (backward-char)
+              (looking-at "[^\\\s-] "))))
+          (backward-char)))
+      (let* ((limit (line-beginning-position))
+             (beg (org-notes-parse-simple-latex))
+             (latex (and (not (equal (point) beg)) (> (point) limit))))
+        (and latex 
+             (funcall (or funct
+                 'org-notes-wrap-with-meta-latex-and-execute) beg (point))
+             (or (just-one-space) t))))
+
+  ;; (defun org-notes-parse-simple-latex-bad ()
+  ;;   (save-excursion
+  ;;     (when (save-excursion (backward-char) (looking-at "[)}]"))
+  ;;       (sp-backward-sexp)
+  ;;       ;; handle two-component latex structures like \frac{}{}
+  ;;       (when (save-excursion (backward-char) (looking-at "[)}]"))
+  ;;         (sp-backward-sexp)))
+  ;;     (unless (save-excursion (backward-char) (looking-at "[ ][^\\\s-]" ))
+  ;;       (backward-word)
+  ;;       (when (save-excursion (backward-char) (looking-at "\\\\"))
+  ;;         (backward-char 1)))
+  ;;     (if (looking-at "[\^_\*\=]")
+  ;;         (progn (org-notes-parse-simple-latex) (print "hello!"))
+  ;;       (point))))
+
+  (defun org-notes-parse-simple-latex ()
+    (save-excursion
+      (when (save-excursion (backward-char) (looking-at "[)}]"))
+        (sp-backward-sexp)
+        ;; handle two-component latex structures like \frac{}{}
+        (when (save-excursion (backward-char) (looking-at "[)}]"))
+          (sp-backward-sexp)))
+      (re-search-backward "[ ]" (line-beginning-position) t)
+      (forward-char)
+      (point)))
 #+end_src
   
 #+begin_src emacs-lisp
@@ -3687,6 +3705,14 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 #+end_src
 
 ** Capture
+
+#+begin_src emacs-lisp
+  (defun my-org-capture-hook ()
+    (abbrev-mode t))
+
+  (add-hook 'org-capture-mode-hook 'my-org-capture-hook)
+#+end_src
+
 *** Template Components
 
     org-capture-template is set in a private file. Look up the documention for
