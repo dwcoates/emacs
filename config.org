@@ -3262,11 +3262,12 @@ Abbreviations
 #+end_src
 
 #+begin_src emacs-lisp
-  (org-notes-wrap-previous "\\mathcal{" "m")
+  (org-notes-wrap-previous "\\mathcal{" "c")
   (org-notes-wrap-previous "^{" "i")
   (org-notes-wrap-previous "_{" "u")
   (org-notes-wrap-previous "\\hat{" "h")
   (org-notes-wrap-previous "\\bar{" "b")
+  (org-notes-wrap-previous "\\text{" "x")
 
   ;; normal latex wrappers
   (org-notes-create-latex-wrapper "\\mathcal{" "}" "m")
@@ -3275,6 +3276,7 @@ Abbreviations
   (org-notes-create-latex-wrapper "_{" "}" "u")
   (org-notes-create-latex-wrapper "\\hat{" "}" "h")
   (org-notes-create-latex-wrapper "\\bar{" "}" "b")
+  (org-notes-create-latex-wrapper "\\text{" "}" "t")
 
   ;; special latex meta wrappers
   (sp-pair "$" "$")
