@@ -1471,8 +1471,7 @@ Show whitespace in diff-mode
            (setq yas-dont-activate t))
          (add-hook 'term-mode-hook 'my/yas-term-hook)
          (defun my/yas-before-hook ()
-           (when (eq yas-minor-mode t) (expand-abbrev))
-           (setq snippet-mode-abbrev-table org-abbrev-table))
+           (when (eq yas-minor-mode t) (expand-abbrev)))
          (add-hook 'yas-before-expand-snippet-hook 'my/yas-before-hook)
          (defun my/yas-after-hook ()
              (setq snippet-mode-abbrev-table local-abbrev-table))
@@ -2178,6 +2177,7 @@ Comment out a line:
     :config
     (lispy-define-key lispy-mode-map "u" 'lispy-backward)
     (lispy-define-key lispy-mode-map "o" 'lispy-forward)
+    (lispy-define-key lispy-mode-map "*" 'lispy-wrap-round)
     (define-key lispy-mode-map (kbd "C-c (") (lambda () (interactive) (insert "(")))
     (define-key lispy-mode-map (kbd "C-c )") (lambda () (interactive) (insert ")")))
     (when (require 'smartparens nil t)
@@ -3350,7 +3350,7 @@ Tasks have multiple possible states. Below defines them and their transitions
 #+begin_src emacs-lisp
   (setq org-todo-keywords
         (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-                (sequence "LEARN(l)" "IMPROVE(r)" "IDEA(e)" "QUIZ(z)" "|" "NOTE(o)" "CLARIFY(c@/@)" )
+                (sequence "LEARN(l)" "IMPROVE(r@/@)" "IDEA(e)" "VERIFY(v@/@)" "|" "NOTE(o)" "CLARIFY(c@/@)")
                 (sequence "BUG(b!)" "ISSUE(i!)" "FEATURE(f!)" "|" "FIXED(x!/@)")
                 (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
 
@@ -3365,7 +3365,7 @@ Tasks have multiple possible states. Below defines them and their transitions
                 ("CLARIFY" :foreground "#551a8b" :weight bold)
                 ("LEARN" :foreground "#8a2be2" :weight bold)
                 ("IMPROVE" :foreground "#a020f0" :weight bold)
-                ("QUIZ" :foreground "#8b008b" :weight bold)
+                ("VERIFY" :foreground "#8b0000" :weight bold)
                 ("UNDERSTOOD" :foreground "forest green" :weight bold)
 
                 ("WAITING" :foreground "orange" :weight bold)
