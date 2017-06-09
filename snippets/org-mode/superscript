@@ -2,4 +2,4 @@
 # name: superscript
 # key: ii
 # --
-${1:base}^{${2:superscript}}$0
+${1:base}^{${2:-1}}$0

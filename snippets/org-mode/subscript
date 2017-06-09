@@ -2,4 +2,4 @@
 # name: subscript
 # key: uu
 # --
-${1:base}_{${2:subscript}}$0
+${1:base}_{${2:-1}}$0

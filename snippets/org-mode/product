@@ -4,4 +4,4 @@
 # group: math
 # name: \prod_{n}^{}
 # --
-\prod_{${1:i}${2: = ${3:initial}}}^{${4:final}}$0
+\prod_{${1:i}${2: = 1}}^{${4:N}}$0
