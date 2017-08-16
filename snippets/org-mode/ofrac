@@ -2,4 +2,4 @@
 # name: ofrac
 # key: f
 # --
-\frac{${1:numerator}}{${2:denominator}}$0
+\frac{${1:1}}{${2:N}}$0

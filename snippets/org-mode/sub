@@ -3,4 +3,4 @@
 # key: sub
 # binding: C-c e u
 # --
-_{${1:sub}}$0
+_{${1:-1}}$0
