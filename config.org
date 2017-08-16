@@ -998,6 +998,17 @@ screen for minute.
 #+end_src
 
 ** Saving/Restoring/Killing
+*** ~perspeen~
+
+#+begin_src emacs-lisp
+(use-package perspeen
+  :ensure t
+  :init
+  (setq perspeen-use-tab t)
+  :config
+  (perspeen-mode))
+#+end_src
+
 *** ~desktop-save~ :save:
 
 #+begin_src emacs-lisp
