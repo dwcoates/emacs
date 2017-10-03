@@ -998,6 +998,28 @@ screen for minute.
 #+end_src
 
 ** Saving/Restoring/Killing
+*** workspaces
+
+#+begin_src emacs-lisp
+  (use-package perspeen
+    :ensure t
+    :init
+    (setq perspeen-use-tab t)
+    :config
+    (perspeen-mode))
+#+end_src
+
+Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
+
+#+begin_src emacs-lisp
+(defun perspeen-create-ws ()
+  "Create a new workspace."
+  (interactive)
+  (perspeen-new-ws-internal)
+  (delete-other-windows)
+  (perspeen-update-mode-string))
+#+end_src
+
 *** ~desktop-save~ :save:
 
 #+begin_src emacs-lisp
