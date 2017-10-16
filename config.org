@@ -1022,8 +1022,10 @@ Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
 
 *** ~desktop-save~ :save:
 
+    Currently turned off
+
 #+begin_src emacs-lisp
-  (desktop-save-mode 1)
+  (desktop-save-mode nil)
 
   (setq desktop-basefilename "emacs.desktop"
         desktop-path `(,saveplace-dir))
