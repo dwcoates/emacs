@@ -354,7 +354,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
        ;; limit the number of displayed canidates
        helm-candidate-number-limit 500  
        ;; move to end or beginning of source when
-       helm-ff-file-name-history-use-recentf t
+       helm-ff-file-name-history-use-recentf nil
        ;; reaching top or bottom of source.
        helm-move-to-line-cycle-in-source     t 
        ;; fuzzy matching buffer names when non-nil
