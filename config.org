@@ -2711,6 +2711,12 @@ not yet support emacs due to a jupyter bug.
 
 ** C/C++
 
+Jump between header and source files
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-M-,") 'ff-find-other-file)
+#+end_src
+
 Company-C-Headers enables the completion of C/C++ header file names using company-mode:
 #+begin_src emacs-lisp
 (use-package company-c-headers
