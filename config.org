@@ -2786,8 +2786,8 @@ Company-C-Headers enables the completion of C/C++ header file names using compan
   )
 #+end_src
 
-
 Don't ask if I really want to compile:
+
 #+begin_src emacs-lisp
 (global-set-key (kbd "<f5>") (lambda ()
                                (interactive)
@@ -2796,13 +2796,19 @@ Don't ask if I really want to compile:
 
 #+end_src
 
-
 Enable Emacs Development Environment (EDE) only in C/C++:
-#+begin_src emacs-lisp
-(require 'ede)
 
-(global-ede-mode)
+#+begin_src emacs-lisp
+  (require 'ede)
+
+  (global-ede-mode)
 #+END_SRC
+
+Configure clang executable
+
+#+begin_src emacs-lisp
+  (setq company-clang-executable "clang++-3.5")
+#+end_src
 
 ** R (statistics)
 
