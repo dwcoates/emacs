@@ -1073,7 +1073,9 @@ Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
          :align below :size 0.5 :noselect t :inhibit-window-quit nil)
         ("*eval*"
          :align below :size 16  :noselect t :inhibit-window-quit nil)
+        (dired-mode :ignore t)
         (helm-mode :ignore t)
+        ("*Deletions*" :inhibit-window-quit nil :same t)
         ("\\`\\*helm.*?\\*\\'" :regexp t :align  :size 0.4)
         ;; Emacs
         ("*Pp Eval Output*"
