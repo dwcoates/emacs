@@ -1,4 +1,5 @@
-# name : v.begin(), v.end()
+# -*- mode: snippet -*-
+# name : score_piece
 # key: scrp
 # --
 __SCORE(${1:RECORD_IDEAS}, ${2:piece_ideas}, ${3:*name*}, ${4:score}, ${5:*value*});
