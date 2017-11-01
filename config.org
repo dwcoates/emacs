@@ -1985,6 +1985,12 @@ Comment out a line:
      (setq dumb-jump-selector 'helm))
    #+end_src
 
+#+begin_src c++
+  (define-key prog-mode-map (kbd "C-S-j b") 'beginning-of-defun)
+  (define-key prog-mode-map (kbd "C-S-j f") 'end-of-defun)
+#+end_src
+
+
 ** Eval in REPL
 
 #+begin_src emacs-lisp
