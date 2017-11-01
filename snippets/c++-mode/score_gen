@@ -1,0 +1,4 @@
+# name : v.begin(), v.end()
+# key: scr
+# --
+__SCORE(${1:RECORD_IDEAS}, ideas[${2:}], ${3:*name*}, ${4:score}, ${5:*value*});
