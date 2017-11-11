@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name : score_piece_pen
+# key: scpp
+# --
+__SCORE_P(${1:RECORD_IDEAS}, ${2:piece_ideas}, ${3:*name*}, ${4:score}, ${5:*value*});
