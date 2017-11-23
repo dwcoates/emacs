@@ -302,7 +302,8 @@
                                (load-theme 'atchka t)))
   :config
   ;; brighten minibuffers (does this even work??)
-  (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer))
+  ;; (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
+  )
 
 (sml/setup)
 
