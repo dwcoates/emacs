@@ -633,7 +633,10 @@ distracting, useless, and unsightly. The following code was grabbed from
   (use-package smex
     :init (global-set-key (kbd "M-x") 'smex)
     :config 
-    (smex-initialize))
+    (smex-initialize)
+    :bind
+    ("C-z" . magit-status))
+
 #+end_src
 
 *** ~ivy~                                               :search:fuzzy:popups:
