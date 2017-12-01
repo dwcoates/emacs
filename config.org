@@ -2875,6 +2875,8 @@ Don't use that annoying indentation style with the comments, please
 
 #+begin_src emacs-lisp
 (defadvice sgml-delete-tag (after reindent-buffer activate) (clean-up-buffer-or-region))
+
+(advice-add 'sgml-close-tag :after 'clean-up-buffer-or-region)
 #+end_src
 
 ** Git
