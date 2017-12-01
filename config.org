@@ -2000,19 +2000,27 @@ Comment out a line:
 **** clean-up-buffer-or-region
 
 #+begin_src emacs-lisp
-(defun clean-up-buffer-or-region ()
-  "Untabifies, indents and deletes trailing whitespace from buffer or region."
-  (interactive)
-  (save-excursion
-    (unless (region-active-p)
-      (mark-whole-buffer))
-    (untabify (region-beginning) (region-end))
-    (indent-region (region-beginning) (region-end))
-    (save-restriction
-      (narrow-to-region (region-beginning) (region-end))
-      (delete-trailing-whitespace))))
+  (defun clean-up-buffer-or-region ()
+    "Untabifies, indents and deletes trailing whitespace from buffer or region."
+    (interactive)
+    (save-excursion
+      (unless (region-active-p)
+        (mark-whole-buffer))
+      (untabify (region-beginning) (region-end))
+      (indent-region (region-beginning) (region-end))
+      (save-restriction
+        (narrow-to-region (region-beginning) (region-end))
+        (delete-trailing-whitespace))))
 #+end_src
 
+**** cut-region
+
+#+begin_src emacs-lisp
+  (defun cut-region (beg end) 
+    (let ((str (copy-region-as-kill beg end)))
+      (delete-region beg end)
+      str))
+#+end_src
 
 *** Navigation
 
@@ -2874,9 +2882,38 @@ Don't use that annoying indentation style with the comments, please
 ** HTML
 
 #+begin_src emacs-lisp
-(defadvice sgml-delete-tag (after reindent-buffer activate) (clean-up-buffer-or-region))
+  (defadvice sgml-delete-tag (after reindent-buffer activate) (clean-up-buffer-or-region))
 
-(advice-add 'sgml-close-tag :after 'clean-up-buffer-or-region)
+  (advice-add 'sgml-close-tag :after 'clean-up-buffer-or-region)
+#+end_src
+
+*** sgml-copy-or-kill-tag
+
+#+begin_src emacs-lisp
+    (defun sgml-copy-or-kill-element (arg)
+      (interactive "P")
+      (let ((cut-tag (lambda ()
+                       (let ((beg (point))
+                             (end (save-excursion (sgml-skip-tag-forward 1)
+                                                  (point))))
+                         (kill-ring-save beg end)
+                         (when arg
+                           (delete-region beg end))))))
+        (save-excursion (if (sgml-beginning-of-tag)
+                            (funcall cut-tag)
+                          (if (progn (forward-char) (sgml-beginning-of-tag))
+                              (funcall cut-tag)
+                            (message "Not in an HTML tag."))))
+        ))
+
+  (defun sgml-kill-element () 
+    (interactive)
+    (let ((current-prefix-arg 4))
+      (call-interactively 'sgml-copy-or-kill-element))
+    )
+
+  (define-key html-mode-map (kbd "C-c C-w") 'sgml-copy-or-kill-element)
+  (define-key html-mode-map (kbd "C-c C-k") 'sgml-kill-element)
 #+end_src
 
 ** Git
