@@ -732,11 +732,12 @@ distracting, useless, and unsightly. The following code was grabbed from
   searched, it will use helm-swoop. Nice idea.
 
   #+begin_src emacs-lisp
-    (use-package ace-isearch
-      :init 
-      (global-ace-isearch-mode)
-      :config
-      (setq ace-isearch-use-jump nil))
+        (use-package ace-isearch
+          :init 
+          (global-ace-isearch-mode)
+          :config
+          (setq ace-isearch-use-jump t)
+          (setq ace-isearch-jump-delay 2))
   #+end_src
 
   Make iterative searching default to regexp searching, which I find much
@@ -745,7 +746,6 @@ distracting, useless, and unsightly. The following code was grabbed from
 #+begin_src emacs-lisp
   ;(setq search-default-mode t)
 #+end_src
-
 
   Use ~swiper~ instead of ~helm-swoop~.
 
