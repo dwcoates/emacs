@@ -49,6 +49,7 @@ Make sure emacs gets my bashrc environment variable:
 #+end_src
 
 * General
+** General
 
 #+begin_src emacs-lisp
   (let ((inhibit-message nil))
@@ -287,6 +288,22 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
                                                     file
                                                   (symbol-value file))))
                                 key))
+#+end_src
+
+*** dired
+
+#+begin_src emacs-lisp
+      (use-package dired-details
+        :config
+        (setq-default dired-details-hidden-string "--- ")
+        (setq dired-dwim-target t)
+        (dired-details-install)
+        :bind
+        ("C-c C-p" . dired-up-directory))
+      (use-package dired-subtree
+        :config
+        (define-key dired-mode-map "i" 'dired-subtree-insert)
+        (define-key dired-mode-map ";" 'dired-subtree-remove))
 #+end_src
 
 ** Narrowing
@@ -736,7 +753,7 @@ distracting, useless, and unsightly. The following code was grabbed from
           :init 
           (global-ace-isearch-mode)
           :config
-          (setq ace-isearch-use-jump t)
+          (setq ace-isearch-use-jump nil)
           (setq ace-isearch-jump-delay 2))
   #+end_src
 
@@ -1915,7 +1932,7 @@ Comment out a line:
     (defun add-file-name-to-clipboard ()
       "Put the current file name on the clipboard"
       (interactive)
-      (let ((filename (if (equal major-mode 'dired-mode)
+      (let ((filename (if (equal major-mode 'dired,-mode)
                           default-directory
                         (buffer-file-name))))
         (message
