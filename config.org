@@ -636,7 +636,6 @@ distracting, useless, and unsightly. The following code was grabbed from
     (smex-initialize)
     :bind
     ("C-z" . magit-status))
-
 #+end_src
 
 *** ~ivy~                                               :search:fuzzy:popups:
@@ -1930,6 +1929,8 @@ Comment out a line:
 #+end_src
 
 * Software Development
+** General Settings
+*** General
 
 #+begin_src emacs-lisp
   (let ((inhibit-message nil))
@@ -1981,49 +1982,6 @@ Comment out a line:
 (add-hook 'dired-mode-hook (lambda () (define-key dired-mode-map (kbd "z") 'magit-status)))
 #+end_src
 
-** Navigation
-   #+begin_src emacs-lisp
-     (use-package dumb-jump
-     :config
-     (setq dumb-jump-selector 'helm))
-   #+end_src
-
-#+begin_src c++
-  (define-key prog-mode-map (kbd "C-S-j b") 'beginning-of-defun)
-  (define-key prog-mode-map (kbd "C-S-j f") 'end-of-defun)
-#+end_src
-
-
-** Eval in REPL
-
-#+begin_src emacs-lisp
-  (use-package eval-in-repl
-    :init
-    (require 'eval-in-repl-ielm)
-    (define-key emacs-lisp-mode-map (kbd "C-x <return>") 'eir-eval-in-ielm)
-    (define-key lisp-interaction-mode-map (kbd "C-x <return>") 'eir-eval-in-ielm)
-    (setq eir-ielm-eval-in-current-buffer t)
-    (define-key Info-mode-map (kbd "<C-return>") 'eir-eval-in-ielm)
-
-    (when (require 'cider nil t)
-      (require 'eval-in-repl-cider)
-        (define-key cider-mode-map (kbd "<C-return>") 'eir-eval-in-cider))
-
-    (when (require 'slime nil t)
-      (require 'eval-in-repl-slime)
-      (add-hook 'lisp-mode-hook
-                '(lambda ()
-                   (local-set-key (kbd "<C-return>") 'eir-eval-in-slime))))
-
-    (require 'eval-in-repl-shell)
-    (add-hook 'sh-mode-hook
-              '(lambda()
-                 (local-set-key (kbd "C-<return>") 'eir-eval-in-shell)))
-    :config
-    (setq eir-repl-placement 'left))
-#+end_src
-
-** General Settings
 *** Editing
 
 #+begin_src emacs-lisp
@@ -2039,7 +1997,96 @@ Comment out a line:
   (define-key smartparens-mode-map (kbd "M-S-d") 'kill-sexp)
 #+end_src
 
-*** Folding 
+**** clean-up-buffer-or-region
+
+#+begin_src emacs-lisp
+(defun clean-up-buffer-or-region ()
+  "Untabifies, indents and deletes trailing whitespace from buffer or region."
+  (interactive)
+  (save-excursion
+    (unless (region-active-p)
+      (mark-whole-buffer))
+    (untabify (region-beginning) (region-end))
+    (indent-region (region-beginning) (region-end))
+    (save-restriction
+      (narrow-to-region (region-beginning) (region-end))
+      (delete-trailing-whitespace))))
+#+end_src
+
+
+*** Navigation
+
+   #+begin_src emacs-lisp
+     (use-package dumb-jump
+     :config
+     (setq dumb-jump-selector 'helm))
+   #+end_src
+
+#+begin_src c++
+  (define-key prog-mode-map (kbd "C-S-j b") 'beginning-of-defun)
+  (define-key prog-mode-map (kbd "C-S-j f") 'end-of-defun)
+#+end_src
+
+**** Projectile
+
+ #+BEGIN_SRC emacs-lisp
+   (use-package projectile
+     :config
+     (projectile-global-mode)
+     (setq-default projectile-enable-caching t
+                   projectile-cache-file (concat 
+                                          saveplace-dir
+                                          "projectile.cache")
+                   projectile-known-projects-file (concat 
+                                                   saveplace-dir
+                                                   "projectile-bookmarks.eld"))
+     (diminish 'projectile-mode))
+
+   (use-package helm-projectile
+     :config
+     (helm-projectile-on)
+     (setq projectile-completion-system 'helm)
+     (setq projectile-indexing-method 'alien))
+ #+END_SRC
+
+
+ #+BEGIN_SRC emacs-lisp
+ (setq tramp-default-method "ssh")
+ #+END_SRC
+
+**** gtags
+
+ #+BEGIN_SRC emacs-lisp
+ (use-package helm-gtags
+   :commands helm-gtags-mode
+   :bind
+   (("C-c g a" . helm-gtags-tags-in-this-function)
+    ("C-j" . helm-gtags-select)
+    ("M-." . helm-gtags-dwim)
+    ("M-," . helm-gtags-pop-stack)
+    ("C-c <" . helm-gtags-previous-history)
+    ("C-c >" . helm-gtags-next-history))
+   :init
+   ; Enable helm-gtags-mode in Eshell for the same reason as above:
+   (add-hook 'dired-mode-hook 'helm-gtags-mode)
+   ; Enable helm-gtags-mode in languages that GNU Global supports:
+   (add-hook 'eshell-mode-hook 'helm-gtags-mode)
+   ; Enable helm-gtags-mode in Dired so you can jump to any tag when navigating project
+   (add-hook 'c-mode-hook 'helm-gtags-mode)
+   (add-hook 'c++-mode-hook 'helm-gtags-mode)
+   (add-hook 'java-mode-hook 'helm-gtags-mode)
+   :config
+   (setq
+    helm-gtags-ignore-case t
+    helm-gtags-auto-update t
+    helm-gtags-use-input-at-cursor t
+    helm-gtags-pulse-at-cursor t
+    helm-gtags-prefix-key "\C-cg"
+    helm-gtags-suggested-key-mapping t)
+   )
+ #+END_SRC
+
+*** Folding
 
   Folding code, vim-style
 
@@ -2100,94 +2147,7 @@ Comment out a line:
  gdb-show-main t)
 #+END_SRC
 
-*** Projectile
-
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :config
-    (projectile-global-mode)
-    (setq-default projectile-enable-caching t
-                  projectile-cache-file (concat 
-                                         saveplace-dir
-                                         "projectile.cache")
-                  projectile-known-projects-file (concat 
-                                                  saveplace-dir
-                                                  "projectile-bookmarks.eld"))
-    (diminish 'projectile-mode))
-
-  (use-package helm-projectile
-    :config
-    (helm-projectile-on)
-    (setq projectile-completion-system 'helm)
-    (setq projectile-indexing-method 'alien))
-#+END_SRC
-
-
-#+BEGIN_SRC emacs-lisp
-(setq tramp-default-method "ssh")
-#+END_SRC
-
-*** gtags
-
-#+BEGIN_SRC emacs-lisp
-(use-package helm-gtags
-  :commands helm-gtags-mode
-  :bind
-  (("C-c g a" . helm-gtags-tags-in-this-function)
-   ("C-j" . helm-gtags-select)
-   ("M-." . helm-gtags-dwim)
-   ("M-," . helm-gtags-pop-stack)
-   ("C-c <" . helm-gtags-previous-history)
-   ("C-c >" . helm-gtags-next-history))
-  :init
-  ; Enable helm-gtags-mode in Eshell for the same reason as above:
-  (add-hook 'dired-mode-hook 'helm-gtags-mode)
-  ; Enable helm-gtags-mode in languages that GNU Global supports:
-  (add-hook 'eshell-mode-hook 'helm-gtags-mode)
-  ; Enable helm-gtags-mode in Dired so you can jump to any tag when navigating project
-  (add-hook 'c-mode-hook 'helm-gtags-mode)
-  (add-hook 'c++-mode-hook 'helm-gtags-mode)
-  (add-hook 'java-mode-hook 'helm-gtags-mode)
-  :config
-  (setq
-   helm-gtags-ignore-case t
-   helm-gtags-auto-update t
-   helm-gtags-use-input-at-cursor t
-   helm-gtags-pulse-at-cursor t
-   helm-gtags-prefix-key "\C-cg"
-   helm-gtags-suggested-key-mapping t)
-  )
-#+END_SRC
-
-*** comint
-
-#+begin_src emacs-lisp
-  (define-key comint-mode-map (kbd "M-r") 'comint-history-isearch-backward)
-#+end_src
-
-#+begin_src emacs-lisp
-  (defvar python-comint-output-limit 2000)
-
-  (defun python-truncate-comint-output (string)
-    "Does not truncate STRING currently, in order to avoid dangling quotes and parens."
-    (let* ((line-lengths (mapcar 'length (split-string string "\n")))
-           (line-max-size 120)
-           ;; Avoid treating mulitline things like DataFrame output as junk to be removed
-           (size (apply '+ (mapcar
-                            (lambda (l) (if (< l line-max-size) (* 0.4 l) l))
-                            line-lengths))))
-      (if (and (>  size python-comint-output-limit)
-               (equal major-mode 'inferior-python-mode))
-          (format-message
-           "\nOutput character length (%s) exceeds character limit `python-comint-output-limit` (%s).\n"
-           (length string)
-           python-comint-output-limit)
-        string)))
-
-  (add-hook 'comint-preoutput-filter-functions 'python-truncate-comint-output)
-#+end_src
-
-*** ~EMR~
+*** EMR
 
 #+begin_src emacs-lisp
   (use-package emr)
@@ -2200,6 +2160,63 @@ Comment out a line:
 (use-package json-reformat)
 (use-package json-mode)
 #+end_src
+
+*** REPL/Command Line
+
+ #+begin_src emacs-lisp
+   (use-package eval-in-repl
+     :init
+     (require 'eval-in-repl-ielm)
+     (define-key emacs-lisp-mode-map (kbd "C-x <return>") 'eir-eval-in-ielm)
+     (define-key lisp-interaction-mode-map (kbd "C-x <return>") 'eir-eval-in-ielm)
+     (setq eir-ielm-eval-in-current-buffer t)
+     (define-key Info-mode-map (kbd "<C-return>") 'eir-eval-in-ielm)
+
+     (when (require 'cider nil t)
+       (require 'eval-in-repl-cider)
+         (define-key cider-mode-map (kbd "<C-return>") 'eir-eval-in-cider))
+
+     (when (require 'slime nil t)
+       (require 'eval-in-repl-slime)
+       (add-hook 'lisp-mode-hook
+                 '(lambda ()
+                    (local-set-key (kbd "<C-return>") 'eir-eval-in-slime))))
+
+     (require 'eval-in-repl-shell)
+     (add-hook 'sh-mode-hook
+               '(lambda()
+                  (local-set-key (kbd "C-<return>") 'eir-eval-in-shell)))
+     :config
+     (setq eir-repl-placement 'left))
+ #+end_src
+
+**** comint
+
+ #+begin_src emacs-lisp
+   (define-key comint-mode-map (kbd "M-r") 'comint-history-isearch-backward)
+ #+end_src
+
+ #+begin_src emacs-lisp
+   (defvar python-comint-output-limit 2000)
+
+   (defun python-truncate-comint-output (string)
+     "Does not truncate STRING currently, in order to avoid dangling quotes and parens."
+     (let* ((line-lengths (mapcar 'length (split-string string "\n")))
+            (line-max-size 120)
+            ;; Avoid treating mulitline things like DataFrame output as junk to be removed
+            (size (apply '+ (mapcar
+                             (lambda (l) (if (< l line-max-size) (* 0.4 l) l))
+                             line-lengths))))
+       (if (and (>  size python-comint-output-limit)
+                (equal major-mode 'inferior-python-mode))
+           (format-message
+            "\nOutput character length (%s) exceeds character limit `python-comint-output-limit` (%s).\n"
+            (length string)
+            python-comint-output-limit)
+         string)))
+
+   (add-hook 'comint-preoutput-filter-functions 'python-truncate-comint-output)
+ #+end_src
 
 ** Lisps
 
@@ -2661,10 +2678,11 @@ improved function.
                                   (and (anaconda-mode-running-p)
                                        (not (use-region-p))
                                        (not (sp-point-in-string-or-comment)))))
-                (emr-declare-command (intern
-                                      (format "anaconda-mode-%s"
-                                              (symbol-name command-name)))
-                  :title title :modes 'python-mode :predicate predicate)))
+                ;; (emr-declare-command (intern
+                ;;                       (format "anaconda-mode-%s"
+                ;;                               (symbol-name command-name)))
+                ;;   :title title :modes 'python-mode :predicate predicate)
+                ))
             '((show-doc          "view documentation" t)
               (find-assignments  "find assignments"  t)
               (find-definitions  "find definitions"  t)
@@ -2821,7 +2839,7 @@ Configure clang executable
   (setq company-clang-executable "clang++-3.5")
 #+end_src
 
-** R (statistics)
+** R
 
 This is not downloaded via use-package and the package manager because
 I was having some problems with it throwing errors.
@@ -2847,10 +2865,16 @@ Don't use that annoying indentation style with the comments, please
   (add-hook 'ess-mode-hook 'dwc-ess-hook)
 #+end_src
 
-** Shell
+** Bash/shell
 
 #+begin_src emacs-lisp
   (add-hook 'sh-mode-hook (lambda () (setq tab-width 4)))
+#+end_src
+
+** HTML
+
+#+begin_src emacs-lisp
+(defadvice sgml-delete-tag (after reindent-buffer activate) (clean-up-buffer-or-region))
 #+end_src
 
 ** Git
