@@ -718,6 +718,9 @@ distracting, useless, and unsightly. The following code was grabbed from
 
   #+BEGIN_SRC emacs-lisp
     (use-package ace-jump-mode
+      :bind* 
+      (:map ace-jump-mode-map     
+      ("C-l" . ace-jump-word-mode))
       :config
       (use-package ace-jump-zap
       :commands ace-jump-zap-to-char 
