@@ -2811,6 +2811,14 @@ Company-C-Headers enables the completion of C/C++ header file names using compan
    )
 #+end_src
 
+#+begin_src emacs-lisp
+  (require 'company-irony-c-headers)
+  ;; Load with `irony-mode` as a grouped backend
+  (eval-after-load 'company
+    '(add-to-list
+      'company-backends '(company-irony-c-headers company-irony)))
+#+end_src
+
 
 #+BEGIN_SRC emacs-lisp
 (set-default 'semantic-case-fold t)
@@ -4316,9 +4324,9 @@ Get autocompletions in tramp:
 pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links, and more.
 
 #+begin_src emacs-lisp
-  (use-package pdf-tools
-    :init
-    (pdf-tools-install nil t t))
+  ;; (use-package pdf-tools
+  ;;   :init
+  ;;   (pdf-tools-install t t t))
 #+end_src
 
 #+RESULTS:
