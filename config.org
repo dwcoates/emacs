@@ -2992,6 +2992,74 @@ Don't use that annoying indentation style with the comments, please
     (setq git-gutter+-disabled-modes '(org-mode org)))
 #+end_src
 
+** JavaScript
+
+#+begin_src emacs-lisp
+  (use-package js-comint
+    :config
+    )
+
+  (defvar js-comint-send-code-step-on-function nil
+    "If non-nil, step sending a function to the js interpreter.")
+
+  (defun js-comint-step-after-defun ()
+    (forward-paragraph)
+    ;; when at last paragraph, don't step to beginning of "next" paragraph
+    (unless (equal (line-number-at-pos (point))
+                   (progn (forward-paragraph) (line-number-at-pos (point))))
+      (backward-paragraph)
+      (forward-line 1)))
+
+  (defun js-comint-send-paragraph-and-step ()
+    "Send current paragraph of code and move point to the beginning of next paragraph."
+    (interactive)
+    (save-excursion
+      (let* ((beg (progn (forward-paragraph)
+                         (backward-paragraph)
+                         (unless (equal (line-number-at-pos) 1) 
+                           (forward-line)) (point)))
+             (end (progn (forward-paragraph) 
+                         (unless (equal (line-number-at-pos (point))
+                                        (line-number-at-pos (point-max)))
+                           (forward-line -1))
+                         (end-of-line)
+                         (point)))
+             (num-lines (1+ (- (line-number-at-pos end)
+                               (line-number-at-pos beg))))
+             (str (buffer-substring-no-properties beg end)))
+        (js-comint-send-string str)
+        (message (concat 
+                  (format "Sent %d line%s "
+                          num-lines
+                          (if (equal num-lines 1) "" "s"))
+                  (if (equal num-lines 1) 
+                      (format "(line %d)" (line-number-at-pos end))
+                    (format "(lines %d-%d)" 
+                            (line-number-at-pos beg) 
+                            (line-number-at-pos end)))
+                  " to JavaScript interpreter")
+                 (line-number-at-pos beg)
+                 (line-number-at-pos end))))
+    (js-comint-step-after-defun))
+
+  (defun js-comint-send-code-and-step ()
+    (interactive)
+    ;; xemacs doesn't have use-region-p
+    (unless (js-comint-get-process)
+      (js-comint-start-or-switch-to-repl))
+    (cond ((use-region-p)
+           (let* ((end (region-end))
+                  (beg (region-beginning))
+                  (str (buffer-substring-no-properties beg end)))
+             (js-comint-send-string str)
+             (message "Sent region between lines %d and %d to python interpreter"
+                      (line-number-at-pos beg)
+                      (line-number-at-pos end))
+             (goto-char end)))
+          (t
+           (js-comint-send-paragraph-and-step))))
+#+end_src
+
 * Org Mode
 
 #+begin_src emacs-lisp
