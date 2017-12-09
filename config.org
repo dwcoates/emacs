@@ -52,6 +52,10 @@ Make sure emacs gets my bashrc environment variable:
 ** General
 
 #+begin_src emacs-lisp
+(setq semantic-idle-scheduler-setup-timer 10000) ; hack. Semantic idle scheduler using 95+% CPU
+#+end_src
+
+#+begin_src emacs-lisp
   (let ((inhibit-message nil))
     (message "Configuring general settings..."))
 #+end_src
@@ -2995,69 +2999,71 @@ Don't use that annoying indentation style with the comments, please
 ** JavaScript
 
 #+begin_src emacs-lisp
-  (use-package js-comint
-    :config
-    )
+    (use-package js-comint
+      :config
+      )
 
-  (defvar js-comint-send-code-step-on-function nil
-    "If non-nil, step sending a function to the js interpreter.")
+    (defvar js-comint-send-code-step-on-function nil
+      "If non-nil, step sending a function to the js interpreter.")
 
-  (defun js-comint-step-after-defun ()
-    (forward-paragraph)
-    ;; when at last paragraph, don't step to beginning of "next" paragraph
-    (unless (equal (line-number-at-pos (point))
-                   (progn (forward-paragraph) (line-number-at-pos (point))))
-      (backward-paragraph)
-      (forward-line 1)))
+    (defun js-comint-step-after-defun ()
+      (forward-paragraph)
+      ;; when at last paragraph, don't step to beginning of "next" paragraph
+      (unless (equal (line-number-at-pos (point))
+                     (progn (forward-paragraph) (line-number-at-pos (point))))
+        (backward-paragraph)
+        (forward-line 1)))
 
-  (defun js-comint-send-paragraph-and-step ()
-    "Send current paragraph of code and move point to the beginning of next paragraph."
-    (interactive)
-    (save-excursion
-      (let* ((beg (progn (forward-paragraph)
-                         (backward-paragraph)
-                         (unless (equal (line-number-at-pos) 1) 
-                           (forward-line)) (point)))
-             (end (progn (forward-paragraph) 
-                         (unless (equal (line-number-at-pos (point))
-                                        (line-number-at-pos (point-max)))
-                           (forward-line -1))
-                         (end-of-line)
-                         (point)))
-             (num-lines (1+ (- (line-number-at-pos end)
-                               (line-number-at-pos beg))))
-             (str (buffer-substring-no-properties beg end)))
-        (js-comint-send-string str)
-        (message (concat 
-                  (format "Sent %d line%s "
-                          num-lines
-                          (if (equal num-lines 1) "" "s"))
-                  (if (equal num-lines 1) 
-                      (format "(line %d)" (line-number-at-pos end))
-                    (format "(lines %d-%d)" 
-                            (line-number-at-pos beg) 
-                            (line-number-at-pos end)))
-                  " to JavaScript interpreter")
-                 (line-number-at-pos beg)
-                 (line-number-at-pos end))))
-    (js-comint-step-after-defun))
+    (defun js-comint-send-paragraph-and-step ()
+      "Send current paragraph of code and move point to the beginning of next paragraph."
+      (interactive)
+      (save-excursion
+        (let* ((beg (progn (forward-paragraph)
+                           (backward-paragraph)
+                           (unless (equal (line-number-at-pos) 1) 
+                             (forward-line)) (point)))
+               (end (progn (forward-paragraph) 
+                           (unless (equal (line-number-at-pos (point))
+                                          (line-number-at-pos (point-max)))
+                             (forward-line -1))
+                           (end-of-line)
+                           (point)))
+               (num-lines (1+ (- (line-number-at-pos end)
+                                 (line-number-at-pos beg))))
+               (str (buffer-substring-no-properties beg end)))
+          (js-comint-send-string str)
+          (message (concat 
+                    (format "Sent %d line%s "
+                            num-lines
+                            (if (equal num-lines 1) "" "s"))
+                    (if (equal num-lines 1) 
+                        (format "(line %d)" (line-number-at-pos end))
+                      (format "(lines %d-%d)" 
+                              (line-number-at-pos beg) 
+                              (line-number-at-pos end)))
+                    " to JavaScript interpreter")
+                   (line-number-at-pos beg)
+                   (line-number-at-pos end))))
+      (js-comint-step-after-defun))
 
-  (defun js-comint-send-code-and-step ()
-    (interactive)
-    ;; xemacs doesn't have use-region-p
-    (unless (js-comint-get-process)
-      (js-comint-start-or-switch-to-repl))
-    (cond ((use-region-p)
-           (let* ((end (region-end))
-                  (beg (region-beginning))
-                  (str (buffer-substring-no-properties beg end)))
-             (js-comint-send-string str)
-             (message "Sent region between lines %d and %d to python interpreter"
-                      (line-number-at-pos beg)
-                      (line-number-at-pos end))
-             (goto-char end)))
-          (t
-           (js-comint-send-paragraph-and-step))))
+    (defun js-comint-send-code-and-step ()
+      (interactive)
+      ;; xemacs doesn't have use-region-p
+      (unless (js-comint-get-process)
+        (js-comint-start-or-switch-to-repl))
+      (cond ((use-region-p)
+             (let* ((end (region-end))
+                    (beg (region-beginning))
+                    (str (buffer-substring-no-properties beg end)))
+               (js-comint-send-string str)
+               (message "Sent region between lines %d and %d to python interpreter"
+                        (line-number-at-pos beg)
+                        (line-number-at-pos end))
+               (goto-char end)))
+            (t
+             (js-comint-send-paragraph-and-step))))
+
+  (define-key js-mode-map (kbd "C-c C-c") 'js-comint-send-code-and-step)
 #+end_src
 
 * Org Mode
@@ -4190,6 +4196,15 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 
   (setq eshell-highlight-prompt nil)
 #+end_src
+
+#+begin_src emacs-lisp
+  (defun eshell-next-prompt (n)
+    "Move to end of Nth next prompt in the buffer.
+  See `eshell-prompt-regexp'."
+    (interactive "p")
+    (re-search-forward eshell-prompt-regexp nil t (or n -1)))
+#+end_src
+
 
 ** Edit With Emacs (Google Chrome extension)
 
