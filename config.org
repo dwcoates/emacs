@@ -4149,12 +4149,23 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 
 #+begin_src emacs-lisp
   (defvar eshell-previous-buffer nil)
+  (defvar eshell-session-alist nil)
+
 
   (defun dwc-switch-to-terminal (arg)
     (interactive "p")
     (if (eq arg 4)
-        (progn (term "/bin/bash"))
-      (if (equal (buffer-name (current-buffer)) eshell-buffer-name)
+        (progn
+          (let ((sesh (alist-get (current-buffer) eshell-session-alist)))
+            (if sesh
+                (progn
+                  (setq eshell-previous-buffer (current-buffer))
+                  (eshell sesh)) 
+              (let ((len (length eshell-session-alist)))
+                (push (cons (current-buffer) len) eshell-session-alist)
+                (eshell len)))))
+      (if (string-match-p (regexp-quote eshell-buffer-name)
+                          (buffer-name (current-buffer)))
           (if eshell-previous-buffer
               (switch-to-buffer eshell-previous-buffer)
             (previous-buffer))
