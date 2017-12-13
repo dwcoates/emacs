@@ -2772,6 +2772,13 @@ not yet support emacs due to a jupyter bug.
 (define-key python-mode-map (kbd "C-c C-b")   'python-nav-backward-sexp)
 (define-key python-mode-map (kbd "C-c F")   'python-nav-forward-block)
 (define-key python-mode-map (kbd "C-c B")   'python-nav-backward-block)
+
+(define-key python-mode-map (kbd "C-c M-e") 'python-nav-end-of-defun)
+(define-key python-mode-map (kbd "C-c M-a") 'python-nav-beginning-of-defun)
+(define-key python-mode-map (kbd "C-c C-e")   'python-nav-end-of-statement)
+(define-key python-mode-map (kbd "C-c C-a")   'python-nav-beginning-of-statement)
+(define-key python-mode-map (kbd "C-c E")   'python-nav-end-of-block)
+(define-key python-mode-map (kbd "C-c A")   'python-nav-beginning-of-block)
 #+end_src
 
 *** company-anaconda
