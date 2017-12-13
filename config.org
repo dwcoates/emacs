@@ -2579,17 +2579,6 @@ intuitive. Based on ~ESS~.
 
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
 improved function.
-*** Commands and Bindings
-
-#+begin_src emacs-lisp
-(define-key python-mode-map (kbd "C-c M-f") 'python-nav-forward-defun)
-(define-key python-mode-map (kbd "C-c M-b") 'python-nav-backward-defun)
-(define-key python-mode-map (kbd "C-c C-f")   'python-nav-forward-sexp)
-(define-key python-mode-map (kbd "C-c C-b")   'python-nav-backward-sexp)
-(define-key python-mode-map (kbd "C-c f")   'python-nav-forward-block)
-(define-key python-mode-map (kbd "C-c b")   'python-nav-backward-block)
-#+end_src
-
 *** Python Shell
 
 #+begin_src emacs-lisp 
@@ -2772,6 +2761,17 @@ not yet support emacs due to a jupyter bug.
 
 #+begin_src emacs-lisp
 ; none
+#+end_src
+
+*** Commands and Bindings
+
+#+begin_src emacs-lisp
+(define-key python-mode-map (kbd "C-c M-f") 'python-nav-forward-defun)
+(define-key python-mode-map (kbd "C-c M-b") 'python-nav-backward-defun)
+(define-key python-mode-map (kbd "C-c C-f")   'python-nav-forward-sexp)
+(define-key python-mode-map (kbd "C-c C-b")   'python-nav-backward-sexp)
+(define-key python-mode-map (kbd "C-c F")   'python-nav-forward-block)
+(define-key python-mode-map (kbd "C-c B")   'python-nav-backward-block)
 #+end_src
 
 *** company-anaconda
