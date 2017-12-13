@@ -109,17 +109,15 @@ Make sure emacs gets my bashrc environment variable:
    (use-package guide-key
      :init
      (guide-key-mode 1)
-     (setq guide-key/guide-key-sequence '("C-x r" 
-                                          "C-x 4"
-                                          "C-x v"
-                                          "C-x 8"
-                                          "C-x +"
-                                          "C-w"
-                                          "C-e"
-                                          "C-h"
-                                          "C-c e"
-                                          "C-c C-v"
-                                          "C-c o"))
+     (setq guide-key/guide-key-sequence '("C-x r" ;; registers and rectangles
+                                          "C-x 4" ;; file finding
+                                          "C-x v" ;; vc
+                                          "C-x 8" ;; special characters
+                                          "C-c f" ;; vimish-fold
+                                          "C-h"   ;; help 
+                                          "C-c e" ;; ??
+                                          "C-c C-v" ;; org-babel
+                                          "C-c o")) ;; switch to specific files
      (setq guide-key/recursive-key-sequence-flag t)
      (setq guide-key/popup-window-position 'bottom)
      (diminish 'guide-key-mode))
@@ -2495,6 +2493,8 @@ My clojure-mode hook
 
 ** Python
 
+*** Python eval functions
+
 Some functions that will help make dealing with .py/shell workflow more
 intuitive. Based on ~ESS~.
 
@@ -2580,6 +2580,15 @@ intuitive. Based on ~ESS~.
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
 improved function.
 *** Commands and Bindings
+
+#+begin_src emacs-lisp
+(define-key python-mode-map (kbd "C-c C-f") 'python-nav-forward-defun)
+(define-key python-mode-map (kbd "C-c C-b") 'python-nav-backward-defun)
+(define-key python-mode-map (kbd "C-c f")   'python-nav-forward-block)
+(define-key python-mode-map (kbd "C-c b")   'python-nav-backward-block)
+#+end_src
+
+
 *** Python Shell
 
 #+begin_src emacs-lisp 
