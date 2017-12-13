@@ -113,7 +113,7 @@ Make sure emacs gets my bashrc environment variable:
                                           "C-x 4" ;; file finding
                                           "C-x v" ;; vc
                                           "C-x 8" ;; special characters
-                                          "C-c f" ;; vimish-fold
+                                          "C-c 5" ;; vimish-fold
                                           "C-h"   ;; help 
                                           "C-c e" ;; ??
                                           "C-c C-v" ;; org-babel
@@ -2132,19 +2132,19 @@ Comment out a line:
           (vimish-fold (save-excursion (python-nav-beginning-of-block) (point))
                        (save-excursion (python-nav-end-of-block) (point))))
         :bind*
-        (("C-c f RET" . vimish-fold)
-         ("C-c f s" . vimish-fold-unfold)
-         ("C-c f S" . vimish-fold-unfold-all)
-         ("C-c f d" . vimish-fold-delete)
-         ("C-c f D" . vimish-fold-delete-all)
-         ("C-c f TAB" . vimish-fold-toggle)
-         ("C-c f <C-tab>" . vimish-fold-toggle-all)
-         ("C-c f h" . vimish-fold-refold)
-         ("C-c f H" . vimish-fold-refold-all)
-         ("C-c f m" . vimish-fold-avy)
-         ("C-c f f" . vimish-fold-defun-fold)
+        (("C-c 5 RET" . vimish-fold)
+         ("C-c 5 s" . vimish-fold-unfold)
+         ("C-c 5 S" . vimish-fold-unfold-all)
+         ("C-c 5 d" . vimish-fold-delete)
+         ("C-c 5 D" . vimish-fold-delete-all)
+         ("C-c 5 TAB" . vimish-fold-toggle)
+         ("C-c 5 <C-tab>" . vimish-fold-toggle-all)
+         ("C-c 5 h" . vimish-fold-refold)
+         ("C-c 5 H" . vimish-fold-refold-all)
+         ("C-c 5 m" . vimish-fold-avy)
+         ("C-c 5 f" . vimish-fold-defun-fold)
          :map python-mode-map
-         ("C-c f b" . vimish-fold-python-block-fold)))
+         ("C-c 5 b" . vimish-fold-python-block-fold)))
 #+end_src
 
 *** Semantic
@@ -2582,12 +2582,13 @@ improved function.
 *** Commands and Bindings
 
 #+begin_src emacs-lisp
-(define-key python-mode-map (kbd "C-c C-f") 'python-nav-forward-defun)
-(define-key python-mode-map (kbd "C-c C-b") 'python-nav-backward-defun)
+(define-key python-mode-map (kbd "C-c M-f") 'python-nav-forward-defun)
+(define-key python-mode-map (kbd "C-c M-b") 'python-nav-backward-defun)
+(define-key python-mode-map (kbd "C-c C-f")   'python-nav-forward-sexp)
+(define-key python-mode-map (kbd "C-c C-b")   'python-nav-backward-sexp)
 (define-key python-mode-map (kbd "C-c f")   'python-nav-forward-block)
 (define-key python-mode-map (kbd "C-c b")   'python-nav-backward-block)
 #+end_src
-
 
 *** Python Shell
 
