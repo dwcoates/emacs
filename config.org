@@ -4147,10 +4147,41 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 
 ** Terminal
 
+Track eshell sessions:
+
+#+begin_src emacs-lisp
+  (defun eshell-default-prompt-function ()
+    (interactive)
+    (concat
+     (system-name) ":"
+     (propertize (car (last (split-string (pwd-repl-home (eshell/pwd)) "/"))) 'face
+                 `(:foreground "#cdcd00"))
+     (or (curr-dir-git-branch-string (eshell/pwd)))
+     (propertize "# " 'face 'default)))
+
+  (defun eshell-short-prompt-function ()
+    (interactive)
+    (concat (format-time-string "#" (current-time))
+            (if (= (user-uid) 0) " # " " ")))
+
+  (defun eshell-swap-prompt ()
+    (interactive)
+    (setq eshell-prompt-function
+          (if (eq eshell-prompt-function
+                  'eshell-default-prompt-function)
+            'eshell-short-prompt-function
+          'eshell-default-prompt-function))
+    (eshell-send-input))
+
+  (add-hook 'eshell-mode-hook
+            (lambda () (define-key eshell-mode-map (kbd "C-c C-;")
+                    'eshell-swap-prompt)))
+#+end_src
+
+
 #+begin_src emacs-lisp
   (defvar eshell-previous-buffer nil)
   (defvar eshell-session-alist nil)
-
 
   (defun dwc-switch-to-terminal (arg)
     (interactive "p")
