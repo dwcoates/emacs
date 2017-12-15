@@ -2549,32 +2549,34 @@ intuitive. Based on ~ESS~.
                     (forward-line)
                     (python-info-current-defun)))
 
-  (defun python-shell-send-code-and-step ()
-    (interactive)
+  (defun python-shell-send-code-and-step (arg)
+    (interactive "p")
     ;; xemacs doesn't have use-region-p
-    (unless (python-shell-get-process)
-      (run-python))
-    (cond ((use-region-p)
-           (let ((end (region-end))
-                 (beg (region-beginning)))
-             (python-shell-send-region beg end)
-             (message "Sent region between lines %d and %d to python interpreter"
-                      (line-number-at-pos beg)
-                      (line-number-at-pos end))
-             (goto-char end)))
-          ;; send function if in a function, else send block and iterate
-          ((python-current-defun)
-           (progn
-             (python-shell-send-defun)
-             (message "Sent '%s' function to python interpreter"
-                      (propertize (python-current-defun) 'face
-                                  '(:foreground "#66D9EF")))
-             (when python-shell-send-code-step-on-function
-               (python-nav-end-of-defun)
-               (forward-line -1)
-               (python-shell-step-after-defun))))
-          (t
-           (python-shell-send-paragraph-and-step))))
+    (let ((python-shell-send-code-step-on-function
+           (if (equal arg 4) t nil)))
+      (unless (python-shell-get-process)
+        (run-python))
+      (cond ((use-region-p)
+             (let ((end (region-end))
+                   (beg (region-beginning)))
+               (python-shell-send-region beg end)
+               (message "Sent region between lines %d and %d to python interpreter"
+                        (line-number-at-pos beg)
+                        (line-number-at-pos end))
+               (goto-char end)))
+            ;; send function if in a function, else send block and iterate
+            ((python-current-defun)
+             (progn
+               (python-shell-send-defun)
+               (message "Sent '%s' function to python interpreter"
+                        (propertize (python-current-defun) 'face
+                                    '(:foreground "#66D9EF")))
+               (when python-shell-send-code-step-on-function
+                 (python-nav-end-of-defun)
+                 (forward-line -1)
+                 (python-shell-step-after-defun))))
+            (t
+             (python-shell-send-paragraph-and-step)))))
 #+end_src
 
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
