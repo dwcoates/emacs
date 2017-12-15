@@ -185,14 +185,15 @@ Unprettify when symbol is just before point. This doesn't seem to work...
 
  *use-package Flycheck*
  #+BEGIN_SRC emacs-lisp
- (use-package flycheck
-   :init (progn
-           (add-hook 'after-init-hook #'global-flycheck-mode))
-   :bind (("C-c ! n" . flycheck-next-error)
-          ("C-c ! p" . flycheck-previous-error)
-          ("C-c ! h" . helm-flycheck))
-   :config
-   (diminish 'flycheck-mode))
+   (use-package flycheck
+     :init (progn
+             (add-hook 'after-init-hook #'global-flycheck-mode))
+     :bind (("C-c ! n" . flycheck-next-error)
+            ("C-c ! p" . flycheck-previous-error)
+            ("C-c ! h" . helm-flycheck))
+     :config
+     (diminish 'flycheck-mode)
+     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
  #+END_SRC
 
 *** ~flyspell~ :spell:check:fly:
