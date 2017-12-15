@@ -838,11 +838,11 @@ Isearch repeat...
 *** ~jump-char~                                                        :jump:
 
 #+begin_src emacs-lisp
-  (use-package jump-char
+  (use-package iy-go-to-char
     :commands jump-char-forward jump-char-backward
     :bind
-    (("C-r" . jump-char-forward)
-     ("C-S-r" . jump-char-backward)))
+    (("C-r" . iy-go-to-char)
+     ("C-S-r" . iy-go-to-char-backward)))
 #+end_src
 
 ** Grep
