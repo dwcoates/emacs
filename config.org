@@ -680,72 +680,23 @@ distracting, useless, and unsightly. The following code was grabbed from
   (use-package swiper)
 #+end_src
 
-** Jumping
-   
-   Move cursor immediately to a given location. ~avy~ and ~ace~ are different
-   approaches to the same idea. They overlay letters on top of all character
-   instances to which you'd like to jump. ~jump-char~ allows us to jump to
-   nearest character, forward or backward; same idea, but goes to the nearest
-   character instead of requiring that you specify the character. ~ace-isearch~
-   wraps ~isearch~ such that for searches > 6 characters in length, isearch
-   automatically switches to ~swiper~ otherwise.
-
-*** ~avy~                                                              :jump:
-
-     ~avy-goto-char-timer~, bound to =C-m=, is the main takeaway from ~avy~, in my
-     opinion. Use it to quickly jump between static buffers.
-
-#+begin_src emacs-lisp
-  ;; Need this to bind to C-m. 
-  ;; Otherwise Emacs confuses C-m with Return
-  (define-key input-decode-map [?\C-m] [C-m])
-
-  (use-package avy
-    :init
-    :config
-    (setq avy-timeout-seconds .2)
-    :bind*
-    (("C-j w" . avy-kill-region)
-     ("C-j W" . avy-copy-region)
-     ("C-j L" . avy-kill-whole-line)
-     ("C-S-l" . avy-copy-line)
-     ("C-l"   . avy-goto-line)
-     ("<C-m>" . avy-goto-char-timer)
-     ("C-."   . avy-goto-char)))
-#+end_src
-
-*** ~ace~                                                              :jump:
-
-  Jump quickly to any word using just two key strokes with ace-jump-mode:
-
-  #+BEGIN_SRC emacs-lisp
-    (use-package ace-jump-mode
-      :bind* 
-      (:map ace-jump-mode-map     
-      ("C-l" . ace-jump-word-mode))
-      :config
-      (use-package ace-jump-zap
-      :commands ace-jump-zap-to-char 
-                ace-jump-zap-up-to-char)
-      :bind*
-      (("C-j K" . ace-jump-zap-to-char)
-       ("C-j k" . ace-jump-zap-up-to-char)))
-  #+END_SRC
-
-*** ~jump-char~                                                        :jump:
-
-#+begin_src emacs-lisp
-  (use-package jump-char
-    :commands jump-char-forward jump-char-backward
-    :bind*
-    (("M-s" . jump-char-forward)
-     ("M-r" . jump-char-backward))
-    :config
-    (key-chord-define-global "js" 'jump-char-forward)
-    (key-chord-define-global "jr" 'jump-char-backward))
-#+end_src
-
 ** Searching
+
+isearching shouldn't be that common. Usually should be jumping around within a
+page or occuring or something.
+
+   #+begin_src emacs-lisp
+(global-set-key (kbd "C-q") 'isearch-forward)
+(global-set-key (kbd "C-S-q") 'isearch-backward)
+#+end_src
+
+Isearch repeat...
+
+#+begin_src emacs-lisp
+(define-key isearch-mode-map (kbd "C-w") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "C-S-w") 'isearch-repeat-backward)
+   #+end_src
+
 *** ~ace-isearch~                                         :search:jump:fuzzy:
 
   This is a mix of ~ace-isearch~, ~helm-swoop~, and ~avy~. Pretty cool. If only
@@ -814,6 +765,70 @@ distracting, useless, and unsightly. The following code was grabbed from
   (add-hook 'isearch-mode-end-hook 'isearcher--set-end-isearcher-register)
 
   (global-set-key (kbd "C-x C-x") 'isearcher-exchange-point-and-mark)
+#+end_src
+
+** Jumping
+   
+   Move cursor immediately to a given location. ~avy~ and ~ace~ are different
+   approaches to the same idea. They overlay letters on top of all character
+   instances to which you'd like to jump. ~jump-char~ allows us to jump to
+   nearest character, forward or backward; same idea, but goes to the nearest
+   character instead of requiring that you specify the character. ~ace-isearch~
+   wraps ~isearch~ such that for searches > 6 characters in length, isearch
+   automatically switches to ~swiper~ otherwise.
+
+*** ~avy~                                                              :jump:
+
+     ~avy-goto-char-timer~, bound to =C-m=, is the main takeaway from ~avy~, in my
+     opinion. Use it to quickly jump between static buffers.
+
+#+begin_src emacs-lisp
+  ;; Need this to bind to C-m. 
+  ;; Otherwise Emacs confuses C-m with Return
+  (define-key input-decode-map [?\C-m] [C-m])
+
+  (use-package avy
+    :init
+    :config
+    (setq avy-timeout-seconds .2)
+    :bind
+    (
+     ("C-l"   . avy-goto-line)
+     ("C-L" . avy-copy-line)
+     ("<C-m>" . avy-goto-char-timer)
+     ("C-."   . avy-goto-char)
+     ("C-s"   . avy-goto-word-1)))
+#+end_src
+
+*** ~ace~                                                              :jump:
+
+  Jump quickly to any word using just two key strokes with ace-jump-mode:
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package ace-jump-mode
+      :bind* 
+      (:map ace-jump-mode-map     
+      ("C-l" . ace-jump-word-mode))
+      :config
+      (use-package ace-jump-zap
+      :commands ace-jump-zap-to-char 
+                ace-jump-zap-up-to-char)
+      :bind*
+      (("C-j K" . ace-jump-zap-to-char)
+       ("C-j k" . ace-jump-zap-up-to-char)))
+  #+END_SRC
+
+*** ~jump-char~                                                        :jump:
+
+#+begin_src emacs-lisp
+  (use-package jump-char
+    :commands jump-char-forward jump-char-backward
+    :bind*
+    (("M-s" . jump-char-forward)
+     ("M-r" . jump-char-backward))
+    :config
+    (key-chord-define-global "js" 'jump-char-forward)
+    (key-chord-define-global "jr" 'jump-char-backward))
 #+end_src
 
 ** Grep
