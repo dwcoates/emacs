@@ -783,21 +783,38 @@ Isearch repeat...
      opinion. Use it to quickly jump between static buffers.
 
 #+begin_src emacs-lisp
-  ;; Need this to bind to C-m. 
-  ;; Otherwise Emacs confuses C-m with Return
-  (define-key input-decode-map [?\C-m] [C-m])
+    ;; Need this to bind to C-m. 
+    ;; Otherwise Emacs confuses C-m with Return
+    (define-key input-decode-map [?\C-m] [C-m])
 
-  (use-package avy
-    :init
-    :config
-    (setq avy-timeout-seconds .2)
-    :bind
-    (
-     ("C-l"   . avy-goto-line)
-     ("C-L" . avy-copy-line)
-     ("<C-m>" . avy-goto-char-timer)
-     ("C-."   . avy-goto-char)
-     ("C-s"   . avy-goto-word-1)))
+    (use-package avy
+      :init
+      :config
+      (setq avy-timeout-seconds .2)
+      :bind
+      (
+       ("C-l"   . avy-goto-line)
+       ("C-S-w"   . avy-kill-regio)
+       ("C-L" . avy-copy-line)
+       ("<C-m>" . avy-goto-char-timer)
+       ("C-."   . avy-goto-char)
+       ("C-s"   . avy-goto-word-1)))
+
+  ;;               a   s   d   f   h   j   l  ;
+  (setq avy-keys '(97 115 100 102 106 108 104 59))
+
+  (setq avy-dispatch-alist '((?c . avy-action-copy)
+                             (?k . avy-action-kill-move)
+                             (?K . avy-action-kill-stay)
+                             (?m . avy-action-mark)
+                             (?p . avy-action-copy-and-yank)))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun avy-action-copy-and-yank (pt)
+  "Copy and yank sexp starting on PT."
+  (avy-action-copy pt)
+  (yank))
 #+end_src
 
 *** ~ace~                                                              :jump:
