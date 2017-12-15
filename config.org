@@ -840,12 +840,9 @@ Isearch repeat...
 #+begin_src emacs-lisp
   (use-package jump-char
     :commands jump-char-forward jump-char-backward
-    :bind*
-    (("M-s" . jump-char-forward)
-     ("M-r" . jump-char-backward))
-    :config
-    (key-chord-define-global "js" 'jump-char-forward)
-    (key-chord-define-global "jr" 'jump-char-backward))
+    :bind
+    (("C-r" . jump-char-forward)
+     ("C-S-r" . jump-char-backward)))
 #+end_src
 
 ** Grep
