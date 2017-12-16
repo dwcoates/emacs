@@ -852,7 +852,11 @@ Isearch repeat...
   (use-package iy-go-to-char
     :commands jump-char-forward jump-char-backward
     :bind
+<<<<<<< HEAD
     (("C-r" . iy-go-to-char)
+=======
+    (("C-r" . iy-go-to-cha)
+>>>>>>> f439ad015e0a8d9cee67e018c90c1c93a6d0df6c
      ("C-S-r" . iy-go-to-char-backward)))
 #+end_src
 
