@@ -2839,39 +2839,35 @@ Jump between header and source files
 
 Company-C-Headers enables the completion of C/C++ header file names using company-mode:
 #+begin_src emacs-lisp
-(use-package company-c-headers
-   :commands (c++-mode c-mode)
-   :config
-   (use-package company-irony
+  (use-package company-c-headers
+     :commands (c++-mode c-mode)
      :config
-     (eval-after-load 'company
-       '(add-to-list 'company-backends 'company-irony))
-     (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
-     )
-   (require 'cc-mode)
-   (require 'semantic)
-   ;; C-mode and C++-mode specific bindings:
-   (bind-key [(control tab)] 'company-complete c-mode-map)
-   (bind-key [(control tab)] 'company-complete c++-mode-map)
+     (use-package company-irony
+       :config
+       (eval-after-load 'company
+         '(add-to-list 'company-backends 'company-irony))
+       (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands))
+     (require 'cc-mode)
+     (require 'semantic)
 
-   (add-to-list 'company-backends 'company-c-headers)
-   ;(add-to-list 'company-c-headers-path-system "/usr/include/c++/4.8/")
+     (add-to-list 'company-backends 'company-c-headers)
+     ;(add-to-list 'company-c-headers-path-system "/usr/include/c++/4.8/")
 
-   ;; *********** Available C style: ***************
-   ;; “gnu”:    The default style for GNU projects
-   ;; “k&r”:    What Kernighan and Ritchie, the authors of C used in their book
-   ;; “bsd”:    What BSD developers use, aka “Allman style” after Eric Allman.
-   ;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
-   ;; “stroustrup”: What Stroustrup, the author of C++ used in his book
-   ;; “ellemtel”:  Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,”
-   ;;             Erik Nyquist and Mats Henricson, Ellemtel
-   ;; “linux”:  What the Linux developers use for kernel development
-   ;; “python”:What Python developers use for extension modules
-   ;; “java”:  The default style for java-mode (see below)
-   ;; “user”:  When you want to define your own style
-   ;; **********************************************
-   (setq c-default-style "linux")  ;; set style to "linux"
-   )
+     ;; *********** Available C style: ***************
+     ;; “gnu”:    The default style for GNU projects
+     ;; “k&r”:    What Kernighan and Ritchie, the authors of C used in their book
+     ;; “bsd”:    What BSD developers use, aka “Allman style” after Eric Allman.
+     ;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
+     ;; “stroustrup”: What Stroustrup, the author of C++ used in his book
+     ;; “ellemtel”:  Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,”
+     ;;             Erik Nyquist and Mats Henricson, Ellemtel
+     ;; “linux”:  What the Linux developers use for kernel development
+     ;; “python”:What Python developers use for extension modules
+     ;; “java”:  The default style for java-mode (see below)
+     ;; “user”:  When you want to define your own style
+     ;; **********************************************
+     ;; set style to "linux"
+     (setq c-default-style "linux"))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2889,7 +2885,6 @@ Company-C-Headers enables the completion of C/C++ header file names using compan
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 (defun my/cedet-hook ()
-  (local-set-key "\C-c\C-j" 'semantic-ia-fast-jump)
   (local-set-key "\C-c\C-j" 'semantic-ia-fast-jump)
   (local-set-key "\C-c\C-s" 'semantic-ia-show-summary))
 
@@ -2910,8 +2905,7 @@ Company-C-Headers enables the completion of C/C++ header file names using compan
   (bind-key  [("C-c C-f C-h")] 'moo-complete c-mode-map)
   (bind-key [(control tab)] 'moo-complete c++-mode-map)
   (bind-key "C-c M-o s" 'fa-show c-mode-map)
-  (bind-key "C-c M-o s" 'fa-show c++-mode-map)
-  )
+  (bind-key "C-c M-o s" 'fa-show c++-mode-map))
 #+end_src
 
 Don't ask if I really want to compile:
@@ -2921,7 +2915,6 @@ Don't ask if I really want to compile:
                                (interactive)
                                (setq-local compilation-read-command nil)
                                (call-interactively 'compile)))
-
 #+end_src
 
 Enable Emacs Development Environment (EDE) only in C/C++:
