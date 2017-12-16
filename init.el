@@ -146,8 +146,7 @@
  global-hl-line-mode                nil
  display-time-mode                  t
  ;; current display column number in modeline
- column-number-mode                 t
- )
+ column-number-mode                 t)
 
 ;; display time in modeline
 (display-time-mode 1)
@@ -179,6 +178,7 @@
       (menu-bar-mode 0)
     (menu-bar-mode 1)))
 (global-set-key (kbd "C-x m") 'toggle-menu-bar)
+(menu-bar-mode -1)
 
 
 ;; Setup default window size:
