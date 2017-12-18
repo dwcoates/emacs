@@ -2616,7 +2616,8 @@ intuitive. Based on ~ESS~.
                  (forward-line -1)
                  (python-shell-step-after-defun))))
             (t
-             (python-shell-send-paragraph-and-step)))))
+             (python-shell-send-paragraph-and-step)))
+      (python-shell-switch-to-shell)))
 #+end_src
 
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
