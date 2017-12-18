@@ -695,8 +695,8 @@ page or occuring or something.
 Isearch repeat...
 
 #+begin_src emacs-lisp
-(define-key isearch-mode-map (kbd "C-w") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "C-S-w") 'isearch-repeat-backward)
+(define-key isearch-mode-map (kbd "C-q") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "C-S-q") 'isearch-repeat-backward)
    #+end_src
 
 *** ~ace-isearch~                                         :search:jump:fuzzy:
@@ -2617,7 +2617,8 @@ intuitive. Based on ~ESS~.
                  (python-shell-step-after-defun))))
             (t
              (python-shell-send-paragraph-and-step)))
-      (python-shell-switch-to-shell)))
+      (when (not (equal arg 4))
+        (python-shell-switch-to-shell))))
 #+end_src
 
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
