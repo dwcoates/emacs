@@ -2532,7 +2532,6 @@ My clojure-mode hook
 #+END_SRC
 
 ** Python
-
 *** Python eval functions
 
 Some functions that will help make dealing with .py/shell workflow more
@@ -2541,7 +2540,9 @@ intuitive. Based on ~ESS~.
 #+begin_src emacs-lisp
   (defvar python-shell-send-code-step-on-function nil
     "If non-nil, step sending a function to the python interpreter.")
+#+end_src
 
+#+begin_src emacs-lisp
   (defun python-shell-step-after-defun ()
     (forward-paragraph)
     ;; when at last paragraph, don't step to beginning of "next" paragraph
@@ -2549,7 +2550,9 @@ intuitive. Based on ~ESS~.
                    (progn (forward-paragraph) (line-number-at-pos (point))))
       (backward-paragraph)
       (forward-line 1)))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun python-shell-send-paragraph-and-step ()
     "Send current paragraph of code and move point to the beginning of next paragraph."
     (interactive)
@@ -2580,7 +2583,9 @@ intuitive. Based on ~ESS~.
                  (line-number-at-pos beg)
                  (line-number-at-pos end))))
     (python-shell-step-after-defun))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun python-current-defun ()
     "`python-info-current-defun' doesn't work when on a blank line, for some reason."
     (interactive)
@@ -2588,7 +2593,9 @@ intuitive. Based on ~ESS~.
                     (backward-paragraph)
                     (forward-line)
                     (python-info-current-defun)))
+#+end_src
 
+#+begin_src emacs-lisp
   (defun python-shell-send-code-and-step (arg)
     (interactive "p")
     ;; xemacs doesn't have use-region-p
@@ -2623,6 +2630,7 @@ intuitive. Based on ~ESS~.
 
 Replace the normal binding (which is set to ~python-shell-send-file~) with this
 improved function.
+
 *** Python Shell
 
 #+begin_src emacs-lisp 
