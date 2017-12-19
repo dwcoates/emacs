@@ -2627,7 +2627,7 @@ intuitive. Based on ~ESS~.
                  (python-shell-step-after-defun))))
             (t
              (python-shell-send-paragraph-and-step)))
-      (when (not arg)
+      (when (not (equal arg 4))
         (python-shell-switch-to-shell))))
 #+end_src
 
