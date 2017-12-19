@@ -2844,6 +2844,21 @@ not yet support emacs due to a jupyter bug.
 
 ** C/C++
 
+#+begin_src emacs-lisp
+  (use-package rtags)
+  (use-package company-rtags
+    :config
+    (setq rtags-completions-enabled t)
+    (add-to-list 'company-backends 'company-rtags)
+    (setq rtags-autostart-diagnostics t)
+    (rtags-enable-standard-keybindings))
+
+  (use-package helm-rtags
+    :config
+    (setq rtags-use-helm t))
+#+end_src
+
+
 Jump between header and source files
 
 #+begin_src emacs-lisp
