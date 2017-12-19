@@ -1,6 +1,6 @@
 #+Title: This is my emacs configuration file.
 
-* Initialize
+* DONE Initialize [0/0]
 
 #+begin_src emacs-lisp
   (let ((inhibit-message nil))
@@ -48,7 +48,7 @@ Make sure emacs gets my bashrc environment variable:
 (add-to-list 'load-path (concat lisp-dir "org-misc")) ;; org-misc functions
 #+end_src
 
-* General
+* DONE General [0/0]
 
 #+begin_src emacs-lisp
 (setq semantic-idle-scheduler-setup-timer 10000) ; hack. Semantic idle scheduler using 95+% CPU
@@ -79,7 +79,7 @@ Make sure emacs gets my bashrc environment variable:
 #+end_src
 
 ** Key Interfaces
-* Assistence
+* DONE Assistence [0/0]
 ** Cosmetic
 *** ~linum~  -- *disabled* :line:number:fringe:
 
@@ -257,7 +257,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
  (use-package auto-complete)
  #+end_src
 
-* Buffer naviation
+* DONE Buffer naviation [0/0]
 ** Narrowing
 
   ~helm~ and ~ivy~ are menu-based selection/narrowing libraries. They give you a
@@ -846,7 +846,7 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 
 #+end_src
 
-* Windowing
+* DONE Windowing [0/0]
 
 #+begin_src emacs-lisp
   (let ((inhibit-message nil))
@@ -1186,7 +1186,7 @@ Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
            shackle-rules))
  #+end_src
 
-* Editing
+* DONE Editing [0/0]
 
 #+begin_src emacs-lisp
   (let ((inhibit-message nil))
@@ -1993,7 +1993,7 @@ Comment out a line:
     (global-set-key (kbd "C-x f") 'add-file-name-to-clipboard)
 #+end_src
 
-* Software Development
+* TODO Software Development [0/1]
 ** General Settings
 *** General
 
@@ -2836,7 +2836,7 @@ not yet support emacs due to a jupyter bug.
 (define-key python-mode-map (kbd "C-c A")   'python-nav-beginning-of-block)
 #+end_src
 
-*** company-anaconda
+*** TODO company-anaconda
 
 #+begin_src emacs-lisp
 
@@ -3146,7 +3146,7 @@ Don't use that annoying indentation style with the comments, please
   (define-key js-mode-map (kbd "C-c C-c") 'js-comint-send-code-and-step)
 #+end_src
 
-* Org Mode
+* DONE Org Mode [0/0]
 
 #+begin_src emacs-lisp
   (let ((inhibit-message nil))
@@ -4202,7 +4202,7 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
   )
 #+end_src
 
-* Emacs as a Auxiliary Interface
+* DONE Emacs as a Auxiliary Interface [0/0]
 
 #+begin_src emacs-lisp
 (message "Configuring Emacs as foreign interface...")
@@ -4649,7 +4649,7 @@ the number 9.
 If you make a mistake, you can usually correct it by pressing =U=, the
 “undo” command. First, clear the stack (=M-0 DEL=) and exit and restart Calc
 to make sure things start off with a clean slate.
-* Final/Cleanup
+* DONE Final/Cleanup [0/0]
 
 Display start-up time and play a notification message.
 
