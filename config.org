@@ -741,7 +741,7 @@ Isearch repeat...
       (
        ("C-l"   . avy-goto-line)
        ("C-S-w"   . avy-kill-regio)
-       ("C-L" . avy-copy-line)
+       ("C-S-l" . avy-copy-line)
        ("<C-m>" . avy-goto-char-timer)
        ("C-."   . avy-goto-char)
        ("C-s"   . avy-goto-word-1)))
