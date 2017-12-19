@@ -49,7 +49,6 @@ Make sure emacs gets my bashrc environment variable:
 #+end_src
 
 * General
-** General
 
 #+begin_src emacs-lisp
 (setq semantic-idle-scheduler-setup-timer 10000) ; hack. Semantic idle scheduler using 95+% CPU
@@ -78,6 +77,74 @@ Make sure emacs gets my bashrc environment variable:
 #+begin_src emacs-lisp
   (setq default-major-mode 'emacs-lisp-mode)
 #+end_src
+
+** Key Interfaces
+* Assistence
+** Cosmetic
+*** ~linum~  -- *disabled* :line:number:fringe:
+
+#+begin_src emacs-lisp 
+;  (set-face-attribute 'linum-mode nil 
+;                      :background "gray16" 
+;                      :foreground "dim gray")
+#+end_src
+
+*** Pretty Symbols :pretty:appearance:unicode:
+
+    Prettify certain symbols and symbol combinations. For example, use a λ
+    instead of =lambda= in elisp code.
+
+#+begin_src emacs-lisp
+(global-prettify-symbols-mode t)
+#+end_src
+
+Unprettify when symbol is just before point. This doesn't seem to work...
+
+#+begin_src emacs-lisp
+(setq prettify-symbols-unprettify-at-point 'right-edge)
+#+end_src
+
+*** ~flycheck~ :check:fly:
+
+ *use-package Flycheck*
+ #+BEGIN_SRC emacs-lisp
+   (use-package flycheck
+     :init (progn
+             (add-hook 'after-init-hook #'global-flycheck-mode))
+     :bind (("C-c ! n" . flycheck-next-error)
+            ("C-c ! p" . flycheck-previous-error)
+            ("C-c ! h" . helm-flycheck))
+     :config
+     (diminish 'flycheck-mode)
+     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+ #+END_SRC
+
+*** ~flyspell~ :spell:check:fly:
+
+#+begin_src emacs-lisp
+(use-package flyspell)
+#+end_src
+
+*** ~rainbow-delimiters~ :parentheses:appearance:
+
+Automatically color parentheses pairs different colors with rainbow-delimiters:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :init
+    (rainbow-delimiters-mode)
+    :config
+    (set-face-attribute 'rainbow-delimiters-depth-1-face nil :foreground "indian red")
+    (set-face-attribute 'rainbow-delimiters-depth-2-face nil :foreground "light sea green")
+    (set-face-attribute 'rainbow-delimiters-depth-3-face nil :foreground "orchid")
+    (set-face-attribute 'rainbow-delimiters-depth-4-face nil :foreground "goldenrod")
+    (set-face-attribute 'rainbow-delimiters-depth-5-face nil :foreground "olive drab")
+    (set-face-attribute 'rainbow-delimiters-depth-6-face nil :foreground "deep sky blue")
+    (set-face-attribute 'rainbow-delimiters-depth-7-face nil :foreground "violet red")
+    (set-face-attribute 'rainbow-delimiters-depth-8-face nil :foreground "SeaGreen2")
+    (set-face-attribute 'rainbow-delimiters-depth-9-face nil :foreground "chocolate")
+    (set-face-attribute 'rainbow-delimiters-unmatched-face nil :foreground "red"))
+#+END_SRC
 
 ** Help
 
@@ -150,79 +217,6 @@ Make sure emacs gets my bashrc environment variable:
      ("C-c d" . helm-dictionary-lookup))
  #+end_src
 
-** Key Interfaces
-*** ~key-chords~ :command:keys:binding:
-
-#+begin_src emacs-lisp 
-(use-package key-chord)
-#+end_src
-
-** General Appearance
-*** ~linum~  -- *disabled* :line:number:fringe:
-
-#+begin_src emacs-lisp 
-;  (set-face-attribute 'linum-mode nil 
-;                      :background "gray16" 
-;                      :foreground "dim gray")
-#+end_src
-
-*** Pretty Symbols :pretty:appearance:unicode:
-
-    Prettify certain symbols and symbol combinations. For example, use a λ
-    instead of =lambda= in elisp code.
-
-#+begin_src emacs-lisp
-(global-prettify-symbols-mode t)
-#+end_src
-
-Unprettify when symbol is just before point. This doesn't seem to work...
-
-#+begin_src emacs-lisp
-(setq prettify-symbols-unprettify-at-point 'right-edge)
-#+end_src
-
-*** ~flycheck~ :check:fly:
-
- *use-package Flycheck*
- #+BEGIN_SRC emacs-lisp
-   (use-package flycheck
-     :init (progn
-             (add-hook 'after-init-hook #'global-flycheck-mode))
-     :bind (("C-c ! n" . flycheck-next-error)
-            ("C-c ! p" . flycheck-previous-error)
-            ("C-c ! h" . helm-flycheck))
-     :config
-     (diminish 'flycheck-mode)
-     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
- #+END_SRC
-
-*** ~flyspell~ :spell:check:fly:
-
-#+begin_src emacs-lisp
-(use-package flyspell)
-#+end_src
-
-*** ~rainbow-delimiters~ :parentheses:appearance:
-
-Automatically color parentheses pairs different colors with rainbow-delimiters:
-
-#+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters
-    :init
-    (rainbow-delimiters-mode)
-    :config
-    (set-face-attribute 'rainbow-delimiters-depth-1-face nil :foreground "indian red")
-    (set-face-attribute 'rainbow-delimiters-depth-2-face nil :foreground "light sea green")
-    (set-face-attribute 'rainbow-delimiters-depth-3-face nil :foreground "orchid")
-    (set-face-attribute 'rainbow-delimiters-depth-4-face nil :foreground "goldenrod")
-    (set-face-attribute 'rainbow-delimiters-depth-5-face nil :foreground "olive drab")
-    (set-face-attribute 'rainbow-delimiters-depth-6-face nil :foreground "deep sky blue")
-    (set-face-attribute 'rainbow-delimiters-depth-7-face nil :foreground "violet red")
-    (set-face-attribute 'rainbow-delimiters-depth-8-face nil :foreground "SeaGreen2")
-    (set-face-attribute 'rainbow-delimiters-depth-9-face nil :foreground "chocolate")
-    (set-face-attribute 'rainbow-delimiters-unmatched-face nil :foreground "red"))
-#+END_SRC
-
 ** Auto Completion
 *** ~company~ :completion:popups:
 
@@ -263,53 +257,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
  (use-package auto-complete)
  #+end_src
 
-** Finding files
-
-   ~get-personal-file-binding~ is used to binding a key to a file. Results in a
-   function, named appropriately, that is called to find =file= when =key= is
-   pressed. The advantage of this is that ~guide-key~ will display the binding
-   nicely.
-
-#+begin_src emacs-lisp
-  (defun make-get-personal-file-key (file key)
-    "Doesn't handle duplicate filenames very well.
-    Does handle files and directorys with same basename, though"
-    (let ((function-symbol (make-symbol
-                            (concat "get-personal-"
-                                    (if (file-directory-p file)
-                                        (concat "dir:" (file-name-nondirectory file))
-                                        (concat"file:" (file-name-base file)))
-                                    ))))
-      `(progn
-         (defun ,function-symbol ()
-           (interactive)
-           (find-file ,file))
-         (global-set-key (kbd ,key) ',function-symbol))))
-
-  (defmacro get-personal-file-binding (file key)
-    (make-get-personal-file-key (file-truename (directory-file-name
-                                                (if (stringp file)
-                                                    file
-                                                  (symbol-value file))))
-                                key))
-#+end_src
-
-*** dired
-
-#+begin_src emacs-lisp
-      (use-package dired-details
-        :config
-        (setq-default dired-details-hidden-string "--- ")
-        (setq dired-dwim-target t)
-        (dired-details-install)
-        :bind
-        ("C-c C-p" . dired-up-directory))
-      (use-package dired-subtree
-        :config
-        (define-key dired-mode-map "i" 'dired-subtree-insert)
-        (define-key dired-mode-map ";" 'dired-subtree-remove))
-#+end_src
-
+* Buffer naviation
 ** Narrowing
 
   ~helm~ and ~ivy~ are menu-based selection/narrowing libraries. They give you a
@@ -1011,7 +959,54 @@ screen for minute.
     (setq curch-idle-interval 0.5))
 #+end_src
 
-** Selection and Narrowing
+** Finding files
+
+   ~get-personal-file-binding~ is used to binding a key to a file. Results in a
+   function, named appropriately, that is called to find =file= when =key= is
+   pressed. The advantage of this is that ~guide-key~ will display the binding
+   nicely.
+
+#+begin_src emacs-lisp
+  (defun make-get-personal-file-key (file key)
+    "Doesn't handle duplicate filenames very well.
+    Does handle files and directorys with same basename, though"
+    (let ((function-symbol (make-symbol
+                            (concat "get-personal-"
+                                    (if (file-directory-p file)
+                                        (concat "dir:" (file-name-nondirectory file))
+                                        (concat"file:" (file-name-base file)))
+                                    ))))
+      `(progn
+         (defun ,function-symbol ()
+           (interactive)
+           (find-file ,file))
+         (global-set-key (kbd ,key) ',function-symbol))))
+
+  (defmacro get-personal-file-binding (file key)
+    (make-get-personal-file-key (file-truename (directory-file-name
+                                                (if (stringp file)
+                                                    file
+                                                  (symbol-value file))))
+                                key))
+#+end_src
+
+*** dired
+
+#+begin_src emacs-lisp
+      (use-package dired-details
+        :config
+        (setq-default dired-details-hidden-string "--- ")
+        (setq dired-dwim-target t)
+        (dired-details-install)
+        :bind
+        ("C-c C-p" . dired-up-directory))
+      (use-package dired-subtree
+        :config
+        (define-key dired-mode-map "i" 'dired-subtree-insert)
+        (define-key dired-mode-map ";" 'dired-subtree-remove))
+#+end_src
+
+** Selection
 *** ~ace-window~ :jump:
 
  Jump quickly between windows and frames using just two key strokes
@@ -4631,7 +4626,7 @@ the number 9.
 If you make a mistake, you can usually correct it by pressing =U=, the
 “undo” command. First, clear the stack (=M-0 DEL=) and exit and restart Calc
 to make sure things start off with a clean slate.
-* Final :unimportant:
+* Final/Cleanup
 
 Display start-up time and play a notification message.
 
