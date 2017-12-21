@@ -740,7 +740,7 @@ Isearch repeat...
       :bind
       (
        ("C-l"   . avy-goto-line)
-       ("C-S-w"   . avy-kill-regio)
+       ("C-S-w"   . avy-kill-region)
        ("C-S-l" . avy-copy-line)
        ("<C-m>" . avy-goto-char-timer)
        ("C-."   . avy-goto-char)
