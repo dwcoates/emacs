@@ -1,4 +1,4 @@
-#+Title: This is my emacs configuration file.
+#+Title:  Emacs configuration file
 
 * DONE Initialize [0/0]
 
