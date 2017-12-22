@@ -808,7 +808,7 @@ Isearch repeat...
     :commands jump-char-forward jump-char-backward
     :bind
     (("C-r" . iy-go-to-char)
-     ("M-r" . iy-go-to-char-backward)))
+     ("C-M-r" . iy-go-to-char-backward)))
 #+end_src
 
 ** Grep
