@@ -1204,6 +1204,11 @@ Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
 
 ** Basic Settings
 
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-M-z") 'zap-to-char)
+#+end_src
+
+
 #+BEGIN_SRC emacs-lisp
   (setq global-mark-ring-max 5000      ; increase mark ring to contains 5000 entries
         mark-ring-max 10000            ; increase kill ring to contains 10000 entries
