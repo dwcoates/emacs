@@ -4379,6 +4379,15 @@ Track eshell sessions:
   (edit-server-start))
 #+END_SRC
 
+** Gghat
+
+#+begin_src emacs-lisp
+  (setq jabber-account-list
+        '(("dodge.w.coates@gmail.com" 
+           (:network-server . "talk.google.com")
+           (:connection-type . ssl))))
+#+end_src
+
 ** IRC
 *** ERC
 
