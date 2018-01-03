@@ -585,6 +585,15 @@ distracting, useless, and unsightly. The following code was grabbed from
  #+begin_src emacs-lisp
    (ido-mode t)
    (bind-key* "C-x C-f" 'ido-find-file)
+   (bind-key "C-x S-k" 'ido-kill-buffer)
+#+end_src
+
+ Ido really insists on using it's own kill-buffer by default...
+
+#+begin_src emacs-lisp
+  (defun kill-buffer-wrapper () (interactive) (kill-buffer))
+  (unbind-key "C-x k")
+  (bind-key "C-x k" 'kill-buffer-wrapper)  
 #+end_src
 
  Ido should save its files where everything else does!
