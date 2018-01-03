@@ -2545,6 +2545,12 @@ My clojure-mode hook
 #+END_SRC
 
 ** Python
+*** General
+
+#+begin_src emacs-lisp
+(setq py-python-command "/usr/bin/python3")
+#+end_src
+
 *** Python eval functions
 
 Some functions that will help make dealing with .py/shell workflow more
