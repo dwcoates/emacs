@@ -3329,6 +3329,12 @@ wrapped table, and everything should be paragraphed, anyway (M-q).
   (setq org-startup-truncated t)
 #+end_src
 
+Install org bullets for pretty org headers
+
+#+begin_src emacs-lisp
+(use-package org-bullets)
+#+end_src
+
 Org-mode hook
 
 #+BEGIN_SRC emacs-lisp
