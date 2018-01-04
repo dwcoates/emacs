@@ -122,7 +122,9 @@ Unprettify when symbol is just before point. This doesn't seem to work...
 *** ~flyspell~ :spell:check:fly:
 
 #+begin_src emacs-lisp
-(use-package flyspell)
+  (use-package flyspell
+    :config
+    (diminish 'flyspell-mode))
 #+end_src
 
 *** ~rainbow-delimiters~ :parentheses:appearance:
@@ -258,6 +260,12 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
  #+end_src
 
 * DONE Buffer naviation [0/0]
+** General
+
+#+begin_src emacs-lisp
+  (diminish 'auto-revert-mode)
+#+end_src
+
 ** Narrowing
 
   ~helm~ and ~ivy~ are menu-based selection/narrowing libraries. They give you a
@@ -663,12 +671,13 @@ Isearch repeat...
   searched, it will use helm-swoop. Nice idea.
 
   #+begin_src emacs-lisp
-        (use-package ace-isearch
-          :init 
-          (global-ace-isearch-mode)
-          :config
-          (setq ace-isearch-use-jump nil)
-          (setq ace-isearch-jump-delay 2))
+    (use-package ace-isearch
+      :init 
+      (global-ace-isearch-mode)
+      :config
+      (diminish 'ace-isearch-mode)
+      (setq ace-isearch-use-jump nil)
+      (setq ace-isearch-jump-delay 2))
   #+end_src
 
   Make iterative searching default to regexp searching, which I find much
@@ -1036,6 +1045,7 @@ screen for minute.
      :bind*
      (("C-o" . ace-window))
      :config
+     (diminish 'ace-window) 
      (setq aw-scope 'frame
            aw-background t
            aw-keys '(?j ?k ?l ?\; ?s ?d ?f ?g)
@@ -1068,7 +1078,9 @@ screen for minute.
 *** ~ace-popup-menu~ :select:
 
 #+begin_src emacs-lisp
-(use-package ace-popup-menu)
+  (use-package ace-popup-menu
+    :config
+    (diminish 'ace-popup-menu))
 #+end_src
 
 ** Saving/Restoring/Killing
@@ -1556,35 +1568,36 @@ Show whitespace in diff-mode
     that you can fill out and tab through, then leave you between the begin__{}src_{}_
 
  #+BEGIN_SRC emacs-lisp
-     (use-package yasnippet
-       :commands
-       (yas-exit-all-snippets
-        yas/goto-end-of-active-field    ;; Defined below
-        yas/goto-start-of-active-field  ;; Defined below
-        yas-expand)
-       :init
-       (yas-global-mode 1)
-       ;; Bindings
-       (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
-       (bind-key "C-e" 'yas-goto-end-of-active-field yas-keymap)
-       (bind-key "C-a" 'yas-goto-start-of-active-field yas-keymap)
-;       (bind-key [(tab)] 'nil yas-minor-mode-map)
-;       (bind-key (kbd "<tab>") 'yas-expand yas-minor-mode-map)
-       :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
-       :config
-       (progn
-         (setq yas-verbosity 1) ;; No need to be so verbose
-;         (setq yas-wrap-around-region nil) ;; Wrap around region
-         (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
-         (defun my/yas-term-hook ()
-           (setq yas-dont-activate t))
-         (add-hook 'term-mode-hook 'my/yas-term-hook)
-         (defun my/yas-before-hook ()
-           (when (eq yas-minor-mode t) (expand-abbrev)))
-         (add-hook 'yas-before-expand-snippet-hook 'my/yas-before-hook)
-         (defun my/yas-after-hook ()
-             (setq snippet-mode-abbrev-table local-abbrev-table))
-         (add-hook 'yas-after-exit-snippet-hook 'my/yas-after-hook)))
+        (use-package yasnippet
+          :commands
+          (yas-exit-all-snippets
+           yas/goto-end-of-active-field    ;; Defined below
+           yas/goto-start-of-active-field  ;; Defined below
+           yas-expand)
+          :init
+          (yas-global-mode 1)
+          ;; Bindings
+          (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
+          (bind-key "C-e" 'yas-goto-end-of-active-field yas-keymap)
+          (bind-key "C-a" 'yas-goto-start-of-active-field yas-keymap)
+   ;       (bind-key [(tab)] 'nil yas-minor-mode-map)
+   ;       (bind-key (kbd "<tab>") 'yas-expand yas-minor-mode-map)
+          :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
+          :config
+          (progn
+            (setq yas-verbosity 1) ;; No need to be so verbose
+   ;         (setq yas-wrap-around-region nil) ;; Wrap around region
+            (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
+            (diminish 'yas-minor-mode)
+            (defun my/yas-term-hook ()
+              (setq yas-dont-activate t))
+            (add-hook 'term-mode-hook 'my/yas-term-hook)
+            (defun my/yas-before-hook ()
+              (when (eq yas-minor-mode t) (expand-abbrev)))
+            (add-hook 'yas-before-expand-snippet-hook 'my/yas-before-hook)
+            (defun my/yas-after-hook ()
+                (setq snippet-mode-abbrev-table local-abbrev-table))
+            (add-hook 'yas-after-exit-snippet-hook 'my/yas-after-hook)))
  #+end_src
 
  Inter-field navigation:
