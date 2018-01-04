@@ -295,15 +295,9 @@
 
 ;; load up the main theme
 (add-to-list 'load-path (concat user-emacs-directory "atchka"))
-(use-package doom-themes
-  :init
-  (require 'atchka-theme)
-  (add-hook 'after-init-hook (lambda ()
-                               (load-theme 'atchka t)))
-  :config
-  ;; brighten minibuffers (does this even work??)
-  ;; (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
-  )
+(require 'atchka-theme)
+(add-hook 'after-init-hook (lambda ()
+                             (load-theme 'atchka t)))
 
 (sml/setup)
 
