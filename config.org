@@ -1414,13 +1414,15 @@ when backwards deleting a word, it will stop at the nearest capital letter.
 **** ~ws-butler~
 
  #+BEGIN_SRC emacs-lisp
- (use-package ws-butler
-   :commands ws-butler
-   :init
-   (add-hook 'c-mode-common-hook 'ws-butler-mode)
-   (add-hook 'text-mode 'ws-butler-mode)
-   (add-hook 'fundamental-mode 'ws-butler-mode)
-   (add-hook 'prog-mode-hook 'ws-butler-mode))
+   (use-package ws-butler
+     :commands ws-butler
+     :init
+     (add-hook 'c-mode-common-hook 'ws-butler-mode)
+     (add-hook 'text-mode 'ws-butler-mode)
+     (add-hook 'fundamental-mode 'ws-butler-mode)
+     (add-hook 'prog-mode-hook 'ws-butler-mode)
+     :config
+     (diminish 'ws-butler-mode))
  #+END_SRC
 
 **** ~anzu~
@@ -2792,6 +2794,7 @@ improved function.
       :init
       :after anaconda-mode
       :config
+      (diminish 'anaconda-mode)
       (mapc (lambda (x)
               (let ((command-name (car x))
                     (title (cadr x))
@@ -3110,6 +3113,7 @@ Don't use that annoying indentation style with the comments, please
     :init
     (global-git-gutter+-mode)
     :config
+    (diminish 'git-gutter+-mode)
     (setq git-gutter+-disabled-modes '(org-mode org)))
 #+end_src
 
@@ -3200,6 +3204,11 @@ Don't use that annoying indentation style with the comments, please
 #+end_src
 
 ** General
+
+#+begin_src emacs-lisp
+  (diminish 'eldoc-mode)
+#+end_src
+
 
    Modify org syntax table to treat the following characters as word
    constituents. This way, commands like forward-word will not treat them as word
