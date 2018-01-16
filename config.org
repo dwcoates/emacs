@@ -777,6 +777,13 @@ Isearch repeat...
                              (?p . avy-action-copy-and-yank)))
 #+end_src
 
+Bind =C-x C-x= to ~avy-pop-mark~
+ 
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x C-x") 'avy-pop-mark)
+#+end_src
+
+
 #+begin_src emacs-lisp
 (defun avy-action-copy-and-yank (pt)
   "Copy and yank sexp starting on PT."
