@@ -2800,6 +2800,7 @@ improved function.
       (anaconda-eldoc-mode))
     (add-hook 'python-mode-hook 'my-python-mode-hook)
     (add-hook 'inferior-python-mode (lambda () (add-to-list 'company-backends 'company-capf)))
+;    (add-hook 'inferior-python-mode (lambda () (add-to-list 'company-backends 'company-jedi)))
     (eval-after-load "company" '(add-to-list 'company-backends 'company-anaconda))
     :bind 
     ("C-c C-" . run-python)
