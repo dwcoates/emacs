@@ -2952,7 +2952,7 @@ Company-C-Headers enables the completion of C/C++ header file names using compan
 #+end_src
 
 #+begin_src emacs-lisp
-  (require 'company-irony-c-headers)
+  (use-package company-irony-c-headers)
   ;; Load with `irony-mode` as a grouped backend
   (eval-after-load 'company
     '(add-to-list
