@@ -2802,6 +2802,7 @@ improved function.
       :after anaconda-mode
       :config
       (diminish 'anaconda-mode)
+      (semantic-idle-summary-mode -1)
       (mapc (lambda (x)
               (let ((command-name (car x))
                     (title (cadr x))
