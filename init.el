@@ -273,7 +273,7 @@
 (set-face-attribute 'default nil
                     :background "#222222"
                     :foreground "light gray"
-                    :height 110
+                    :height 105
                     :foundry "unknown"
                     :family "Ubuntu Mono")
 
