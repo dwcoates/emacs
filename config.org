@@ -1328,12 +1328,6 @@ when backwards deleting a word, it will stop at the nearest capital letter.
 
 **** ~smartparens~
 
-     Precious binding with useless command.
-
-#+begin_src emacs-lisp
-  (unbind-key "M-r" smartparens-mode-map)
-#+end_src
-
  #+BEGIN_SRC emacs-lisp
    (use-package smartparens
      :bind*
@@ -1362,7 +1356,13 @@ when backwards deleting a word, it will stop at the nearest capital letter.
      (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
      (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
      (diminish 'smartparens-mode))
- #+END_SRC
+#+END_SRC
+
+ Precious binding with useless command.
+
+#+begin_src emacs-lisp
+  (unbind-key "M-r" smartparens-mode-map)
+#+end_src
 
 #+begin_src emacs-lisp
   (define-key smartparens-mode-map (kbd "M-[") 'sp-unwrap-sexp)
