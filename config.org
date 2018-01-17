@@ -2034,12 +2034,19 @@ Comment out a line:
 #+end_src
 
 * TODO Software Development [0/1]
-** General Settings
-*** General
 
 #+begin_src emacs-lisp
   (let ((inhibit-message nil))
     (message "Configuring development environments..."))
+#+end_src
+
+** General Settings
+*** General
+
+  Highlight current line when coding
+
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook 'hl-line-mode)
 #+end_src
 
   Use helm-dash-install-docset to install docsets. Nice package!!
@@ -3380,7 +3387,8 @@ Org-mode hook
   (defun dwc-org-mode-appearance-hook ()
     (toggle-word-wrap)
     (flyspell-mode)
-    (org-bullets-mode t))
+    (org-bullets-mode t)
+    (hl-line-mode -1))
 
   (add-hook 'org-mode-hook 'dwc-org-mode-appearance-hook)
 #+END_SRC

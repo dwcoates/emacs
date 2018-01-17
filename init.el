@@ -198,7 +198,6 @@
 (require 'hl-line)
 (set-face-background 'hl-line "#3b3b3b")
 (set-face-foreground 'highlight nil)
-(global-hl-line-mode t)
 
 ;; Dont ask me if I want to use these features before I do:
 (put 'narrow-to-region 'disabled nil)
