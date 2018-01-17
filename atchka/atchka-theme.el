@@ -7,7 +7,7 @@
 ;;
 ;;; Code:
 
-(require 'doom-themes)
+(use-package doom-themes)
 
 (deftheme atchka "A dark theme.")
 
