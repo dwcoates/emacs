@@ -650,94 +650,6 @@ distracting, useless, and unsightly. The following code was grabbed from
   (use-package swiper)
 #+end_src
 
-** Searching
-
-isearching shouldn't be that common. Usually should be jumping around within a
-page or occuring or something.
-
-   #+begin_src emacs-lisp
-(global-set-key (kbd "C-q") 'isearch-forward)
-(global-set-key (kbd "C-S-q") 'isearch-backward)
-#+end_src
-
-Isearch repeat...
-
-#+begin_src emacs-lisp
-(define-key isearch-mode-map (kbd "C-q") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "C-S-q") 'isearch-repeat-backward)
-   #+end_src
-
-*** ~ace-isearch~                                         :search:jump:fuzzy:
-
-  This is a mix of ~ace-isearch~, ~helm-swoop~, and ~avy~. Pretty cool. If only
-  one key is searched, it will use ace, if more than one and less than 6
-  are serached, it will use good ol' isearch, if more than 6 are
-  searched, it will use helm-swoop. Nice idea.
-
-  #+begin_src emacs-lisp
-    (use-package ace-isearch
-      :init 
-      (global-ace-isearch-mode)
-      :config
-      (diminish 'ace-isearch-mode)
-      (setq ace-isearch-use-jump nil)
-      (setq ace-isearch-jump-delay 2))
-  #+end_src
-
-  Make iterative searching default to regexp searching, which I find much
-  better for building keyboard macros.
-
-#+begin_src emacs-lisp
-  ;(setq search-default-mode t)
-#+end_src
-
-  Use ~swiper~ instead of ~helm-swoop~.
-
-#+begin_src emacs-lisp
-  (defun ace-isearch-swiper-from-isearch ()
-    "Invoke `helm-swoop' from ace-isearch."
-    (interactive)
-    (let (($query (if isearch-regexp
-                      isearch-string
-                    (regexp-quote isearch-string))))
-      (let (search-nonincremental-instead)
-        (ignore-errors (isearch-exit)))
-      (swiper $query)))
-
-  (setq ace-isearch-function-from-isearch 'ace-isearch-swiper-from-isearch)
-#+end_src
-
-*** ~isearcher~
-
-#+begin_src emacs-lisp
-  (defvar isearcher--register nil)
-  (defvar isearcher--end-register nil)
-
-  (defun isearcher ()
-    (interactive)
-    (when (and isearcher--register isearcher--end-register)
-      (if (not (equal (point) (marker-position isearcher--register)))
-          (goto-char isearcher--register)
-        (goto-char isearcher--end-register))))
-
-  (defun isearcher-exchange-point-and-mark ()
-    (interactive)
-    (if (use-region-p)
-        (call-interactively 'exchange-point-and-mark)
-      (isearcher)))
-
-  (defun isearcher--set-isearcher-register ()
-    (setq-local isearcher--register (point-marker)))
-
-  (defun isearcher--set-end-isearcher-register ()
-    (setq-local isearcher--end-register (point-marker)))
-
-  (add-hook 'isearch-mode-hook 'isearcher--set-isearcher-register)
-  (add-hook 'isearch-mode-end-hook 'isearcher--set-end-isearcher-register)
-
-  ;(global-set-key (kbd "C-x C-x") 'isearcher-exchange-point-and-mark)
-#+end_src
-
 ** Jumping
    
    Move cursor immediately to a given location. ~avy~ and ~ace~ are different
@@ -837,6 +749,94 @@ Bind =C-x C-x= to ~avy-pop-mark~
     :bind
     (("C-r" . iy-go-to-char)
      ("C-M-r" . iy-go-to-char-backward)))
+#+end_src
+
+** Searching
+
+isearching shouldn't be that common. Usually should be jumping around within a
+page or occuring or something.
+
+   #+begin_src emacs-lisp
+(global-set-key (kbd "C-q") 'isearch-forward)
+(global-set-key (kbd "C-S-q") 'isearch-backward)
+#+end_src
+
+Isearch repeat...
+
+#+begin_src emacs-lisp
+(define-key isearch-mode-map (kbd "C-q") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "C-S-q") 'isearch-repeat-backward)
+   #+end_src
+
+*** ~ace-isearch~                                         :search:jump:fuzzy:
+
+  This is a mix of ~ace-isearch~, ~helm-swoop~, and ~avy~. Pretty cool. If only
+  one key is searched, it will use ace, if more than one and less than 6
+  are serached, it will use good ol' isearch, if more than 6 are
+  searched, it will use helm-swoop. Nice idea.
+
+  #+begin_src emacs-lisp
+    (use-package ace-isearch
+      :init 
+      (global-ace-isearch-mode)
+      :config
+      (diminish 'ace-isearch-mode)
+      (setq ace-isearch-use-jump nil)
+      (setq ace-isearch-jump-delay 2))
+  #+end_src
+
+  Make iterative searching default to regexp searching, which I find much
+  better for building keyboard macros.
+
+#+begin_src emacs-lisp
+  ;(setq search-default-mode t)
+#+end_src
+
+  Use ~swiper~ instead of ~helm-swoop~.
+
+#+begin_src emacs-lisp
+  (defun ace-isearch-swiper-from-isearch ()
+    "Invoke `helm-swoop' from ace-isearch."
+    (interactive)
+    (let (($query (if isearch-regexp
+                      isearch-string
+                    (regexp-quote isearch-string))))
+      (let (search-nonincremental-instead)
+        (ignore-errors (isearch-exit)))
+      (swiper $query)))
+
+  (setq ace-isearch-function-from-isearch 'ace-isearch-swiper-from-isearch)
+#+end_src
+
+*** ~isearcher~
+
+#+begin_src emacs-lisp
+  (defvar isearcher--register nil)
+  (defvar isearcher--end-register nil)
+
+  (defun isearcher ()
+    (interactive)
+    (when (and isearcher--register isearcher--end-register)
+      (if (not (equal (point) (marker-position isearcher--register)))
+          (goto-char isearcher--register)
+        (goto-char isearcher--end-register))))
+
+  (defun isearcher-exchange-point-and-mark ()
+    (interactive)
+    (if (use-region-p)
+        (call-interactively 'exchange-point-and-mark)
+      (isearcher)))
+
+  (defun isearcher--set-isearcher-register ()
+    (setq-local isearcher--register (point-marker)))
+
+  (defun isearcher--set-end-isearcher-register ()
+    (setq-local isearcher--end-register (point-marker)))
+
+  (add-hook 'isearch-mode-hook 'isearcher--set-isearcher-register)
+  (add-hook 'isearch-mode-end-hook 'isearcher--set-end-isearcher-register)
+
+  ;(global-set-key (kbd "C-x C-x") 'isearcher-exchange-point-and-mark)
 #+end_src
 
 ** Grep
