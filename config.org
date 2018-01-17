@@ -905,10 +905,7 @@ Remaps the other-window command. In general, commands with consecutive
 Quickly move the cursor to the first instance of a character with iy-go-to-char:
 
 #+begin_src emacs-lisp
-(use-package iy-go-to-char
-  :init (progn
-          (key-chord-define-global "zl" 'iy-go-to-char)
-          (key-chord-define-global "zj" 'iy-go-to-char-backward)))
+(use-package iy-go-to-char)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -927,8 +924,6 @@ Quickly move the cursor to the first instance of a character with iy-go-to-char:
 General navigation bindings:
 
 #+begin_src emacs-lisp
-;(key-chord-define-global "fp" 'find-file-at-point)
-
 (global-unset-key (kbd "C-x 5 0"))
 (global-set-key (kbd "C-x 5 DEL") 'delete-frame)
 
@@ -1474,7 +1469,6 @@ when backwards deleting a word, it will stop at the nearest capital letter.
      (use-package expand-region
        :commands er/expand-region
        :init
-   ;    (key-chord-define-global ";l" 'er/expand-region)
        )
  #+END_SRC
 
@@ -2015,7 +2009,6 @@ Comment out a line:
   "comment or uncomment current line"
   (interactive)
   (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
-(key-chord-define-global ";'" 'toggle-comment-on-line)
 #+END_SRC
 
 *** add-file-name-to-clipboard
