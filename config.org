@@ -913,8 +913,30 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
   through code.
 
 #+begin_src emacs-lisp
-  (define-key occur-mode-map (kbd "<down>") 'occur-next)
-  (define-key occur-mode-map (kbd "<up>") 'occur-previous) 
+  (defun occur-step (arg)
+    (interactive "P")
+    (let* ((num 0)
+           (arg (or arg 1))
+           (foo (if (or (not arg) (>= arg 0))
+                    'occur-next
+                  'occur-prev)))
+      (while (< num (abs arg))
+        (setq num (1+ num))
+        (funcall foo)))
+    (recenter))
+
+  (defun occur-step-forward (arg)
+    (interactive "P")
+    (let ((arg (if arg (abs arg) 1)))
+      (occur-step arg)))
+
+  (defun occur-step-backward (arg)
+    (interactive "P")
+    (let ((arg (if arg (- (abs arg)) -1)))
+      (occur-step arg)))
+
+  (define-key occur-mode-map (kbd "<down>") 'occur-step-forward)
+  (define-key occur-mode-map (kbd "<up>") 'occur-step-backward) 
 #+end_src
 
 * DONE Windowing [0/0]
