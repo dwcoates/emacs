@@ -234,7 +234,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
      (add-hook 'after-init-hook 'global-company-mode)
      ;; provides a little popup for documentation
      :bind*
-     (("C-'" . company-files)
+     (("C-S-;" . company-files)
       ("C-;" . company-manual-begin)
       :map company-active-map
       ("C-n" . company-select-next)
