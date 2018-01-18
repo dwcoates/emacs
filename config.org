@@ -2037,6 +2037,28 @@ Comment out a line:
     (global-set-key (kbd "C-x f") 'add-file-name-to-clipboard)
 #+end_src
 
+*** duplicate-line
+
+#+begin_src emacs-lisp
+  (defun duplicate-line(arg)
+    (interactive "P")
+    (let* ((arg (if arg arg 1))
+           (beg (save-excursion (beginning-of-line) (point)))
+           (end (save-excursion (end-of-line) (point)))
+           (line (buffer-substring-no-properties beg end)))
+      (save-excursion
+        (end-of-line)
+        (print arg)
+        (open-line arg)
+        (setq num 0)
+        (while (< num arg)
+          (setq num (1+ num))
+          (forward-line 1)
+          (insert-string line)))))
+
+  (global-set-key (kbd "C-S-o") 'duplicate-line)
+#+end_src
+
 * TODO Software Development [0/1]
 
 #+begin_src emacs-lisp
