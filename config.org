@@ -1359,6 +1359,7 @@ when backwards deleting a word, it will stop at the nearest capital letter.
            ("C-M-d" . sp-delete-sexp)
            ("C-M-k" . sp-kill-sexp))
      :config
+     (unbind-key "M-s")
      ;; These are loaded from a file because currently smartparens isn't
      ;; handling escaped quotations in org well. Funnily enough, smartparens
      ;; binds requires that I bind to a quotation, which requires an escaped
