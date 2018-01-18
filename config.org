@@ -902,6 +902,12 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 
 #+end_src
 
+** Re-centering
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "M-L") 'reposition-window)
+#+end_src
+
 * DONE Windowing [0/0]
 
 #+begin_src emacs-lisp
