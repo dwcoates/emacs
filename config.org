@@ -906,6 +906,15 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "M-L") 'reposition-window)
+  (global-set-key (kbd "C-S-l") 'recenter-top-bottom)
+#+end_src
+
+  Use up and down arrows to step through occur. Means I can sit back and rifle
+  through code.
+
+#+begin_src emacs-lisp
+  (define-key occur-mode-map (kbd "<down>") 'occur-next)
+  (define-key occur-mode-map (kbd "<up>") 'occur-previous) 
 #+end_src
 
 * DONE Windowing [0/0]
