@@ -270,6 +270,29 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
   (diminish 'auto-revert-mode)
 #+end_src
 
+*** Navigation
+
+ #+begin_src emacs-lisp
+   (defun smart-beginning-of-line ()
+       "Move point to first non-whitespace character or beginning-of-line.
+
+     Move point to the first non-whitespace character on this line.
+     If point was already at that position, move point to beginning of line."
+       (interactive)
+       (let ((oldpos (point)))
+         (back-to-indentation)
+         (and (= oldpos (point))
+              (if (equal major-mode 'org-mode)
+                  (org-beginning-of-line)
+                (beginning-of-line)))))
+ #+end_src
+
+ #+begin_src emacs-lisp
+   (global-set-key [home] 'smart-beginning-of-line)
+   (global-set-key (kbd "C-a") 'smart-beginning-of-line)
+   (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
+ #+end_src
+
 ** Narrowing
 
   ~helm~ and ~ivy~ are menu-based selection/narrowing libraries. They give you a
@@ -1480,29 +1503,6 @@ when backwards deleting a word, it will stop at the nearest capital letter.
    :init
    (bind-key "M-c" 'duplicate-thing))
  #+END_SRC
-
-** Navigation
-
-#+begin_src emacs-lisp
-  (defun smart-beginning-of-line ()
-      "Move point to first non-whitespace character or beginning-of-line.
-
-    Move point to the first non-whitespace character on this line.
-    If point was already at that position, move point to beginning of line."
-      (interactive)
-      (let ((oldpos (point)))
-        (back-to-indentation)
-        (and (= oldpos (point))
-             (if (equal major-mode 'org-mode)
-                 (org-beginning-of-line)
-               (beginning-of-line)))))
-#+end_src
-
-#+begin_src emacs-lisp
-  (global-set-key [home] 'smart-beginning-of-line)
-  (global-set-key (kbd "C-a") 'smart-beginning-of-line)
-  (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
-#+end_src
 
 ** Key commands
 *** General
