@@ -862,6 +862,12 @@ Isearch repeat...
   ;(global-set-key (kbd "C-x C-x") 'isearcher-exchange-point-and-mark)
 #+end_src
 
+*** ~occur~
+
+#+begin_src emacs-lisp
+  (bind-key* "M-s o" 'occur)
+#+end_src
+
 ** Grep
 *** ~rgrep~ :search:regexp:
 Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
