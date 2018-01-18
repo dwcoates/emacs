@@ -263,7 +263,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
  (use-package auto-complete)
  #+end_src
 
-* DONE Buffer naviation [0/0]
+* DONE Buffer navigation [0/0]
 ** General
 
 #+begin_src emacs-lisp
