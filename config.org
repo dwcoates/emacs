@@ -439,7 +439,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
        helm-buffers-fuzzy-matching           nil   
        ;;  Helm size. Don't want it to be too distracting.
        helm-autoresize-max-height       25
-       helm-autoresize-min-height       18)
+       helm-autoresize-min-height       3)
       (diminish 'helm-mode)
       (set-face-attribute 'helm-candidate-number nil 
                           :background "salmon2" 
