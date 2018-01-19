@@ -928,15 +928,23 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
   (defun occur-step-forward (arg)
     (interactive "P")
     (let ((arg (if arg (abs arg) 1)))
-      (occur-step arg)))
+      (occur-step arg))
+    (occur-mode-display-occurrence))
 
   (defun occur-step-backward (arg)
     (interactive "P")
     (let ((arg (if arg (- (abs arg)) -1)))
-      (occur-step arg)))
+      (occur-step arg))
+    (occur-mode-display-occurrence))
 
   (define-key occur-mode-map (kbd "<down>") 'occur-step-forward)
   (define-key occur-mode-map (kbd "<up>") 'occur-step-backward) 
+#+end_src
+
+  Better display occurrence
+
+#+begin_src emacs-lisp
+  (add-hook 'occur-mode-find-occurrence-hook 'recenter)
 #+end_src
 
 * DONE Windowing [0/0]
