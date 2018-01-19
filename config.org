@@ -3954,7 +3954,8 @@ Function to visually delimit priorities in the org-agenda-list buffer.
     (setq org-clock-sound t)
     (global-set-key (kbd "C-c C-x s") 'tea-show-remaining-time)
     (global-set-key (kbd "C-c C-x n") 'tea-time)
-    (setq tea-time-sound (concat user-emacs-directory "bowshootalert.wav")))
+    (setq tea-time-sound (concat user-emacs-directory "bowshootalert.wav")
+    (setq tea-time-sound-command "play %s")))
 #+end_src
 
 ** Babel
