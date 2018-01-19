@@ -3948,14 +3948,18 @@ Function to visually delimit priorities in the org-agenda-list buffer.
 
 *** tea-time
 
+Tea time will play a sound of your choosing on a delay. It's a timer.
+
+Sound command is set to =play= which is acquired on Ubuntu Linux with ~sudo apt install sox~.
+
 #+begin_src emacs-lisp
   (use-package tea-time
     :init
     (setq org-clock-sound t)
     (global-set-key (kbd "C-c C-x s") 'tea-show-remaining-time)
     (global-set-key (kbd "C-c C-x n") 'tea-time)
-    (setq tea-time-sound (concat user-emacs-directory "bowshootalert.wav")
-    (setq tea-time-sound-command "play %s")))
+    (setq tea-time-sound (concat user-emacs-directory "bowshootalert.wav"))
+    (setq tea-time-sound-command "play %s"))
 #+end_src
 
 ** Babel
