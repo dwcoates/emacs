@@ -1282,6 +1282,15 @@ Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
 #+end_src
 
 ** Behavior
+
+  Force horizontal window splitting. No clue why anyone would want to split code
+  windows vertically, you just waste window space past column 80.
+
+   #+begin_src emacs-lisp
+     (setq split-width-threshold 80)
+     (setq split-height-threshold nil)
+   #+end_src
+
 *** ~zygospore~
 
 #+BEGIN_SRC emacs-lisp
