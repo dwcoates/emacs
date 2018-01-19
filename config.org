@@ -1630,42 +1630,50 @@ when backwards deleting a word, it will stop at the nearest capital letter.
    (bind-key "M-c" 'duplicate-thing))
  #+END_SRC
 
-** Key commands
-*** General
+*** Key commands
+**** General
 
-    Automatically indent when pressing =return=.
+     Automatically indent when pressing =return=.
 
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "RET") 'newline-and-indent)
-#+END_SRC
+ #+BEGIN_SRC emacs-lisp
+ (global-set-key (kbd "RET") 'newline-and-indent)
+ #+END_SRC
 
-    Activate whitespace-mode to view all whitespace characters
+     Activate whitespace-mode to view all whitespace characters
 
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-c w") 'whitespace-mode)
-#+END_SRC
+ #+BEGIN_SRC emacs-lisp
+ (global-set-key (kbd "C-c w") 'whitespace-mode)
+ #+END_SRC
 
-    Delete region command is useful sometimes where <delete> doesnt work
+     Delete region command is useful sometimes where <delete> doesnt work
 
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-c <delete>") 'delete-region)
-#+END_SRC
+ #+BEGIN_SRC emacs-lisp
+ (global-set-key (kbd "C-c <delete>") 'delete-region)
+ #+END_SRC
 
-    Great, simple package. Makes =C-w= and =M-w= act as ~kill-whole-line~ or copy
-    whole line when no region is active, and normal ~kill-region~ or ~yank~
-    otherwise.
+     Great, simple package. Makes =C-w= and =M-w= act as ~kill-whole-line~ or copy
+     whole line when no region is active, and normal ~kill-region~ or ~yank~
+     otherwise.
+
+ #+begin_src emacs-lisp
+ (use-package whole-line-or-region)
+ #+end_src
+
+**** Narrowing
+
+ #+BEGIN_SRC emacs-lisp
+ (global-set-key (kbd "C-x n d") 'narrow-to-defun)
+ (global-set-key (kbd "C-x n r") 'narrow-to-region)
+ (global-set-key (kbd "C-x n w") 'widen)
+ #+END_SRC
+
+** Common
+
+   capitalize do-what-I-mean.
 
 #+begin_src emacs-lisp
-(use-package whole-line-or-region)
+  (global-set-key (kbd "C-x L") 'capitalize-dwim)
 #+end_src
-
-*** Narrowing
-
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x n d") 'narrow-to-defun)
-(global-set-key (kbd "C-x n r") 'narrow-to-region)
-(global-set-key (kbd "C-x n w") 'widen)
-#+END_SRC
 
 ** Diffing
 
