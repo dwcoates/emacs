@@ -2,6 +2,12 @@
 ;; This must be set to nil at end of config.
 (setq inhibit-message t)
 
+;; - TODO:
+;; Require Emacs 25.1+
+;; (let ((str (emacs-version)))
+;;   (if (string-match "GNU Emacs \\([0-9]+\\.?+\\)+" "GNU Emacs 25.1.1")
+;;       (message "%s" (match-string 0 "GNU Emacs 25.1.1"))))
+
 ;; Directory for personal stuff. Personal org documents, emacs history, etc.
 (defconst personal-dir (file-name-as-directory "~/personal"))
 (unless (file-exists-p personal-dir)
