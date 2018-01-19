@@ -2401,249 +2401,6 @@ Comment out a line:
    (add-hook 'comint-preoutput-filter-functions 'python-truncate-comint-output)
  #+end_src
 
-** Lisps
-
-~lispy~ is a core lisp-editing package developed by [[https://github.com/abo-abo/lispy][abo-abo]].
-
-#+begin_src emacs-lisp
-  (use-package lispy
-    :init
-    (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
-    ;(add-hook 'ielm-mode-hook (lambda () (lispy-mode 1)))
-    (defun conditionally-enable-lispy ()
-      (when (eq this-command 'eval-expression)
-        (lispy-mode 1)))
-    (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy)
-    :config
-    (lispy-define-key lispy-mode-map "u" 'lispy-backward)
-    (lispy-define-key lispy-mode-map "o" 'lispy-forward)
-    (lispy-define-key lispy-mode-map "*" 'lispy-wrap-round)
-    (define-key lispy-mode-map (kbd "C-c (") (lambda () (interactive) (insert "(")))
-    (define-key lispy-mode-map (kbd "C-c )") (lambda () (interactive) (insert ")")))
-    (when (require 'smartparens nil t)
-      (smartparens-mode -1)))
-#+end_src
-
-~lispy~ has really annoying behavior for beginning of line movement. It will go
-to beginning of line, unless it's already there, in which case it will
-=backward-to-indentation=. This should be the other way around.
-
-#+begin_src emacs-lisp
-  (defun lispy-move-beginning-of-line ()
-    "Rewrite lispy-move-beginning-of-line to replace unintuitive
-  behavior"
-    (interactive)
-    (lispy--ensure-visible)
-    (if (equal (point) (save-excursion (back-to-indentation) (point)))
-        (move-beginning-of-line 1)
-      (back-to-indentation)))
-#+end_src
-
-
-
-*** General Lisp Settings
-
-Define hooks:
-
-#+begin_src emacs-lisp
-  ;; General Lisp hook:
-  (defun my/general-lisp-hook ()
-    (rainbow-delimiters-mode-enable))
-#+end_src
-
-Emacs Lisp hook:
-
-#+begin_src emacs-lisp
-  ;; General Lisp hook:
-  (defun my/emacs-lisp-hook ()
-        (my/general-lisp-hook)
-        (turn-on-eldoc-mode))
-#+end_src
-
-Add hooks:
-
-#+begin_src emacs-lisp
-(add-hook 'emacs-lisp-mode-hook 'my/emacs-lisp-hook)
-(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-#+end_src
-
-Enable rainbow-delimiters for lisp modes
-
-#+BEGIN_SRC emacs-lisp
-;(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
-(add-hook 'eval-expression-minibuffer-setup-hook 'my/general-lisp-hook)
-(add-hook 'ielm-mode-hook             'my/general-lisp-hook)
-(add-hook 'lisp-mode-hook            'my/general-lisp-hook)
-(add-hook 'scheme-mode-hook           'my/general-lisp-hook)
-;; pretty sure this isnt necessary
-;(add-hook 'lisp-interaction-mode-hook (lambda () (my/general-lisp-hook)))
-
-#+end_src
-
-Enable eldoc-mode in appropriate emacs lisp hooks
-
-#+begin_src emacs-lisp
-;; eldoc-mode shows documentation in the minibuffer when writing code
-;; http://www.emacswiki.org/emacs/ElDoc
-(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-#+END_SRC
-
-*** Emacs Lisp
-
-#+begin_src emacs-lisp
-(define-prefix-command 'Apropos-Prefix nil "Apropos (a,c,d,i,l,v,C-v)")
-(global-set-key (kbd "C-h C-a") 'Apropos-Prefix)
-(define-key Apropos-Prefix (kbd "a")   'apropos)
-(define-key Apropos-Prefix (kbd "C-a") 'apropos)
-(define-key Apropos-Prefix (kbd "c")   'apropos-command)
-(define-key Apropos-Prefix (kbd "d")   'apropos-documentation)
-(define-key Apropos-Prefix (kbd "i")   'info-apropos)
-(define-key Apropos-Prefix (kbd "l")   'apropos-library)
-(define-key Apropos-Prefix (kbd "v")   'apropos-variable)
-(define-key Apropos-Prefix (kbd "C-v") 'apropos-value)
-#+end_src
-
-
-Turn on emacs lisp documentation
-#+begin_src emacs-lisp
-(eldoc-mode 1)
-#+end_src
-
-
-#+begin_src emacs-lisp
-  (use-package persistent-scratch
-    :init
-    ;; careful about keeping this order. Wouldn't want to save before
-    ;; you restore :O
-    (setq persistent-scratch-save-file (concat saveplace-dir "persistent-scratch"))
-    (unless (file-exists-p persistent-scratch-save-file)
-      (message "%s: %s" "Creating persistent-scratch file for first time at" persistent-scratch-save-file)
-      (with-temp-buffer (write-file persistent-scratch-save-file))
-      (persistent-scratch-save))
-    (persistent-scratch-restore)
-    (persistent-scratch-autosave-mode))
-#+end_src
-
-
-#+begin_src emacs-lisp
-(defun my/bindkey-ielm-other-window ()
-  (local-set-key (kbd "<f9>") (lambda ()
-                                (let ((ielm-buffer (get-buffer "*ielm*")))
-                                  (if (equal ielm-buffer nil)
-                                      (ielm)
-                                    (switch-to-buffer-other-window ielm-buffer)))
-                                )))
-
-(add-hook 'emacs-lisp-mode-hook 'my/bindkey-ielm-other-window)
-#+end_src
-
-
-Display possible symbol completions in a helm buffer:
-#+BEGIN_SRC emacs-lisp
-(define-key global-map (kbd "C-c l c") 'helm-lisp-completion-at-point)
-#+END_SRC
-
-*** Clojure
-**** clojure-mode
-
-My clojure-mode hook
-#+begin_src emacs-lisp
-  (defun my/clojure-mode-hook ()
-    (my/general-lisp-hook)
-    (subword-mode)
-    (setq inferior-lisp-program "lein repl")
-    (font-lock-add-keywords
-     nil
-     '(("(\\(facts?\\)"
-        (1 font-lock-keyword-face))
-       ("(\\(background?\\)"
-        (1 font-lock-keyword-face))
-       ))
-    (define-clojure-indent (fact 1))
-    (define-clojure-indent (facts 1))
-    )
-#+end_src
-
-
-#+BEGIN_SRC emacs-lisp
-  (use-package clojure-mode
-    :mode "\\.clj\\'"
-    :init
-    ;; Use clojure-mode for other file-name extensions
-    (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
-    (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
-    (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
-    (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
-    ;; Define the clojure-mode-map prefix
-    :config
-      (use-package clojure-mode-extra-font-locking)
-      (use-package flycheck-clojure)
-      ;; A little more syntax highlighting
-      (require 'clojure-mode-extra-font-locking)
-                                          ;(use-package clj-refactor)
-      (add-hook 'clojure-mode-hook 'my/clojure-mode-hook)
-    )
-#+END_SRC
-
-**** CIDER
-
-#+BEGIN_SRC emacs-lisp
-  (use-package cider
-    :commands cider-mode
-    :functions (cider-start-http-server cider-refresh cider-user-ns)
-    :config
-    (require 'clojure-mode-extra-font-locking)
-    (progn
-      (bind-keys
-       ("C-' 1" . cider-visit-error-buffer))
-      (bind-keys
-       :map clojure-mode-map
-       ("C" . cider-start-http-server)
-       ( "C-c r" . cider-refresh)
-       ("C-c u" . cider-user-ns))
-      (bind-keys
-       :map cider-mode-map
-       ("C-c u" . cider-user-ns)
-       ("C-`" . cider-jack-in)))
-    ;; Provides minibuffer documentation for the code you're typing into the repl
-    (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-    (setq cider-repl-pop-to-buffer-on-connect t) ;; Go right to the REPL buffer when
-    ;; it's finished connecting
-    (setq cider-show-error-buffer nil) ;; When there's a cider error, show its buffer
-    ;; and switch to it
-    (setq cider-auto-select-error-buffer t)
-    (setq cider-repl-history-file "~/.emacs.d/cider-history") ;; Where to store the
-    ;; cider history.
-    (setq cider-repl-wrap-history t) ;; Wrap when navigating history.
-    ;; CIDER and clojure-mode specific bindings:
-    )
-#+END_SRC
-
-
-#+BEGIN_SRC emacs-lisp
-(defun cider-start-http-server ()
-  (interactive)
-  (cider-load-current-buffer)
-  (let ((ns (cider-current-ns)))
-    (cider-repl-set-ns ns)
-    (cider-interactive-eval (format "(println '(def server (%s/start))) (println 'server)" ns))
-    (cider-interactive-eval (format "(def server (%s/start)) (println server)" ns))))
-#+END_SRC
-
-
-#+BEGIN_SRC emacs-lisp
-(defun cider-refresh ()
-  (interactive)
-  (cider-interactive-eval (format "(user/reset)")))
-#+END_SRC
-
-
-#+BEGIN_SRC emacs-lisp
-(defun cider-user-ns ()
-  (interactive)
-  (cider-repl-set-ns "user"))
-#+END_SRC
-
 ** Python
 *** General
 
@@ -2969,6 +2726,122 @@ not yet support emacs due to a jupyter bug.
 
 #+end_src
 
+** JavaScript
+*** js-comint
+
+#+begin_src emacs-lisp
+    (use-package js-comint
+      :config)
+#+end_src
+
+**** Code stepping
+
+#+begin_src emacs-lisp
+    (defvar js-comint-send-code-step-on-function nil
+      "If non-nil, step sending a function to the js interpreter.")
+
+    (defun js-comint-step-after-defun ()
+      (forward-paragraph)
+      ;; when at last paragraph, don't step to beginning of "next" paragraph
+      (unless (equal (line-number-at-pos (point))
+                     (progn (forward-paragraph) (line-number-at-pos (point))))
+        (backward-paragraph)
+        (forward-line 1)))
+
+    (defun js-comint-send-paragraph-and-step ()
+      "Send current paragraph of code and move point to the beginning of next paragraph."
+      (interactive)
+      (save-excursion
+        (let* ((beg (progn (forward-paragraph)
+                           (backward-paragraph)
+                           (unless (equal (line-number-at-pos) 1) 
+                             (forward-line)) (point)))
+               (end (progn (forward-paragraph) 
+                           (unless (equal (line-number-at-pos (point))
+                                          (line-number-at-pos (point-max)))
+                             (forward-line -1))
+                           (end-of-line)
+                           (point)))
+               (num-lines (1+ (- (line-number-at-pos end)
+                                 (line-number-at-pos beg))))
+               (str (buffer-substring-no-properties beg end)))
+          (js-comint-send-string str)
+          (message (concat 
+                    (format "Sent %d line%s "
+                            num-lines
+                            (if (equal num-lines 1) "" "s"))
+                    (if (equal num-lines 1) 
+                        (format "(line %d)" (line-number-at-pos end))
+                      (format "(lines %d-%d)" 
+                              (line-number-at-pos beg) 
+                              (line-number-at-pos end)))
+                    " to JavaScript interpreter")
+                   (line-number-at-pos beg)
+                   (line-number-at-pos end))))
+      (js-comint-step-after-defun))
+
+    (defun js-comint-send-code-and-step ()
+      (interactive)
+      ;; xemacs doesn't have use-region-p
+      (unless (js-comint-get-process)
+        (js-comint-start-or-switch-to-repl))
+      (cond ((use-region-p)
+             (let* ((end (region-end))
+                    (beg (region-beginning))
+                    (str (buffer-substring-no-properties beg end)))
+               (js-comint-send-string str)
+               (message "Sent region between lines %d and %d to python interpreter"
+                        (line-number-at-pos beg)
+                        (line-number-at-pos end))
+               (goto-char end)))
+            (t
+             (js-comint-send-paragraph-and-step))))
+
+  (define-key js-mode-map (kbd "C-c C-c") 'js-comint-send-code-and-step)
+#+end_src
+
+*** js2-mode
+
+#+begin_src emacs-lisp
+  (use-package js2-mode)
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+#+end_src
+
+  Better JavaScript ~imenu~. 
+
+#+begin_src emacs-lisp
+  (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+#+end_src
+
+**** js2-refactor
+
+#+begin_src emacs-lisp
+  (use-package js2-refactor
+    :bind
+    (:map 
+     js2-mode-map
+     ("C-k" . js2r-kill)))
+#+end_src
+
+**** xref-js2
+
+#+begin_src emacs-lisp
+  (use-package xref-js2)
+#+end_src
+
+*** company-tern
+
+#+begin_src emacs-lisp
+  (use-package company-tern)
+  (add-to-list 'company-backends 'company-tern)
+  (add-hook 'js2-mode-hook (lambda ()
+                            (tern-mode)
+                            (company-mode)))
+  ;; Disable completion keybindings, use xref-js2 instead
+  (define-key tern-mode-keymap (kbd "M-.") nil)
+  (define-key tern-mode-keymap (kbd "M-,") nil) 
+#+end_src
+
 ** C/C++
 
    Use line numbers in C/C++ buffers
@@ -3092,6 +2965,249 @@ Configure clang executable
   (setq company-clang-executable "clang++-3.5")
 #+end_src
 
+** Lisp
+
+~lispy~ is a core lisp-editing package developed by [[https://github.com/abo-abo/lispy][abo-abo]].
+
+#+begin_src emacs-lisp
+  (use-package lispy
+    :init
+    (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
+    ;(add-hook 'ielm-mode-hook (lambda () (lispy-mode 1)))
+    (defun conditionally-enable-lispy ()
+      (when (eq this-command 'eval-expression)
+        (lispy-mode 1)))
+    (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy)
+    :config
+    (lispy-define-key lispy-mode-map "u" 'lispy-backward)
+    (lispy-define-key lispy-mode-map "o" 'lispy-forward)
+    (lispy-define-key lispy-mode-map "*" 'lispy-wrap-round)
+    (define-key lispy-mode-map (kbd "C-c (") (lambda () (interactive) (insert "(")))
+    (define-key lispy-mode-map (kbd "C-c )") (lambda () (interactive) (insert ")")))
+    (when (require 'smartparens nil t)
+      (smartparens-mode -1)))
+#+end_src
+
+~lispy~ has really annoying behavior for beginning of line movement. It will go
+to beginning of line, unless it's already there, in which case it will
+=backward-to-indentation=. This should be the other way around.
+
+#+begin_src emacs-lisp
+  (defun lispy-move-beginning-of-line ()
+    "Rewrite lispy-move-beginning-of-line to replace unintuitive
+  behavior"
+    (interactive)
+    (lispy--ensure-visible)
+    (if (equal (point) (save-excursion (back-to-indentation) (point)))
+        (move-beginning-of-line 1)
+      (back-to-indentation)))
+#+end_src
+
+
+
+*** General Lisp Settings
+
+Define hooks:
+
+#+begin_src emacs-lisp
+  ;; General Lisp hook:
+  (defun my/general-lisp-hook ()
+    (rainbow-delimiters-mode-enable))
+#+end_src
+
+Emacs Lisp hook:
+
+#+begin_src emacs-lisp
+  ;; General Lisp hook:
+  (defun my/emacs-lisp-hook ()
+        (my/general-lisp-hook)
+        (turn-on-eldoc-mode))
+#+end_src
+
+Add hooks:
+
+#+begin_src emacs-lisp
+(add-hook 'emacs-lisp-mode-hook 'my/emacs-lisp-hook)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+#+end_src
+
+Enable rainbow-delimiters for lisp modes
+
+#+BEGIN_SRC emacs-lisp
+;(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'eval-expression-minibuffer-setup-hook 'my/general-lisp-hook)
+(add-hook 'ielm-mode-hook             'my/general-lisp-hook)
+(add-hook 'lisp-mode-hook            'my/general-lisp-hook)
+(add-hook 'scheme-mode-hook           'my/general-lisp-hook)
+;; pretty sure this isnt necessary
+;(add-hook 'lisp-interaction-mode-hook (lambda () (my/general-lisp-hook)))
+
+#+end_src
+
+Enable eldoc-mode in appropriate emacs lisp hooks
+
+#+begin_src emacs-lisp
+;; eldoc-mode shows documentation in the minibuffer when writing code
+;; http://www.emacswiki.org/emacs/ElDoc
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+#+END_SRC
+
+*** Emacs Lisp
+
+#+begin_src emacs-lisp
+(define-prefix-command 'Apropos-Prefix nil "Apropos (a,c,d,i,l,v,C-v)")
+(global-set-key (kbd "C-h C-a") 'Apropos-Prefix)
+(define-key Apropos-Prefix (kbd "a")   'apropos)
+(define-key Apropos-Prefix (kbd "C-a") 'apropos)
+(define-key Apropos-Prefix (kbd "c")   'apropos-command)
+(define-key Apropos-Prefix (kbd "d")   'apropos-documentation)
+(define-key Apropos-Prefix (kbd "i")   'info-apropos)
+(define-key Apropos-Prefix (kbd "l")   'apropos-library)
+(define-key Apropos-Prefix (kbd "v")   'apropos-variable)
+(define-key Apropos-Prefix (kbd "C-v") 'apropos-value)
+#+end_src
+
+
+Turn on emacs lisp documentation
+#+begin_src emacs-lisp
+(eldoc-mode 1)
+#+end_src
+
+
+#+begin_src emacs-lisp
+  (use-package persistent-scratch
+    :init
+    ;; careful about keeping this order. Wouldn't want to save before
+    ;; you restore :O
+    (setq persistent-scratch-save-file (concat saveplace-dir "persistent-scratch"))
+    (unless (file-exists-p persistent-scratch-save-file)
+      (message "%s: %s" "Creating persistent-scratch file for first time at" persistent-scratch-save-file)
+      (with-temp-buffer (write-file persistent-scratch-save-file))
+      (persistent-scratch-save))
+    (persistent-scratch-restore)
+    (persistent-scratch-autosave-mode))
+#+end_src
+
+
+#+begin_src emacs-lisp
+(defun my/bindkey-ielm-other-window ()
+  (local-set-key (kbd "<f9>") (lambda ()
+                                (let ((ielm-buffer (get-buffer "*ielm*")))
+                                  (if (equal ielm-buffer nil)
+                                      (ielm)
+                                    (switch-to-buffer-other-window ielm-buffer)))
+                                )))
+
+(add-hook 'emacs-lisp-mode-hook 'my/bindkey-ielm-other-window)
+#+end_src
+
+
+Display possible symbol completions in a helm buffer:
+#+BEGIN_SRC emacs-lisp
+(define-key global-map (kbd "C-c l c") 'helm-lisp-completion-at-point)
+#+END_SRC
+
+*** Clojure
+**** clojure-mode
+
+My clojure-mode hook
+#+begin_src emacs-lisp
+  (defun my/clojure-mode-hook ()
+    (my/general-lisp-hook)
+    (subword-mode)
+    (setq inferior-lisp-program "lein repl")
+    (font-lock-add-keywords
+     nil
+     '(("(\\(facts?\\)"
+        (1 font-lock-keyword-face))
+       ("(\\(background?\\)"
+        (1 font-lock-keyword-face))
+       ))
+    (define-clojure-indent (fact 1))
+    (define-clojure-indent (facts 1))
+    )
+#+end_src
+
+
+#+BEGIN_SRC emacs-lisp
+  (use-package clojure-mode
+    :mode "\\.clj\\'"
+    :init
+    ;; Use clojure-mode for other file-name extensions
+    (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
+    ;; Define the clojure-mode-map prefix
+    :config
+      (use-package clojure-mode-extra-font-locking)
+      (use-package flycheck-clojure)
+      ;; A little more syntax highlighting
+      (require 'clojure-mode-extra-font-locking)
+                                          ;(use-package clj-refactor)
+      (add-hook 'clojure-mode-hook 'my/clojure-mode-hook)
+    )
+#+END_SRC
+
+**** CIDER
+
+#+BEGIN_SRC emacs-lisp
+  (use-package cider
+    :commands cider-mode
+    :functions (cider-start-http-server cider-refresh cider-user-ns)
+    :config
+    (require 'clojure-mode-extra-font-locking)
+    (progn
+      (bind-keys
+       ("C-' 1" . cider-visit-error-buffer))
+      (bind-keys
+       :map clojure-mode-map
+       ("C" . cider-start-http-server)
+       ( "C-c r" . cider-refresh)
+       ("C-c u" . cider-user-ns))
+      (bind-keys
+       :map cider-mode-map
+       ("C-c u" . cider-user-ns)
+       ("C-`" . cider-jack-in)))
+    ;; Provides minibuffer documentation for the code you're typing into the repl
+    (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+    (setq cider-repl-pop-to-buffer-on-connect t) ;; Go right to the REPL buffer when
+    ;; it's finished connecting
+    (setq cider-show-error-buffer nil) ;; When there's a cider error, show its buffer
+    ;; and switch to it
+    (setq cider-auto-select-error-buffer t)
+    (setq cider-repl-history-file "~/.emacs.d/cider-history") ;; Where to store the
+    ;; cider history.
+    (setq cider-repl-wrap-history t) ;; Wrap when navigating history.
+    ;; CIDER and clojure-mode specific bindings:
+    )
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp
+(defun cider-start-http-server ()
+  (interactive)
+  (cider-load-current-buffer)
+  (let ((ns (cider-current-ns)))
+    (cider-repl-set-ns ns)
+    (cider-interactive-eval (format "(println '(def server (%s/start))) (println 'server)" ns))
+    (cider-interactive-eval (format "(def server (%s/start)) (println server)" ns))))
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp
+(defun cider-refresh ()
+  (interactive)
+  (cider-interactive-eval (format "(user/reset)")))
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp
+(defun cider-user-ns ()
+  (interactive)
+  (cider-repl-set-ns "user"))
+#+END_SRC
+
 ** R
 
 This is not downloaded via use-package and the package manager because
@@ -3208,76 +3324,6 @@ Don't use that annoying indentation style with the comments, please
     :config
     (diminish 'git-gutter+-mode)
     (setq git-gutter+-disabled-modes '(org-mode org)))
-#+end_src
-
-** JavaScript
-
-#+begin_src emacs-lisp
-    (use-package js-comint
-      :config
-      )
-
-    (defvar js-comint-send-code-step-on-function nil
-      "If non-nil, step sending a function to the js interpreter.")
-
-    (defun js-comint-step-after-defun ()
-      (forward-paragraph)
-      ;; when at last paragraph, don't step to beginning of "next" paragraph
-      (unless (equal (line-number-at-pos (point))
-                     (progn (forward-paragraph) (line-number-at-pos (point))))
-        (backward-paragraph)
-        (forward-line 1)))
-
-    (defun js-comint-send-paragraph-and-step ()
-      "Send current paragraph of code and move point to the beginning of next paragraph."
-      (interactive)
-      (save-excursion
-        (let* ((beg (progn (forward-paragraph)
-                           (backward-paragraph)
-                           (unless (equal (line-number-at-pos) 1) 
-                             (forward-line)) (point)))
-               (end (progn (forward-paragraph) 
-                           (unless (equal (line-number-at-pos (point))
-                                          (line-number-at-pos (point-max)))
-                             (forward-line -1))
-                           (end-of-line)
-                           (point)))
-               (num-lines (1+ (- (line-number-at-pos end)
-                                 (line-number-at-pos beg))))
-               (str (buffer-substring-no-properties beg end)))
-          (js-comint-send-string str)
-          (message (concat 
-                    (format "Sent %d line%s "
-                            num-lines
-                            (if (equal num-lines 1) "" "s"))
-                    (if (equal num-lines 1) 
-                        (format "(line %d)" (line-number-at-pos end))
-                      (format "(lines %d-%d)" 
-                              (line-number-at-pos beg) 
-                              (line-number-at-pos end)))
-                    " to JavaScript interpreter")
-                   (line-number-at-pos beg)
-                   (line-number-at-pos end))))
-      (js-comint-step-after-defun))
-
-    (defun js-comint-send-code-and-step ()
-      (interactive)
-      ;; xemacs doesn't have use-region-p
-      (unless (js-comint-get-process)
-        (js-comint-start-or-switch-to-repl))
-      (cond ((use-region-p)
-             (let* ((end (region-end))
-                    (beg (region-beginning))
-                    (str (buffer-substring-no-properties beg end)))
-               (js-comint-send-string str)
-               (message "Sent region between lines %d and %d to python interpreter"
-                        (line-number-at-pos beg)
-                        (line-number-at-pos end))
-               (goto-char end)))
-            (t
-             (js-comint-send-paragraph-and-step))))
-
-  (define-key js-mode-map (kbd "C-c C-c") 'js-comint-send-code-and-step)
 #+end_src
 
 * DONE Org Mode [0/0]
