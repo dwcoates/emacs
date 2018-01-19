@@ -55,6 +55,7 @@
  '(mode-line-inactive ((t (:background "gray22" :foreground "gray52" :inverse-video nil :box nil))))
  '(mumamo-background-chunk-major ((((class color) (min-colors 88) (background dark)) nil)))
  '(org-block-begin-line ((t (:inherit atchka-org-block-lines-face))))
+ '(org-code ((t (:background "gray" :foreground "brown" :box (:line-width 1 :color "dark gray") :weight extra-bold :height 0.9 :family "Courier"))))
  '(org-footnote ((t (:foreground "#FD971F" :height 1.0))))
  '(org-upcoming-deadline ((t (:foreground "gray30"))))
  '(sml/global ((((class color) (min-colors 89)) (:foreground "DarkOrange4" :inverse-video nil))))
