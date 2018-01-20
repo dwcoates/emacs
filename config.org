@@ -82,7 +82,6 @@ Make sure emacs gets my bashrc environment variable:
   (setq default-major-mode 'emacs-lisp-mode)
 #+end_src
 
-** Key Interfaces
 * DONE Assistence [0/0]
 ** Cosmetic
 *** ~linum~  -- *disabled* :line:number:fringe:
@@ -151,6 +150,18 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
     (set-face-attribute 'rainbow-delimiters-depth-9-face nil :foreground "chocolate")
     (set-face-attribute 'rainbow-delimiters-unmatched-face nil :foreground "red"))
 #+END_SRC
+
+*** ~rainbow-mode~
+    
+    Rainbow mode colorizes hex color codes. Useful when customizing Emacs
+    themes. For example: #E74C3C, #F92672, #9C91E4, #268BD2.
+
+#+begin_src emacs-lisp
+  (use-package rainbow-mode
+    :config
+    (add-hook 'org-mode-hook 'rainbow-mode)
+    (add-hook 'prog-mode-hook 'rainbow-mode)) 
+#+end_src
 
 ** Help
 
