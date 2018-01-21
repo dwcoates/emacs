@@ -98,9 +98,9 @@ Goodies contains a lot of custom functions I've written or scavenged or
 stolen.
 
 #+begin_src emacs-lisp
-  (require 'dwc-goodies)
-
-  (global-set-key (kbd "C-c u c") 'helm-insert-color-hex)
+  (use-package 'dwc-goodies
+    :config
+    (global-set-key (kbd "C-c u c") 'helm-insert-color-hex))
 #+end_src
 
 This binding is just annoying, so remove it.
@@ -2342,7 +2342,7 @@ Comment out a line:
 
    #+begin_src emacs-lisp
   (use-package dumb-jump
-  :config
+   :config
   (setq dumb-jump-selector 'helm))
    #+end_src
 
