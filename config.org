@@ -415,13 +415,14 @@ Un-prettify when symbol is just before point.
   ~helm~ and ~ivy~ are menu-based selection/narrowing libraries. They give you a
   way to sift through lists with pop-up fuzzy-searchable menus. ~helm~ and ~ivy~
   are used as =M-x= interfaces, for example. Binding =M-x= to ~helm-M-x~ is a much
-  nicer way to select commands than the Emacs default. These libraries are easy
-  to use and extend, so there are many ~helm~ / ~ivy~ based packages available on
-  =Melpa= and other Emacs package repositories. ~counsel~ is then name for the
-  collection of ~ivy~ interfaces for common Emacs commands, such as helm commands
-  and file finding.
+  nicer way to select commands than the Emacs default. Try it out. 
 
-  ~helm-swoop~ is a helm-based packaged for sifting through buffer
+  These libraries are easy to use and extend, so there are many ~helm~ / ~ivy~
+  based packages available on =Melpa= and other Emacs package
+  repositories. ~counsel~ is the name for the collection of ~ivy~ interfaces for
+  common Emacs commands, such as helm commands and file finding.
+
+  ~helm-swoop~ is a helm-based package for sifting through buffer
   contents. ~helm-multi-swoop~ lets us do it across all open buffers. ~swiper~ is
   the ~helm-swoop~ equivalent for ~ivy~.
 
@@ -439,7 +440,7 @@ Un-prettify when symbol is just before point.
   (setq helm-gtags-prefix-key "\C-cg")
   #+END_SRC
 
-  *use-package Helm*
+  Load helm and set some basic defaults.
 
   #+BEGIN_SRC emacs-lisp
     (use-package helm
@@ -516,9 +517,8 @@ Un-prettify when symbol is just before point.
       )
   #+end_src
 
-  Helm-swoop is an interface for searching for lines in a buffer using helm
+  ~helm-swoop~ is an interface for searching for lines in a buffer using helm.
 
-  *use-package helm-swoop*
   #+BEGIN_SRC emacs-lisp
     (use-package helm-swoop
       :init (progn
@@ -541,14 +541,15 @@ Un-prettify when symbol is just before point.
                 (setq helm-swoop-pre-input-function (lambda () nil)))
   #+END_SRC
 
-Can use =TAB= and =C-i= to perform the same action as =RETURN=, but without killing
-the ~helm~ process. This is very useful, for example, when you want to sift
-through Emacs documentation.
+  Can use =TAB= and =C-i= to perform the same action as =RETURN=, but without
+  killing the ~helm~ process. This is very useful, for example, when you want to
+  sift through Emacs Lisp documentation in a =C-h f= (~describe-function~) call.
 
   #+begin_src emacs-lisp
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)  ; make TAB works in terminal
 #+end_src
 
+  Some helm bindings and additional commands.
 
 #+begin_src emacs-lisp
   (define-key helm-map (kbd "C-z")  'helm-select-action)             ; list actions using C-z
@@ -566,11 +567,7 @@ through Emacs documentation.
   (global-set-key (kbd "C-c 7 g") 'helm-google-suggest)
   (global-set-key (kbd "C-c 7 s") 'helm-surfraw)
 
-  ;(global-set-key (kbd "C-c h M-:") 'helm-eval-expression-with-eldoc)
-  ;(global-set-key (kbd "C-c h c") 'helm-calcul-expression)
-
-  ;(global-set-key (kbd "C-c h x") 'helm-register)
-  ;(global-set-key (kbd "C-x r j") 'jump-to-register)
+  (global-set-key (kbd "C-x r j") 'jump-to-register)
 
   (define-key 'help-command (kbd "C-f") 'helm-apropos)
   (define-key 'help-command (kbd "r") 'helm-info-emacs)
@@ -590,7 +587,6 @@ through Emacs documentation.
 
   #+BEGIN_SRC emacs-lisp
   (define-key global-map [remap find-tag] 'helm-etags-select)
-
   (define-key global-map [remap list-buffers] 'helm-buffers-list)
   #+END_SRC
 
@@ -602,7 +598,7 @@ through Emacs documentation.
                 (local-set-key (kbd "C-c C-l") 'helm-eshell-history)))
   #+END_SRC
 
-  Fuzzy matching for elisp helm completion. E.g., (helm-M-x "fi ile") will
+  Fuzzy matching for elisp helm completion. E.g., =helm-M-x= "fi ile" will
   have "find-file" as one of the possible completions.
 
   #+BEGIN_SRC emacs-lisp
@@ -648,7 +644,7 @@ Don't display the modeline in bottom buffers when helm is active. It's
 distracting, useless, and unsightly. The following code was grabbed from
 [[http://emacs.stackexchange.com/questions/15233/hide-modeline-in-all-bottom-windows-while-helm-is-active][StackExchange]].
 
-1. Collect bottom buffers
+1. *Collect bottom buffers*
 
 #+begin_src emacs-lisp
 (defvar bottom-buffers nil
@@ -669,7 +665,7 @@ distracting, useless, and unsightly. The following code was grabbed from
   (add-hook 'helm-before-initialize-hook #'bottom-buffers-init)
 #+end_src
 
-2. Hide mode line
+2. *Hide mode line*
 
 #+begin_src emacs-lisp
 (defun bottom-buffers-hide-mode-line ()
@@ -681,7 +677,7 @@ distracting, useless, and unsightly. The following code was grabbed from
 (add-hook 'helm-after-initialize-hook #'bottom-buffers-hide-mode-line)
 #+end_src
 
-3. Restore mode line
+3. *Restore mode line*
 
 #+begin_src emacs-lisp
 (defun bottom-buffers-show-mode-line ()
@@ -718,21 +714,22 @@ distracting, useless, and unsightly. The following code was grabbed from
 
 **** ~helm-dash~
 
-      ~helm-dash~ is a wonderful utility for looking up docs using the ~dash~
-      utility. Install dash docs with ~helm-dash-install-docset~ (Docs are
-      searchable by package name, so you can download the ~Pandas~ docs for
-      python or the ~node.js~ docs for javascript).
+  ~helm-dash~ is a wonderful utility for looking up docs using the ~dash~
+  utility. Install dash docs with ~helm-dash-install-docset~ (Docs are
+  search-able by package name, so you can download the ~Pandas~ docs for
+  Python or the ~node.js~ docs for JavaScript).
 
 #+begin_src emacs-lisp
   (use-package helm-dash
   :config
-  (setq helm-dash-browser-func 'eww ; don't open the docs in chrome/firefox/whatever
-        ))
-#+end_src
+  ; don't open the docs in chrome/firefox/whatever
+  (setq helm-dash-browser-func 'eww)) 
+  #+end_src
 
 *** ~ido~                                                      :search:fuzzy:
 
- I prefer Ido for find-file. 
+ I prefer Ido for find-file. It's less distracting, and I usually down need to
+ browse files.
 
  #+begin_src emacs-lisp
    (ido-mode t)
@@ -748,7 +745,7 @@ distracting, useless, and unsightly. The following code was grabbed from
   (bind-key "C-x k" 'kill-buffer-wrapper)  
 #+end_src
 
- Ido should save its files where everything else does!
+ Ido should save its history files where everything else does!
 
 #+begin_src emacs-lisp
   (setq-default ido-save-directory-list-file (concat saveplace-dir "ido.last"))
@@ -756,7 +753,9 @@ distracting, useless, and unsightly. The following code was grabbed from
 
 **** ~smex~
 
-     Use smart-M-x for =M-x=.
+     Use smart-M-x for =M-x=. It's discreet. I use =C-h f= (with =C-i= to preview
+     documentation) to browse Emacs functions/commands, and =M-x= to actually
+     execute them.
 
 #+begin_src emacs-lisp
   (use-package smex
@@ -768,6 +767,9 @@ distracting, useless, and unsightly. The following code was grabbed from
 #+end_src
 
 *** ~ivy~                                               :search:fuzzy:popups:
+
+  Ivy is a nice package, but I'm partial to helm. Ivy/counsel are still useful
+  sometimes, though.
 
  #+begin_src emacs-lisp
    (use-package ivy
@@ -784,7 +786,8 @@ distracting, useless, and unsightly. The following code was grabbed from
 
 **** ~swiper~                                           :search:fuzzy:popups:
 
-      Sift through a buffer's contents with ~swiper~.
+      Sift through a buffer's contents with ~swiper~. I think it's faster than
+      ~helm-swoop~ (but less feature-rich), so it has that going for it.
 
 #+begin_src emacs-lisp
   (use-package swiper)
