@@ -2243,14 +2243,6 @@ Comment out a line:
   (global-set-key (kbd "C-c i") 'imenu)
 #+end_src
 
-  ~nlinum~ mode, a line numbering minor-mode, is much faster than ~linum~ mode,
-  but also buggy and annoying. Truthfully, there is no halfway decent
-  line-numbering mode for Emacs that I know of.
-
-#+begin_src emacs-lisp
-  (use-package nlinum)
-#+end_src
-
   ~hs-minor-mode~ gives us the ability to fold and unfold code and comments
 
 #+BEGIN_SRC emacs-lisp
