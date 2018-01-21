@@ -1,5 +1,27 @@
 #+Title:  Emacs configuration file
 
+* DONE Introduction
+  Use the following help commands liberally:
+
+     =C-h B=    ~describe-buffer~
+     =C-h c=    ~describe-command~          (replaces ~describe-key-briefly~)
+     =C-h o=    ~describe-option~
+     =C-h C-c=  ~describe-key-briefly~      (replaces =C-h c=)
+     =C-h C-o=  ~describe-option-of-type~
+     =C-h m    ~describe-mode~
+     =C-h M-c=  ~describe-copying~          (replaces =C-h C-c=)
+     =C-h M-f=  ~describe-file~
+     =C-h M-k=  ~describe-keymap~
+     =C-h M-l=  ~find-function-on-key~
+     =C-h p=    ~describe-personal-keybindings~
+
+#+begin_src emacs-lisp
+  (use-package help-fns+) 
+
+  ;; describe-personal-keybindings is included by use-package
+  (global-set-key (kbd "C-h p") 'describe-personal-keybindings) 
+#+end_src
+
 * DONE Initialize [0/0]
 
 #+begin_src emacs-lisp
@@ -153,7 +175,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
 *** ~rainbow-mode~
     
-    Rainbow mode colorizes hex color codes. Useful when customizing Emacs
+    ~rainbow-mode~ colorizes hex color codes. Useful when customizing Emacs
     themes. For example: #E74C3C, #F92672, #9C91E4, #268BD2.
 
 #+begin_src emacs-lisp
@@ -162,77 +184,6 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
     (add-hook 'org-mode-hook 'rainbow-mode)
     (add-hook 'prog-mode-hook 'rainbow-mode)) 
 #+end_src
-
-** Help
-
-   The following gives us the ~C-h M-k~ binding for the new command
-   ~describe-keymap~. This can be used to look up the current key commands for any
-   mode's map. It provides the following additional help commands:
-
-     =C-h B=    ~describe-buffer~
-     =C-h c=    ~describe-command~          (replaces ~describe-key-briefly~)
-     =C-h o=    ~describe-option~
-     =C-h C-c=  ~describe-key-briefly~      (replaces =C-h c=)
-     =C-h C-o=  ~describe-option-of-type~
-     =C-h M-c=  ~describe-copying~          (replaces =C-h C-c=)
-     =C-h M-f=  ~describe-file~
-     =C-h M-k=  ~describe-keymap~
-     =C-h M-l=  ~find-function-on-key~
-
-#+begin_src emacs-lisp
-  (use-package help-fns+)  
-#+end_src
-
-*** ~guide-key~
-
-   Display possible key binding completions automatically in a small pop-up
-   buffer with ~guide-key~. For example, typing =C-h= will provide a small hint
-   pop-up for commands under this prefix.
-
- #+BEGIN_SRC emacs-lisp
-   (use-package guide-key
-     :init
-     (guide-key-mode 1)
-     (setq guide-key/guide-key-sequence '("C-x r" ;; registers and rectangles
-                                          "C-x 4" ;; file finding
-                                          "C-x v" ;; vc
-                                          "C-x 8" ;; special characters
-                                          "C-c 5" ;; vimish-fold
-                                          "C-h"   ;; help 
-                                          "C-z" 
-                                          "C-c e" ;; ??
-                                          "C-c C-v" ;; org-babel
-                                          "C-c o")) ;; switch to specific files
-     (setq guide-key/recursive-key-sequence-flag t)
-     (setq guide-key/popup-window-position 'bottom)
-     (diminish 'guide-key-mode))
- #+END_SRC
-
-*** Dictionary
-**** ~dictionary~
-
-     ~dictionary~ provides a way to query offline dictionary servers for looking
-     up definitions, synonyms, etc.
-
-#+begin_src emacs-lisp
-  (use-package dictionary)
-#+end_src
-
-**** ~helm-dictionary~
-
-     Use my helm-dictionary package. There is another package on =Melpa= called
-     =helm-dictionary=, so have to be careful with this import.
-
- #+begin_src emacs-lisp
-   (add-to-list 'load-path (concat lisp-dir "helm-dictionary"))
-#+end_src
-
-#+begin_src emacs-lisp
-   (use-package helm-dictionary
-     :commands (helm-dictionary-lookup)
-     :bind 
-     ("C-c d" . helm-dictionary-lookup))
- #+end_src
 
 ** Auto Completion
 *** ~company~ :completion:popups:
@@ -346,6 +297,57 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
  #+begin_src emacs-lisp
  (use-package auto-complete)
+ #+end_src
+
+** ~guide-key~
+
+  Display possible key binding completions automatically in a small pop-up
+  buffer with ~guide-key~. For example, typing =C-h= will provide a small hint
+  pop-up for commands under this prefix.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package guide-key
+    :init
+    (guide-key-mode 1)
+    (setq guide-key/guide-key-sequence '("C-x r" ;; registers and rectangles
+                                         "C-x 4" ;; file finding
+                                         "C-x v" ;; vc
+                                         "C-x 8" ;; special characters
+                                         "C-c 5" ;; vimish-fold
+                                         "C-h"   ;; help 
+                                         "C-z" 
+                                         "C-c e" ;; ??
+                                         "C-c C-v" ;; org-babel
+                                         "C-c o")) ;; switch to specific files
+    (setq guide-key/recursive-key-sequence-flag t)
+    (setq guide-key/popup-window-position 'bottom)
+    (diminish 'guide-key-mode))
+#+END_SRC
+
+** Dictionary
+*** ~dictionary~
+
+     ~dictionary~ provides a way to query offline dictionary servers for looking
+     up definitions, synonyms, etc.
+
+#+begin_src emacs-lisp
+  (use-package dictionary)
+#+end_src
+
+*** ~helm-dictionary~
+
+     Use my helm-dictionary package. There is another package on =Melpa= called
+     =helm-dictionary=, so have to be careful with this import.
+
+ #+begin_src emacs-lisp
+   (add-to-list 'load-path (concat lisp-dir "helm-dictionary"))
+#+end_src
+
+#+begin_src emacs-lisp
+   (use-package helm-dictionary
+     :commands (helm-dictionary-lookup)
+     :bind 
+     ("C-c d" . helm-dictionary-lookup))
  #+end_src
 
 * DONE Buffer navigation [0/0]
