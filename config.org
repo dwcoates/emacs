@@ -150,8 +150,8 @@ Un-prettify when symbol is just before point.
             ("C-c ! p" . flycheck-previous-error)
             ("C-c ! h" . helm-flycheck))
      :config
-     (diminish 'flycheck-mode)
-     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+     :diminish 'flycheck-mode)
  #+END_SRC
 
 *** ~flyspell~ :spell:check:fly:
@@ -162,7 +162,7 @@ Un-prettify when symbol is just before point.
 #+begin_src emacs-lisp
   (use-package flyspell
     :config
-    (diminish 'flyspell-mode))
+    :diminish 'flyspell-mode)
 #+end_src
 
 *** ~rainbow-delimiters~ :parentheses:appearance:
@@ -238,7 +238,7 @@ Un-prettify when symbol is just before point.
        (setq company-backends (delete 'company-semantic company-backends))
        (use-package helm-company
          :bind ("C-c <tab>" . helm-company)))
-     (diminish 'company-mode)
+     :diminish 'company-mode
      (company-quickhelp-mode 1))
  #+end_src
 
@@ -347,7 +347,7 @@ Un-prettify when symbol is just before point.
                                          "C-c o")) ;; switch to specific files
     (setq guide-key/recursive-key-sequence-flag t)
     (setq guide-key/popup-window-position 'bottom)
-    (diminish 'guide-key-mode))
+    :diminish 'guide-key-mode)
 #+END_SRC
 
 ** Dictionary
@@ -484,10 +484,10 @@ Un-prettify when symbol is just before point.
        ;;  Helm size. Don't want it to be too distracting.
        helm-autoresize-max-height       25
        helm-autoresize-min-height       3)
-      (diminish 'helm-mode)
       (set-face-attribute 'helm-candidate-number nil 
                           :background "salmon2" 
-                          :foreground "black"))
+                          :foreground "black")
+      :diminish 'helm-mode)
   #+END_SRC
 
   Helm-dash is a great package that allows us to look up documentation with
@@ -923,9 +923,9 @@ Isearch repeat...
       :init 
       (global-ace-isearch-mode)
       :config
-      (diminish 'ace-isearch-mode)
       (setq ace-isearch-use-jump nil)
-      (setq ace-isearch-jump-delay 2))
+      (setq ace-isearch-jump-delay 2)
+      :diminish 'ace-isearch-mode)
   #+end_src
 
   Make iterative searching default to regexp searching, which I find much
@@ -1245,7 +1245,6 @@ screen for minute.
      :bind*
      (("C-o" . ace-window))
      :config
-     (diminish 'ace-window) 
      (setq aw-scope 'frame
            aw-background t
            aw-keys '(?j ?k ?l ?\; ?s ?d ?f ?g)
@@ -1255,7 +1254,8 @@ screen for minute.
                                (?v aw-split-window-vert " Ace - Split Vert Window")
                                (?b aw-split-window-horz " Ace - Split Horz Window")
                                (?i delete-other-windows " Ace - Maximize Window")
-                               (?o my/other-window " Ace - Other window"))))
+                               (?o my/other-window " Ace - Other window")))
+     :diminish 'ace-window)
  #+END_SRC
 
 *** ~windmove~ :direction:
@@ -1279,8 +1279,7 @@ screen for minute.
 
 #+begin_src emacs-lisp
   (use-package ace-popup-menu
-    :config
-    (diminish 'ace-popup-menu))
+    :diminish 'ace-popup-menu)
 #+end_src
 
 ** Saving/Restoring/Killing
@@ -1559,7 +1558,7 @@ when backwards deleting a word, it will stop at the nearest capital letter.
      (smartparens-global-mode 1)
      (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
      (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode)
-     (diminish 'smartparens-mode))
+     :diminish 'smartparens-mode)
 #+END_SRC
 
  Precious binding with useless command.
@@ -1597,10 +1596,10 @@ when backwards deleting a word, it will stop at the nearest capital letter.
 **** ~volatile-highlights~
 
  #+BEGIN_SRC emacs-lisp
- (use-package volatile-highlights
-   :config
-   (volatile-highlights-mode t)
-   (diminish 'volatile-highlights-mode))
+   (use-package volatile-highlights
+     :config
+     (volatile-highlights-mode t)
+     :diminish 'volatile-highlights-mode)
  #+END_SRC
 
 **** ~clean-auto-indent-mode~
@@ -1631,8 +1630,7 @@ when backwards deleting a word, it will stop at the nearest capital letter.
      (add-hook 'text-mode 'ws-butler-mode)
      (add-hook 'fundamental-mode 'ws-butler-mode)
      (add-hook 'prog-mode-hook 'ws-butler-mode)
-     :config
-     (diminish 'ws-butler-mode))
+     :diminish 'ws-butler-mode)
  #+END_SRC
 
 **** ~anzu~
@@ -1749,10 +1747,10 @@ Show whitespace in diff-mode
 *** ~undo-tree~
 
  #+BEGIN_SRC emacs-lisp
- (use-package undo-tree
-   :config
-   (global-undo-tree-mode)
-   (diminish 'undo-tree-mode))
+   (use-package undo-tree
+     :config
+     (global-undo-tree-mode)
+     :diminish 'undo-tree-mode)
  #+END_SRC
 
 ** Snippet expansion
@@ -1764,36 +1762,36 @@ Show whitespace in diff-mode
     that you can fill out and tab through, then leave you between the begin__{}src_{}_
 
  #+BEGIN_SRC emacs-lisp
-        (use-package yasnippet
-          :commands
-          (yas-exit-all-snippets
-           yas/goto-end-of-active-field    ;; Defined below
-           yas/goto-start-of-active-field  ;; Defined below
-           yas-expand)
-          :init
-          (yas-global-mode 1)
-          ;; Bindings
-          (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
-          (bind-key "C-e" 'yas-goto-end-of-active-field yas-keymap)
-          (bind-key "C-a" 'yas-goto-start-of-active-field yas-keymap)
-   ;       (bind-key [(tab)] 'nil yas-minor-mode-map)
-   ;       (bind-key (kbd "<tab>") 'yas-expand yas-minor-mode-map)
-          :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
-          :config
-          (progn
-            (setq yas-verbosity 1) ;; No need to be so verbose
-   ;         (setq yas-wrap-around-region nil) ;; Wrap around region
-            (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
-            (diminish 'yas-minor-mode)
-            (defun my/yas-term-hook ()
-              (setq yas-dont-activate t))
-            (add-hook 'term-mode-hook 'my/yas-term-hook)
-            (defun my/yas-before-hook ()
-              (when (eq yas-minor-mode t) (expand-abbrev)))
-            (add-hook 'yas-before-expand-snippet-hook 'my/yas-before-hook)
-            (defun my/yas-after-hook ()
-                (setq snippet-mode-abbrev-table local-abbrev-table))
-            (add-hook 'yas-after-exit-snippet-hook 'my/yas-after-hook)))
+   (use-package yasnippet
+     :commands
+     (yas-exit-all-snippets
+      yas/goto-end-of-active-field    ;; Defined below
+      yas/goto-start-of-active-field  ;; Defined below
+      yas-expand)
+     :init
+     (yas-global-mode 1)
+     ;; Bindings
+     (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
+     (bind-key "C-e" 'yas-goto-end-of-active-field yas-keymap)
+     (bind-key "C-a" 'yas-goto-start-of-active-field yas-keymap)
+                                           ;       (bind-key [(tab)] 'nil yas-minor-mode-map)
+                                           ;       (bind-key (kbd "<tab>") 'yas-expand yas-minor-mode-map)
+     :functions (yas/goto-end-of-active-field yas/goto-start-of-active-field)
+     :config
+     (progn
+       (setq yas-verbosity 1) ;; No need to be so verbose
+                                           ;         (setq yas-wrap-around-region nil) ;; Wrap around region
+       (setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
+       (defun my/yas-term-hook ()
+         (setq yas-dont-activate t))
+       (add-hook 'term-mode-hook 'my/yas-term-hook)
+       (defun my/yas-before-hook ()
+         (when (eq yas-minor-mode t) (expand-abbrev)))
+       (add-hook 'yas-before-expand-snippet-hook 'my/yas-before-hook)
+       (defun my/yas-after-hook ()
+         (setq snippet-mode-abbrev-table local-abbrev-table))
+       (add-hook 'yas-after-exit-snippet-hook 'my/yas-after-hook))
+     :diminish 'yas-minor-mode)
  #+end_src
 
  Inter-field navigation:
@@ -2364,15 +2362,15 @@ Comment out a line:
                    projectile-known-projects-file (concat 
                                                    saveplace-dir
                                                    "projectile-bookmarks.eld"))
-     (diminish 'projectile-mode))
+     :diminish 'projectile-mode)
 
    (use-package helm-projectile
      :config
      (helm-projectile-on)
      (setq projectile-completion-system 'helm)
-     (setq projectile-indexing-method 'alien))
+     (setq projectile-indexing-method 'alien)
+     :diminish 'helm-projectile)
  #+END_SRC
-
 
  #+BEGIN_SRC emacs-lisp
  (setq tramp-default-method "ssh")
