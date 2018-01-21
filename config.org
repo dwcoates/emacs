@@ -2746,7 +2746,6 @@ Comment out a line:
       :init
       :after anaconda-mode
       :config
-      (diminish 'anaconda-mode)
       (semantic-idle-summary-mode -1)
       (mapc (lambda (x)
               (let ((command-name (car x))
@@ -3166,14 +3165,10 @@ Add hooks:
 Enable rainbow-delimiters for lisp modes
 
 #+BEGIN_SRC emacs-lisp
-;(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'eval-expression-minibuffer-setup-hook 'my/general-lisp-hook)
 (add-hook 'ielm-mode-hook             'my/general-lisp-hook)
 (add-hook 'lisp-mode-hook            'my/general-lisp-hook)
 (add-hook 'scheme-mode-hook           'my/general-lisp-hook)
-;; pretty sure this isnt necessary
-;(add-hook 'lisp-interaction-mode-hook (lambda () (my/general-lisp-hook)))
-
 #+end_src
 
 Enable eldoc-mode in appropriate emacs lisp hooks
@@ -3220,7 +3215,6 @@ Turn on emacs lisp documentation
     (persistent-scratch-restore)
     (persistent-scratch-autosave-mode))
 #+end_src
-
 
 #+begin_src emacs-lisp
 (defun my/bindkey-ielm-other-window ()
