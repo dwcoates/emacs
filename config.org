@@ -104,7 +104,7 @@ Make sure emacs gets my bashrc environment variable:
   (setq default-major-mode 'emacs-lisp-mode)
 #+end_src
 
-* DONE Assistence [0/0]
+* DONE Assistance [0/0]
 ** Cosmetic
 *** ~linum~  -- *disabled* :line:number:fringe:
 
