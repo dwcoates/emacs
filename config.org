@@ -2555,154 +2555,25 @@ Comment out a line:
 (setq py-python-command "/usr/bin/python3")
 #+end_src
 
-*** Python eval functions
-
-Some functions that will help make dealing with .py/shell workflow more
-intuitive. Based on ~ESS~.
-
-#+begin_src emacs-lisp
-  (defvar python-shell-send-code-step-on-function nil
-    "If non-nil, step sending a function to the python interpreter.")
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun python-shell-step-after-defun ()
-    (forward-paragraph)
-    ;; when at last paragraph, don't step to beginning of "next" paragraph
-    (unless (equal (line-number-at-pos (point))
-                   (progn (forward-paragraph) (line-number-at-pos (point))))
-      (backward-paragraph)
-      (forward-line 1)))
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun python-shell-send-paragraph-and-step ()
-    "Send current paragraph of code and move point to the beginning of next paragraph."
-    (interactive)
-    (save-excursion
-      (let* ((beg (progn (forward-paragraph)
-                         (backward-paragraph)
-                         (unless (equal (line-number-at-pos) 1) 
-                           (forward-line)) (point)))
-             (end (progn (forward-paragraph) 
-                         (unless (equal (line-number-at-pos (point))
-                                        (line-number-at-pos (point-max)))
-                           (forward-line -1))
-                         (end-of-line)
-                         (point)))
-             (num-lines (1+ (- (line-number-at-pos end)
-                               (line-number-at-pos beg)))))
-        (python-shell-send-region beg end)
-        (message (concat 
-                  (format "Sent %d line%s "
-                          num-lines
-                          (if (equal num-lines 1) "" "s"))
-                  (if (equal num-lines 1) 
-                      (format "(line %d)" (line-number-at-pos end))
-                    (format "(lines %d-%d)" 
-                            (line-number-at-pos beg) 
-                            (line-number-at-pos end)))
-                  " to Python interpreter")
-                 (line-number-at-pos beg)
-                 (line-number-at-pos end))))
-    (python-shell-step-after-defun))
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun python-current-defun ()
-    "`python-info-current-defun' doesn't work when on a blank line, for some reason."
-    (interactive)
-    (save-excursion (forward-paragraph)
-                    (backward-paragraph)
-                    (forward-line)
-                    (python-info-current-defun)))
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun python-shell-send-code-and-step (arg)
-    (interactive "p")
-    ;; xemacs doesn't have use-region-p
-    (let ((python-shell-send-code-step-on-function
-           (if (equal arg 4) t nil)))
-      (unless (python-shell-get-process)
-        (run-python))
-      (cond ((use-region-p)
-             (let ((end (region-end))
-                   (beg (region-beginning)))
-               (python-shell-send-region beg end)
-               (message "Sent region between lines %d and %d to python interpreter"
-                        (line-number-at-pos beg)
-                        (line-number-at-pos end))
-               (goto-char end)))
-            ;; send function if in a function, else send block and iterate
-            ((python-current-defun)
-             (progn
-               (python-shell-send-defun)
-               (message "Sent '%s' function to python interpreter"
-                        (propertize (python-current-defun) 'face
-                                    '(:foreground "#66D9EF")))
-               (when python-shell-send-code-step-on-function
-                 (python-nav-end-of-defun)
-                 (forward-line -1)
-                 (python-shell-step-after-defun))))
-            (t
-             (python-shell-send-paragraph-and-step)))
-      (when (not (equal arg 4))
-        (python-shell-switch-to-shell))))
-#+end_src
-
-Replace the normal binding (which is set to ~python-shell-send-file~) with this
-improved function.
-
-*** Python Shell
-
-#+begin_src emacs-lisp 
-  (defun python-switch-to-shell-same-window ()
-    (interactive)
-    (let ((python-buffer (python-shell-get-buffer)))
-      (if python-buffer
-          (switch-to-buffer python-buffer)
-        (message "No python process running"))))
-#+end_src
-
-
-**** IPython *DISABLED*
-
- see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0][here]] for info on IPython 5 is not working properly in Emacs.
+**** Commands and Bindings
 
  #+begin_src emacs-lisp
- ;  (setq python-shell-prompt-detect-failure-warning nil
- ;        py-shell-interpreter "ipython"
- ;        ;; use the wx backend, for both mayavi and matplotlib
- ;        python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
- ;        py-shell-switch-buffers-on-execute-p t
- ;        py-smart-indentation t
- ;        python-shell-completion-native-disabled-interpreters '("jupyter" "pypy"))
+ (define-key python-mode-map (kbd "C-c M-f") 'python-nav-forward-defun)
+ (define-key python-mode-map (kbd "C-c M-b") 'python-nav-backward-defun)
+ (define-key python-mode-map (kbd "C-c C-f")   'python-nav-forward-sexp)
+ (define-key python-mode-map (kbd "C-c C-b")   'python-nav-backward-sexp)
+ (define-key python-mode-map (kbd "C-c F")   'python-nav-forward-block)
+ (define-key python-mode-map (kbd "C-c B")   'python-nav-backward-block)
+
+ (define-key python-mode-map (kbd "C-c M-e") 'python-nav-end-of-defun)
+ (define-key python-mode-map (kbd "C-c M-a") 'python-nav-beginning-of-defun)
+ (define-key python-mode-map (kbd "C-c C-e")   'python-nav-end-of-statement)
+ (define-key python-mode-map (kbd "C-c C-a")   'python-nav-beginning-of-statement)
+ (define-key python-mode-map (kbd "C-c E")   'python-nav-end-of-block)
+ (define-key python-mode-map (kbd "C-c A")   'python-nav-beginning-of-block)
  #+end_src
 
-**** CPython
-
- I currently prefer using the =CPython= interpreter. 
-
- #+begin_src emacs-lisp
-     (setq python-shell-prompt-detect-failure-warning nil
-           py-shell-interpreter "python"
-           ;; setup the matplotlib backend and import pyplot.
-           python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg'); from matplotlib import pyplot as plt\"" 
-           py-shell-switch-buffers-on-execute-p t
-           python-shell-enable-font-lock t
-           py-smart-indentation t
-           python-shell-completion-native-disabled-interpreters '("python" "pypy"))
-
-     ;; subtly gray commmands
-     (set-face-attribute 'comint-highlight-input nil  
-                         :foreground "gray63" :weight 'bold)
-
-     (eval-after-load "python"
-       '(setq python-shell-setup-code '((python-shell-completion-native-turn-off))))
- #+end_src
-
-*** python-mode
+*** ~python-mode~
 
 #+begin_src emacs-lisp
   (use-package python-mode
@@ -2724,7 +2595,106 @@ improved function.
                  (setq-local completion-at-point-functions nil))))
 #+end_src
 
-*** py-autopep8
+**** ~python-send-code-and-step~
+
+ Some functions that will help make dealing with .py/shell workflow more
+ intuitive. Based on ~ESS~.
+
+ #+begin_src emacs-lisp
+   (defvar python-shell-send-code-step-on-function nil
+     "If non-nil, step sending a function to the python interpreter.")
+ #+end_src
+
+ #+begin_src emacs-lisp
+   (defun python-shell-step-after-defun ()
+     (forward-paragraph)
+     ;; when at last paragraph, don't step to beginning of "next" paragraph
+     (unless (equal (line-number-at-pos (point))
+                    (progn (forward-paragraph) (line-number-at-pos (point))))
+       (backward-paragraph)
+       (forward-line 1)))
+ #+end_src
+
+ #+begin_src emacs-lisp
+   (defun python-shell-send-paragraph-and-step ()
+     "Send current paragraph of code and move point to the beginning of next paragraph."
+     (interactive)
+     (save-excursion
+       (let* ((beg (progn (forward-paragraph)
+                          (backward-paragraph)
+                          (unless (equal (line-number-at-pos) 1) 
+                            (forward-line)) (point)))
+              (end (progn (forward-paragraph) 
+                          (unless (equal (line-number-at-pos (point))
+                                         (line-number-at-pos (point-max)))
+                            (forward-line -1))
+                          (end-of-line)
+                          (point)))
+              (num-lines (1+ (- (line-number-at-pos end)
+                                (line-number-at-pos beg)))))
+         (python-shell-send-region beg end)
+         (message (concat 
+                   (format "Sent %d line%s "
+                           num-lines
+                           (if (equal num-lines 1) "" "s"))
+                   (if (equal num-lines 1) 
+                       (format "(line %d)" (line-number-at-pos end))
+                     (format "(lines %d-%d)" 
+                             (line-number-at-pos beg) 
+                             (line-number-at-pos end)))
+                   " to Python interpreter")
+                  (line-number-at-pos beg)
+                  (line-number-at-pos end))))
+     (python-shell-step-after-defun))
+ #+end_src
+
+ #+begin_src emacs-lisp
+   (defun python-current-defun ()
+     "`python-info-current-defun' doesn't work when on a blank line, for some reason."
+     (interactive)
+     (save-excursion (forward-paragraph)
+                     (backward-paragraph)
+                     (forward-line)
+                     (python-info-current-defun)))
+ #+end_src
+
+ #+begin_src emacs-lisp
+   (defun python-shell-send-code-and-step (arg)
+     (interactive "p")
+     ;; xemacs doesn't have use-region-p
+     (let ((python-shell-send-code-step-on-function
+            (if (equal arg 4) t nil)))
+       (unless (python-shell-get-process)
+         (run-python))
+       (cond ((use-region-p)
+              (let ((end (region-end))
+                    (beg (region-beginning)))
+                (python-shell-send-region beg end)
+                (message "Sent region between lines %d and %d to python interpreter"
+                         (line-number-at-pos beg)
+                         (line-number-at-pos end))
+                (goto-char end)))
+             ;; send function if in a function, else send block and iterate
+             ((python-current-defun)
+              (progn
+                (python-shell-send-defun)
+                (message "Sent '%s' function to python interpreter"
+                         (propertize (python-current-defun) 'face
+                                     '(:foreground "#66D9EF")))
+                (when python-shell-send-code-step-on-function
+                  (python-nav-end-of-defun)
+                  (forward-line -1)
+                  (python-shell-step-after-defun))))
+             (t
+              (python-shell-send-paragraph-and-step)))
+       (when (not (equal arg 4))
+         (python-shell-switch-to-shell))))
+ #+end_src
+
+ Replace the normal binding (which is set to ~python-shell-send-file~) with this
+ improved function.
+
+*** ~py-autopep8~
 
 #+begin_src emacs-lisp
   (use-package py-autopep8
