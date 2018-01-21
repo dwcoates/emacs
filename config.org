@@ -2702,7 +2702,7 @@ Comment out a line:
     (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 #+end_src
 
-*** elpy *DISABLED*
+*** ~elpy-mode~ *DISABLED*
 
 #+BEGIN_SRC emacs-lisp
 ;    (use-package elpy
@@ -2724,7 +2724,7 @@ Comment out a line:
 ;      (add-hook 'elpy-mode-hook 'flycheck-mode))
 #+END_SRC
 
-*** anaconda
+*** ~anaconda-mode~
 
    =anaconda= (not to be confused with the Python package manager) is an
    alternative to =elpy=.
@@ -2737,7 +2737,7 @@ Comment out a line:
       (anaconda-eldoc-mode))
     (add-hook 'python-mode-hook 'my-python-mode-hook)
     (add-hook 'inferior-python-mode (lambda () (add-to-list 'company-backends 'company-capf)))
-;    (add-hook 'inferior-python-mode (lambda () (add-to-list 'company-backends 'company-jedi)))
+                                          ;    (add-hook 'inferior-python-mode (lambda () (add-to-list 'company-backends 'company-jedi)))
     (eval-after-load "company" '(add-to-list 'company-backends 'company-anaconda))
     :bind 
     ("C-c C-" . run-python)
@@ -2766,10 +2766,11 @@ Comment out a line:
               (find-assignments  "find assignments"  t)
               (find-definitions  "find definitions"  t)
               (find-file         "find assignments"  t)
-              (find-references "show usages" nil)))))
+              (find-references "show usages" nil))))
+    :diminish 'anaconda-mode)
 #+end_src
 
-*** ein
+*** ~ein~
 
     ~Ein~ is an Emacs front end for ~jupyter notebook~.
 
@@ -2802,7 +2803,7 @@ Comment out a line:
     (add-hook 'ein:notebook-multilang-mode-hook 'switch-color))
 #+end_src
 
-*** ob-ipython
+*** ~ob-ipython~
 
 Currently DO NOT attempt to fetch completions from jupyter. It does
 not yet support emacs due to a jupyter bug.
@@ -2811,32 +2812,58 @@ not yet support emacs due to a jupyter bug.
 ; none
 #+end_src
 
-*** Commands and Bindings
+*** ~company-anaconda~
+    ~company-anaconda~ 
+*** Python Shell
 
-#+begin_src emacs-lisp
-(define-key python-mode-map (kbd "C-c M-f") 'python-nav-forward-defun)
-(define-key python-mode-map (kbd "C-c M-b") 'python-nav-backward-defun)
-(define-key python-mode-map (kbd "C-c C-f")   'python-nav-forward-sexp)
-(define-key python-mode-map (kbd "C-c C-b")   'python-nav-backward-sexp)
-(define-key python-mode-map (kbd "C-c F")   'python-nav-forward-block)
-(define-key python-mode-map (kbd "C-c B")   'python-nav-backward-block)
-
-(define-key python-mode-map (kbd "C-c M-e") 'python-nav-end-of-defun)
-(define-key python-mode-map (kbd "C-c M-a") 'python-nav-beginning-of-defun)
-(define-key python-mode-map (kbd "C-c C-e")   'python-nav-end-of-statement)
-(define-key python-mode-map (kbd "C-c C-a")   'python-nav-beginning-of-statement)
-(define-key python-mode-map (kbd "C-c E")   'python-nav-end-of-block)
-(define-key python-mode-map (kbd "C-c A")   'python-nav-beginning-of-block)
+#+begin_src emacs-lisp 
+  (defun python-switch-to-shell-same-window ()
+    (interactive)
+    (let ((python-buffer (python-shell-get-buffer)))
+      (if python-buffer
+          (switch-to-buffer python-buffer)
+        (message "No python process running"))))
 #+end_src
 
-*** TODO company-anaconda
 
-#+begin_src emacs-lisp
+**** IPython *DISABLED*
 
-#+end_src
+ see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0][here]] for info on IPython 5 is not working properly in Emacs.
 
+ #+begin_src emacs-lisp
+ ;  (setq python-shell-prompt-detect-failure-warning nil
+ ;        py-shell-interpreter "ipython"
+ ;        ;; use the wx backend, for both mayavi and matplotlib
+ ;        python-shell-interpreter-args "--matplotlib=wx --pylab=wx --colors=DarkBG"
+ ;        py-shell-switch-buffers-on-execute-p t
+ ;        py-smart-indentation t
+ ;        python-shell-completion-native-disabled-interpreters '("jupyter" "pypy"))
+ #+end_src
+
+**** CPython
+
+ I currently prefer using the =CPython= interpreter. 
+
+ #+begin_src emacs-lisp
+     (setq python-shell-prompt-detect-failure-warning nil
+           py-shell-interpreter "python"
+           ;; setup the matplotlib backend and import pyplot.
+           python-shell-interpreter-args "-i -c \"import matplotlib; matplotlib.use('qt4agg'); from matplotlib import pyplot as plt\"" 
+           py-shell-switch-buffers-on-execute-p t
+           python-shell-enable-font-lock t
+           py-smart-indentation t
+           python-shell-completion-native-disabled-interpreters '("python" "pypy"))
+
+     ;; subtly gray commmands
+     (set-face-attribute 'comint-highlight-input nil  
+                         :foreground "gray63" :weight 'bold)
+
+     (eval-after-load "python"
+       '(setq python-shell-setup-code '((python-shell-completion-native-turn-off))))
+ #+end_src
+ 
 ** JavaScript
-*** js-comint
+*** ~js-comint~
 
 #+begin_src emacs-lisp
     (use-package js-comint
@@ -2909,7 +2936,7 @@ not yet support emacs due to a jupyter bug.
   (define-key js-mode-map (kbd "C-c C-c") 'js-comint-send-code-and-step)
 #+end_src
 
-*** js2-mode
+*** ~js2-mode~
 
 #+begin_src emacs-lisp
   (use-package js2-mode)
@@ -2938,7 +2965,7 @@ not yet support emacs due to a jupyter bug.
   (use-package xref-js2)
 #+end_src
 
-*** company-tern
+*** ~company-tern~
 
 #+begin_src emacs-lisp
   (use-package company-tern)
@@ -3112,14 +3139,11 @@ to beginning of line, unless it's already there, in which case it will
       (back-to-indentation)))
 #+end_src
 
-
-
 *** General Lisp Settings
 
 Define hooks:
 
 #+begin_src emacs-lisp
-  ;; General Lisp hook:
   (defun my/general-lisp-hook ()
     (rainbow-delimiters-mode-enable))
 #+end_src
@@ -3127,7 +3151,6 @@ Define hooks:
 Emacs Lisp hook:
 
 #+begin_src emacs-lisp
-  ;; General Lisp hook:
   (defun my/emacs-lisp-hook ()
         (my/general-lisp-hook)
         (turn-on-eldoc-mode))
@@ -3176,12 +3199,13 @@ Enable eldoc-mode in appropriate emacs lisp hooks
 (define-key Apropos-Prefix (kbd "C-v") 'apropos-value)
 #+end_src
 
-
 Turn on emacs lisp documentation
+
 #+begin_src emacs-lisp
 (eldoc-mode 1)
 #+end_src
 
+**** ~persistent-scratch~
 
 #+begin_src emacs-lisp
   (use-package persistent-scratch
@@ -3210,16 +3234,17 @@ Turn on emacs lisp documentation
 (add-hook 'emacs-lisp-mode-hook 'my/bindkey-ielm-other-window)
 #+end_src
 
-
 Display possible symbol completions in a helm buffer:
+
 #+BEGIN_SRC emacs-lisp
 (define-key global-map (kbd "C-c l c") 'helm-lisp-completion-at-point)
 #+END_SRC
 
 *** Clojure
-**** clojure-mode
+**** ~clojure-mode~
 
 My clojure-mode hook
+
 #+begin_src emacs-lisp
   (defun my/clojure-mode-hook ()
     (my/general-lisp-hook)
@@ -3258,7 +3283,7 @@ My clojure-mode hook
     )
 #+END_SRC
 
-**** CIDER
+**** ~cider-mode~
 
 #+BEGIN_SRC emacs-lisp
   (use-package cider
@@ -3386,8 +3411,8 @@ Don't use that annoying indentation style with the comments, please
   (define-key html-mode-map (kbd "C-c C-k") 'sgml-kill-element)
 #+end_src
 
-** Git
-*** Magit
+** Git [2/3]
+*** ~magit~
 
  #+BEGIN_SRC  emacs-lisp
  (use-package magit
@@ -3396,43 +3421,42 @@ Don't use that annoying indentation style with the comments, please
    (bind-key "C-c m s" 'magit-status))
  #+END_SRC
 
-**** backup specifics
+Backup function to target when called.
 
  #+BEGIN_SRC emacs-lisp
- ;; Backup function to target when called.
- (defun my/backup-specifics (file target)
- "Copy file to target and apply function"
-     (if (not (file-exists-p file))
-       (write-region "" nil file)) ; create file
-     (copy-file file target t))
+   (defun my/backup-specifics (file target)
+   "Copy file to target and apply function"
+       (if (not (file-exists-p file))
+         (write-region "" nil file)) ; create file
+       (copy-file file target t))
  #+END_SRC
 
-**** On magit-push
+Advise ~magit-push~ to backup =specifics.el= to a backup file in home.
 
  #+BEGIN_SRC emacs-lisp
- ;; Advise magit-push to backup specifics.el to a backup file in home
- (advice-add 'magit-push :around (lambda (push &rest args)
-     (my/backup-specifics "~/.emacs.d/specifics.el" "~/.emacsSpecificsBackup.el")
-     (apply push args)))
+   (advice-add 'magit-push :around (lambda (push &rest args)
+       (my/backup-specifics "~/.emacs.d/specifics.el" "~/.emacsSpecificsBackup.el")
+       (apply push args)))
  #+END_SRC
 
-*** gist
+*** ~gist~
 
  #+begin_src emacs-lisp
  (use-package gist)
  #+end_src
 
-*** git-gutter
+*** TODO ~git-gutter~ *disabled*
 
 #+begin_src emacs-lisp
   (use-package git-gutter+
     :commands 
     git-gutter-mode+
     :init
-    (global-git-gutter+-mode)
+    ;; uncomment to enable git-gutter-mode
+    ; (global-git-gutter+-mode) 
     :config
-    (diminish 'git-gutter+-mode)
-    (setq git-gutter+-disabled-modes '(org-mode org)))
+    (setq git-gutter+-disabled-modes '(org-mode org))
+    :diminish 'git-gutter+-mode)
 #+end_src
 
 * DONE Org Mode [0/0]
