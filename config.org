@@ -32,10 +32,17 @@
 12. =C-h C-c=  ~describe-key-briefly~
     Display a small description of a key-binding's command in the minibuffer.
 
+
+=C-h f=, then typing "describe" can always be used to browse help
+functions. Also, M-x can be used if key-bindings are forgotten (e.g., =M-x
+describe-function=)
+
+Download a package that provides some of the above help functions.
+~describe-personal-keybindings~ is included by ~use-package~.
+
 #+begin_src emacs-lisp
   (use-package help-fns+) 
 
-  ;; describe-personal-keybindings is included by use-package
   (global-set-key (kbd "C-h p") 'describe-personal-keybindings) 
 #+end_src
 
@@ -4536,7 +4543,7 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 * DONE Emacs as a Auxiliary Interface [0/0]
 
 #+begin_src emacs-lisp
-(message "Configuring Emacs as foreign interface...")
+  (message "Configuring Emacs as an auxiliary interface...")
 #+end_src
 
 ** Terminal
