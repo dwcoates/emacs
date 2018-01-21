@@ -3,17 +3,34 @@
 * DONE Introduction
   Use the following help commands liberally:
 
-     =C-h B=    ~describe-buffer~
-     =C-h c=    ~describe-command~          (replaces ~describe-key-briefly~)
-     =C-h o=    ~describe-option~
-     =C-h C-c=  ~describe-key-briefly~      (replaces =C-h c=)
-     =C-h C-o=  ~describe-option-of-type~
-     =C-h m    ~describe-mode~
-     =C-h M-c=  ~describe-copying~          (replaces =C-h C-c=)
-     =C-h M-f=  ~describe-file~
-     =C-h M-k=  ~describe-keymap~
-     =C-h M-l=  ~find-function-on-key~
-     =C-h p=    ~describe-personal-keybindings~
+1. =C-h f=    ~describe-function~
+   Select Emacs functions and provide a description of the selected command.
+2. =C-h c=    ~describe-command~          (replaces ~describe-key-briefly~)
+   Select interactive Emacs functions ("commands") and provide a description
+   of the selected command.
+3. =C-h B=    ~describe-buffer~
+   Open a buffer that describes current buffer, it's active minor modes,
+   major mode, key bindings, etc.
+4. =C-h m=    ~describe-mode~     
+   Opens a buffer that enumerates active modes and information on them. 
+5. =C-h M-k=  ~describe-keymap~
+   Open a buffer that enumerates the key bindings associated with an Emacs
+   major/minor mode.
+7. =C-h p=    ~describe-personal-keybindings~
+   Describe custom bindings created.
+6. =C-h M-l=  ~find-function-on-key~
+   Search through Emacs Lisp functions, and jump to the definition for the
+   function selected.
+8. =C-h M-f=  ~describe-file~
+   Select files and show information about them.
+7. =C-h o=    ~describe-option~
+   Describe user variables.
+8. =C-h C-o=  ~describe-option-of-type~
+   Describe user variables, but first narrow them by type.
+9. =C-h M-c=  ~describe-copying~          (replaces =C-h C-c=)
+   Create a buffer that contains the entire GNU Public License.
+10. =C-h C-c=  ~describe-key-briefly~      (replaces =C-h c=)
+    Display a small description of a key-binding's command in the minibuffer.
 
 #+begin_src emacs-lisp
   (use-package help-fns+) 
@@ -87,7 +104,7 @@ This code keeps the semantic idle parser from running the CPU too hot.
   (setq semantic-idle-scheduler-setup-timer 10000) ; hack. Semantic idle scheduler using 95+% CPU
 #+end_src
 
-Start up message
+Start up message.
 
 #+begin_src emacs-lisp
   (let ((inhibit-message nil))
