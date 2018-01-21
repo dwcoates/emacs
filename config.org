@@ -53,7 +53,7 @@ https://github.com/purcell/exec-path-from-shell
     (package-install 'exec-path-from-shell)))
 #+END_SRC
 
-Make sure emacs gets my bashrc environment variable:
+Make sure Emacs gets my bashrc environment variable:
 
 #+begin_src emacs-lisp
   (let ((path (shell-command-to-string ". ~/.bashrc; echo -n $PATH")))
@@ -64,29 +64,38 @@ Make sure emacs gets my bashrc environment variable:
            '("~/.local/bin/flake8")
            exec-path)))
 #+end_src
+ 
+Let Emacs know about some of my Emacs Lisp code
 
 #+begin_src emacs-lisp
-(add-to-list 'load-path (concat lisp-dir "goodies")) ;; personal goodies
-(add-to-list 'load-path (concat lisp-dir "org-misc")) ;; org-misc functions
+  (add-to-list 'load-path (concat lisp-dir "goodies"))  ;; personal goodies
+  (add-to-list 'load-path (concat lisp-dir "org-misc")) ;; org-misc functions
 #+end_src
 
 * DONE General [0/0]
+
+Diminish allows selectively removing certain mode "nicknames" from the
+modeline. Useful for keeping the modeline from getting too cluttered.
 
 #+begin_src emacs-lisp
   (use-package diminish)
 #+end_src
 
+This code keeps the semantic idle parser from running the CPU too hot.
+
 #+begin_src emacs-lisp
-(setq semantic-idle-scheduler-setup-timer 10000) ; hack. Semantic idle scheduler using 95+% CPU
+  (setq semantic-idle-scheduler-setup-timer 10000) ; hack. Semantic idle scheduler using 95+% CPU
 #+end_src
+
+Start up message
 
 #+begin_src emacs-lisp
   (let ((inhibit-message nil))
     (message "Configuring general settings..."))
 #+end_src
 
-  Goodies contains a lot of custom functions I've written or scavenged or
-  stolen.
+Goodies contains a lot of custom functions I've written or scavenged or
+stolen.
 
 #+begin_src emacs-lisp
   (require 'dwc-goodies)
@@ -94,11 +103,13 @@ Make sure emacs gets my bashrc environment variable:
   (global-set-key (kbd "C-c u c") 'helm-insert-color-hex)
 #+end_src
 
-  This binding is just annoying
+This binding is just annoying, so remove it.
 
 #+begin_src emacs-lisp
   (global-unset-key (kbd "ESC ESC ESC"))
 #+end_src
+
+Make ~emacs-lisp-mode~ the default major mode. 
 
 #+begin_src emacs-lisp
   (setq default-major-mode 'emacs-lisp-mode)
@@ -106,32 +117,31 @@ Make sure emacs gets my bashrc environment variable:
 
 * DONE Assistance [0/0]
 ** Cosmetic
-*** ~linum~  -- *disabled* :line:number:fringe:
+*** ~linum-mode~                                            :line:number:fringe:
 
-#+begin_src emacs-lisp 
-;  (set-face-attribute 'linum-mode nil 
-;                      :background "gray16" 
-;                      :foreground "dim gray")
-#+end_src
+    ~linum-mode~ is a line-numbering mode that comes packaged with Emacs.
 
 *** Pretty Symbols :pretty:appearance:unicode:
 
     Prettify certain symbols and symbol combinations. For example, use a λ
-    instead of =lambda= in elisp code.
+    instead of =lambda= in Emacs Lisp code.
 
 #+begin_src emacs-lisp
-(global-prettify-symbols-mode t)
+  (global-prettify-symbols-mode t)
 #+end_src
 
-Unprettify when symbol is just before point. This doesn't seem to work...
+Un-prettify when symbol is just before point.
 
 #+begin_src emacs-lisp
-(setq prettify-symbols-unprettify-at-point 'right-edge)
+  (setq prettify-symbols-unprettify-at-point 'right-edge)
 #+end_src
 
-*** ~flycheck~ :check:fly:
+*** ~flycheck-mode~                                                  :check:fly:
 
- *use-package Flycheck*
+    ~flycheck-mode~ provides highlighting mistakes for syntax errors. A lot like
+    Microsoft Word's red squiggly lines that are used to point out
+    grammar/spelling errors.
+
  #+BEGIN_SRC emacs-lisp
    (use-package flycheck
      :init (progn
@@ -146,6 +156,9 @@ Unprettify when symbol is just before point. This doesn't seem to work...
 
 *** ~flyspell~ :spell:check:fly:
 
+    ~flyspell-mode~ is flycheck, but for spelling. Useful in ~org-mode~ and other
+    basic text modes.
+
 #+begin_src emacs-lisp
   (use-package flyspell
     :config
@@ -154,7 +167,9 @@ Unprettify when symbol is just before point. This doesn't seem to work...
 
 *** ~rainbow-delimiters~ :parentheses:appearance:
 
-Automatically color parentheses pairs different colors with rainbow-delimiters:
+    Automatically color parentheses pairs different colors with
+    rainbow-delimiters. This mode is particularly useful in Lisp modes, where
+    there are many, many, many parentheses.
 
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
@@ -176,7 +191,9 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 *** ~rainbow-mode~
     
     ~rainbow-mode~ colorizes hex color codes. Useful when customizing Emacs
-    themes. For example: #E74C3C, #F92672, #9C91E4, #268BD2.
+    themes. For example: #E74C3C, #F92672, #9C91E4, #268BD2. By the way, use
+    =C-c u c=, ~helm-insert-color-hex~, to select color hexes and insert them at
+    point.
 
 #+begin_src emacs-lisp
   (use-package rainbow-mode
@@ -187,6 +204,12 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
 ** Auto Completion
 *** ~company~ :completion:popups:
+
+    ~company-mode~ is my auto-completion mode of choice. It's a pretty big
+    package, and is highly extensible and configurable. There are company
+    backends that people have written for all sorts of things; JavaScript,
+    org-mode, Python, C++, etc. Throughout this config, company backends will
+    be added for corresponding modes.
 
  *use-package Company*
 
@@ -219,7 +242,7 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
      (company-quickhelp-mode 1))
  #+end_src
 
- Use company in minibuffer:
+ Use company in minibuffer.
 
  #+begin_src emacs-lisp
 (with-eval-after-load "company-autoloads"
@@ -295,11 +318,14 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 
 *** ~auto-complete~ :completion:popups:
 
+  ~auto-complete~ is another completion package. It's more or less dormant in my
+  configuration, but I load it here because why not.
+
  #+begin_src emacs-lisp
  (use-package auto-complete)
  #+end_src
 
-** ~guide-key~
+** ~guide-key~ 
 
   Display possible key binding completions automatically in a small pop-up
   buffer with ~guide-key~. For example, typing =C-h= will provide a small hint
@@ -325,23 +351,27 @@ Automatically color parentheses pairs different colors with rainbow-delimiters:
 #+END_SRC
 
 ** Dictionary
-*** ~dictionary~
-
-     ~dictionary~ provides a way to query offline dictionary servers for looking
-     up definitions, synonyms, etc.
+   ~dictionary~ provides a way to query offline dictionary servers for looking
+   up definitions, synonyms, etc.
 
 #+begin_src emacs-lisp
   (use-package dictionary)
 #+end_src
 
-*** ~helm-dictionary~
+   Use my ~helm-dictionary~ package. There is another package on =Melpa= called
+   =helm-dictionary=, so have to be careful with this import.
 
-     Use my helm-dictionary package. There is another package on =Melpa= called
-     =helm-dictionary=, so have to be careful with this import.
+   Make sure that helm-dictionary directory is know to Emacs load-path. If
+   this line weren't here, in the following ~use-package~ call, Emacs would look
+   for ~helm-dictionary~ in the load-path, not find it, then look to download
+   helm-dictionary from Melpa Emacs repositories (which would be the wrong
+   helm-dictionary).
 
  #+begin_src emacs-lisp
    (add-to-list 'load-path (concat lisp-dir "helm-dictionary"))
 #+end_src
+
+   Load ~helm-dictionary~
 
 #+begin_src emacs-lisp
    (use-package helm-dictionary
