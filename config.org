@@ -94,15 +94,6 @@ Start up message
     (message "Configuring general settings..."))
 #+end_src
 
-Goodies contains a lot of custom functions I've written or scavenged or
-stolen.
-
-#+begin_src emacs-lisp
-  (use-package 'dwc-goodies
-    :config
-    (global-set-key (kbd "C-c u c") 'helm-insert-color-hex))
-#+end_src
-
 This binding is just annoying, so remove it.
 
 #+begin_src emacs-lisp
