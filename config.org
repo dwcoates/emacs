@@ -4,32 +4,55 @@
   Use the following help commands liberally:
 
 1.  =C-h f=    ~describe-function~
+
    Select Emacs functions and provide a description of the selected command.
+
 2.  =C-h c=    ~describe-command~
+
    Select interactive Emacs functions ("commands") and provide a description
    of the selected command.
+
 3.  =C-h B=    ~describe-buffer~
+
    Open a buffer that describes current buffer, it's active minor modes,
    major mode, key bindings, etc.
+
 4.  =C-h m=    ~describe-mode~     
+
    Opens a buffer that enumerates active modes and information on them. 
+
 5.  =C-h M-k=  ~describe-keymap~
+
    Open a buffer that enumerates the key bindings associated with an Emacs
    major/minor mode.
+
 6.  =C-h p=    ~describe-personal-keybindings~
+
    Describe custom bindings created.
+
 7.  =C-h M-l=  ~find-function-on-key~
+
    Search through Emacs Lisp functions, and jump to the definition for the
    function selected.
+
 8.  =C-h M-f=  ~describe-file~
+
    Select files and show information about them.
+
 9.  =C-h o=    ~describe-option~
+
    Describe user variables.
+
 10. =C-h C-o=  ~describe-option-of-type~
+
    Describe user variables, but first narrow them by type.
+
 11. =C-h M-c=  ~describe-copying~
+
    Create a buffer that contains the entire GNU Public License.
+
 12. =C-h C-c=  ~describe-key-briefly~
+
     Display a small description of a key-binding's command in the minibuffer.
 
 
