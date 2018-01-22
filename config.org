@@ -1,6 +1,12 @@
 #+Title:  Emacs configuration file
 
 * Introduction
+
+  Fun facts: this Emacs configuration uses ~150 3rd-party packages, all of
+  which consist of more than 500,000 lines of lisp code.
+
+** Fundamental help commands
+
   Use the following help commands liberally:
 
 1.  =C-h f=    ~describe-function~
