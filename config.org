@@ -2,8 +2,8 @@
 
 * Introduction
 
-  Fun facts: this Emacs configuration uses ~150 3rd-party packages, all of
-  which consist of more than 500,000 lines of lisp code.
+  Fun facts: this Emacs configuration uses ~150 3rd-party packages, those
+  packages having a combined ~500,000 lines of lisp code.
 
 ** Fundamental help commands
 
@@ -37,6 +37,11 @@
    Describe custom bindings created.
 
 7.  =C-h M-l=  ~find-function-on-key~
+
+   Enter a key command, and jump to the code for the corresponding
+   command.
+
+8. =C-h C-S-f= ~find-function~
 
    Search through Emacs Lisp functions, and jump to the definition for the
    function selected.
@@ -73,6 +78,7 @@ Download a package that provides some of the above help functions.
   (use-package help-fns+) 
 
   (global-set-key (kbd "C-h p") 'describe-personal-keybindings) 
+  (global-set-key (kbd "C-h C-S-f") 'find-function) 
 #+end_src
 
 * Initialize
