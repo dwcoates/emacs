@@ -509,6 +509,8 @@ Un-prettify when symbol is just before point.
        :map helm-map
        ("C-c C-y" . helm-yank-selection-and-quit)
        ("C-i" . helm-select-action) ;; This is a big one. Use C-SPC to select entries,
+       ("C-S-p" . helm-previous-source)
+       ("C-S-n" . helm-next-source)
        ;; then C-i (or TAB) to select an action to perform on
        ;; those selected entries.
        :map helm-buffer-map
