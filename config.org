@@ -1290,20 +1290,18 @@ modes switched off. Useful when opening large files that can slow Emacs to a
 crawl.
 
 #+begin_src emacs-lisp
-(defun dired-find-file-conservatively ()
-  (interactive)
-  (let ((auto-mode-alist nil)
-        (mmode major-mode))
-    (setq-default major-mode 'fundamental-mode)
-    (dired-find-file)
-    ;; disable costly modes
-    (fundamental-mode)
-    (smartparens-mode -1)
-    (setq-default major-mode mmode)))
+  (defun dired-find-file-conservatively ()
+    (interactive)
+    (let ((auto-mode-alist nil)) ;; speeds up long lines. see https://emacs.stackexchange.com/questions/598/how-do-i-prevent-extremely-long-lines-making-emacs-slow
+      (dired-find-file)
+      ;; disable costly modes
+      (fundamental-mode)
+      (when (boundp 'smartparens-mode)
+        (smartparens-mode -1))
+      (setq-local bidi-display-reordering nil)))
 
-(define-key dired-mode-map (kbd "S-<return>") 'dired-find-file-conservatively)
+  (define-key dired-mode-map (kbd "S-<return>") 'dired-find-file-conservatively)
 #+end_src
-
 
 ** Selection
 *** ~ace-window~ :jump:
