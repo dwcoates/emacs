@@ -540,6 +540,8 @@ Un-prettify when symbol is just before point.
       (set-face-attribute 'helm-candidate-number nil 
                           :background "salmon2" 
                           :foreground "black")
+      (set-face-attribute 'helm-source-header nil
+                          :foreground "#ff6347")
       :diminish 'helm-mode)
   #+END_SRC
 
