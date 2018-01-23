@@ -23,7 +23,7 @@
    Open a buffer that describes current buffer, it's active minor modes,
    major mode, key bindings, etc.
 
-4.  =C-h m=    ~describe-mode~     
+4.  =C-h m=    ~helm-describe-modes~     
 
    Opens a buffer that enumerates active modes and information on them. 
 
@@ -79,6 +79,7 @@ Download a package that provides some of the above help functions.
 
   (global-set-key (kbd "C-h p") 'describe-personal-keybindings) 
   (global-set-key (kbd "C-h C-S-f") 'find-function) 
+  (global-set-key (kbd "C-h m") 'helm-describe-modes)
 #+end_src
 
 * Initialize
