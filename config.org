@@ -2762,6 +2762,10 @@ Comment out a line:
  Replace the normal binding (which is set to ~python-shell-send-file~) with this
  improved function.
 
+#+begin_src emacs-lisp
+  (define-key python-mode-map (kbd "C-c C-c") 'python-shell-send-code-and-step)
+#+end_src
+
 *** ~py-autopep8~
 
 #+begin_src emacs-lisp
