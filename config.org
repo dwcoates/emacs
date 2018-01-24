@@ -897,6 +897,7 @@ Bind =C-x C-x= to ~avy-pop-mark~
 (global-set-key (kbd "C-x C-x") 'avy-pop-mark)
 #+end_src
 
+avy functions for modifying avy searching (copy, execute code, narrowing, etc)
 
 #+begin_src emacs-lisp
 (defun avy-action-copy-and-yank (pt)
@@ -922,6 +923,27 @@ Bind =C-x C-x= to ~avy-pop-mark~
      (save-excursion (avy-action-goto pt)
                      (end-of-line)
                      (point))))
+#+end_src
+
+avy function for confining search to current paragraph.
+
+#+begin_src emacs-lisp
+(defun avy-goto-char-in-paragraph (char)
+  "Jump to the currently visible CHAR in current paragraph."
+  (interactive (list (read-char "char: " t)))
+  (let (beg end)
+    (save-excursion
+      (forward-paragraph)
+      (setq end (point))
+      (backward-paragraph)
+      (setq beg (point)))
+    (avy-with avy-goto-char
+              (avy--generic-jump
+               (regexp-quote (string char))
+               nil
+               avy-style
+               beg
+               end))))
 #+end_src
 
 *** ~ace~                                                              :jump:
