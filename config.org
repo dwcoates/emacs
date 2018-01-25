@@ -1070,33 +1070,44 @@ Isearch repeat...
 Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
 
 #+begin_src emacs-lisp
-(require 'rgrep)
+  (require 'rgrep)
 
-(eval-after-load "grep"
-  '(defadvice grep-mode (after grep-register-match-positions activate)
-     (add-hook 'compilation-filter-hook 'grep-register-match-positions nil t)))
+  (eval-after-load "grep"
+    '(defadvice grep-mode (after grep-register-match-positions activate)
+       (add-hook 'compilation-filter-hook 'grep-register-match-positions nil t)))
 
-(eval-after-load "multiple-cursors"
-  '(add-to-list 'mc--default-cmds-to-run-once 'mc/add-cursors-to-all-matches))
+  (eval-after-load "multiple-cursors"
+    '(add-to-list 'mc--default-cmds-to-run-once 'mc/add-cursors-to-all-matches))
 
-(eval-after-load "wgrep"
-  '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
+  (eval-after-load "wgrep"
+    '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
 
-(eval-after-load "grep"
-  '(progn
-     ;; Don't recurse into some directories
-     (add-to-list 'grep-find-ignored-directories "target")
-     (add-to-list 'grep-find-ignored-directories "node_modules")
-     (add-to-list 'grep-find-ignored-directories "vendor")
+  (eval-after-load "grep"
+    '(progn
+       ;; Don't recurse into some directories
+       (add-to-list 'grep-find-ignored-directories "target")
+       (add-to-list 'grep-find-ignored-directories "node_modules")
+       (add-to-list 'grep-find-ignored-directories "vendor")
 
-     ;; Add custom keybindings
-     (define-key grep-mode-map "q" 'rgrep-quit-window)
-     (define-key grep-mode-map (kbd "C-<return>") 'rgrep-goto-file-and-close-rgrep)
-     (define-key grep-mode-map (kbd "C-x C-s") 'wgrep-save-all-buffers)
+       ;; Add custom keybindings
+       (define-key grep-mode-map "q" 'rgrep-quit-window)
+       (define-key grep-mode-map (kbd "C-<return>") 'rgrep-goto-file-and-close-rgrep)
+       (define-key grep-mode-map (kbd "C-x C-s") 'wgrep-save-all-buffers)
 
-     ;; Use same keybinding as occur
-     (setq wgrep-enable-key "e")))
+       ;; Use same keybinding as occur
+       (setq wgrep-enable-key "e")))
+#+end_src
 
+Keybinding:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c g R") 'rgrep)
+#+end_src
+
+*** ~counsel-git-grep~ :counsel:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c g r") 'counsel-git-grep)
 #+end_src
 
 ** Re-centering
