@@ -1302,6 +1302,12 @@ screen for minute.
                                 key))
 #+end_src
 
+Use ~helm-locate~ to recursively find files.
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x M-f") 'helm-locate)
+#+end_src
+
 *** dired
 
 #+begin_src emacs-lisp
