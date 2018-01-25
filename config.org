@@ -391,11 +391,13 @@ Un-prettify when symbol is just before point.
                                          "C-x v" ;; vc
                                          "C-x 8" ;; special characters
                                          "C-c 5" ;; vimish-fold
+                                         "C-c"                                         
                                          "C-h"   ;; help 
                                          "C-z" 
                                          "C-c e" ;; ??
                                          "C-c C-v" ;; org-babel
-                                         "C-c o")) ;; switch to specific files
+                                         "C-c o"
+                                         "C-c ;")) ;; switch to specific files
     (setq guide-key/recursive-key-sequence-flag t)
     (setq guide-key/popup-window-position 'bottom)
     :diminish 'guide-key-mode)
