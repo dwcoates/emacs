@@ -2655,7 +2655,7 @@ Comment out a line:
  #+end_src
 
  #+begin_src emacs-lisp
-   (defvar python-comint-output-limit 7000)
+   (defvar python-comint-output-limit 2000)
 
    (defun python-truncate-comint-output (string)
      "Does not truncate STRING currently, in order to avoid dangling quotes and parens."
