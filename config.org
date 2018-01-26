@@ -2655,22 +2655,20 @@ Comment out a line:
  #+end_src
 
  #+begin_src emacs-lisp
-   (defvar python-comint-output-limit 2000)
+   (defvar python-comint-output-limit 4100)
 
    (defun python-truncate-comint-output (string)
      "Does not truncate STRING currently, in order to avoid dangling quotes and parens."
-     (let* ((line-lengths (mapcar 'length (split-string string "\n")))
+     (let* ((line-lengths (mapcar 'length (split-string (substring-no-properties string) "\n")))
             (line-max-size 120)
             ;; Avoid treating mulitline things like DataFrame output as junk to be removed
-            (size (apply '+ (mapcar
-                             (lambda (l) (if (< l line-max-size) (* 0.4 l) l))
-                             line-lengths))))
+            (size (apply '+ (mapcar (lambda (l) (if (< l line-max-size) (* 0.4 l) l))
+                                    line-lengths))))
        (if (and (>  size python-comint-output-limit)
                 (equal major-mode 'inferior-python-mode))
            (format-message
             "\nOutput character length (%s) exceeds character limit `python-comint-output-limit` (%s).\n"
-            (length string)
-            python-comint-output-limit)
+            (length string) python-comint-output-limit)
          string)))
 
    (add-hook 'comint-preoutput-filter-functions 'python-truncate-comint-output)
