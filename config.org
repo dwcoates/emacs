@@ -899,13 +899,34 @@ Bind =C-x C-x= to ~avy-pop-mark~
 (global-set-key (kbd "C-x C-x") 'avy-pop-mark)
 #+end_src
 
+Remove whitespace when copying:
+
+#+begin_src emacs-lisp
+  (defun avy-action-copy (pt)
+    "Copy sexp starting on PT."
+    (save-excursion
+      (let (str)
+        (goto-char pt)
+        (avy-forward-item)
+        (setq str ( (buffer-substring pt (point))))
+        (when (fboundp 's-trim)
+          (setq str (s-trim str)))
+        (kill-new str)
+        (message "Copied: %s" str)))
+    (let ((dat (ring-ref avy-ring 0)))
+      (select-frame-set-input-focus
+       (window-frame (cdr dat)))
+      (select-window (cdr dat))
+      (goto-char (car dat))))
+#+end_src
+
 avy functions for modifying avy searching (copy, execute code, narrowing, etc)
 
 #+begin_src emacs-lisp
-(defun avy-action-copy-and-yank (pt)
-  "Copy and yank sexp starting on PT."
-  (avy-action-copy pt)
-  (yank))
+  (defun avy-action-copy-and-yank (pt)
+    "Copy and yank sexp starting on PT."
+    (avy-action-copy pt)
+    (yank))
 #+end_src
 
 #+begin_src emacs-lisp
