@@ -4751,6 +4751,16 @@ Track eshell sessions:
                     'eshell-swap-prompt)))
 #+end_src
 
+Make sure ~company-capf~ completion backend is at the front of the
+list. Otherwise, there is a lot of whacky behavior with asterisks.
+
+#+begin_src emacs-lisp
+  (when (boundp 'company-mode)
+    (setq company-backends (cons "company-capf" (remove "company-capf" company-backends))))
+#+end_src
+
+A specialized switch to shell function. Lets you switch to shell for current
+directory, and if one doesn't exit, it creates it.
 
 #+begin_src emacs-lisp
   (defvar eshell-previous-buffer nil)
