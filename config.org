@@ -4574,6 +4574,40 @@ Sound command is set to =play= which is acquired on Ubuntu Linux with ~sudo apt 
                                                            float:right}}</style>")
 #+end_src
 
+*** ~org-latex-export-region-to-pdf~
+
+#+begin_src emacs-lisp
+  (defun org-latex-export-region-to-pdf (beg end &optional no-declutter)
+    "Export the current region to pdf, prompting for output filename.
+
+    This can be done by narrowing region, but it's a bit slow, and
+    the output is ugly and cluttered.  More importantly, it also
+    writes the pdf file for the region using the name of the
+    original file, which is obviously annoying.
+
+    with NO-DECLUTTER non-nil, don't declutter the pdf output."
+    (interactive (if (region-active-p)
+                     (list (region-beginning)
+                           (region-end)
+                           (or current-prefix-arg no-declutter))
+                   (user-error "No active region to export.")))
+    (when (not (equal major-mode 'org-mode))
+      (user-error "Not in an org-mode context."))
+    (let ((buf (make-temp-name "temp"))
+          (str (buffer-substring-no-properties beg end)))
+      (switch-to-buffer buf)
+      (org-mode)
+      (when (not arg)
+        (insert "#+OPTIONS: toc:nil num:nil prop:nil tags:nil title:nil\n\n"))
+      (insert str)
+      (org-forward-heading-same-level 1 t)
+      (let ((cur-level (org-current-level))) ;
+        (loop repeat (/ (- cur-level 1) (org-level-increment))
+              do (org-promote-subtree)))
+      (org-latex-export-to-pdf)
+      (kill-buffer buf)))
+#+end_src
+
 ** Functions
 
 #+begin_src emacs-lisp
