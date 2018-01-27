@@ -397,6 +397,7 @@ Un-prettify when symbol is just before point.
                                          "C-c e" ;; ??
                                          "C-c C-v" ;; org-babel
                                          "C-c o"
+                                         "M-s"
                                          "C-c ;")) ;; switch to specific files
     (setq guide-key/recursive-key-sequence-flag t)
     (setq guide-key/popup-window-position 'bottom)
