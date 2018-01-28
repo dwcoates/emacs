@@ -4857,6 +4857,22 @@ directory, and if one doesn't exit, it creates it.
     (re-search-forward eshell-prompt-regexp nil t (or n -1)))
 #+end_src
 
+Make ~eshell~ cache passwords
+
+#+begin_src emacs-lisp
+  (defun eshell-sudo-hook () 
+    (require 'em-tramp)
+    (setq eshell-prefer-lisp-functions t)
+    (let ((proc (eshell-interactive-process)))
+      (if proc
+          (process-send-string proc  "alias sudo 'eshell/sudo $*'")
+        (error "eshell sudo hook called without existing eshell process.  Possibly a problem with order of hooks.q")))
+    (setq password-cache t) 
+    (setq password-cache-expiry 3600))
+
+  (add-hook eshell-mode-hook eshell-sudo-hook)
+#+end_src
+ 
 ** Edit With Emacs (Google Chrome extension)
 
 #+BEGIN_SRC emacs-lisp
