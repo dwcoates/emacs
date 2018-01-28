@@ -1194,7 +1194,7 @@ Add a more convenient ~other-frame~ binding
 
 #+begin_src emacs-lisp
   (bind-keys*
-   ("M-o" . other-frame))
+   ("M-o" . other-window))
 #+end_src
 
 #+begin_src emacs-lisp
