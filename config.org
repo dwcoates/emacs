@@ -3735,10 +3735,8 @@ Load =atchka-org-theme=
   (add-to-list 'load-path (concat lisp-dir "atchka-org"))
   (add-to-list 'load-path (concat lisp-dir "atchka-org-blocks"))
 
-  (require 'atchka-org-blocks)
-  (atchka-org-minor-mode t)
-
-  (when (require 'atchka-org-theme nil t)
+  (when (and window-system (require 'atchka-org-theme nil t))
+    (atchka-org-minor-mode t)
     (load-theme 'atchka-org))
 #+end_src
 
