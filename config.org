@@ -4870,7 +4870,7 @@ Make ~eshell~ cache passwords
     (setq password-cache t) 
     (setq password-cache-expiry 3600))
 
-  (add-hook eshell-mode-hook eshell-sudo-hook)
+  (add-hook 'eshell-mode-hook 'eshell-sudo-hook)
 #+end_src
  
 ** Edit With Emacs (Google Chrome extension)
