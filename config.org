@@ -986,6 +986,13 @@ avy function for confining search to current paragraph.
        ("M-S-z" . ace-jump-zap-up-to-char)))
   #+END_SRC
 
+**** ~ace-link~
+
+     #+begin_src emacs-lisp
+       (use-package ace-link
+         (ace-link-setup-default))
+     #+end_src
+
 *** ~jump-char~                                                        :jump:
 
 #+begin_src emacs-lisp
