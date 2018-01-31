@@ -1180,6 +1180,41 @@ Keybinding:
   (add-hook 'occur-mode-find-occurrence-hook 'recenter)
 #+end_src
 
+** ~special-tab~
+
+#+begin_src emacs-lisp
+  (defun special-tab ()
+    "Wrapper for tab key invocation. 
+
+         If point is just before a close delimiter, skip forward until 
+         there is no closed delimiter in front of point. Otherwise, invoke 
+         normal tab command for current mode.
+
+         Must be bound to <tab> using bind-key* macro from bind-key package.
+
+         Note, this function will not be called if `override-global-mode' is
+         turned off."
+    (interactive)
+    (defun next-char ()
+      (and (not (equal (point) (point-max)))
+           (string (char-after (point)))))
+    (let ((char (next-char))
+          (delims '("'" "\"" ")" "]")))
+      (if (and char (member char delims))
+          (progn (forward-char 1)
+                 (while (and
+                         (setq char (next-char))
+                         (member char delims))
+                   (forward-char 1)))
+        (override-global-mode -1)
+        (call-interactively (key-binding (kbd "TAB")))
+        (override-global-mode 1))))
+
+  (if (macrop 'bind-key*)        
+      (bind-key* (kbd "<tab>") 'special-tab)
+    (user-error "Must have bind-key from use-package.el to use special-tab function."))
+#+end_src
+
 * Windowing
 
 #+begin_src emacs-lisp
