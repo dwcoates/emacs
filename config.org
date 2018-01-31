@@ -2380,20 +2380,16 @@ Comment out a line:
 *** add-file-name-to-clipboard
 
 #+begin_src emacs-lisp
-    (defun add-file-name-to-clipboard ()
-      "Put the current file name on the clipboard"
-      (interactive)
-      (let ((filename (if (equal major-mode 'dired,-mode)
-                          default-directory
-                        (buffer-file-name))))
-        (message
-         (if filename
-             (with-temp-buffer
-               (insert filename)
-               (clipboard-kill-region (point-min) (point-max))))
-           (kill-new default-directory))))
+  (defun add-file-name-to-clipboard ()
+    "Put the current file name on the clipboard"
+    (interactive)
+    (let ((filename
+           (if (equal major-mode 'dired-mode)
+               (file-truename (dired-file-name-at-point))
+             (buffer-file-name))))
+      (message "Copied \'%s\' to clipboard" (kill-new filename))))
 
-    (global-set-key (kbd "C-x f") 'add-file-name-to-clipboard)
+  (global-set-key (kbd "C-x f") 'add-file-name-to-clipboard)
 #+end_src
 
 *** duplicate-line
