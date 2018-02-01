@@ -1418,10 +1418,16 @@ crawl.
    (defun my/other-window ()
      (other-window 1))
 
+   (defun ace-window-all-frames ()
+     (interactive)
+     (let ((aw-scope 'global))
+       (call-interactively 'ace-window)))
+
    (use-package ace-window
      :commands ace-window
      :bind*
-     (("C-o" . ace-window))
+     (("C-o" . ace-window)
+      ("M-o" . ace-window-all-frames))
      :config
      (setq aw-scope 'frame
            aw-background t
