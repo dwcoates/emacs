@@ -404,6 +404,12 @@ Un-prettify when symbol is just before point.
     :diminish 'guide-key-mode)
 #+END_SRC
 
+** ~free-keys~
+
+#+begin_src emacs-lisp
+  (use-package free-keys)
+#+end_src
+
 ** Dictionary
    ~dictionary~ provides a way to query offline dictionary servers for looking
    up definitions, synonyms, etc.
