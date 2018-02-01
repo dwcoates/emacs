@@ -1099,12 +1099,12 @@ avy functions for modifying avy searching (copy, execute code, narrowing, etc)
 
 #+begin_src emacs-lisp
   (defun avy-action-execute-code (pt)
-    (run-python)
-    (python-shell-send-region
-     (save-excursion (beginning-of-line) (point))
-     (save-excursion (avy-action-goto pt)
-                     (end-of-line)
-                     (point))))
+    (let* ((string (progn (avy-action-copy pt) 
+                          (substring-no-properties (pop kill-ring)))))
+      (if (functionp 's-trim)
+          (setq string (s-trim string))
+        (warn "No s-trim function found, avy-action-execute-code may work poorly with Python code."))
+      (python-send-string string)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1346,36 +1346,36 @@ Keybinding:
 ** ~special-tab~
 
 #+begin_src emacs-lisp
-  (defun special-tab ()
-    "Wrapper for tab key invocation. 
+    (defvar special-tab-last-command nil)
 
-         If point is just before a close delimiter, skip forward until 
-         there is no closed delimiter in front of point. Otherwise, invoke 
-         normal tab command for current mode.
+    (defun special-tab ()
+      "Wrapper for tab key invocation. 
 
-         Must be bound to <tab> using bind-key* macro from bind-key package.
+           If point is just before a close delimiter, skip forward until 
+           there is no closed delimiter in front of point. Otherwise, invoke 
+           normal tab command for current mode.
 
-         Note, this function will not be called if `override-global-mode' is
-         turned off."
-    (interactive)
-    (defun next-char ()
-      (and (not (equal (point) (point-max)))
-           (string (char-after (point)))))
-    (let ((char (next-char))
-          (delims '("'" "\"" ")" "]")))
-      (if (and char (member char delims))
-          (progn (forward-char 1)
-                 (while (and
-                         (setq char (next-char))
-                         (member char delims))
-                   (forward-char 1)))
-        (override-global-mode -1)
-        (call-interactively (key-binding (kbd "TAB")))
-        (override-global-mode 1))))
+           Must be bound to <tab> using bind-key* macro from bind-key package.
 
-  (if (macrop 'bind-key*)        
-      (bind-key* (kbd "<tab>") 'special-tab)
-    (user-error "Must have bind-key from use-package.el to use special-tab function."))
+           Note, this function will not be called if `override-global-mode' is
+           turned off."
+      (interactive)
+      (defun next-char-delims (delims)
+        (let ((char (and (not (equal (point) (point-max)))
+                         (string (char-after (point))))))
+          (when char (member char delims))))
+      (let ((open '("'" "\"" ")" "]"))
+            (closed '("'" "\"" "(" "[")))
+        (if (next-char-delims open)
+            (progn (forward-char 1)
+                   (while (next-char-delims open)
+                     (forward-char 1)))
+          (run-with-timer 0 nil (lambda () (setq last-command (key-binding (kbd "TAB")))))
+          (call-interactively (key-binding (kbd "TAB"))))))
+
+    (if (macrop 'bind-key*)        
+        (bind-key* (kbd "<tab>") 'special-tab)
+      (user-error "Must have bind-key from use-package.el to use special-tab function."))
 #+end_src
 
 * Windowing
