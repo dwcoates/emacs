@@ -50,3 +50,29 @@
  ("C-d" . sp-delete-sexp)
  ("<backspace>" . sp-backward-delete-symbol)
  ("<C-backspace>" . sp-backward-kill-sexp))
+
+
+(when (macrop 'defhydra)
+  (defhydra hydra-org-agenda-view (:hint none)
+   "
+_q_: barf backwards   _f_: forward sexp
+_w_: barf forwards    _b_: backward sexp
+_e_: slurp backwards  _t_: transpose sexp
+_r_: slurp forwards   _n_: next line
+_y_: yank             _p_: previous line"
+   ("SPC" org-agenda-reset-view)
+   ("q" sp-backward-barf-sexp)
+   ("w" sp-forward-barf-sexp)
+   ("e" sp-backward-slurp-sexp)
+   ("r" sp-forward-slurp-sexp)
+   ("q" nil)
+   ("r" nil)
+   ("y" yank)
+   ("t" sp-transpose-sexp)
+   ("f" sp-forward-sexp)
+   ("b" sp-backward-sexp)
+   ("C-p" sp-previous-sexp)
+   ("C-n" sp-next-sexp)
+   ("p" previous-line)
+   ("n" next-line)
+   ("k" sp-kill-sexp)))
