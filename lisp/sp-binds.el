@@ -53,7 +53,7 @@
 
 
 (when (macrop 'defhydra)
-  (defhydra hydra-org-agenda-view (:hint none)
+  (defhydra hydra-smartparens (:hint none)
    "
 _q_: barf backwards   _f_: forward sexp
 _w_: barf forwards    _b_: backward sexp
@@ -63,9 +63,8 @@ _y_: yank             _p_: previous line"
    ("SPC" org-agenda-reset-view)
    ("q" sp-backward-barf-sexp)
    ("w" sp-forward-barf-sexp)
-   ("e" sp-backward-slurp-sexp)
-   ("r" sp-forward-slurp-sexp)
-   ("q" nil)
+   ("u" sp-backward-slurp-sexp)
+   ("i" sp-forward-slurp-sexp)
    ("r" nil)
    ("y" yank)
    ("t" sp-transpose-sexp)
@@ -73,6 +72,15 @@ _y_: yank             _p_: previous line"
    ("b" sp-backward-sexp)
    ("C-p" sp-previous-sexp)
    ("C-n" sp-next-sexp)
+   ("a" sp-beginning-of-sexp)
+   ("e" sp-end-of-sexp)
+   ("C-f" sp-forward-parallel-sexp)
+   ("C-b" sp-backward-parallel-sexp)
    ("p" previous-line)
    ("n" next-line)
    ("k" sp-kill-sexp)))
+
+(let ((map (if (macrop 'bind-key*)
+               override-global-map
+             global-map)))
+  (define-key map (kbd "M-j") 'hydra-smartparens/body))
