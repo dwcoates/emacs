@@ -46,7 +46,7 @@
  ("C-k"   . sp-backward-kill-sexp)
  ("C-w" . sp-copy-sexp)
  ;; deleting
- ("d" . sp-delete-)
+ ("d" . sp-delete-word)
  ("C-d" . sp-delete-sexp)
- ("<C-backspace>" . sp-backward-delete-symbol)
- ("<M-backspace>" . sp-backward-kill-sexp))
+ ("<backspace>" . sp-backward-delete-symbol)
+ ("<C-backspace>" . sp-backward-kill-sexp))
