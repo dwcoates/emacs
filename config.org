@@ -394,6 +394,7 @@ Un-prettify when symbol is just before point.
                                          "C-c"                                         
                                          "C-h"   ;; help 
                                          "C-z" 
+                                         "C-c ." 
                                          "C-c e" ;; ??
                                          "C-c C-v" ;; org-babel
                                          "C-c o"
