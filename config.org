@@ -1439,13 +1439,6 @@ General navigation bindings:
 Key bindings for other files:
 
 #+begin_src emacs-lisp
-(global-set-key (kbd "C-c o f e")
-                (lambda ()
-                  (interactive)
-                  (dwc-find-file-other-frame "~/.emacs.d/init.el")
-                  (split-window-horizontally)
-                  (windmove-right)
-                  (find-file "~/.emacs.d/custom/")))
 (global-set-key (kbd "C-c o f C-e")
                 (lambda ()
                   (interactive)
@@ -1597,23 +1590,6 @@ crawl.
                                (?i delete-other-windows " Ace - Maximize Window")
                                (?o my/other-window " Ace - Other window")))
      :diminish 'ace-window)
- #+END_SRC
-
-*** ~windmove~ :direction:
-
- Navigate windows directionally with wind-move:
-
- #+BEGIN_SRC emacs-lisp
-   (use-package windmove
-     :commands
-     ;; Here because alternative commands (key chords) do not trigger package autoload.
-     (windmove-left windmove-right windmove-up windmove-down)
-     :init
-     (bind-keys
-      ("C-x w j" . windmove-left)
-      ("C-x w l" . windmove-right)
-      ("C-x w i" . windmove-up)
-      ("C-x w k" . windmove-down)))
  #+END_SRC
 
 *** ~ace-popup-menu~ :select:
