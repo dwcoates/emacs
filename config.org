@@ -3152,7 +3152,7 @@ not yet support emacs due to a jupyter bug.
 #+begin_src emacs-lisp
   (add-to-list 'load-path "~/workspace/lpy")
   (use-package worf)
-  (use-package cc-mode)
+  (require 'cc-mode) ;; part of GNU Emacs.
   (when (require 'lpy nil t)
      (add-hook 'python-mode-hook 'lpy-mode))
 #+end_src
