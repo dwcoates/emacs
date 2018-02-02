@@ -369,7 +369,6 @@ Un-prettify when symbol is just before point.
 
 #+begin_src emacs-lisp
   (use-package flyspell
-    :config
     :diminish 'flyspell-mode)
 #+end_src
 
