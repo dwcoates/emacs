@@ -3681,15 +3681,15 @@ My clojure-mode hook
 
 ** R
 
-This is not downloaded via use-package and the package manager because
-I was having some problems with it throwing errors.
+   This is not downloaded via use-package and the package manager because
+   I was having some problems with it throwing errors.
+
 #+begin_src emacs-lisp
   (add-to-list 'load-path "~/ess/lisp/")
   (when (load "ess-site" t)
     (defun my/ess-mode-hook-funct ()
       (smartparens-mode t))
     (add-hook 'ess-mode-hook 'my/ess-mode-hook-funct))
-    
 #+end_src
 
 Don't use that annoying indentation style with the comments, please
