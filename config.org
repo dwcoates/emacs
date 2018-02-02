@@ -1155,6 +1155,7 @@ avy function for confining search to current paragraph.
 
      #+begin_src emacs-lisp
        (use-package ace-link
+         :config
          (ace-link-setup-default))
      #+end_src
 
