@@ -3180,6 +3180,15 @@ not yet support emacs due to a jupyter bug.
  #+end_src
  
 ** JavaScript
+
+Add javascript to org-babel languages.
+
+#+begin_src emacs-lisp
+(org-babel-do-load-languages
+   'org-babel-load-languages
+   '((js . t)))
+#+end_src
+
 *** ~js-comint~
 
 #+begin_src emacs-lisp
