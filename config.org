@@ -664,6 +664,8 @@ Un-prettify when symbol is just before point.
     (use-package helm
       :init
       (helm-mode 1)
+      :bind
+      (("C-x C-SPC" . helm-mark-ring))
       :bind*
       (("M-y" . helm-show-kill-ring)
        ("M-X" . helm-M-x)
