@@ -546,11 +546,12 @@ Un-prettify when symbol is just before point.
                                          "C-x 4" ;; file finding
                                          "C-x v" ;; vc
                                          "C-x 8" ;; special characters
+                                         "C-x w"
                                          "C-c 5" ;; vimish-fold
                                          "C-c"                                         
                                          "C-h"   ;; help 
                                          "C-z" 
-                                         "C-c ." 
+                                         "C-c ."                                         
                                          "C-c e" ;; ??
                                          "C-c C-v" ;; org-babel
                                          "C-c o"
