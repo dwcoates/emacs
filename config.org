@@ -1402,7 +1402,7 @@ Remaps the other-window command. In general, commands with consecutive
   (global-set-key (kbd "C-x o") 'other-window)
   (global-set-key (kbd "C-x O") 'other-frame)
   (global-set-key (kbd "C-c b") 'switch-to-other-buffer)
-  (global-set-key (kbd "C-x w t") 'transpose-windows)
+  (global-set-key (kbd "C-x M-t") 'transpose-windows)
 #+end_src
 
 Quickly move the cursor to the first instance of a character with iy-go-to-char:
