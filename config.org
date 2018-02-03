@@ -1383,6 +1383,12 @@ Keybinding:
     (message "Configuring window/buffer/frame management..."))
 #+end_src
 
+** windmove
+
+#+begin_src emacs-lisp
+(use-package windmove)
+#+end_src
+
 ** Basic Settings
 
 Add a more convenient ~other-frame~ binding
