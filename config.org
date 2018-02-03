@@ -2010,7 +2010,7 @@ when backwards deleting a word, it will stop at the nearest capital letter.
      Activate whitespace-mode to view all whitespace characters
 
  #+BEGIN_SRC emacs-lisp
- (global-set-key (kbd "C-c w") 'whitespace-mode)
+ (global-set-key (kbd "C-x w") 'whitespace-mode)
  #+END_SRC
 
      Delete region command is useful sometimes where <delete> doesnt work
