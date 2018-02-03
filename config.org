@@ -695,7 +695,7 @@ Un-prettify when symbol is just before point.
        helm-ff-file-name-history-use-recentf nil
        helm-move-to-line-cycle-in-source     t 
        helm-buffers-fuzzy-matching           nil   
-       helm-autoresize-max-height       25 ;;  Helm size. Don't want it to be too
+       helm-autoresize-max-height       10 ;;  Helm size. Don't want it to be too
                                            ;;  distracting.
        helm-autoresize-min-height       3)
       ;;
@@ -1461,6 +1461,46 @@ Key bindings for other files:
                 (lambda () (interactive) (switch-to-buffer "*Messages*")))
 (global-set-key (kbd "C-c o s")
                 (lambda () (interactive) (switch-to-buffer "*Scratch*")))
+#+end_src
+
+Hydra bindings
+
+#+begin_src emacs-lisp
+    (defhydra hydra-windows (:hint none)
+      "
+     Split: _v_ert _x_:horz
+    Delete: _o_nly  _da_ce  _dw_indow  _db_uffer  _df_rame
+      Move: _s_wap
+    Frames: _f_rame new  _df_ delete
+      Misc: _m_ark _a_ce  _u_ndo  _r_edo
+  H Adjust: _zs_hrink _ze_nlarge
+  V Adjust: _vs_shrink _ve_nlarge"
+      ("vs"  shrink-window)                 ; vertical
+      ("ve"  enlarge-window)                ; vertical
+      ("zs"  shrink-window-horizontally)
+      ("ze"  enlarge-window-horizontally)
+      ;; windmove
+      ("h" windmove-left)
+      ("j" windmove-down)
+      ("k" windmove-up)
+      ("l" windmove-right)
+      ("H" hydra-move-splitter-left)
+      ("J" hydra-move-splitter-down)
+      ("K" hydra-move-splitter-up)
+      ("L" hydra-move-splitter-right)
+      ;; undo/redo
+      ("u" winner-undo)
+      ("r" winner-redo) ;;fixme, not working?
+      ("o" delete-other-windows :exit t)
+      ("a" ace-window :exit t)
+      ("f" find-file :exit t)
+      ("s" ace-swap-window)
+      ("da" ace-delete-window)
+      ("dw" delete-window)
+      ("db" kill-this-buffer)
+      ("df" delete-frame :exit t))
+
+(global-set-key (kbd "C-S-o") 'hydra-windows/body)
 #+end_src
 
 ** General Appearance
