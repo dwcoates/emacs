@@ -3429,7 +3429,7 @@ Enable Emacs Development Environment (EDE) only in C/C++:
   (global-ede-mode)
 #+END_SRC
 
-Configure clang executable
+Configure Clang executable
 
 #+begin_src emacs-lisp
   (setq company-clang-executable "clang++-3.5")
