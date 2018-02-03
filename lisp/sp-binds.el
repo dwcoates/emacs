@@ -8,7 +8,9 @@
  ;; wrap/unwrap/rewrap
  ("M-[" . sp-backward-unwrap-sexp)
  ("M-]" . sp-unwrap-sexp)
- ("M-s-[" . sp-rewrap-sexp)
+ ("M-s-[" . sp-rewrap-sexp))
+
+(bind-keys*
  :prefix "C-j"
  :prefix-map smartparens-mode-map
  ;; wrapping
