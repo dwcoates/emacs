@@ -181,8 +181,8 @@ Make ~emacs-lisp-mode~ the default major mode.
  #+begin_src emacs-lisp
    (defhydra hydra-zoom (global-map "<f2>")
      "For zooming buffer text."
-     ("g" text-scale-increase "in")
-     ("l" text-scale-decrease "out"))
+     ("i" text-scale-increase "in")
+     ("o" text-scale-decrease "out"))
  #+end_src
 
 Hydra solution for navigating ~buffer-menu~.
@@ -1463,44 +1463,92 @@ Key bindings for other files:
                 (lambda () (interactive) (switch-to-buffer "*Scratch*")))
 #+end_src
 
-Hydra bindings
+*** Hydra bindings
 
 #+begin_src emacs-lisp
-    (defhydra hydra-windows (:hint none)
-      "
-     Split: _v_ert _x_:horz
-    Delete: _o_nly  _da_ce  _dw_indow  _db_uffer  _df_rame
-      Move: _s_wap
-    Frames: _f_rame new  _df_ delete
-      Misc: _m_ark _a_ce  _u_ndo  _r_edo
-  H Adjust: _zs_hrink _ze_nlarge
-  V Adjust: _vs_shrink _ve_nlarge"
-      ("vs"  shrink-window)                 ; vertical
-      ("ve"  enlarge-window)                ; vertical
-      ("zs"  shrink-window-horizontally)
-      ("ze"  enlarge-window-horizontally)
-      ;; windmove
-      ("h" windmove-left)
-      ("j" windmove-down)
-      ("k" windmove-up)
-      ("l" windmove-right)
-      ("H" hydra-move-splitter-left)
-      ("J" hydra-move-splitter-down)
-      ("K" hydra-move-splitter-up)
-      ("L" hydra-move-splitter-right)
-      ;; undo/redo
-      ("u" winner-undo)
-      ("r" winner-redo) ;;fixme, not working?
-      ("o" delete-other-windows :exit t)
-      ("a" ace-window :exit t)
-      ("f" find-file :exit t)
-      ("s" ace-swap-window)
-      ("da" ace-delete-window)
-      ("dw" delete-window)
-      ("db" kill-this-buffer)
-      ("df" delete-frame :exit t))
+      (defhydra hydra-windows (global-map "C-S-o" :hint none)
+        "
+      Delete: _o_nly  _da_ce  _dw_indow  _db_uffer  _df_rame
+        Move: _s_wap, _b_alance
+      Frames: _f_rame new  _df_ delete
+        Misc: _a_ce  _u_ndo  _r_edo
+    Windmove: _h_, _j_, _k_, _l_
+      Adjust: _H_, _J_, _K_, _L_"
+        ;; Windmove
+        ("h" windmove-left)
+        ("j" windmove-down)
+        ("k" windmove-up)
+        ("l" windmove-right)
+        ;; Adjust
+        ("H" hydra-move-splitter-left)
+        ("J" hydra-move-splitter-down)
+        ("K" hydra-move-splitter-up)
+        ("L" hydra-move-splitter-right)
+        ;; undo/redo
+        ("u" winner-undo)
+        ("r" winner-redo) ;;fixme, not working?
+        ("o" delete-other-windows :exit t)
+        ("b" balance-windows)
+        ("a" ace-window :exit t)
+        ("f" find-file :exit t)
+        ("s" ace-swap-window)
+        ("da" ace-delete-window)
+        ("dw" delete-window)
+        ("db" kill-this-buffer)
+        ("df" delete-frame :exit t))
 
-(global-set-key (kbd "C-S-o") 'hydra-windows/body)
+  (defhydra hydra-splitter (global-map "C-M-s")
+      "splitter"
+      ("h" hydra-move-splitter-left)
+      ("j" hydra-move-splitter-down)
+      ("k" hydra-move-splitter-up)
+      ("l" hydra-move-splitter-right))
+#+end_src
+
+**** Helpers
+
+#+begin_src emacs-lisp
+  (defun hydra-move-splitter-left (arg)
+    "Move window splitter left."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'right))
+        (shrink-window-horizontally arg)
+      (enlarge-window-horizontally arg)))
+
+  (defun hydra-move-splitter-right (arg)
+    "Move window splitter right."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'right))
+        (enlarge-window-horizontally arg)
+      (shrink-window-horizontally arg)))
+
+  (defun hydra-move-splitter-up (arg)
+    "Move window splitter up."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'up))
+        (enlarge-window arg)
+      (shrink-window arg)))
+
+  (defun hydra-move-splitter-down (arg)
+    "Move window splitter down."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'up))
+        (shrink-window arg)
+      (enlarge-window arg)))
+
+  (defvar rectangle-mark-mode)
+  (defun hydra-ex-point-mark ()
+    "Exchange point and mark."
+    (interactive)
+    (if rectangle-mark-mode
+        (rectangle-exchange-point-and-mark)
+      (let ((mk (mark)))
+        (rectangle-mark-mode 1)
+        (goto-char mk))))
 #+end_src
 
 ** General Appearance
@@ -2641,6 +2689,17 @@ Comment out a line:
 
 #+begin_src emacs-lisp
   (add-hook 'dired-mode-hook (lambda () (define-key dired-mode-map (kbd "z") 'magit-status)))
+#+end_src
+
+#+begin_src emacs-lisp
+  ;;** Example 3: jump to error
+  (defhydra hydra-error (global-map "M-g e")
+    "goto-error"
+    ("h" first-error "first")
+    ("j" next-error "next")
+    ("k" previous-error "prev")
+    ("v" recenter-top-bottom "recenter")
+    ("q" nil "quit"))
 #+end_src
 
 *** Editing
