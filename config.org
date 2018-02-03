@@ -3256,7 +3256,10 @@ not yet support emacs due to a jupyter bug.
 *** ~js2-mode~
 
 #+begin_src emacs-lisp
-  (use-package js2-mode)
+  (use-package js2-mode
+    :bind
+    (:map js2-mode-map
+          ("C-c SPC" . js2-mark-defun)))
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 #+end_src
 
