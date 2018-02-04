@@ -75,7 +75,7 @@ Download a package that provides some of the above help functions.
 ~describe-personal-keybindings~ is included by ~use-package~.
 
 #+begin_src emacs-lisp
-  (use-package help-fns+) 
+;  (use-package help-fns+) 
 
   (global-set-key (kbd "C-h p") 'describe-personal-keybindings) 
   (global-set-key (kbd "C-h C-S-f") 'find-function) 
@@ -1574,7 +1574,7 @@ screen for minute.
 
 #+begin_src emacs-lisp
   (use-package cursor-chg
-    :init
+    :config
     (curchg-toggle-cursor-type-when-idle)
     (setq curch-idle-interval 0.5))
 #+end_src
@@ -2998,6 +2998,7 @@ Comment out a line:
     (define-key prog-mode-map (kbd "C-c C-a") 'python-nav-beginning-of-block) 
     (define-key python-mode-map (kbd "C-c SPC") 'py-switch-to-shell) 
     (define-key python-mode-map (kbd "C-c C-SPC") 'python-switch-to-shell-same-window) 
+    (define-key python-mode-map (kbd "C-c C-c") 'python-shell-send-code-and-step)
     (setq python-shell-send-code-step-on-function t)
     (add-hook 'python-mode-hook
               '(lambda ()
@@ -3102,10 +3103,6 @@ Comment out a line:
 
  Replace the normal binding (which is set to ~python-shell-send-file~) with this
  improved function.
-
-#+begin_src emacs-lisp
-  (define-key python-mode-map (kbd "C-c C-c") 'python-shell-send-code-and-step)
-#+end_src
 
 *** ~py-autopep8~
 
@@ -3502,6 +3499,7 @@ Minor mode for C/C++ code completion bindings.
 
 #+begin_src emacs-lisp
   (use-package function-args
+    :ensure t
     :commands (c++-mode c-mode)
     :config
     (require 'cc-mode)
