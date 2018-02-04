@@ -37,7 +37,6 @@ backups
 /.sx/
 elpaBackup
 *txt
-Makefile
 *.cpp
 *.h
 history

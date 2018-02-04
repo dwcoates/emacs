@@ -28,7 +28,7 @@ line or use --debug-init to enable this.")
 (defvar doom-emacs-dir (file-truename user-emacs-directory)
   "The path to this emacs.d directory.")
 
-(defvar doom-core-dir (concat doom-emacs-dir "core/")
+(defvar doom-core-dir (concat doom-emacs-dir "doom-core/")
   "Where essential files are stored.")
 
 (defvar doom-modules-dir (concat doom-emacs-dir "modules/")
