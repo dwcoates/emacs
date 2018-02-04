@@ -51,7 +51,6 @@ MODES should be one major-mode symbol or a list of them."
   (quiet! (company-statistics-mode +1)))
 
 
-;; Looks ugly on OSX without emacs-mac build
 (def-package! company-quickhelp
   :after company
   :config

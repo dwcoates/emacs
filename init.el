@@ -3,21 +3,23 @@
 (doom! :feature
       ;debugger          ; FIXME stepping through code, to help you add bugs
        eval              ; run code, run (also, repls)
-       evil              ; come to the dark side, we have cookies
+      ;evil              ; come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        jump              ; helping you get around
-       services          ; TODO managing external services & code builders
        snippets          ; my elves. They type so I don't have to
        spellcheck        ; tasing you for misspelling mispelling
        syntax-checker    ; tasing you for every semicolon you forget
        version-control   ; remember, remember that commit in November
        workspaces        ; tab emulation, persistence & separate workspaces
 
-       :completion
+       :core-ui
        company           ; the ultimate code completion backend
-       ivy               ; a search engine for love and life
-      ;helm              ; the *other* search engine for love and life
-      ;ido               ; the other *other* search engine...
+       helm              ; a search engine for love and life
+       ;; ivy
+       ;; ido
+
+       :gui
+       theme
 
        :tools
        dired             ; making dired pretty [functional]
@@ -26,7 +28,7 @@
        gist              ; interacting with github gists
        imenu             ; an imenu sidebar and searchable code index
        impatient-mode    ; show off code over HTTP
-      ;macos             ; MacOS-specific commands
+                                        ;macos             ; MacOS-specific commands
        make              ; run make tasks from Emacs
        neotree           ; a project drawer, like NERDTree for vim
        password-store    ; password manager for nerds
@@ -82,15 +84,15 @@
        ;; toward a specific purpose. They may have additional dependencies and
        ;; should be loaded late.
        :app
-      ;email             ; emacs as an email client
-      ;irc               ; how neckbeards socialize
-      ;rss               ; emacs as an RSS reader
-      ;twitter           ; twitter client https://twitter.com/vnought
-      ;write             ; emacs as a word processor (latex + org + markdown)
+                                        ;email             ; emacs as an email client
+                                        ;irc               ; how neckbeards socialize
+                                        ;rss               ; emacs as an RSS reader
+                                        ;twitter           ; twitter client https://twitter.com/vnought
+                                        ;write             ; emacs as a word processor (latex + org + markdown)
 
        ;; Private modules are where you place your personal configuration files.
        ;; By default, they are not tracked. There is one module included here,
        ;; the defaults module. It contains a Spacemacs-inspired keybinding
        ;; scheme and additional ex commands for evil-mode. Use it as a reference
        ;; for your own.
-:private default)
+       :private default)

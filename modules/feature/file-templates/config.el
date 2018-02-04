@@ -33,7 +33,7 @@
                   (yas--template-content
                    (cl-find key (yas--all-templates (yas--get-snippet-tables mode))
                             :key #'yas--template-key :test #'equal)))
-                 (and (featurep 'evil) evil-mode)
+                 (and (featurep! 'evil) evil-mode)
                  (and yas--active-field-overlay
                       (overlay-buffer yas--active-field-overlay)
                       (overlay-get yas--active-field-overlay 'yas--field)))
