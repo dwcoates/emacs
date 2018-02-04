@@ -1,11 +1,138 @@
 #+Title:  Emacs configuration file
 
-* Introduction
+* left behind
+This code keeps the semantic idle parser from running the CPU too hot.
 
-  Fun facts: this Emacs configuration uses ~150 3rd-party packages, those
-  packages having a combined ~500,000 lines of lisp code.
+#+begin_src emacs-lisp
+  (setq semantic-idle-scheduler-setup-timer 10000) ; hack. Semantic idle scheduler using 95+% CPU
+#+end_src
 
-** Fundamental help commands
+Make ~emacs-lisp-mode~ the default major mode. 
+
+#+begin_src emacs-lisp
+  (setq default-major-mode 'emacs-lisp-mode)
+#+end_src
+
+* Core
+
+This binding is just annoying, so remove it.
+
+#+begin_src emacs-lisp
+  (global-unset-key (kbd "ESC ESC ESC"))
+#+end_src
+
+** keybinds
+
+#+begin_src emacs-lisp
+  (bind-key* "M-s o" 'occur)
+#+end_src
+
+Hydra solution for navigating ~buffer-menu~.
+
+ #+begin_src emacs-lisp
+ (defhydra hydra-buffer-menu (:color pink
+                              :hint nil)
+   "
+ ^Mark^             ^Unmark^           ^Actions^          ^Search
+ ^^^^^^^^-----------------------------------------------------------------
+ _m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
+ _s_: save          _U_: unmark up     _b_: bury          _I_: isearch
+ _d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
+ _D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
+ _~_: modified
+ "
+   ("m" Buffer-menu-mark)
+   ("u" Buffer-menu-unmark)
+   ("U" Buffer-menu-backup-unmark)
+   ("d" Buffer-menu-delete)
+   ("D" Buffer-menu-delete-backwards)
+   ("s" Buffer-menu-save)
+   ("~" Buffer-menu-not-modified)
+   ("x" Buffer-menu-execute)
+   ("b" Buffer-menu-bury)
+   ("g" revert-buffer)
+   ("T" Buffer-menu-toggle-files-only)
+   ("O" Buffer-menu-multi-occur :color blue)
+   ("I" Buffer-menu-isearch-buffers :color blue)
+   ("R" Buffer-menu-isearch-buffers-regexp :color blue)
+   ("c" nil "cancel")
+   ("v" Buffer-menu-select "select" :color blue)
+   ("o" Buffer-menu-other-window "other-window" :color blue)
+   ("q" quit-window "quit" :color blue))
+
+ (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body)
+ #+end_src
+
+A Hydra approach to ~rectangle-mark-mode~.
+
+#+begin_src emacs-lisp
+    (require 'rect)
+    (defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
+                               :color pink
+                               :post (deactivate-mark))
+      "
+      ^_p_^     _d_elete    _s_tring
+    _b_   _f_   _o_k        _y_ank
+      ^_n_^     _w_ew-copy  _r_eset
+    ^^^^        _e_xchange  _u_ndo
+    ^^^^        ^ ^         _y_ank
+    "
+      ("b" rectangle-backward-char nil)
+      ("f" rectangle-forward-char nil)
+      ("p" rectangle-previous-line nil)
+      ("n" rectangle-next-line nil)
+      ("e" hydra-ex-point-mark nil)
+      ("w" copy-rectangle-as-kill nil)
+      ("d" delete-rectangle nil)
+      ("r" (if (region-active-p)
+               (deactivate-mark)
+             (rectangle-mark-mode 1)) nil)
+      ("y" yank-rectangle nil)
+      ("u" undo nil)
+      ("s" string-rectangle nil)
+      ("k" kill-rectangle nil)
+      ("o" nil nil))
+
+  (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
+#+end_src
+
+** core
+
+ #+begin_src emacs-lisp
+   (defun smart-beginning-of-line ()
+       "Move point to first non-whitespace character or beginning-of-line.
+
+     Move point to the first non-whitespace character on this line.
+     If point was already at that position, move point to beginning of line."
+       (interactive)
+       (let ((oldpos (point)))
+         (back-to-indentation)
+         (and (= oldpos (point))
+              (if (equal major-mode 'org-mode)
+                  (org-beginning-of-line)
+                (beginning-of-line)))))
+ #+end_src
+
+ #+begin_src emacs-lisp
+   (global-set-key [home] 'smart-beginning-of-line)
+   (global-set-key (kbd "C-a") 'smart-beginning-of-line)
+   (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
+ #+end_src
+
+
+   #+begin_src emacs-lisp
+(global-set-key (kbd "C-q") 'isearch-forward)
+(global-set-key (kbd "C-S-q") 'isearch-backward)
+#+end_src
+
+Isearch repeat...
+
+#+begin_src emacs-lisp
+(define-key isearch-mode-map (kbd "C-q") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "C-S-q") 'isearch-repeat-backward)
+   #+end_src
+
+* Fundamental help commands
 
   Use the following help commands liberally:
 
@@ -84,36 +211,7 @@ Download a package that provides some of the above help functions.
 
 * Initialize
 
-#+begin_src emacs-lisp
-  (let ((inhibit-message nil))
-    (message "Initializing package manager..."))
-#+end_src
-
-
-#+begin_src emacs-lisp
-;; Keep emacs-generated custom settings in a separate file so they don't pollute init.el
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file)
-#+end_src
-
 I run linux, but this may be useful for those who use OSX. Description:
-
-On OS X, an Emacs instance started from the graphical user
-interface will have a different environment than a shell in a
-terminal window, because OS X does not run a shell during the
-login. Obviously this will lead to unexpected results when
-calling external utilities like make from Emacs.
-This library works around this problem by copying important
-environment variables from the user's shell.
-https://github.com/purcell/exec-path-from-shell
-
-#+BEGIN_SRC emacs-lisp
-(if (eq system-type 'darwin)
-  (unless (package-installed-p 'exec-path-from-shell)
-    (package-install 'exec-path-from-shell)))
-#+END_SRC
-
-Make sure Emacs gets my bashrc environment variable:
 
 #+begin_src emacs-lisp
   (let ((path (shell-command-to-string ". ~/.bashrc; echo -n $PATH")))
@@ -125,56 +223,18 @@ Make sure Emacs gets my bashrc environment variable:
            exec-path)))
 #+end_src
  
-Let Emacs know about some of my Emacs Lisp code
+These have to be fetched with doom's method
 
 #+begin_src emacs-lisp
   (add-to-list 'load-path (concat lisp-dir "goodies"))  ;; personal goodies
   (add-to-list 'load-path (concat lisp-dir "org-misc")) ;; org-misc functions
 #+end_src
 
-* General
-
-Diminish allows selectively removing certain mode "nicknames" from the
-modeline. Useful for keeping the modeline from getting too cluttered.
+* UI
 
 #+begin_src emacs-lisp
   (use-package diminish)
 #+end_src
-
-This code keeps the semantic idle parser from running the CPU too hot.
-
-#+begin_src emacs-lisp
-  (setq semantic-idle-scheduler-setup-timer 10000) ; hack. Semantic idle scheduler using 95+% CPU
-#+end_src
-
-Start up message.
-
-#+begin_src emacs-lisp
-  (let ((inhibit-message nil))
-    (message "Configuring general settings..."))
-#+end_src
-
-This binding is just annoying, so remove it.
-
-#+begin_src emacs-lisp
-  (global-unset-key (kbd "ESC ESC ESC"))
-#+end_src
-
-Make ~emacs-lisp-mode~ the default major mode. 
-
-#+begin_src emacs-lisp
-  (setq default-major-mode 'emacs-lisp-mode)
-#+end_src
-
-** Key interfaces
-*** Hydra 
-
- ~Hydra~ is a mode that allows modal bindings. Create a set of modal bindings
- under a prefix with the ~defhydr~ macro.
-
- #+begin_src emacs-lisp
-   (use-package hydra)
- #+end_src
 
  From the Hydra examples, increase/decrease buffer font size:
 
@@ -185,76 +245,14 @@ Make ~emacs-lisp-mode~ the default major mode.
      ("o" text-scale-decrease "out"))
  #+end_src
 
-Hydra solution for navigating ~buffer-menu~.
-
- #+begin_src emacs-lisp
- (defhydra hydra-buffer-menu (:color pink
-                              :hint nil)
-   "
- ^Mark^             ^Unmark^           ^Actions^          ^Search
- ^^^^^^^^-----------------------------------------------------------------
- _m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
- _s_: save          _U_: unmark up     _b_: bury          _I_: isearch
- _d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
- _D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
- _~_: modified
- "
-   ("m" Buffer-menu-mark)
-   ("u" Buffer-menu-unmark)
-   ("U" Buffer-menu-backup-unmark)
-   ("d" Buffer-menu-delete)
-   ("D" Buffer-menu-delete-backwards)
-   ("s" Buffer-menu-save)
-   ("~" Buffer-menu-not-modified)
-   ("x" Buffer-menu-execute)
-   ("b" Buffer-menu-bury)
-   ("g" revert-buffer)
-   ("T" Buffer-menu-toggle-files-only)
-   ("O" Buffer-menu-multi-occur :color blue)
-   ("I" Buffer-menu-isearch-buffers :color blue)
-   ("R" Buffer-menu-isearch-buffers-regexp :color blue)
-   ("c" nil "cancel")
-   ("v" Buffer-menu-select "select" :color blue)
-   ("o" Buffer-menu-other-window "other-window" :color blue)
-   ("q" quit-window "quit" :color blue))
-
- (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body)
- #+end_src
-
-A Hydra approach to ~rectangle-mark-mode~.
-
-#+begin_src emacs-lisp
-    (require 'rect)
-    (defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
-                               :color pink
-                               :post (deactivate-mark))
-      "
-      ^_p_^     _d_elete    _s_tring
-    _b_   _f_   _o_k        _y_ank
-      ^_n_^     _w_ew-copy  _r_eset
-    ^^^^        _e_xchange  _u_ndo
-    ^^^^        ^ ^         _y_ank
-    "
-      ("b" rectangle-backward-char nil)
-      ("f" rectangle-forward-char nil)
-      ("p" rectangle-previous-line nil)
-      ("n" rectangle-next-line nil)
-      ("e" hydra-ex-point-mark nil)
-      ("w" copy-rectangle-as-kill nil)
-      ("d" delete-rectangle nil)
-      ("r" (if (region-active-p)
-               (deactivate-mark)
-             (rectangle-mark-mode 1)) nil)
-      ("y" yank-rectangle nil)
-      ("u" undo nil)
-      ("s" string-rectangle nil)
-      ("k" kill-rectangle nil)
-      ("o" nil nil))
-
-  (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
-#+end_src
+** Hydra 
 
 Org-agenda:
+* Org
+
+  - org mode stuff
+
+** agenda
 
 #+begin_src emacs-lisp
 ;;** Example 12: org-agenda-view
@@ -297,8 +295,11 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
   ("v" nil))
 #+end_src
 
-* Assistance
-** Message buffer
+* Emacs system
+
+- messages buffer
+- warnings
+- help
 
 #+begin_src emacs-lisp
   (defun sh/current-time-microseconds ()
@@ -324,92 +325,46 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
   (advice-add 'message :before 'sh/ad-timestamp-message)
 #+end_src
 
-** Cosmetic
-*** ~linum-mode~                                            :line:number:fringe:
+** system help
+** keys
+*** ~guide-key~ 
 
-    ~linum-mode~ is a line-numbering mode that comes packaged with Emacs.
-
-*** Pretty Symbols :pretty:appearance:unicode:
-
-    Prettify certain symbols and symbol combinations. For example, use a λ
-    instead of =lambda= in Emacs Lisp code.
-
-#+begin_src emacs-lisp
-  (global-prettify-symbols-mode t)
-#+end_src
-
-Un-prettify when symbol is just before point.
-
-#+begin_src emacs-lisp
-  (setq prettify-symbols-unprettify-at-point 'right-edge)
-#+end_src
-
-*** ~flycheck-mode~                                                  :check:fly:
-
-    ~flycheck-mode~ provides highlighting mistakes for syntax errors. A lot like
-    Microsoft Word's red squiggly lines that are used to point out
-    grammar/spelling errors.
+   Display possible key binding completions automatically in a small pop-up
+   buffer with ~guide-key~. For example, typing =C-h= will provide a small hint
+   pop-up for commands under this prefix.
 
  #+BEGIN_SRC emacs-lisp
-   (use-package flycheck
-     :init (progn
-             (add-hook 'after-init-hook #'global-flycheck-mode))
-     :bind (("C-c ! n" . flycheck-next-error)
-            ("C-c ! p" . flycheck-previous-error)
-            ("C-c ! h" . helm-flycheck))
-     :config
-     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-     :diminish 'flycheck-mode)
+   (use-package guide-key
+     :init
+     (guide-key-mode 1)
+     (setq guide-key/guide-key-sequence '("C-x r" ;; registers and rectangles
+                                          "C-x 4" ;; file finding
+                                          "C-x v" ;; vc
+                                          "C-x 8" ;; special characters
+                                          "C-x w"
+                                          "C-c 5" ;; vimish-fold
+                                          "C-c"                                         
+                                          "C-h"   ;; help 
+                                          "C-z" 
+                                          "C-c ."                                         
+                                          "C-c e" ;; ??
+                                          "C-c C-v" ;; org-babel
+                                          "C-c o"
+                                          "M-s"
+                                          "C-c ;")) ;; switch to specific files
+     (setq guide-key/recursive-key-sequence-flag t)
+     (setq guide-key/popup-window-position 'bottom)
+     :diminish 'guide-key-mode)
  #+END_SRC
 
-*** ~flyspell~ :spell:check:fly:
+*** ~free-keys~
 
-    ~flyspell-mode~ is flycheck, but for spelling. Useful in ~org-mode~ and other
-    basic text modes.
+ #+begin_src emacs-lisp
+   (use-package free-keys)
+ #+end_src
 
-#+begin_src emacs-lisp
-  (use-package flyspell
-    :diminish 'flyspell-mode)
-#+end_src
-
-*** ~rainbow-delimiters~ :parentheses:appearance:
-
-    Automatically color parentheses pairs different colors with
-    rainbow-delimiters. This mode is particularly useful in Lisp modes, where
-    there are many, many, many parentheses.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters
-    :init
-    (rainbow-delimiters-mode)
-    :config
-    (set-face-attribute 'rainbow-delimiters-depth-1-face nil :foreground "indian red")
-    (set-face-attribute 'rainbow-delimiters-depth-2-face nil :foreground "light sea green")
-    (set-face-attribute 'rainbow-delimiters-depth-3-face nil :foreground "orchid")
-    (set-face-attribute 'rainbow-delimiters-depth-4-face nil :foreground "goldenrod")
-    (set-face-attribute 'rainbow-delimiters-depth-5-face nil :foreground "olive drab")
-    (set-face-attribute 'rainbow-delimiters-depth-6-face nil :foreground "deep sky blue")
-    (set-face-attribute 'rainbow-delimiters-depth-7-face nil :foreground "violet red")
-    (set-face-attribute 'rainbow-delimiters-depth-8-face nil :foreground "SeaGreen2")
-    (set-face-attribute 'rainbow-delimiters-depth-9-face nil :foreground "chocolate")
-    (set-face-attribute 'rainbow-delimiters-unmatched-face nil :foreground "red"))
-#+END_SRC
-
-*** ~rainbow-mode~
-    
-    ~rainbow-mode~ colorizes hex color codes. Useful when customizing Emacs
-    themes. For example: #E74C3C, #F92672, #9C91E4, #268BD2. By the way, use
-    =C-c u c=, ~helm-insert-color-hex~, to select color hexes and insert them at
-    point.
-
-#+begin_src emacs-lisp
-  (use-package rainbow-mode
-    :config
-    (add-hook 'org-mode-hook 'rainbow-mode)
-    (add-hook 'prog-mode-hook 'rainbow-mode)) 
-#+end_src
-
-** Auto Completion
+* UI
+** completion
 *** ~company~ :completion:popups:
 
     ~company-mode~ is my auto-completion mode of choice. It's a pretty big
@@ -532,127 +487,7 @@ Un-prettify when symbol is just before point.
  (use-package auto-complete)
  #+end_src
 
-** ~guide-key~ 
-
-  Display possible key binding completions automatically in a small pop-up
-  buffer with ~guide-key~. For example, typing =C-h= will provide a small hint
-  pop-up for commands under this prefix.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package guide-key
-    :init
-    (guide-key-mode 1)
-    (setq guide-key/guide-key-sequence '("C-x r" ;; registers and rectangles
-                                         "C-x 4" ;; file finding
-                                         "C-x v" ;; vc
-                                         "C-x 8" ;; special characters
-                                         "C-x w"
-                                         "C-c 5" ;; vimish-fold
-                                         "C-c"                                         
-                                         "C-h"   ;; help 
-                                         "C-z" 
-                                         "C-c ."                                         
-                                         "C-c e" ;; ??
-                                         "C-c C-v" ;; org-babel
-                                         "C-c o"
-                                         "M-s"
-                                         "C-c ;")) ;; switch to specific files
-    (setq guide-key/recursive-key-sequence-flag t)
-    (setq guide-key/popup-window-position 'bottom)
-    :diminish 'guide-key-mode)
-#+END_SRC
-
-** ~free-keys~
-
-#+begin_src emacs-lisp
-  (use-package free-keys)
-#+end_src
-
-** Dictionary
-   ~dictionary~ provides a way to query offline dictionary servers for looking
-   up definitions, synonyms, etc.
-
-#+begin_src emacs-lisp
-  (use-package dictionary)
-#+end_src
-
-   Use my ~helm-dictionary~ package. There is another package on =Melpa= called
-   =helm-dictionary=, so have to be careful with this import.
-
-   Make sure that helm-dictionary directory is know to Emacs load-path. If
-   this line weren't here, in the following ~use-package~ call, Emacs would look
-   for ~helm-dictionary~ in the load-path, not find it, then look to download
-   helm-dictionary from Melpa Emacs repositories (which would be the wrong
-   helm-dictionary).
-
- #+begin_src emacs-lisp
-   (add-to-list 'load-path (concat lisp-dir "helm-dictionary"))
-#+end_src
-
-   Load ~helm-dictionary~
-
-#+begin_src emacs-lisp
-   (use-package helm-dictionary
-     :commands (helm-dictionary-lookup)
-     :bind 
-     ("C-c d" . helm-dictionary-lookup))
- #+end_src
-
-* Buffer navigation
-** General
-
-#+begin_src emacs-lisp
-  (diminish 'auto-revert-mode)
-#+end_src
-
-*** Navigation
-
- #+begin_src emacs-lisp
-   (defun smart-beginning-of-line ()
-       "Move point to first non-whitespace character or beginning-of-line.
-
-     Move point to the first non-whitespace character on this line.
-     If point was already at that position, move point to beginning of line."
-       (interactive)
-       (let ((oldpos (point)))
-         (back-to-indentation)
-         (and (= oldpos (point))
-              (if (equal major-mode 'org-mode)
-                  (org-beginning-of-line)
-                (beginning-of-line)))))
- #+end_src
-
- #+begin_src emacs-lisp
-   (global-set-key [home] 'smart-beginning-of-line)
-   (global-set-key (kbd "C-a") 'smart-beginning-of-line)
-   (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
- #+end_src
-
-** Narrowing
-
-  ~helm~ and ~ivy~ are menu-based selection/narrowing libraries. They give you a
-  way to sift through lists with pop-up fuzzy-searchable menus. ~helm~ and ~ivy~
-  are used as =M-x= interfaces, for example. Binding =M-x= to ~helm-M-x~ is a much
-  nicer way to select commands than the Emacs default. Try it out. 
-
-  These libraries are easy to use and extend, so there are many ~helm~ / ~ivy~
-  based packages available on =Melpa= and other Emacs package
-  repositories. ~counsel~ is the name for the collection of ~ivy~ interfaces for
-  common Emacs commands, such as helm commands and file finding.
-
-  ~helm-swoop~ is a helm-based package for sifting through buffer
-  contents. ~helm-multi-swoop~ lets us do it across all open buffers. ~swiper~ is
-  the ~helm-swoop~ equivalent for ~ivy~.
-
-  ~ido~ is a selection/narrowing package a bit different than ~helm~ and ~ivy~. It
-  uses the =minibuffer= instead of a pop-up list, and I generally consider it
-  best for selecting from a well-known list for which there isn't attached
-  meta-data. Selecting from a list of tags or files in familiar directory, for
-  example. ~smex~ is an ~ido~ packaged used for =M-x=.
-
-*** ~helm~                                              :search:fuzzy:popups:
-
-  This variables must be set before loading ~helm-gtags~
+** selection
 
   #+BEGIN_SRC emacs-lisp
   (setq helm-gtags-prefix-key "\C-cg")
@@ -709,16 +544,57 @@ Un-prettify when symbol is just before point.
       :diminish 'helm-mode)
   #+END_SRC
 
-  Helm-dash is a great package that allows us to look up documentation with
-  helm. It is mostly equivalent to Dash, but does not depend on it. Use
-  `helm-dash-install-docset' to download a docset fo a particular language (or
-  language package).
+ I prefer Ido for find-file. It's less distracting, and I usually down need to
+ browse files.
 
-  #+begin_src emacs-lisp
-    (use-package helm-dash
-     :bind*
-     (("C-c C-?" . helm-dash-at-point)))
-  #+end_src
+ #+begin_src emacs-lisp
+   (ido-mode t)
+   (bind-key* "C-x C-f" 'ido-find-file)
+   (bind-key "C-x S-k" 'ido-kill-buffer)
+#+end_src
+
+ Ido really insists on using it's own kill-buffer by default...
+
+#+begin_src emacs-lisp
+  (defun kill-buffer-wrapper () (interactive) (kill-buffer))
+  (unbind-key "C-x k")
+  (bind-key "C-x k" 'kill-buffer-wrapper)  
+#+end_src
+
+ Ido should save its history files where everything else does!
+
+#+begin_src emacs-lisp
+  (setq-default ido-save-directory-list-file (concat saveplace-dir "ido.last"))
+ #+end_src
+
+
+#+begin_src emacs-lisp
+  (use-package smex
+    :init (global-set-key (kbd "M-x") 'smex)
+    :config 
+    (smex-initialize)
+    :bind
+    ("C-z" . magit-status))
+#+end_src
+
+
+
+ #+begin_src emacs-lisp
+   (use-package ivy
+     :init
+     (use-package counsel
+       :config
+       :bind*
+       ("C-x y" . counsel-org-tag))
+     :config
+     (set-face-attribute 'ivy-current-match nil :background "#ffb6c1" :foreground "black")
+     (setq ivy-height 5)
+     (setq ivy-format-function 'ivy-format-function-arrow))
+ #+end_src
+
+#+begin_src emacs-lisp
+  (use-package swiper)
+#+end_src
 
   Helm-flx improves helms scoring of results. Helm-fuzzier improves its fuzzy
   matching. Seems useless.
@@ -824,9 +700,13 @@ Un-prettify when symbol is just before point.
   (setq helm-lisp-fuzzy-completion t)
   #+END_SRC
 
-**** ~helm-buffers-list~                                :search:fuzzy:popups:
-
-Make helm-buffers-list sort the buffers.
+  #+begin_src emacs-lisp
+    (use-package helm-dash
+     :bind*
+     (("C-c C-?" . helm-dash-at-point))
+     :config
+     (setq helm-dash-browser-func 'eww))
+  #+end_src
 
 #+begin_src emacs-lisp
   (defun dwc-helm-source-buffers (buffers)
@@ -856,8 +736,6 @@ Make helm-buffers-list sort the buffers.
 
   (advice-add 'helm-buffers-sort-transformer :around 'helm-buffers-sort-dired-buffers)
 #+end_src
-
-**** Hide mode-lines under helm
 
 Don't display the modeline in bottom buffers when helm is active. It's
 distracting, useless, and unsightly. The following code was grabbed from
@@ -918,7 +796,7 @@ distracting, useless, and unsightly. The following code was grabbed from
 (advice-add 'helm-keyboard-quit :around #'helm-keyboard-quit-advice)
 #+end_src
 
-**** Change helm mode-line appearance
+change modeleine appearance
 
 #+begin_src emacs-lisp
   (defun helm-mode-line-hook ()
@@ -931,98 +809,87 @@ distracting, useless, and unsightly. The following code was grabbed from
   (add-hook 'helm-major-mode-hook 'helm-mode-line-hook)
 #+end_src
 
-**** ~helm-dash~
+** cosmetic
+*** ~linum-mode~                                            :line:number:fringe:
 
-  ~helm-dash~ is a wonderful utility for looking up docs using the ~dash~
-  utility. Install dash docs with ~helm-dash-install-docset~ (Docs are
-  search-able by package name, so you can download the ~Pandas~ docs for
-  Python or the ~node.js~ docs for JavaScript).
+*** Pretty Symbols :pretty:appearance:unicode:
 
 #+begin_src emacs-lisp
-  (use-package helm-dash
-  :config
-  ; don't open the docs in chrome/firefox/whatever
-  (setq helm-dash-browser-func 'eww)) 
-  #+end_src
-
-*** ~ido~                                                      :search:fuzzy:
-
- I prefer Ido for find-file. It's less distracting, and I usually down need to
- browse files.
-
- #+begin_src emacs-lisp
-   (ido-mode t)
-   (bind-key* "C-x C-f" 'ido-find-file)
-   (bind-key "C-x S-k" 'ido-kill-buffer)
+  (global-prettify-symbols-mode t)
 #+end_src
 
- Ido really insists on using it's own kill-buffer by default...
+Un-prettify when symbol is just before point.
 
 #+begin_src emacs-lisp
-  (defun kill-buffer-wrapper () (interactive) (kill-buffer))
-  (unbind-key "C-x k")
-  (bind-key "C-x k" 'kill-buffer-wrapper)  
+  (setq prettify-symbols-unprettify-at-point 'right-edge)
 #+end_src
 
- Ido should save its history files where everything else does!
+*** ~flycheck-mode~                                                  :check:fly:
 
-#+begin_src emacs-lisp
-  (setq-default ido-save-directory-list-file (concat saveplace-dir "ido.last"))
- #+end_src
+    ~flycheck-mode~ provides highlighting mistakes for syntax errors. A lot like
+    Microsoft Word's red squiggly lines that are used to point out
+    grammar/spelling errors.
 
-**** ~smex~
-
-     Use smart-M-x for =M-x=. It's discreet. I use =C-h f= (with =C-i= to preview
-     documentation) to browse Emacs functions/commands, and =M-x= to actually
-     execute them.
-
-#+begin_src emacs-lisp
-  (use-package smex
-    :init (global-set-key (kbd "M-x") 'smex)
-    :config 
-    (smex-initialize)
-    :bind
-    ("C-z" . magit-status))
-#+end_src
-
-*** ~ivy~                                               :search:fuzzy:popups:
-
-  Ivy is a nice package, but I'm partial to helm. Ivy/counsel are still useful
-  sometimes, though.
-
- #+begin_src emacs-lisp
-   (use-package ivy
-     :init
-     (use-package counsel
-       :config
-       :bind*
-       ("C-x y" . counsel-org-tag))
+ #+BEGIN_SRC emacs-lisp
+   (use-package flycheck
+     :init (progn
+             (add-hook 'after-init-hook #'global-flycheck-mode))
+     :bind (("C-c ! n" . flycheck-next-error)
+            ("C-c ! p" . flycheck-previous-error)
+            ("C-c ! h" . helm-flycheck))
      :config
-     (set-face-attribute 'ivy-current-match nil :background "#ffb6c1" :foreground "black")
-     (setq ivy-height 5)
-     (setq ivy-format-function 'ivy-format-function-arrow))
- #+end_src
+     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+     :diminish 'flycheck-mode)
+ #+END_SRC
 
-**** ~swiper~                                           :search:fuzzy:popups:
+*** ~flyspell~ :spell:check:fly:
 
-      Sift through a buffer's contents with ~swiper~. I think it's faster than
-      ~helm-swoop~ (but less feature-rich), so it has that going for it.
+    ~flyspell-mode~ is flycheck, but for spelling. Useful in ~org-mode~ and other
+    basic text modes.
 
 #+begin_src emacs-lisp
-  (use-package swiper)
+  (use-package flyspell
+    :diminish 'flyspell-mode)
+#+end_src
+
+*** ~rainbow-delimiters~ :parentheses:appearance:
+
+    Automatically color parentheses pairs different colors with
+    rainbow-delimiters. This mode is particularly useful in Lisp modes, where
+    there are many, many, many parentheses.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :init
+    (rainbow-delimiters-mode)
+    :config
+    (set-face-attribute 'rainbow-delimiters-depth-1-face nil :foreground "indian red")
+    (set-face-attribute 'rainbow-delimiters-depth-2-face nil :foreground "light sea green")
+    (set-face-attribute 'rainbow-delimiters-depth-3-face nil :foreground "orchid")
+    (set-face-attribute 'rainbow-delimiters-depth-4-face nil :foreground "goldenrod")
+    (set-face-attribute 'rainbow-delimiters-depth-5-face nil :foreground "olive drab")
+    (set-face-attribute 'rainbow-delimiters-depth-6-face nil :foreground "deep sky blue")
+    (set-face-attribute 'rainbow-delimiters-depth-7-face nil :foreground "violet red")
+    (set-face-attribute 'rainbow-delimiters-depth-8-face nil :foreground "SeaGreen2")
+    (set-face-attribute 'rainbow-delimiters-depth-9-face nil :foreground "chocolate")
+    (set-face-attribute 'rainbow-delimiters-unmatched-face nil :foreground "red"))
+#+END_SRC
+
+*** ~rainbow-mode~
+    
+    ~rainbow-mode~ colorizes hex color codes. Useful when customizing Emacs
+    themes. For example: #E74C3C, #F92672, #9C91E4, #268BD2. By the way, use
+    =C-c u c=, ~helm-insert-color-hex~, to select color hexes and insert them at
+    point.
+
+#+begin_src emacs-lisp
+  (use-package rainbow-mode
+    :config
+    (add-hook 'org-mode-hook 'rainbow-mode)
+    (add-hook 'prog-mode-hook 'rainbow-mode)) 
 #+end_src
 
 ** Jumping
-   
-   Move cursor immediately to a given location. ~avy~ and ~ace~ are different
-   approaches to the same idea. They overlay letters on top of all character
-   instances to which you'd like to jump. ~jump-char~ allows us to jump to
-   nearest character, forward or backward; same idea, but goes to the nearest
-   character instead of requiring that you specify the character. ~ace-isearch~
-   wraps ~isearch~ such that for searches > 6 characters in length, isearch
-   automatically switches to ~swiper~ otherwise.
-
-*** ~avy~                                                              :jump:
 
      ~avy-goto-char-timer~, bound to =C-m=, is the main takeaway from ~avy~, in my
      opinion. Use it to quickly jump between static buffers.
@@ -1134,8 +1001,6 @@ avy function for confining search to current paragraph.
                end))))
 #+end_src
 
-*** ~ace~                                                              :jump:
-
   Jump quickly to any word using just two key strokes with ace-jump-mode:
 
   #+BEGIN_SRC emacs-lisp
@@ -1149,37 +1014,12 @@ avy function for confining search to current paragraph.
        ("M-S-z" . ace-jump-zap-up-to-char)))
   #+END_SRC
 
-**** ~ace-link~
-
      #+begin_src emacs-lisp
        (use-package ace-link
          :config
          (ace-link-setup-default))
      #+end_src
 
-** Searching
-
-isearching shouldn't be that common. Usually should be jumping around within a
-page or occuring or something.
-
-   #+begin_src emacs-lisp
-(global-set-key (kbd "C-q") 'isearch-forward)
-(global-set-key (kbd "C-S-q") 'isearch-backward)
-#+end_src
-
-Isearch repeat...
-
-#+begin_src emacs-lisp
-(define-key isearch-mode-map (kbd "C-q") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "C-S-q") 'isearch-repeat-backward)
-   #+end_src
-
-*** ~ace-isearch~                                         :search:jump:fuzzy:
-
-  This is a mix of ~ace-isearch~, ~helm-swoop~, and ~avy~. Pretty cool. If only
-  one key is searched, it will use ace, if more than one and less than 6
-  are serached, it will use good ol' isearch, if more than 6 are
-  searched, it will use helm-swoop. Nice idea.
 
   #+begin_src emacs-lisp
     (use-package ace-isearch
@@ -1190,13 +1030,6 @@ Isearch repeat...
       (setq ace-isearch-jump-delay 2)
       :diminish 'ace-isearch-mode)
   #+end_src
-
-  Make iterative searching default to regexp searching, which I find much
-  better for building keyboard macros.
-
-#+begin_src emacs-lisp
-  ;(setq search-default-mode t)
-#+end_src
 
   Use ~swiper~ instead of ~helm-swoop~.
 
@@ -1214,46 +1047,7 @@ Isearch repeat...
   (setq ace-isearch-function-from-isearch 'ace-isearch-swiper-from-isearch)
 #+end_src
 
-*** ~isearcher~
-
-#+begin_src emacs-lisp
-  (defvar isearcher--register nil)
-  (defvar isearcher--end-register nil)
-
-  (defun isearcher ()
-    (interactive)
-    (when (and isearcher--register isearcher--end-register)
-      (if (not (equal (point) (marker-position isearcher--register)))
-          (goto-char isearcher--register)
-        (goto-char isearcher--end-register))))
-
-  (defun isearcher-exchange-point-and-mark ()
-    (interactive)
-    (if (use-region-p)
-        (call-interactively 'exchange-point-and-mark)
-      (isearcher)))
-
-  (defun isearcher--set-isearcher-register ()
-    (setq-local isearcher--register (point-marker)))
-
-  (defun isearcher--set-end-isearcher-register ()
-    (setq-local isearcher--end-register (point-marker)))
-
-  (add-hook 'isearch-mode-hook 'isearcher--set-isearcher-register)
-  (add-hook 'isearch-mode-end-hook 'isearcher--set-end-isearcher-register)
-
-  ;(global-set-key (kbd "C-x C-x") 'isearcher-exchange-point-and-mark)
-#+end_src
-
-*** ~occur~
-
-#+begin_src emacs-lisp
-  (bind-key* "M-s o" 'occur)
-#+end_src
-
-** Grep
-*** ~rgrep~ :search:regexp:
-Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
+** searching
 
 #+begin_src emacs-lisp
   (require 'rgrep)
@@ -1284,18 +1078,12 @@ Load and configure the rgrep code in goodies. I believe it's from John Wiegley.
        (setq wgrep-enable-key "e")))
 #+end_src
 
-Keybinding:
-
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c g R") 'rgrep)
 #+end_src
 
-*** ~counsel-git-grep~ :counsel:
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c g r") 'counsel-git-grep)
-#+end_src
-
+* tools
+* Buffer navigation
 ** Re-centering
 
 #+begin_src emacs-lisp
