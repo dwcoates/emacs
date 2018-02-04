@@ -1,356 +1,96 @@
-;; inhibit minibuffer messages.
-;; This must be set to nil at end of config.
-(setq inhibit-message t)
+(require 'core (concat user-emacs-directory "doom-core/core"))
 
-;; - TODO:
-;; Require Emacs 25.1+
-;; (let ((str (emacs-version)))
-;;   (if (string-match "GNU Emacs \\([0-9]+\\.?+\\)+" "GNU Emacs 25.1.1")
-;;       (message "%s" (match-string 0 "GNU Emacs 25.1.1"))))
+(doom! :feature
+      ;debugger          ; FIXME stepping through code, to help you add bugs
+       eval              ; run code, run (also, repls)
+       evil              ; come to the dark side, we have cookies
+       file-templates    ; auto-snippets for empty files
+       jump              ; helping you get around
+       services          ; TODO managing external services & code builders
+       snippets          ; my elves. They type so I don't have to
+       spellcheck        ; tasing you for misspelling mispelling
+       syntax-checker    ; tasing you for every semicolon you forget
+       version-control   ; remember, remember that commit in November
+       workspaces        ; tab emulation, persistence & separate workspaces
 
-;; Directory for personal stuff. Personal org documents, emacs history, etc.
-(defconst personal-dir (file-name-as-directory "~/personal"))
-(unless (file-exists-p personal-dir)
-  (message "%s: %s" "Creating personal directory for first time" personal-dir)
-  (make-directory personal-dir))
+       :completion
+       company           ; the ultimate code completion backend
+       ivy               ; a search engine for love and life
+      ;helm              ; the *other* search engine for love and life
+      ;ido               ; the other *other* search engine...
 
-(let ((inhibit-message nil))
-  (message "Loading basic settings in init.el..."))
+       :tools
+       dired             ; making dired pretty [functional]
+       electric-indent   ; smarter, keyword-based electric-indent
+       eshell            ; a consistent, cross-platform shell (WIP)
+       gist              ; interacting with github gists
+       imenu             ; an imenu sidebar and searchable code index
+       impatient-mode    ; show off code over HTTP
+      ;macos             ; MacOS-specific commands
+       make              ; run make tasks from Emacs
+       neotree           ; a project drawer, like NERDTree for vim
+       password-store    ; password manager for nerds
+       rotate-text       ; cycle region at point between text candidates
+       term              ; terminals in Emacs
+       tmux              ; an API for interacting with tmux
+       upload            ; map local to remote projects via ssh/ftp
 
-;; Directory for emacs saves
-(defconst saveplace-dir
-  (concat (file-name-as-directory (concat personal-dir ".emacs-saves")))
-  "Where all the saves go (stuff like cursor position, autosaves, etc).")
+       :lang
+       assembly          ; assembly for fun or debugging
+       cc                ; C/C++/Obj-C madness
+       crystal           ; ruby at the speed of c
+       clojure           ; java with a lisp
+       csharp            ; unity, .NET, and mono shenanigans
+       data              ; config/data formats
+       elixir            ; erlang done right
+       elm               ; care for a cup of TEA?
+       emacs-lisp        ; drown in parentheses
+       go                ; the hipster dialect
+       (haskell +intero) ; a language that's lazier than I am
+       hy                ; readability of scheme w/ speed of python
+       (java +meghanada) ; the poster child for carpal tunnel syndrome
+       javascript        ; all(hope(abandon(ye(who(enter(here))))))
+       julia             ; a better, faster MATLAB
+       latex             ; writing papers in Emacs has never been so fun
+       ledger            ; an accounting system in Emacs
+       lua               ; one-based indices? one-based indices
+       markdown          ; writing docs for people to ignore
+       ocaml             ; an objective camel
+       (org              ; organize your plain life in plain text
+        +attach          ; custom attachment system
+        +babel           ; running code in org
+        +capture         ; org-capture in and outside of Emacs
+        +export          ; centralized export system + more backends
+        +present         ; Emacs for presentations
+        ;; TODO +publish
+        )
+       perl              ; write code no one else can comprehend
+       php               ; make php less awful to work with
+       plantuml          ; diagrams for confusing people more
+       purescript        ; javascript, but functional
+       python            ; beautiful is better than ugly
+       rest              ; Emacs as a REST client
+       ruby              ; 1.step do {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+       rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       scala             ; java, but good
+       sh                ; she sells (ba|z)sh shells on the C xor
+       swift             ; who asked for emoji variables?
+       typescript        ; javascript, but better
+       web               ; the tubes
 
-;; Directory for lisp source code
-(defconst lisp-dir
-  (file-name-as-directory (concat user-emacs-directory "lisp"))
-  "Where Lisp and packages not added by package.el belong.")
-(add-to-list 'load-path lisp-dir)
+       ;; Applications are complex and opinionated modules that transform Emacs
+       ;; toward a specific purpose. They may have additional dependencies and
+       ;; should be loaded late.
+       :app
+      ;email             ; emacs as an email client
+      ;irc               ; how neckbeards socialize
+      ;rss               ; emacs as an RSS reader
+      ;twitter           ; twitter client https://twitter.com/vnought
+      ;write             ; emacs as a word processor (latex + org + markdown)
 
-;; load system-specific settings best loaded first
-(let ((pre (concat personal-dir ".exclusive/pre.el")))
-  (if (file-exists-p pre)
-      (load pre)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;; SET UP PACKAGE MANAGEMENT AND USE-PACKAGE ;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(setq package-user-dir (concat user-emacs-directory "dependencies"))
-
-(package-initialize)
-
-;; Load Emacs' package manager
-(require 'package)
-
-;; Add various emacs package repositories to the pool. This is where we
-;; look for packages.
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("tromey" . "http://tromey.com/elpa/") t)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives
-             '("elpy" . "https://jorgenschaefer.github.io/packages/"))
-
-;; Load all of the repositories that we've added.
-(when (not package-archive-contents)
-  (package-refresh-contents))
-
-;;
-;; USE-PACKAGE
-;;
-;; use-package is a core package in modern emacs (at least if you have
-;; a large config that you want to be managable as a plug-and-play
-;; release). The following installs it if not already installed. It's
-;; done here so it can be used to insall org-mode, which is used for
-;; organizing the rest of this emacs config. The last several lines of
-;; this file call an org function that handles that.
-;;
-;;
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
-
-;; Configure use-package
-(setq use-package-verbose t)
-(require 'use-package)
-(use-package auto-compile
-  :ensure t
-  :config (auto-compile-on-load-mode))
-(setq load-prefer-newer t)
-(setq use-package-always-ensure t)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;; PRE-LOAD APPEARANCE SETTINGS ;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; These are here, and not in config.org, because they should be present
-; during the loading and saving of config.el (generated by babel).
-; If any code in config.org fails, the basic appearance of emacs will
-; be preserved. I got tired of seeing ugly emacs on failure.
-
-;; Load wilson theme:
-;(load "~/.emacs.d/wilson-theme.el")
-
-;;
-;; Some basic editing and appearance defaults
-;; Things like tab width, word-wrapping, cursor blinking, etc.
-;;
-(setq-default
- ;; Formatting
- delete-trailing-lines              nil
- fill-column                        78
- apropos-do-all                     t           ; make `apropos' more useful
- echo-keystrokes                    0.02        ; show me what I type
- enable-recursive-minibuffers       nil         ; no minibufferception
- bookmark-save-flag                 t
- history-length                     1000
- ;; Spaces, not tabs
- indent-tabs-mode                   nil
- require-final-newline              t
- tab-always-indent                  t
- tab-width                          4
- ;; Wrapping
- truncate-lines                     t
- truncate-partial-width-windows     50
- visual-fill-column-center-text     nil
- word-wrap                          t
- ;; Scrolling
- hscroll-margin                     1
- hscroll-step                       1
- scroll-conservatively              1001
- scroll-margin                      0
- scroll-preserve-screen-position    t
- scroll-bar-mode                    nil
- ;; Regions
- shift-select-mode                  t
- ;; Whitespace
- tabify-regexp                      "^\t* [ \t]+"
- whitespace-line-column             fill-column
- whitespace-style                   '(face tabs tab-mark
-                                           trailing indentation
-                                           lines-tail)
- whitespace-display-mappings        '((tab-mark ?\t [?› ?\t])
-                                      (newline-mark 10 [36 10]))
- ;;          INTERFACE
- ;v; no splash message
- inhibit-startup-message            t
- ;; cursor
- blink-cursor-mode                  nil
- cursor-type                        'box
- ;; highlight current line
- global-hl-line-mode                t
- display-time-mode                  t
- ;; current display column number in modeline
- column-number-mode                 t)
-
-;; display time in modeline
-(display-time-mode 1)
-
-(set-scroll-bar-mode nil)
-
-(setq-default cursor-in-non-selected-windows nil)
-;; no toolbar
-(tool-bar-mode -1)
-
-;; set transparency
-(set-frame-parameter (selected-frame) 'alpha '(100 92))
-(add-to-list 'default-frame-alist '(alpha 100 92))
-
-;; don't include scroll bars in new frames
-(defun my/disable-scroll-bars (frame)
-  (modify-frame-parameters frame
-                           '((vertical-scroll-bars . nil)
-                             (horizontal-scroll-bars . nil))))
-(add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
-
-;; never, ever, ever show me another damn menu pop up again
-(fset 'menu-bar-open nil)
-
-;; key binding for turning the menu bar on and off
-(defun toggle-menu-bar ()
-  (interactive)
-  (if menu-bar-mode
-      (menu-bar-mode 0)
-    (menu-bar-mode 1)))
-(global-set-key (kbd "C-x m") 'toggle-menu-bar)
-(menu-bar-mode -1)
-
-
-;; Setup default window size:
-(add-to-list 'default-frame-alist '(height . 40))
-(add-to-list 'default-frame-alist '(width . 160))
-
-;; No scroll bar
-(set-frame-parameter (selected-frame) 'scroll-bar-mode nil)
-(add-to-list 'default-frame-alist '(scroll-bar-mode nil))
-
-;; Use 'y' instead of "yes" and 'n' instead of "no" at prompt.
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-(global-set-key (kbd "C-c ; t") 'toggle-truncate-lines)
-
-;; Highlight current line:
-(require 'hl-line)
-(set-face-background 'hl-line "#3b3b3b")
-(set-face-foreground 'highlight nil)
-
-;; Dont ask me if I want to use these features before I do:
-(put 'narrow-to-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
-(put 'scroll-left 'disabled nil)
-(put 'upcase-region 'disabled nil)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;; SAVES ;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Save point across sessions
-(require 'saveplace)
-(setq-default
- save-place-file (concat saveplace-dir "places_")
- save-place-mode t)
-(when (>= emacs-major-version 25)
-  (save-place-mode +1))
-
-;; Save history across sessions
-(require 'savehist)
-(setq-default savehist-file (expand-file-name "hist_" saveplace-dir)
-      savehist-additional-variables
-      '(kill-ring search-ring regexp-search-ring))
-(savehist-mode 1)
-
-;; Keep track of recently opened files
-(require 'recentf)
-(setq-default recentf-save-file (expand-file-name "recent_" saveplace-dir)
-              recentf-exclude '("/tmp/" "/ssh:" "\\.?ido\\.last$" "\\.revive$" "/TAGS$"
-                                "emacs\\.d/private/cache/.+" "emacs\\.d/workgroups/.+$"
-                                "wg-default" "/company-statistics-cache.el$"
-                                "^/var/folders/.+$" "^/tmp/.+")
-              recentf-max-menu-items 0
-              recentf-max-saved-items 250
-              recentf-auto-cleanup 600
-              recentf-filename-handlers '(abbreviate-file-name))
-(recentf-mode 1)
-
-;; File Autosaves
-(setq-default auto-save-list-file-prefix (concat saveplace-dir ".saves-"))
-
-(setq-default bookmark-default-file (concat saveplace-dir "bookmarks"))
-
-(setq-default ede-project-placeholder-cache-file
-              (concat saveplace-dir "ede-projects.el"))
-
-;; window config undo/redo winner is a minor-mode for undoing and
-;; redoing window configuration changes.
-(setq-default winner-dont-bind-my-keys t)
-(use-package winner)
-(winner-mode 1)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;; GARBAGE COLLECTION ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; set garbage collection threshold very high for the duration of
-;; initialization
-(setq gc-cons-threshold 50000000)
-
-(add-hook 'emacs-startup-hook 'my/set-gc-threshold)
-(defun my/set-gc-threshold ()
-  "Reset `gc-cons-threshold' to its default value."
-  (setq gc-cons-threshold 800000))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;; THEMES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Set default face (used for background, normal text, etc)
-(set-face-attribute 'default nil
-                    :background "#222222"
-                    :foreground "light gray"
-                    :height 105
-                    :foundry "unknown"
-                    :family "Ubuntu Mono")
-
-;; Useful function for loading icons
-(defun load-directory (dir)
-  (let ((load-it (lambda (f)
-                   (load-file (concat (file-name-as-directory dir) f)))
-                 ))
-    (mapc load-it (directory-files dir nil "\\.el$"))))
-
-;; Set up modeline
-(use-package smart-mode-line
-  :init
-  (setq sml/name-width 16)
-  (setq sml/no-confirm-load-theme t)
-  (add-hook 'after-init-hook 'smart-mode-line-enable))
-
-(let ((inhibit-message nil))
-  (message "Loading atchka theme..."))
-
-;; load up the main theme
-(add-to-list 'load-path (concat user-emacs-directory "atchka"))
-(require 'atchka-theme)
-(add-hook 'after-init-hook (lambda ()
-                             (load-theme 'atchka t)))
-
-(sml/setup)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;; LOAD CONFIG.ORG AND SAVE ITS ELISP TO CONFIG.EL ;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(let ((inhibit-message nil))
-  (message "Loading configuration file, config.org..."))
-
-;; This use-package call will ensure that the correct, up-to-date
-;; version of org installed, along with all its subpackages (that's
-;; the "contrib" bit).
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-(use-package org
-  :mode (("\\.org$" . org-mode))
-  :ensure org-plus-contrib)
-
-;; Make a .el file out of the code in config.org, then run it.  This
-;; bit of code is responsible for the loading other 2k+ lines of code
-;; for this config.
-(org-babel-load-file
- (expand-file-name "config.org"
-                   user-emacs-directory))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;; WRAP UP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(setq inhibit-message nil)
-
-;; Load system-specific personal settings
-(let ((post (concat personal-dir ".exclusive/post.el")))
-  (when (file-exists-p post)
-      (load post)))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-agenda-files
-   (quote
-    ("~/personal/projects/" "~/personal/computers/" "~/personal/work/" "~/personal/school/bootcamp/" "~/personal/school/" "~/personal/math/" "~/personal/philosophy/" "~/personal/politics/" "~/personal/history/" "~/personal/"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(mumamo-background-chunk-major ((((class color) (min-colors 88) (background dark)) nil))))
-(put 'dired-find-alternate-file 'disabled nil)
+       ;; Private modules are where you place your personal configuration files.
+       ;; By default, they are not tracked. There is one module included here,
+       ;; the defaults module. It contains a Spacemacs-inspired keybinding
+       ;; scheme and additional ex commands for evil-mode. Use it as a reference
+       ;; for your own.
+:private default)
