@@ -1,11 +1,11 @@
 ;;; completion/ido/config.el -*- lexical-binding: t; -*-
 
+
 (def-package! ido
-  :commands '(ido-find-file ido-kill-buffer)
-  :bind
-  (:map global-map
-        "C-x C-f" 'ido-find-file
-        "C-x S-k" 'ido-kill-buffer)
+  ;; :bind
+  ;; (:map global-map
+  ;;       "C-x C-f" 'ido-find-file
+  ;;       "C-x S-k" 'ido-kill-buffer)
   :config
   (setq ido-ignore-buffers
         '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"

@@ -175,57 +175,57 @@ extension, try to guess one."
 ;; Auto-close delimiters and blocks as you type
 (def-package! smartparens
   :hook (doom-init . smartparens-global-mode)
-  :bind*
-  (:map smartparens-mode-map
-        ;; delete behavior
-        ("<backspace>" . sp-backward-delete-char)
-        ("<C-backspace>" . backward-delete-char)
-        ("<M-backspace>" . sp-backward-kill-word)
-        ("<C-M-backspace>" . backward-kill-word)
-        ;; wrap/unwrap/rewrap
-        ("M-[" . sp-backward-unwrap-sexp)
-        ("M-]" . sp-unwrap-sexp)
-        ("M-s-[" . sp-rewrap-sexp)
-   :prefix "C-j" :prefix-map smartparens-mode-map
-   ;; wrapping
-   ("("  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "(")))
-   ("["  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "[")))
-   ("{"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "{")))
-   ("'"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "'")))
-   ("\"" . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\"")))
-   ("_"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_")))
-   ("`"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "`")))
-   ;; sexp direction
-   ("a" . sp-beginning-of-sexp)
-   ("e" . sp-end-of-sexp)
-   ("i"   . sp-up-sexp)
-   ("j" . sp-backward-down-sexp)
-   ("l"   . sp-backward-up-sexp)
-   ("f" . sp-forward-sexp)
-   ("b" . sp-backward-sexp)
-   ("n" . sp-next-sexp)
-   ("p" . sp-previous-sexp)
-   ;; symbol direction
-   ("h" . sp-forward-symbol)
-   ("g" . sp-backward-symbol)
-   ;; slurping
-   ("t" . sp-forward-slurp-sexp)
-   ("w" . sp-forward-barf-sexp)
-   ("r"  . sp-backward-slurp-sexp)
-   ("q"  . sp-backward-barf-sexp)
-   ;; transposing
-   ("C-t" . sp-transpose-sexp)
-   ("M-t" . sp-transpose-hybrid-sexp)
-   ;; killing/copying
-   ("k" . sp-kill-sexp)
-   ("h"   . sp-kill-hybrid-sexp)
-   ("C-k"   . sp-backward-kill-sexp)
-   ("C-w" . sp-copy-sexp)
-   ;; deleting
-   ("d" . sp-delete-word)
-   ("C-d" . sp-delete-sexp)
-   ("<backspace>" . sp-backward-delete-symbol)
-   ("<C-backspace>" . sp-backward-kill-sexp))
+  ;; :bind*
+  ;; (:map smartparens-mode-map
+  ;;       ;; delete behavior
+  ;;       ("<backspace>" . sp-backward-delete-char)
+  ;;       ("<C-backspace>" . backward-delete-char)
+  ;;       ("<M-backspace>" . sp-backward-kill-word)
+  ;;       ("<C-M-backspace>" . backward-kill-word)
+  ;;       ;; wrap/unwrap/rewrap
+  ;;       ("M-[" . sp-backward-unwrap-sexp)
+  ;;       ("M-]" . sp-unwrap-sexp)
+  ;;       ("M-s-[" . sp-rewrap-sexp)
+  ;;  :prefix "C-j" :prefix-map smartparens-mode-map
+  ;;  ;; wrapping
+  ;;  ("("  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "(")))
+  ;;  ("["  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "[")))
+  ;;  ("{"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "{")))
+  ;;  ("'"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "'")))
+  ;;  ("\"" . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\"")))
+  ;;  ("_"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_")))
+  ;;  ("`"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "`")))
+  ;;  ;; sexp direction
+  ;;  ("a" . sp-beginning-of-sexp)
+  ;;  ("e" . sp-end-of-sexp)
+  ;;  ("i"   . sp-up-sexp)
+  ;;  ("j" . sp-backward-down-sexp)
+  ;;  ("l"   . sp-backward-up-sexp)
+  ;;  ("f" . sp-forward-sexp)
+  ;;  ("b" . sp-backward-sexp)
+  ;;  ("n" . sp-next-sexp)
+  ;;  ("p" . sp-previous-sexp)
+  ;;  ;; symbol direction
+  ;;  ("h" . sp-forward-symbol)
+  ;;  ("g" . sp-backward-symbol)
+  ;;  ;; slurping
+  ;;  ("t" . sp-forward-slurp-sexp)
+  ;;  ("w" . sp-forward-barf-sexp)
+  ;;  ("r"  . sp-backward-slurp-sexp)
+  ;;  ("q"  . sp-backward-barf-sexp)
+  ;;  ;; transposing
+  ;;  ("C-t" . sp-transpose-sexp)
+  ;;  ("M-t" . sp-transpose-hybrid-sexp)
+  ;;  ;; killing/copying
+  ;;  ("k" . sp-kill-sexp)
+  ;;  ("h"   . sp-kill-hybrid-sexp)
+  ;;  ("C-k"   . sp-backward-kill-sexp)
+  ;;  ("C-w" . sp-copy-sexp)
+  ;;  ;; deleting
+  ;;  ("d" . sp-delete-word)
+  ;;  ("C-d" . sp-delete-sexp)
+  ;;  ("<backspace>" . sp-backward-delete-symbol)
+  ;;  ("<C-backspace>" . sp-backward-kill-sexp))
   :config
   (defun sp-delete-sexp (arg)
      "Deletes sexp at point. Does not save to kill ring."
@@ -273,16 +273,16 @@ extension, try to guess one."
 
 (def-package! avy
   :commands (avy-goto-char-2 avy-goto-line)
-  :bind
-  (("C-l"   . avy-goto-line)
-   ("C-S-w"   . avy-kill-region)
-   ("C-S-l" . avy-copy-line)
-   ("<C-m>" . avy-goto-char-timer)
-   ("C-."   . avy-goto-char)
-   ("C-s" . avy-goto-char-in-paragraph)
-   ("C-r" . avy-goto-char-in-line))
-  :bind*
-  (("C-M-s"   . avy-goto-word-1))
+  ;; :bind
+  ;; (("C-l"   . avy-goto-line)
+  ;;  ("C-S-w"   . avy-kill-region)
+  ;;  ("C-S-l" . avy-copy-line)
+  ;;  ("<C-m>" . avy-goto-char-timer)
+  ;;  ("C-."   . avy-goto-char)
+  ;;  ("C-s" . avy-goto-char-in-paragraph)
+  ;;  ("C-r" . avy-goto-char-in-line))
+  ;; :bind*
+  ;; (("C-M-s"   . avy-goto-word-1))
   :config
   (setq avy-all-windows nil
         avy-background  t

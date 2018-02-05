@@ -11,28 +11,29 @@
 ;;
 
 (def-package! helm
-  :commands helm-M-x
   :init
-  :bind
-  (("C-x C-SPC" . helm-mark-ring))
-  :bind*
-  (("M-y" . helm-show-kill-ring)
-   ("M-X" . helm-M-x)
-   ("C-h SPC" . helm-all-mark-rings)
-   ("C-x b" . helm-mini)
-   ("C-x C-o" . helm-buffers-list)
-   ("C-h SPC" . helm-all-mark-rings)
-   ("C-c s" . helm-occur)
-   ("C-h F" . helm-insert-command-name)
-   :map helm-map
-   ("C-c C-y" . helm-yank-selection-and-quit)
-   ("C-i" . helm-select-action) ;; This is a big one. Use C-SPC to select entries,
-   ("C-S-p" . helm-previous-source)
-   ("C-S-n" . helm-next-source)
-   ;; then C-i (or TAB) to select an action to perform on
-   ;; those selected entries.
-   :map helm-buffer-map
-   ("C-c C-k" . helm-buffer-run-kill-buffers))
+  (map! :map global-map
+        "M-x" 'helm-M-x)
+  ;; :bind
+  ;; (("C-x C-SPC" . helm-mark-ring))
+  ;; :bind*
+  ;; (("M-y" . helm-show-kill-ring)
+  ;;  ("M-X" . helm-M-x)
+  ;;  ("C-h SPC" . helm-all-mark-rings)
+  ;;  ("C-x b" . helm-mini)
+  ;;  ("C-x C-o" . helm-buffers-list)
+  ;;  ("C-h SPC" . helm-all-mark-rings)
+  ;;  ("C-c s" . helm-occur)
+  ;;  ("C-h F" . helm-insert-command-name)
+  ;;  :map helm-map
+  ;;  ("C-c C-y" . helm-yank-selection-and-quit)
+  ;;  ("C-i" . helm-select-action) ;; This is a big one. Use C-SPC to select entries,
+  ;;  ("C-S-p" . helm-previous-source)
+  ;;  ("C-S-n" . helm-next-source)
+  ;;  ;; then C-i (or TAB) to select an action to perform on
+  ;;  ;; those selected entries.
+  ;;  :map helm-buffer-map
+  ;;  ("C-c C-k" . helm-buffer-run-kill-buffers))
 
   :config
   (load "helm-autoloads" nil t)
