@@ -29,7 +29,7 @@
 (package! command-log-mode)
 (package! editorconfig)
 (package! expand-region)
-(package! help-fns+)
+;; (package! help-fns+)      ; not currently available on melpa
 (package! pcre2el)
 (package! smart-forward)
 (package! smartparens)
