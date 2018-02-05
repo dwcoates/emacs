@@ -277,9 +277,84 @@ extension, try to guess one."
 
 (def-package! avy
   :commands (avy-goto-char-2 avy-goto-line)
+  :bind
+  (("C-l"   . avy-goto-line)
+   ("C-S-w"   . avy-kill-region)
+   ("C-S-l" . avy-copy-line)
+   ("<C-m>" . avy-goto-char-timer)
+   ("C-."   . avy-goto-char)
+   ("C-s" . avy-goto-char-in-paragraph)
+   ("C-r" . avy-goto-char-in-line))
+  :bind*
+  (("C-M-s"   . avy-goto-word-1))
   :config
   (setq avy-all-windows nil
-        avy-background t))
+        avy-background  t
+        avy-keys '(97  115 100 102 106 108 104 113 119
+                   101 114 116 121 117 111 122 120 118
+                   98  109 44  46)
+        avy-dispatch-alist '((?c . avy-action-copy)
+                             (?k . avy-action-kill-move)
+                             (?K . avy-action-kill-stay)
+                             (?m . avy-action-mark)
+                             (?\; . avy-action-execute-code)
+                             (?n . avy-narrow-region)
+                             (?p . avy-action-copy-and-yank))
+        avy-timeout-seconds .2)
+
+  (defun avy-action-copy (pt)
+    "Copy sexp starting on PT."
+    (save-excursion
+      (let (str)
+        (goto-char pt)
+        (avy-forward-item)
+        (setq str ( (buffer-substring pt (point))))
+        (when (fboundp 's-trim)
+          (setq str (s-trim str)))
+        (kill-new str)
+        (message "Copied: %s" str)))
+    (let ((dat (ring-ref avy-ring 0)))
+      (select-frame-set-input-focus
+       (window-frame (cdr dat)))
+      (select-window (cdr dat))
+      (goto-char (car dat))))
+
+  (defun avy-action-copy-and-yank (pt)
+    "Copy and yank sexp starting on PT."
+    (avy-action-copy pt)
+    (yank))
+
+  (defun avy-action-execute-code (pt)
+    (let* ((string (progn (avy-action-copy pt)
+                          (substring-no-properties (pop kill-ring)))))
+      (if (functionp 's-trim)
+          (setq string (s-trim string))
+        (warn "No s-trim function found, avy-action-execute-code may work poorly with Python code."))
+      (python-send-string string)))
+
+  (defun avy-narrow-region (pt)
+    (narrow-to-region
+     (save-excursion (beginning-of-line) (point))
+     (save-excursion (avy-action-goto pt)
+                     (end-of-line)
+                     (point))))
+
+  (defun avy-goto-char-in-paragraph (char)
+  "Jump to the currently visible CHAR in current paragraph."
+  (interactive (list (read-char "char: " t)))
+  (let (beg end)
+    (save-excursion
+      (forward-paragraph)
+      (setq end (point))
+      (backward-paragraph)
+      (setq beg (point)))
+    (avy-with avy-goto-char
+              (avy--generic-jump
+               (regexp-quote (string char))
+               nil
+               avy-style
+               beg
+               end)))))
 
 (def-package! command-log-mode
   :commands (command-log-mode global-command-log-mode)
