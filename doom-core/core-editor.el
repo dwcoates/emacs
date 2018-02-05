@@ -301,14 +301,14 @@ extension, try to guess one."
                              (?n . avy-narrow-region)
                              (?p . avy-action-copy-and-yank))
         avy-timeout-seconds .2)
-
+  ;; Execute functions
   (defun avy-action-copy (pt)
     "Copy sexp starting on PT."
     (save-excursion
       (let (str)
         (goto-char pt)
         (avy-forward-item)
-        (setq str ( (buffer-substring pt (point))))
+        (setq str (buffer-substring pt (point)))
         (when (fboundp 's-trim)
           (setq str (s-trim str)))
         (kill-new str)
@@ -318,12 +318,10 @@ extension, try to guess one."
        (window-frame (cdr dat)))
       (select-window (cdr dat))
       (goto-char (car dat))))
-
   (defun avy-action-copy-and-yank (pt)
     "Copy and yank sexp starting on PT."
     (avy-action-copy pt)
     (yank))
-
   (defun avy-action-execute-code (pt)
     (let* ((string (progn (avy-action-copy pt)
                           (substring-no-properties (pop kill-ring)))))
@@ -331,14 +329,12 @@ extension, try to guess one."
           (setq string (s-trim string))
         (warn "No s-trim function found, avy-action-execute-code may work poorly with Python code."))
       (python-send-string string)))
-
   (defun avy-narrow-region (pt)
     (narrow-to-region
      (save-excursion (beginning-of-line) (point))
      (save-excursion (avy-action-goto pt)
                      (end-of-line)
                      (point))))
-
   (defun avy-goto-char-in-paragraph (char)
   "Jump to the currently visible CHAR in current paragraph."
   (interactive (list (read-char "char: " t)))
