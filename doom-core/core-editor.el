@@ -271,18 +271,23 @@ extension, try to guess one."
   :commands (ace-link-help ace-link-org))
 
 (def-package! avy
-  :commands (avy-goto-char-2 avy-goto-line)
-  ;; :bind
-  ;; (("C-l"   . avy-goto-line)
-  ;;  ("C-S-w"   . avy-kill-region)
-  ;;  ("C-S-l" . avy-copy-line)
-  ;;  ("<C-m>" . avy-goto-char-timer)
-  ;;  ("C-."   . avy-goto-char)
-  ;;  ("C-s" . avy-goto-char-in-paragraph)
-  ;;  ("C-r" . avy-goto-char-in-line))
-  ;; :bind*
-  ;; (("C-M-s"   . avy-goto-word-1))
+  :commands (avy-goto-char-2 avy-goto-line avy-goto-line avy-kill-region 
+             avy-copy-line avy-goto-char-in-line 
+             avy-goto-char-timer avy-goto-char avy-goto-char-in-paragraph )
+  :init
+  ;; Bindings
+  (map! :map global-map
+   "C-l"    'avy-goto-line
+   "C-S-w"    'avy-kill-region
+   "C-S-l"  'avy-copy-line
+   "<C-m>"  'avy-goto-char-timer
+   "C-."   'avy-goto-char
+   "C-s"  'avy-goto-char-in-paragraph
+   "C-r"  'avy-goto-char-in-line)
+  (map! :map global-map
+   "C-M-s"    'avy-goto-word-1)
   :config
+  ;; Settings
   (setq avy-all-windows nil
         avy-background  t
         avy-keys '(97  115 100 102 106 108 104 113 119
