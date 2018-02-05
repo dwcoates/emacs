@@ -231,6 +231,18 @@ extension, try to guess one."
    ("<backspace>" . sp-backward-delete-symbol)
    ("<C-backspace>" . sp-backward-kill-sexp))
 
+  (defun sp-delete-sexp (arg)
+     "Deletes sexp at point. Does not save to kill ring."
+     (interactive "p")
+     (sp-kill-sexp arg)
+     (pop kill-ring))
+
+  (defun sp-backward-delete-sexp (arg)
+     "Deletes sexp at point. Does not save to kill ring."
+     (interactive "p")
+     (sp-backward-kill-sexp arg)
+     (pop kill-ring))
+
   (setq sp-autowrap-region t ; let evil-surround handle this
         sp-highlight-pair-overlay nil
         sp-cancel-autoskip-on-backward-movement nil
@@ -242,7 +254,8 @@ extension, try to guess one."
   (add-hook 'evil-replace-state-exit-hook  #'turn-on-smartparens-mode)
 
   (sp-local-pair '(xml-mode nxml-mode php-mode) "<!--" "-->"
-                 :post-handlers '(("| " "SPC"))))
+                 :post-handlers '(("| " "SPC")))
+  :diminish 'smartparens-mode)
 
 ;; Branching undo
 (def-package! undo-tree
