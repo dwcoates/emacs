@@ -15,8 +15,8 @@
        :core-ui
        company           ; the ultimate code completion backend
        helm              ; a search engine for love and life
-       ;; ivy
-       ;; ido
+       ivy
+       ido
 
        :gui
        theme
