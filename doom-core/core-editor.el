@@ -175,22 +175,18 @@ extension, try to guess one."
 ;; Auto-close delimiters and blocks as you type
 (def-package! smartparens
   :hook (doom-init . smartparens-global-mode)
-  :config
-  (bind-keys*
-   :map smartparens-mode-map
-   ;; delete behavior
-   ("<backspace>" . sp-backward-delete-char)
-   ("<C-backspace>" . backward-delete-char)
-   ("<M-backspace>" . sp-backward-kill-word)
-   ("<C-M-backspace>" . backward-kill-word)
-   ;; wrap/unwrap/rewrap
-   ("M-[" . sp-backward-unwrap-sexp)
-   ("M-]" . sp-unwrap-sexp)
-   ("M-s-[" . sp-rewrap-sexp))
-
-  (bind-keys*
-   :prefix "C-j"
-   :prefix-map smartparens-mode-map
+  :bind*
+  (:map smartparens-mode-map
+        ;; delete behavior
+        ("<backspace>" . sp-backward-delete-char)
+        ("<C-backspace>" . backward-delete-char)
+        ("<M-backspace>" . sp-backward-kill-word)
+        ("<C-M-backspace>" . backward-kill-word)
+        ;; wrap/unwrap/rewrap
+        ("M-[" . sp-backward-unwrap-sexp)
+        ("M-]" . sp-unwrap-sexp)
+        ("M-s-[" . sp-rewrap-sexp)
+   :prefix "C-j" :prefix-map smartparens-mode-map
    ;; wrapping
    ("("  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "(")))
    ("["  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "[")))
@@ -230,7 +226,7 @@ extension, try to guess one."
    ("C-d" . sp-delete-sexp)
    ("<backspace>" . sp-backward-delete-symbol)
    ("<C-backspace>" . sp-backward-kill-sexp))
-
+  :config
   (defun sp-delete-sexp (arg)
      "Deletes sexp at point. Does not save to kill ring."
      (interactive "p")
