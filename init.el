@@ -20,6 +20,12 @@
 
        :gui
        theme
+       hl-todo
+       nav-flash
+       theme
+       unicode
+       vi-tilde-fringe
+       window-select
 
        :tools
        dired             ; making dired pretty [functional]
