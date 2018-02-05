@@ -1,6 +1,11 @@
 ;;; completion/ido/config.el -*- lexical-binding: t; -*-
 
 (def-package! ido
+  :commands '(ido-find-file ido-kill-buffer)
+  :bind
+  (:map global-map
+        "C-x C-f" 'ido-find-file
+        "C-x S-k" 'ido-kill-buffer)
   :config
   (setq ido-ignore-buffers
         '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
@@ -20,13 +25,12 @@
   (push "Icon\\?$" ido-ignore-files)
 
   (ido-mode 1)
-  (ido-everywhere 1)
   (require 'ido-ubiquitous)
   (ido-ubiquitous-mode 1)
 
   (defun +ido|init ()
     (require 'ido-vertical-mode)
-    (ido-vertical-mode 1)
+    ;; (ido-vertical-mode 1)
 
     (require 'flx-ido)
     (flx-ido-mode +1)
