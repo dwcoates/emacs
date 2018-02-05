@@ -11,31 +11,22 @@
 ;;
 
 (def-package! helm
+  :commands (helm-M-x helm-show-kill-ring helm-M-x helm-all-mark-rings helm-mini
+            helm-buffers-list helm-all-mark-rings helm-occur helm-insert-command-name)
   :init
   (map! :map global-map
-        "M-x" 'helm-M-x)
-  ;; :bind
-  ;; (("C-x C-SPC" . helm-mark-ring))
-  ;; :bind*
-  ;; (("M-y" . helm-show-kill-ring)
-  ;;  ("M-X" . helm-M-x)
-  ;;  ("C-h SPC" . helm-all-mark-rings)
-  ;;  ("C-x b" . helm-mini)
-  ;;  ("C-x C-o" . helm-buffers-list)
-  ;;  ("C-h SPC" . helm-all-mark-rings)
-  ;;  ("C-c s" . helm-occur)
-  ;;  ("C-h F" . helm-insert-command-name)
-  ;;  :map helm-map
-  ;;  ("C-c C-y" . helm-yank-selection-and-quit)
-  ;;  ("C-i" . helm-select-action) ;; This is a big one. Use C-SPC to select entries,
-  ;;  ("C-S-p" . helm-previous-source)
-  ;;  ("C-S-n" . helm-next-source)
-  ;;  ;; then C-i (or TAB) to select an action to perform on
-  ;;  ;; those selected entries.
-  ;;  :map helm-buffer-map
-  ;;  ("C-c C-k" . helm-buffer-run-kill-buffers))
+        "M-x" 'helm-M-x
+        "M-y"  'helm-show-kill-ring
+        "M-X"  'helm-M-x
+        "C-h SPC"  'helm-all-mark-rings
+        "C-x b"  'helm-mini
+        "C-x C-o"  'helm-buffers-list
+        "C-h SPC"  'helm-all-mark-rings
+        "C-c s"  'helm-occur
+        "C-h F"  'helm-insert-command-name)
 
   :config
+  (message "loaded helm")
   (load "helm-autoloads" nil t)
   (add-hook 'doom-init-hook #'helm-mode)
 
@@ -78,7 +69,6 @@
 
   (map! :map global-map
         [remap apropos]                   #'helm-apropos
-        [remap find-file]                 #'helm-find-files
         [remap recentf-open-files]        #'helm-recentf
         [remap projectile-switch-to-buffer] #'helm-projectile-switch-to-buffer
         [remap projectile-recentf]        #'helm-projectile-recentf
@@ -88,10 +78,18 @@
         [remap noop-show-kill-ring]       #'helm-show-kill-ring
         [remap projectile-switch-project] #'helm-projectile-switch-project
         [remap projectile-find-file]      #'helm-projectile-find-file
-        [remap imenu-anywhere]            #'helm-imenu-anywhere
-        [remap execute-extended-command]  #'helm-M-x)
+        [remap imenu-anywhere]            #'helm-imenu-anywhere)
 
+  (map! :map helm-map
+        "C-c C-y"  'helm-yank-selection-and-quit
+        "C-i"  'helm-select-action ;; This is a big one. Use C-SPC to select entries
+        "C-S-p"  'helm-previous-source
+        "C-S-n"  'helm-next-source
+        :map helm-buffer-map
+        "C-c C-k"  'helm-buffer-run-kill-buffers)
+  
   :diminish 'helm-mode)
+
 
 (def-package! helm-locate
   :defer t
