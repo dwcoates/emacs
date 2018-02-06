@@ -22,24 +22,24 @@
   "A list of cons cells that map a letter to a evil state symbol.")
 
 
+;;
 ;; Not sure what this does.
+;;
 (def-package! which-key
-  ;; :config
-  ;; (setq which-key-sort-order #'which-key-prefix-then-key-order
-  ;;       which-key-sort-uppercase-first nil
-  ;;       which-key-add-column-padding 1
-  ;;       which-key-max-display-columns nil
-  ;;       which-key-min-display-lines 5)
-  ;; ;; embolden local bindings
-  ;; (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold)
-  ;; (which-key-setup-side-window-bottom)
-  ;; (add-hook 'doom-init-hook #'which-key-mode)
-  )
+  :config
+  (setq which-key-sort-order #'which-key-prefix-then-key-order
+        which-key-sort-uppercase-first nil
+        which-key-add-column-padding 1
+        which-key-max-display-columns nil
+        which-key-min-display-lines 5)
+  ;; embolden local bindings
+  (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold)
+  (which-key-setup-side-window-bottom)
+  (add-hook 'doom-init-hook #'which-key-mode))
 
 
-(defpackage hydra
+(def-package! hydra
   :init
-  ;; In case I later need to wrap defhydra in any special functionality.
   :config
   (setq lv-use-seperator t))
 
