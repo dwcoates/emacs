@@ -22,72 +22,26 @@
   "A list of cons cells that map a letter to a evil state symbol.")
 
 
-;;
+;; Not sure what this does.
 (def-package! which-key
-  :config
-  (setq which-key-sort-order #'which-key-prefix-then-key-order
-        which-key-sort-uppercase-first nil
-        which-key-add-column-padding 1
-        which-key-max-display-columns nil
-        which-key-min-display-lines 5)
-  ;; embolden local bindings
-  (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold)
-  (which-key-setup-side-window-bottom)
-  (add-hook 'doom-init-hook #'which-key-mode))
+  ;; :config
+  ;; (setq which-key-sort-order #'which-key-prefix-then-key-order
+  ;;       which-key-sort-uppercase-first nil
+  ;;       which-key-add-column-padding 1
+  ;;       which-key-max-display-columns nil
+  ;;       which-key-min-display-lines 5)
+  ;; ;; embolden local bindings
+  ;; (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold)
+  ;; (which-key-setup-side-window-bottom)
+  ;; (add-hook 'doom-init-hook #'which-key-mode)
+  )
 
 
-(def-package! hydra
+(defpackage hydra
   :init
   ;; In case I later need to wrap defhydra in any special functionality.
-  (defalias 'def-hydra! 'defhydra)
-  (defalias 'def-hydra-radio! 'defhydradio)
   :config
-  (setq lv-use-seperator t)
-
-  (def-hydra! doom@text-zoom (:hint t :color red)
-    "
-      Text zoom: _j_:zoom in, _k_:zoom out, _0_:reset
-"
-    ("j" text-scale-increase "in")
-    ("k" text-scale-decrease "out")
-    ("0" (text-scale-set 0) "reset"))
-
-  (def-hydra! doom@window-nav (:hint nil)
-    "
-          Split: _v_ert  _s_:horz
-         Delete: _c_lose  _o_nly
-  Switch Window: _h_:left  _j_:down  _k_:up  _l_:right
-        Buffers: _p_revious  _n_ext  _b_:select  _f_ind-file
-         Resize: _H_:splitter left  _J_:splitter down  _K_:splitter up  _L_:splitter right
-           Move: _a_:up  _z_:down  _i_menu
-"
-    ("z" scroll-up-line)
-    ("a" scroll-down-line)
-    ("i" idomenu)
-
-    ("h" windmove-left)
-    ("j" windmove-down)
-    ("k" windmove-up)
-    ("l" windmove-right)
-
-    ("p" doom/previous-buffer)
-    ("n" doom/next-buffer)
-    ("b" switch-to-buffer)
-    ("f" find-file)
-
-    ("s" split-window-below)
-    ("v" split-window-right)
-
-    ("c" delete-window)
-    ("o" delete-other-windows)
-
-    ("H" hydra-move-splitter-left)
-    ("J" hydra-move-splitter-down)
-    ("K" hydra-move-splitter-up)
-    ("L" hydra-move-splitter-right)
-
-    ("q" nil)))
-
+  (setq lv-use-seperator t))
 
 ;;
 (defun doom--keybind-register (key desc &optional modes)
