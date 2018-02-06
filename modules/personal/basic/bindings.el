@@ -5,8 +5,6 @@
 (map! :map global-map
       "C-c p x x" 'forward-char)
 
-
-
 (map! :map global-map
       :prefix "C-x"
       "b" #'doom/previous-buffer
@@ -598,9 +596,10 @@
 ;; ;; This section is dedicated to "fixing" certain keys so that they behave
 ;; ;; properly, more like vim, or how I like it.
 
-(map! (:map input-decode-map
-        [S-iso-lefttab] [backtab]
-        (:unless window-system "TAB" [tab])) ; Fix TAB in terminal
+(map! 
+ (:map input-decode-map
+   [S-iso-lefttab] [backtab]
+   (:unless window-system "TAB" [tab])) ; Fix TAB in terminal
 
       ;; I want C-a and C-e to be a little smarter. C-a will jump to
       ;; indentation. Pressing it again will send you to the true bol. Same goes
@@ -630,49 +629,211 @@
       :i [remap newline]                #'doom/newline-and-indent)
 
 
-  (defhydra doom@text-zoom (:hint t :color red)
-    "
+;; Buffer zooming
+(defhydra hydra-text-zoom (:hint t :color red)
+  "
       Text zoom: _j_:zoom in, _k_:zoom out, _0_:reset
 "
-    ("j" text-scale-increase "in")
-    ("k" text-scale-decrease "out")
-    ("0" (text-scale-set 0) "reset"))
+  ("j" text-scale-increase "in")
+  ("k" text-scale-decrease "out")
+  ("0" (text-scale-set 0) "reset"))
 
-  (defhydra hydra-window-nav (:hint nil)
+;; Window navigation
+(defhydra hydra-windows (global-map "C-S-o" :hint none)
+  "
+      Delete: _o_nly  _da_ce  _dw_indow  _db_uffer  _df_rame
+        Move: _s_wap, _b_alance
+      Frames: _f_rame new  _df_ delete
+        Misc: _a_ce  _u_ndo  _r_edo
+    Windmove: _h_, _j_, _k_, _l_
+      Adjust: _H_, _J_, _K_, _L_"
+  ;; windmove
+  ("h" windmove-left)
+  ("j" windmove-down)
+  ("k" windmove-up)
+  ("l" windmove-right)
+  ;; adjust
+  ("H" hydra-move-splitter-left)
+  ("J" hydra-move-splitter-down)
+  ("K" hydra-move-splitter-up)
+  ("L" hydra-move-splitter-right)
+  ;; undo/redo
+  ("u" winner-undo)
+  ("r" winner-redo) ;;fixme, not working?
+  ;; find file
+  ("f" find-file :exit t)
+  ;; move buffer
+  ("z" scroll-up-line)
+  ("a" scroll-down-line)
+  ("i" idomenu)
+  ;; arrange
+  ("s" ace-swap-window)
+  ("b" balance-windows)
+  ;; delete
+  ("da" ace-delete-window)
+  ("do" delete-other-windows :exit t)
+  ("dw" delete-window)
+  ("db" kill-this-buffer)
+  ("df" delete-frame :exit t))
+
+;; Rectangle
+(defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
+                                     :color pink
+                                     :post (deactivate-mark))
+  "
+      ^_p_^     _d_elete    _s_tring
+    _b_   _f_   _o_k        _y_ank
+      ^_n_^     _w_ew-copy  _r_eset
+    ^^^^        _e_xchange  _u_ndo
+    ^^^^        ^ ^         _y_ank
     "
-          Split: _v_ert  _s_:horz
-         Delete: _c_lose  _o_nly
-  Switch Window: _h_:left  _j_:down  _k_:up  _l_:right
-        Buffers: _p_revious  _n_ext  _b_:select  _f_ind-file
-         Resize: _H_:splitter left  _J_:splitter down  _K_:splitter up  _L_:splitter right
-           Move: _a_:up  _z_:down  _i_menu
-"
-    ("z" scroll-up-line)
-    ("a" scroll-down-line)
-    ("i" idomenu)
+  ("b" rectangle-backward-char nil)
+  ("f" rectangle-forward-char nil)
+  ("p" rectangle-previous-line nil)
+  ("n" rectangle-next-line nil)
+  ("e" hydra-ex-point-mark nil)
+  ("w" copy-rectangle-as-kill nil)
+  ("d" delete-rectangle nil)
+  ("r" (if (region-active-p)
+           (deactivate-mark)
+         (rectangle-mark-mode 1)) nil)
+  ("y" yank-rectangle nil)
+  ("u" undo nil)
+  ("s" string-rectangle nil)
+  ("k" kill-rectangle nil)
+  ("o" nil nil))
 
-    ("h" windmove-left)
-    ("j" windmove-down)
-    ("k" windmove-up)
-    ("l" windmove-right)
 
-    ("p" doom/previous-buffer)
-    ("n" doom/next-buffer)
-    ("b" switch-to-buffer)
-    ("f" find-file)
+;; Buffer menu
+(defhydra hydra-buffer-menu (:color pink
+                                    :hint nil)
+  "
+ ^Mark^             ^Unmark^           ^Actions^          ^Search
+ ^^^^^^^^-----------------------------------------------------------------
+ _m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
+ _s_: save          _U_: unmark up     _b_: bury          _I_: isearch
+ _d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
+ _D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
+ _~_: modified"
+  ("m" Buffer-menu-mark)
+  ("u" Buffer-menu-unmark)
+  ("U" Buffer-menu-backup-unmark)
+  ("d" Buffer-menu-delete)
+  ("D" Buffer-menu-delete-backwards)
+  ("s" Buffer-menu-save)
+  ("~" Buffer-menu-not-modified)
+  ("x" Buffer-menu-execute)
+  ("b" Buffer-menu-bury)
+  ("g" revert-buffer)
+  ("T" Buffer-menu-toggle-files-only)
+  ("O" Buffer-menu-multi-occur :color blue)
+  ("I" Buffer-menu-isearch-buffers :color blue)
+  ("R" Buffer-menu-isearch-buffers-regexp :color blue)
+  ("c" nil "cancel")
+  ("v" Buffer-menu-select "select" :color blue)
+  ("o" Buffer-menu-other-window "other-window" :color blue)
+  ("q" quit-window "quit" :color blue))
 
-    ("s" split-window-below)
-    ("v" split-window-right)
+(map!  [home] 'smart-beginning-of-line
+       "C-a" 'smart-beginning-of-line
+       "M-s o" 'occur
+       ;;
+       ;; Smartparens
+       ;;
+       (:after smartparens
+         (:map smartparens-mode-map
+           ;; delete behavior
+           "<backspace>"  'sp-backward-delete-char
+           "<C-backspace>"  'backward-delete-char
+           "<M-backspace>"  'sp-backward-kill-word
+           "<C-M-backspace>"  'backward-kill-word
+           ;; wrap/unwrap/rewrap
+           "M-["  'sp-backward-unwrap-sexp
+           "M-]"  'sp-unwrap-sexp
+           "M-s-["  'sp-rewrap-sexp)
+         (:prefix "C-j" :map smartparens-mode-map
+           ;; wrapping
+           "("   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "("))
+           "["   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "["))
+           "{"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "{"))
+           "'"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "'"))
+           "\""  (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\""))
+           "_"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_"))
+           "`"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "`"))
+           ;; sexp direction
+           "a"  'sp-beginning-of-sexp
+           "e"  'sp-end-of-sexp
+           "i"    'sp-up-sexp
+           "j"  'sp-backward-down-sexp
+           "l"    'sp-backward-up-sexp
+           "f"  'sp-forward-sexp
+           "b"  'sp-backward-sexp
+           "n"  'sp-next-sexp
+           "p"  'sp-previous-sexp
+           ;; symbol direction
+           "h"  'sp-forward-symbol
+           "g"  'sp-backward-symbol
+           ;; slurping
+           "t"  'sp-forward-slurp-sexp
+           "w"  'sp-forward-barf-sexp
+           "r"   'sp-backward-slurp-sexp
+           "q"   'sp-backward-barf-sexp
+           ;; transposing
+           "C-t"  'sp-transpose-sexp
+           "M-t"  'sp-transpose-hybrid-sexp
+           ;; killing/copying
+           "k"  'sp-kill-sexp
+           "h"    'sp-kill-hybrid-sexp
+           "C-k"    'sp-backward-kill-sexp
+           "C-w"  'sp-copy-sexp
+           ;; deleting
+           "d"  'sp-delete-word
+           "C-d"  'sp-delete-sexp
+           "<backspace>"  'sp-backward-delete-symbol
+           "<C-backspace>"  'sp-backward-kill-sexp))
+       ;;
+       ;; Company
+       ;;
+       (:prefix "C-c"
+         (:prefix "*"
+           "l"   #'+company/whole-lines
+           "k"   #'+company/dict-or-keywords
+           "f"   #'company-files
+           "C-]"   #'company-etags
+           "s"     #'company-ispell
+           "y"   #'company-yasnippet
+           "c"   #'company-capf
+           "a"   #'company-dabbrev-code
+           "q"   #'+company/dabbrev-code-previous))
+       (:after company
+         (:map company-active-map
+           ;; Don't interfere with `evil-delete-backward-word' in insert mode
+           "C-w"        nil
+           "C-o"        #'company-search-kill-others
+           "C-n"        #'company-select-next
+           "C-p"        #'company-select-previous
+           "C-h"        #'company-quickhelp-manual-begin
+           "C-S-h"      #'company-show-doc-buffer
+           "C-S-s"      #'company-search-candidates
+           "C-s"        #'company-filter-candidates
+           "C-SPC"      #'company-complete-common
+           "C-h"        #'company-quickhelp-manual-begin
+           [tab]        #'company-complete-common-or-cycle
+           [backtab]    #'company-select-previous
+           [escape]     (λ! (company-abort) (evil-normal-state 1)))
+         ;; Automatically applies to `company-filter-map'
+         (:map company-search-map
+           "C-n"        #'company-search-repeat-forward
+           "C-p"        #'company-search-repeat-backward
+           "C-s"        (λ! (company-search-abort) (company-filter-candidates))
+           [escape]     #'company-search-abort)))
+   
+  ;; (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
 
-    ("c" delete-window)
-    ("o" delete-other-windows)
+;; (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)   
+;; (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body)                       
 
-    ("H" hydra-move-splitter-left)
-    ("J" hydra-move-splitter-down)
-    ("K" hydra-move-splitter-up)
-    ("L" hydra-move-splitter-right)
-
-    ("q" nil))
+;; goes in core
 
 
 ;; (map!      ;; Text-scaling
