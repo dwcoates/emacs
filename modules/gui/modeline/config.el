@@ -2,8 +2,6 @@
 
 (deftheme dwc-mode-line-theme "Modeline theme.")
 
-(require 'smart-mode-line)
-
 (def-package! smart-mode-line
  :config
  (setq sml-theme 'dark)
