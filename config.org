@@ -593,77 +593,8 @@ crawl.
         kill-whole-line t)             ; if NIL, kill whole line and move the next line up
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
- 
-#+END_SRC
-
-Delete tabs with backspace
-
-#+BEGIN_SRC emacs-lisp
-  (setq backward-delete-char-untabify-method 'hungry)
-#+END_SRC
-
-Use space to indent by default
-
-  (setq-default indent-tabs-mode nil)
-
-
-Set appearance of a tab that is represented by 4 spaces
-
-  (global-set-key (kbd "C-z") 'just-one-space)
-
-Remap =M-z= to 
-
-#+begin_src emacs-lisp
-  (defun delete-space ()
-    "Kill the whitespace between two non-whitespace characters"
-    (interactive "*")
-    (if (and (region-active-p) (interactive-p))
-        (let* ((beg (region-beginning))
-              (end (region-end))
-              (num-lines (count-lines beg end)))
-          (save-excursion
-            (goto-char beg)
-            (cl-loop for i from 1 to num-lines
-                     do (progn (beginning-of-line)
-                               (delete-space)
-                               (forward-line)))))    
-      (save-excursion
-      (save-restriction
-        (save-match-data
-          (progn
-            (re-search-backward "[^ \t\r]" nil t)
-            (re-search-forward "[ \t\r]+" nil t)
-            (replace-match "" nil nil)))))))
-  (global-set-key (kbd "C-M-S-z") 'delete-space)
-#+end_src
-
-Remap =M-k= to ~kill-whole-line~ 
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "M-k") 'kill-whole-line)
-#+end_src
-
-Use ~subword-mode~, which treats camelcase components as word, so, for example,
-when backwards deleting a word, it will stop at the nearest capital letter.
-
-#+begin_src emacs-lisp
-(global-subword-mode 1)
-#+end_src
-
-#+begin_src emacs-lisp
-  (unbind-key "M-r" smartparens-mode-map)
-#+end_src
-
 *** Useful Packages
 **** ~volatile-highlights~
-
- #+BEGIN_SRC emacs-lisp
-   (use-package volatile-highlights
-     :config
-     (volatile-highlights-mode t)
-     :diminish 'volatile-highlights-mode)
- #+END_SRC
 
 **** ~clean-auto-indent-mode~
 
@@ -674,58 +605,10 @@ when backwards deleting a word, it will stop at the nearest capital letter.
    (add-hook 'prog-mode-hook 'clean-aindent-mode))
  #+END_SRC
 
-**** ~dtrt-indent~
-
- #+BEGIN_SRC emacs-lisp
- (use-package dtrt-indent
-   :config
-   (setq dtrt-indent-verbosity 0)
-   (dtrt-indent-mode 1))
- #+END_SRC
-
-**** ~ws-butler~
-
- #+BEGIN_SRC emacs-lisp
-   (use-package ws-butler
-     :commands ws-butler
-     :init
-     (add-hook 'c-mode-common-hook 'ws-butler-mode)
-     (add-hook 'text-mode 'ws-butler-mode)
-     (add-hook 'fundamental-mode 'ws-butler-mode)
-     (add-hook 'prog-mode-hook 'ws-butler-mode)
-     :diminish 'ws-butler-mode)
- #+END_SRC
-
-**** ~anzu~
-
- #+BEGIN_SRC emacs-lisp
- (use-package anzu
-   :commands
-   (anzu-query-replace
-    anzu-query-replace-regexp)
-   :init
-   ;; Bindings
-   (bind-key "M-%" 'anzu-query-replace)
-   (bind-key "C-M-%" 'anzu-query-replace-regexp)
-   :config
-   (global-anzu-mode)
-   )
- #+END_SRC
-
 **** ~iedit~
 
-     When ~iedit~ mode is turned on, all the occurrences of the current region in
-     the buffer (possibly narrowed) or a region are highlighted.  If one
-     occurrence is modified, the change are applied to all other occurrences
-     simultaneously.
-
  #+BEGIN_SRC emacs-lisp
- (use-package iedit
-   :commands iedit-mode
-   :init
-   (bind-key "C-x ;" 'iedit-mode)
-   :config
-   (setq iedit-toggle-key-default nil))
+ 
  #+END_SRC
 
 **** ~expand-region~
