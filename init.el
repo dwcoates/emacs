@@ -24,6 +24,7 @@
        nav-flash
        theme
        unicode
+       modeline
        vi-tilde-fringe
        window-select
 
