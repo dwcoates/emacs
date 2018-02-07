@@ -2,7 +2,7 @@
 
 (deftheme dwc-mode-line-theme "Modeline theme.")
 
-q(require 'smart-mode-line)
+(require 'smart-mode-line)
 (setq sml-theme 'dark)
 (sml/setup)
 :config
