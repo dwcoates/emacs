@@ -737,9 +737,14 @@
 (map!  ;;
        ;; Core
        ;;
+       ;; UI
+      
        "C-x k" 'fast-kill-buffer
+       ;; Editing
        [home] 'smart-beginning-of-line
        "C-a" 'smart-beginning-of-line
+       "C-x ;" 'iedit-mode
+       ;; Searching
        "M-s o" 'occur
        ;;
        ;; Ace-window
