@@ -52,6 +52,38 @@
         helm-buffers-fuzzy-matching           nil
         helm-autoresize-max-height            10
         helm-autoresize-min-height            3)
+  
+  ;; Save current position to mark ring
+  (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
+
+  ;; Sort helm source buffers
+  (defun dwc-helm-source-buffers (buffers)
+    "Return sorted source-buffers.  Helm will not sort results by default."
+    (let ((last-used (subseq buffers 0 (min 5 (length buffers))))
+          (buffers (subseq buffers (min 6 (length buffers))))
+          dired-buffers
+          other-buffers
+          (buf-sort (lambda (bufs)
+                      (cl-sort 
+                       bufs
+                       (lambda (a b)
+                         (or (< (length a) (length b))
+                             (and (= (length a) (length b))
+                                  (string-lessp a b))))))))
+      (dolist (buf buffers)
+        (if (with-current-buffer buf
+              (eq major-mode 'dired-mode))
+            (push buf dired-buffers)
+          (push buf other-buffers)))
+      (append
+       (funcall buf-sort last-used)
+       (funcall buf-sort other-buffers)
+       (funcall buf-sort dired-buffers))))
+
+  (defun helm-buffers-sort-dired-buffers (orig-fun &rest args)
+    (dwc-helm-source-buffers (apply orig-fun args)))
+
+  (advice-add 'helm-buffers-sort-transformer :around 'helm-buffers-sort-dired-buffers)
 
   ;;; Helm hacks
   (defun +helm*replace-prompt (plist)
