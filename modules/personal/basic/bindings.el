@@ -845,7 +845,8 @@
        ;;
        ;; Ido
        ;; 
-       "M-x" 'smex
+       "M-x"     '+smex
+       "C-x C-f" '+ido-find-file
        ;;
        ;; Helm
        ;; 
