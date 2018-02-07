@@ -3,6 +3,15 @@
 * left behind
 This code keeps the semantic idle parser from running the CPU too hot.
 
+  #+BEGIN_SRC emacs-lisp
+    (set-face-attribute 'helm-candidate-number nil 
+                        :background "salmon2" 
+                        :foreground "black")
+    (set-face-attribute 'helm-source-header nil
+                        :foreground "#ff6347")
+  #+END_SRC
+
+
 #+begin_src emacs-lisp
   (setq semantic-idle-scheduler-setup-timer 10000) ; hack. Semantic idle scheduler using 95+% CPU
 #+end_src
@@ -11,6 +20,30 @@ Make ~emacs-lisp-mode~ the default major mode.
 
 #+begin_src emacs-lisp
   (setq default-major-mode 'emacs-lisp-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun make-get-personal-file-key (file key)
+    "Doesn't handle duplicate filenames very well.
+    Does handle files and directorys with same basename, though"
+    (let ((function-symbol (make-symbol
+                            (concat "get-personal-"
+                                    (if (file-directory-p file)
+                                        (concat "dir:" (file-name-nondirectory file))
+                                        (concat"file:" (file-name-base file)))
+                                    ))))
+      `(progn
+         (defun ,function-symbol ()
+           (interactive)
+           (find-file ,file))
+         (global-set-key (kbd ,key) ',function-symbol))))
+
+  (defmacro get-personal-file-binding (file key)
+    (make-get-personal-file-key (file-truename (directory-file-name
+                                                (if (stringp file)
+                                                    file
+                                                  (symbol-value file))))
+                                key))
 #+end_src
 
 * Fundamental help commands
@@ -227,155 +260,9 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
  #+end_src
 
 * UI
-** completion
-*** ~company~ :completion:popups:
-
-    ~company-mode~ is my auto-completion mode of choice. It's a pretty big
-    package, and is highly extensible and configurable. There are company
-    backends that people have written for all sorts of things; JavaScript,
-    org-mode, Python, C++, etc. Throughout this config, company backends will
-    be added for corresponding modes.
-
- *use-package Company*
-
- #+begin_src emacs-lisp
-   (use-package company
-     :init
-     (add-hook 'after-init-hook 'global-company-mode)
-     ;; provides a little popup for documentation
-     :bind*
-     (("C-S-;" . company-files)
-      ("C-;" . company-manual-begin)
-      :map company-active-map
-      ("C-n" . company-select-next)
-      ("C-p" . company-select-previous)
-      ("M-n" . company-next-page)
-      ("M-p" . company-previous-page))
-     :config
-     (use-package company-quickhelp
-       :config
-       (setq company-quickhelp-max-lines 10
-             company-idle-delay 2.0
-             company-quickhelp-delay 0.25)
-       (bind-key "M-h" 'company-quickhelp-manual-begin company-mode-map))
-     (add-to-list 'company-backends 'company-anaconda)
-     (progn
-       (setq company-backends (delete 'company-semantic company-backends))
-       (use-package helm-company
-         :bind ("C-c <tab>" . helm-company)))
-     (company-quickhelp-mode 1)
-     :diminish 'company-mode)
- #+end_src
-
- Use company in minibuffer.
-
- #+begin_src emacs-lisp
-(with-eval-after-load "company-autoloads"
-  (global-company-mode 1)
-
-  (setq company-tooltip-limit 20
-        company-minimum-prefix-length 1
-        company-echo-delay 0
-        company-begin-commands '(self-insert-command
-                                 c-electric-lt-gt c-electric-colon
-                                 completion-separator-self-insert-command)
-        company-idle-delay 0.2
-        company-show-numbers t
-        company-tooltip-align-annotations t)
-
-  (defvar-local company-col-offset 0 "Horisontal tooltip offset.")
-  (defvar-local company-row-offset 0 "Vertical tooltip offset.")
-
-  (defun company--posn-col-row (posn)
-    (let ((col (car (posn-col-row posn)))
-          ;; `posn-col-row' doesn't work well with lines of different height.
-          ;; `posn-actual-col-row' doesn't handle multiple-width characters.
-          (row (cdr (posn-actual-col-row posn))))
-      (when (and header-line-format (version< emacs-version "24.3.93.3"))
-        ;; http://debbugs.gnu.org/18384
-        (cl-decf row))
-      (cons (+ col (window-hscroll) company-col-offset) (+ row company-row-offset))))
-
-  (defun company-elisp-minibuffer (command &optional arg &rest ignored)
-    "`company-mode' completion back-end for Emacs Lisp in the minibuffer."
-    (interactive (list 'interactive))
-    (case command
-      ('prefix (and (minibufferp)
-                    (case company-minibuffer-mode
-                      ('execute-extended-command (company-grab-symbol))
-                      (t (company-capf `prefix)))))
-      ('candidates
-       (case company-minibuffer-mode
-         ('execute-extended-command (all-completions arg obarray 'commandp))
-         (t nil)))))
-
-  (defun minibuffer-company ()
-    (unless company-mode
-      (when (and global-company-mode (or (eq this-command #'execute-extended-command)
-                                         (eq this-command #'eval-expression)))
-
-        (setq-local company-minibuffer-mode this-command)
-
-        (setq-local completion-at-point-functions
-                    (list (if (fboundp 'elisp-completion-at-point)
-                              #'elisp-completion-at-point
-                            #'lisp-completion-at-point) t))
-
-        (setq-local company-show-numbers nil)
-        (setq-local company-backends '((company-elisp-minibuffer company-capf)))
-        (setq-local company-tooltip-limit 8)
-        (setq-local company-col-offset 1)
-        (setq-local company-row-offset 1)
-        (setq-local company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
-                                        company-preview-if-just-one-frontend))
-
-        (company-mode 1)
-        (when (eq this-command #'execute-extended-command)
-          (company-complete)))))
-
-  (add-hook 'minibuffer-setup-hook #'minibuffer-company)
-  ;;(remove-hook 'minibuffer-setup-hook #'minibuffer-company)
-  ;;(add-hook 'eval-expression-minibuffer-setup-hook #'minibuffer-company)
-  ;; (with-eval-after-load "company-flx-autoloads"
-  ;; (company-flx-mode))
-)
- #+end_src
-
-*** ~auto-complete~ :completion:popups:
-
-  ~auto-complete~ is another completion package. It's more or less dormant in my
-  configuration, but I load it here because why not.
-
- #+begin_src emacs-lisp
- (use-package auto-complete)
- #+end_src
-
-** selection
-
-  #+BEGIN_SRC emacs-lisp
-  (setq helm-gtags-prefix-key "\C-cg")
-  #+END_SRC
 *** helm
-
-  #+BEGIN_SRC emacs-lisp
-    (set-face-attribute 'helm-candidate-number nil 
-                        :background "salmon2" 
-                        :foreground "black")
-    (set-face-attribute 'helm-source-header nil
-                        :foreground "#ff6347")
-  #+END_SRC
-
-
- #+begin_src emacs-lisp
-   
-#+end_src
-
- Ido really insists on using it's own kill-buffer by default...
-
 #+begin_src emacs-lisp
-  (defun kill-buffer-wrapper () (interactive) (kill-buffer))
-  (unbind-key "C-x k")
-  (bind-key "C-x k" 'kill-buffer-wrapper)  
+    
 #+end_src
 
  Ido should save its history files where everything else does!
@@ -931,50 +818,12 @@ The fringe is the area on the left and right edge of Emacs windows.
 #+begin_src emacs-lisp
   (setq fringe-mode '(4 . 4)) ;; set default fringe width to be 4 pixels on both sides
 #+end_src
-
-*** Cursor :cursor:idle:
-
-Change cursor when idle or in a different buffer. I like the vertical bar
-cursor, so this is nice when I need to find my cursor after not looking at the
-screen for minute.
-
-#+begin_src emacs-lisp
-  (use-package cursor-chg
-    :init
-    (curchg-toggle-cursor-type-when-idle)
-    (setq curch-idle-interval 0.5))
-#+end_src
-
 ** Finding files
 
    ~get-personal-file-binding~ is used to binding a key to a file. Results in a
    function, named appropriately, that is called to find =file= when =key= is
    pressed. The advantage of this is that ~guide-key~ will display the binding
    nicely.
-
-#+begin_src emacs-lisp
-  (defun make-get-personal-file-key (file key)
-    "Doesn't handle duplicate filenames very well.
-    Does handle files and directorys with same basename, though"
-    (let ((function-symbol (make-symbol
-                            (concat "get-personal-"
-                                    (if (file-directory-p file)
-                                        (concat "dir:" (file-name-nondirectory file))
-                                        (concat"file:" (file-name-base file)))
-                                    ))))
-      `(progn
-         (defun ,function-symbol ()
-           (interactive)
-           (find-file ,file))
-         (global-set-key (kbd ,key) ',function-symbol))))
-
-  (defmacro get-personal-file-binding (file key)
-    (make-get-personal-file-key (file-truename (directory-file-name
-                                                (if (stringp file)
-                                                    file
-                                                  (symbol-value file))))
-                                key))
-#+end_src
 
 Use ~helm-locate~ to recursively find files.
 
