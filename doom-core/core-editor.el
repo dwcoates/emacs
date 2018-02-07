@@ -45,11 +45,16 @@ modes are active and the buffer is read-only.")
  whitespace-display-mappings
  '((tab-mark ?\t [?› ?\t])
    (newline-mark ?\n [?¬ ?\n])
-   (space-mark ?\  [?·] [?.])))
+   (space-mark ?\  [?·] [?.]))
+ ;; Hungry backspace
+ backward-delete-char-untabify-method 'hungry)
 
 ;; Enable intermediate Emacs features disabled by default
-;; (put 'downcase-region 'disabled nil)
-;; (put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
+;; Use subwords
+(global-subword-mode 1)
 
 ;; ediff
 (setq ediff-diff-options "-w"
