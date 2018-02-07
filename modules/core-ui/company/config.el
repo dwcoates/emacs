@@ -99,6 +99,8 @@ MODES should be one major-mode symbol or a list of them."
           (when (eq this-command #'execute-extended-command)
             (company-complete)))))
 
+    (add-hook 'minibuffer-setup-hook #'minibuffer-company))
+
   :diminish 'company-mode)
 
 
