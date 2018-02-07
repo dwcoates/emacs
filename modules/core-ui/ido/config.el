@@ -60,3 +60,8 @@
              (insert "~/")
            (call-interactively #'self-insert-command)))))
   (add-hook 'ido-setup-hook #'+ido|setup-home-keybind))
+
+  (def-package! smex
+    :commands smex
+    :config 
+    (smex-initialize))
