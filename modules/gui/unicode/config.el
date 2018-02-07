@@ -17,3 +17,8 @@
     (if initial-window-system
         (+unicode|init-fonts)
       (add-hook 'after-make-frame-functions #'+unicode|init-fonts))))
+
+;; Turn on pretty symbols, which are unicode overlays for certain character
+;; combinations.
+(global-prettify-symbols-mode t)
+(setq prettify-symbols-unprettify-at-point 'right-edge)
