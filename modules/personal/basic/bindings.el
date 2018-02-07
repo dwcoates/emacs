@@ -738,95 +738,101 @@
        "C-a" 'smart-beginning-of-line
        "M-s o" 'occur
        ;;
+       ;; Ace-window
+       ;;
+       (:map global-map
+             ("C-o" . ace-window)
+             ("M-o" . ace-window-all-frames))
+       ;;
        ;; Smartparens
        ;;
        (:after smartparens
          (:map smartparens-mode-map
-           ;; delete behavior
-           "<backspace>"  'sp-backward-delete-char
-           "<C-backspace>"  'backward-delete-char
-           "<M-backspace>"  'sp-backward-kill-word
-           "<C-M-backspace>"  'backward-kill-word
-           ;; wrap/unwrap/rewrap
-           "M-["  'sp-backward-unwrap-sexp
-           "M-]"  'sp-unwrap-sexp
-           "M-s-["  'sp-rewrap-sexp)
+               ;; delete behavior
+               "<backspace>"  'sp-backward-delete-char
+               "<C-backspace>"  'backward-delete-char
+               "<M-backspace>"  'sp-backward-kill-word
+               "<C-M-backspace>"  'backward-kill-word
+               ;; wrap/unwrap/rewrap
+               "M-["  'sp-backward-unwrap-sexp
+               "M-]"  'sp-unwrap-sexp
+               "M-s-["  'sp-rewrap-sexp)
          (:prefix "C-j" :map smartparens-mode-map
-           ;; wrapping
-           "("   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "("))
-           "["   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "["))
-           "{"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "{"))
-           "'"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "'"))
-           "\""  (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\""))
-           "_"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_"))
-           "`"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "`"))
-           ;; sexp direction
-           "a"  'sp-beginning-of-sexp
-           "e"  'sp-end-of-sexp
-           "i"    'sp-up-sexp
-           "j"  'sp-backward-down-sexp
-           "l"    'sp-backward-up-sexp
-           "f"  'sp-forward-sexp
-           "b"  'sp-backward-sexp
-           "n"  'sp-next-sexp
-           "p"  'sp-previous-sexp
-           ;; symbol direction
-           "h"  'sp-forward-symbol
-           "g"  'sp-backward-symbol
-           ;; slurping
-           "t"  'sp-forward-slurp-sexp
-           "w"  'sp-forward-barf-sexp
-           "r"   'sp-backward-slurp-sexp
-           "q"   'sp-backward-barf-sexp
-           ;; transposing
-           "C-t"  'sp-transpose-sexp
-           "M-t"  'sp-transpose-hybrid-sexp
-           ;; killing/copying
-           "k"  'sp-kill-sexp
-           "h"    'sp-kill-hybrid-sexp
-           "C-k"    'sp-backward-kill-sexp
-           "C-w"  'sp-copy-sexp
-           ;; deleting
-           "d"  'sp-delete-word
-           "C-d"  'sp-delete-sexp
-           "<backspace>"  'sp-backward-delete-symbol
-           "<C-backspace>"  'sp-backward-kill-sexp))
+                  ;; wrapping
+                  "("   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "("))
+                  "["   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "["))
+                  "{"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "{"))
+                  "'"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "'"))
+                  "\""  (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\""))
+                  "_"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_"))
+                  "`"   (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "`"))
+                  ;; sexp direction
+                  "a"  'sp-beginning-of-sexp
+                  "e"  'sp-end-of-sexp
+                  "i"    'sp-up-sexp
+                  "j"  'sp-backward-down-sexp
+                  "l"    'sp-backward-up-sexp
+                  "f"  'sp-forward-sexp
+                  "b"  'sp-backward-sexp
+                  "n"  'sp-next-sexp
+                  "p"  'sp-previous-sexp
+                  ;; symbol direction
+                  "h"  'sp-forward-symbol
+                  "g"  'sp-backward-symbol
+                  ;; slurping
+                  "t"  'sp-forward-slurp-sexp
+                  "w"  'sp-forward-barf-sexp
+                  "r"   'sp-backward-slurp-sexp
+                  "q"   'sp-backward-barf-sexp
+                  ;; transposing
+                  "C-t"  'sp-transpose-sexp
+                  "M-t"  'sp-transpose-hybrid-sexp
+                  ;; killing/copying
+                  "k"  'sp-kill-sexp
+                  "h"    'sp-kill-hybrid-sexp
+                  "C-k"    'sp-backward-kill-sexp
+                  "C-w"  'sp-copy-sexp
+                  ;; deleting
+                  "d"  'sp-delete-word
+                  "C-d"  'sp-delete-sexp
+                  "<backspace>"  'sp-backward-delete-symbol
+                  "<C-backspace>"  'sp-backward-kill-sexp))
        ;;
        ;; Company
        ;;
        (:prefix "C-c"
          (:prefix "*"
-           "l"   #'+company/whole-lines
-           "k"   #'+company/dict-or-keywords
-           "f"   #'company-files
-           "C-]"   #'company-etags
-           "s"     #'company-ispell
-           "y"   #'company-yasnippet
-           "c"   #'company-capf
-           "a"   #'company-dabbrev-code
-           "q"   #'+company/dabbrev-code-previous))
+                  "l"   #'+company/whole-lines
+                  "k"   #'+company/dict-or-keywords
+                  "f"   #'company-files
+                  "C-]"   #'company-etags
+                  "s"     #'company-ispell
+                  "y"   #'company-yasnippet
+                  "c"   #'company-capf
+                  "a"   #'company-dabbrev-code
+                  "q"   #'+company/dabbrev-code-previous))
        (:after company
          (:map company-active-map
-           ;; Don't interfere with `evil-delete-backward-word' in insert mode
-           "C-w"        nil
-           "C-o"        #'company-search-kill-others
-           "C-n"        #'company-select-next
-           "C-p"        #'company-select-previous
-           "C-h"        #'company-quickhelp-manual-begin
-           "C-S-h"      #'company-show-doc-buffer
-           "C-S-s"      #'company-search-candidates
-           "C-s"        #'company-filter-candidates
-           "C-SPC"      #'company-complete-common
-           "C-h"        #'company-quickhelp-manual-begin
-           [tab]        #'company-complete-common-or-cycle
-           [backtab]    #'company-select-previous
-           [escape]     (λ! (company-abort) (evil-normal-state 1)))
+               ;; Don't interfere with `evil-delete-backward-word' in insert mode
+               "C-w"        nil
+               "C-o"        #'company-search-kill-others
+               "C-n"        #'company-select-next
+               "C-p"        #'company-select-previous
+               "C-h"        #'company-quickhelp-manual-begin
+               "C-S-h"      #'company-show-doc-buffer
+               "C-S-s"      #'company-search-candidates
+               "C-s"        #'company-filter-candidates
+               "C-SPC"      #'company-complete-common
+               "C-h"        #'company-quickhelp-manual-begin
+               [tab]        #'company-complete-common-or-cycle
+               [backtab]    #'company-select-previous
+               [escape]     (λ! (company-abort) (evil-normal-state 1)))
          ;; Automatically applies to `company-filter-map'
          (:map company-search-map
-           "C-n"        #'company-search-repeat-forward
-           "C-p"        #'company-search-repeat-backward
-           "C-s"        (λ! (company-search-abort) (company-filter-candidates))
-           [escape]     #'company-search-abort)))
+               "C-n"        #'company-search-repeat-forward
+               "C-p"        #'company-search-repeat-backward
+               "C-s"        (λ! (company-search-abort) (company-filter-candidates))
+               [escape]     #'company-search-abort)))
    
   ;; (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
 

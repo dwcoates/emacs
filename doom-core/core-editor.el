@@ -291,6 +291,29 @@ extension, try to guess one."
                beg
                end)))))
 
+(def-package! ace-window
+             :commands (ace-window ace-window-all-frames)
+             :config
+             (defun ace-other-window ()
+               (other-window 1))
+
+             (defun ace-window-all-frames ()
+               (interactive)
+               (let ((aw-scope 'global))
+                 (call-interactively 'ace-window)))
+
+             (setq aw-scope 'frame
+                   aw-background t
+                   aw-keys '(?j ?k ?l ?\; ?s ?d ?f ?g)
+                   aw-dispatch-alist '((?x aw-delete-window " Ace - Delete Window")
+                                       (?m aw-swap-window " Ace - Swap Window")
+                                       (?n aw-flip-window)
+                                       (?v aw-split-window-vert " Ace - Split Vert Window")
+                                       (?b aw-split-window-horz " Ace - Split Horz Window")
+                                       (?i delete-other-windows " Ace - Maximize Window")
+                                       (?o my/other-window " Ace - Other window")))
+             :diminish 'ace-window)
+
 (def-package! command-log-mode
   :commands (command-log-mode global-command-log-mode)
   :config
