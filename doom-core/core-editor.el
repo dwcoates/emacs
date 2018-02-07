@@ -47,6 +47,10 @@ modes are active and the buffer is read-only.")
    (newline-mark ?\n [?¬ ?\n])
    (space-mark ?\  [?·] [?.])))
 
+;; Enable intermediate Emacs features disabled by default
+;; (put 'downcase-region 'disabled nil)
+;; (put 'upcase-region 'disabled nil)
+
 ;; ediff
 (setq ediff-diff-options "-w"
       ediff-split-window-function #'split-window-horizontally
