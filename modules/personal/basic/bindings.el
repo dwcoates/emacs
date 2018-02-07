@@ -734,15 +734,19 @@
   ("o" Buffer-menu-other-window "other-window" :color blue)
   ("q" quit-window "quit" :color blue))
 
-(map!  [home] 'smart-beginning-of-line
+(map!  ;;
+       ;; Core
+       ;;
+       "C-x k" 'fast-kill-buffer
+       [home] 'smart-beginning-of-line
        "C-a" 'smart-beginning-of-line
        "M-s o" 'occur
        ;;
        ;; Ace-window
        ;;
        (:map global-map
-             ("C-o" . ace-window)
-             ("M-o" . ace-window-all-frames))
+         "C-o" 'ace-window
+         "M-o" 'ace-window-all-frames)
        ;;
        ;; Smartparens
        ;;

@@ -130,3 +130,8 @@ presentations."
         (windmove-find-other-window 'up))
       (shrink-window arg)
     (enlarge-window arg)))
+
+;;;###autoload
+(defun fast-kill-buffer () 
+  (interactive) 
+  (kill-buffer))
