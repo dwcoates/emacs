@@ -441,8 +441,9 @@ character that looks like a space that `whitespace-mode' won't affect.")
   (after! evil (nlinum-relative-setup-evil)))
 
 (def-package! ws-butler
-     :commands ws-butler
+     :commands ws-butler-mode
      :init
+     (add-hook 'after-init-hook 'ws-butler-mode)
      (add-hook 'c-mode-common-hook 'ws-butler-mode)
      (add-hook 'text-mode 'ws-butler-mode)
      (add-hook 'fundamental-mode 'ws-butler-mode)

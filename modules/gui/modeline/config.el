@@ -3,63 +3,68 @@
 (deftheme dwc-mode-line-theme "Modeline theme.")
 
 (require 'smart-mode-line)
-(setq sml-theme 'dark)
-(sml/setup)
-:config
-(custom-theme-set-faces
- 'dwc-mode-line-theme
- '(mode-line-buffer-id ((t :inherit sml/filename :foreground nil :background nil))) 
- '(mode-line-inactive ((t :foreground "gray60" :background "#404045" :inverse-video nil)))
- '(mode-line     ((t :foreground "gray60" :background "black" :inverse-video nil)))
- '(sml/global    ((t :foreground "gray50" :inverse-video nil)))
- '(sml/modes     ((t :inherit sml/global :foreground "White")))
- '(sml/filename  ((t :inherit sml/global :foreground "#eab700" :weight bold)))
- '(sml/prefix    ((t :inherit sml/global :foreground "#bf6000")))
- '(sml/read-only ((t :inherit sml/not-modified :foreground "DeepSkyBlue")))
- '(persp-selected-face ((t :foreground "ForestGreen" :inherit sml/filename)))
- '(helm-candidate-number ((t :foreground nil :background nil :inherit sml/filename))))
 
-;;;###autoload
-(when load-file-name
-  (add-to-list 'custom-theme-load-path
-               (file-name-as-directory (file-name-directory load-file-name))))
+(def-package! smart-mode-line
+ :config
+ (setq sml-theme 'dark)
+ (sml/setup)
+ ;;
+ ;; This code breaks because of ws-butler for some reason???
+ ;;
+ (custom-theme-set-faces
+  'dwc-mode-line-theme
+  '(mode-line-buffer-id ((t :inherit sml/filename :foreground nil :background nil))) 
+  '(mode-line-inactive ((t :foreground "gray60" :background "#404045" :inverse-video nil)))
+  '(mode-line     ((t :foreground "gray60" :background "black" :inverse-video nil)))
+  '(sml/global    ((t :foreground "gray50" :inverse-video nil)))
+  '(sml/modes     ((t :inherit sml/global :foreground "White")))
+  '(sml/filename  ((t :inherit sml/global :foreground "#eab700" :weight bold)))
+  '(sml/prefix    ((t :inherit sml/global :foreground "#bf6000")))
+  '(sml/read-only ((t :inherit sml/not-modified :foreground "DeepSkyBlue")))
+  '(persp-selected-face ((t :foreground "ForestGreen" :inherit sml/filename)))
+  '(helm-candidate-number ((t :foreground nil :background nil :inherit sml/filename)))))
 
-(def-package! eldoc-eval
-  :config
-  (defun +doom-modeline-eldoc (text)
-    (concat (when (display-graphic-p)
-              (+doom-modeline--make-xpm
-               (face-background 'doom-modeline-eldoc-bar nil t)
-               +doom-modeline-height
-               +doom-modeline-bar-width))
-            text))
+;; ;;;###autoload
+;; (when load-file-name
+;;   (add-to-list 'custom-theme-load-path
+;;                (file-name-as-directory (file-name-directory load-file-name))))
 
-  ;; Show eldoc in the mode-line with `eval-expression'
-  (defun +doom-modeline--show-eldoc (input)
-    "Display string STR in the mode-line next to minibuffer."
-    (with-current-buffer (eldoc-current-buffer)
-      (let* ((str              (and (stringp input) input))
-             (mode-line-format (or (and str (or (+doom-modeline-eldoc str) str))
-                                   mode-line-format))
-             mode-line-in-non-selected-windows)
-        (force-mode-line-update)
-        (sit-for eldoc-show-in-mode-line-delay))))
-  (setq eldoc-in-minibuffer-show-fn #'+doom-modeline--show-eldoc)
+;; (def-package! eldoc-eval
+;;   :config
+;;   (defun +doom-modeline-eldoc (text)
+;;     (concat (when (display-graphic-p)
+;;               (+doom-modeline--make-xpm
+;;                (face-background 'doom-modeline-eldoc-bar nil t)
+;;                +doom-modeline-height
+;;                +doom-modeline-bar-width))
+;;             text))
 
-  (eldoc-in-minibuffer-mode +1))
+;;   ;; Show eldoc in the mode-line with `eval-expression'
+;;   (defun +doom-modeline--show-eldoc (input)
+;;     "Display string STR in the mode-line next to minibuffer."
+;;     (with-current-buffer (eldoc-current-buffer)
+;;       (let* ((str              (and (stringp input) input))
+;;              (mode-line-format (or (and str (or (+doom-modeline-eldoc str) str))
+;;                                    mode-line-format))
+;;              mode-line-in-non-selected-windows)
+;;         (force-mode-line-update)
+;;         (sit-for eldoc-show-in-mode-line-delay))))
+;;   (setq eldoc-in-minibuffer-show-fn #'+doom-modeline--show-eldoc)
 
-;; Keep `+doom-modeline-current-window' up-to-date
-(defvar +doom-modeline-current-window (frame-selected-window))
-(defun +doom-modeline|set-selected-window (&rest _)
-  "Sets `+doom-modeline-current-window' appropriately"
-  (when-let* ((win (frame-selected-window)))
-    (unless (minibuffer-window-active-p win)
-      (setq +doom-modeline-current-window win))))
+;;   (eldoc-in-minibuffer-mode +1))
 
-(add-hook 'window-configuration-change-hook #'+doom-modeline|set-selected-window)
-(add-hook 'focus-in-hook #'+doom-modeline|set-selected-window)
-(advice-add #'handle-switch-frame :after #'+doom-modeline|set-selected-window)
-(advice-add #'select-window :after #'+doom-modeline|set-selected-window)
+;; ;; Keep `+doom-modeline-current-window' up-to-date
+;; (defvar +doom-modeline-current-window (frame-selected-window))
+;; (defun +doom-modeline|set-selected-window (&rest _)
+;;   "Sets `+doom-modeline-current-window' appropriately"
+;;   (when-let* ((win (frame-selected-window)))
+;;     (unless (minibuffer-window-active-p win)
+;;       (setq +doom-modeline-current-window win))))
+
+;; (add-hook 'window-configuration-change-hook #'+doom-modeline|set-selected-window)
+;; (add-hook 'focus-in-hook #'+doom-modeline|set-selected-window)
+;; (advice-add #'handle-switch-frame :after #'+doom-modeline|set-selected-window)
+;; (advice-add #'select-window :after #'+doom-modeline|set-selected-window)
 
 ;;
 ;; Variables
