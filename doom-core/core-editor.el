@@ -333,10 +333,15 @@ extension, try to guess one."
 (def-package! expand-region
   :commands (er/expand-region er/contract-region er/mark-symbol er/mark-word))
 
+(def-package! iedit
+   :commands iedit-mode
+   :config
+   (setq iedit-toggle-key-default nil))
+
 ;; Currently not available?
-;; (def-package! help-fns+ ; Improved help commands
-;;   :commands (describe-buffer describe-command describe-file
-;;              describe-keymap describe-option describe-option-of-type))
+(def-package! help-fns+ ; Improved help commands
+  :commands (describe-buffer describe-command describe-file
+             describe-keymap describe-option describe-option-of-type))
 
 (def-package! pcre2el
   :commands rxt-quote-pcre)
