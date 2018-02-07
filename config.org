@@ -45,7 +45,76 @@ Make ~emacs-lisp-mode~ the default major mode.
                                                   (symbol-value file))))
                                 key))
 #+end_src
+** disable helm modeline (possibly uselss)
 
+This code was useful before, but now doom makes helm come from minibuffer. Idk.
+1. *Collect bottom buffers*
+
+#+begin_src emacs-lisp
+(defvar bottom-buffers nil
+  "List of bottom buffers before helm session.
+    Its element is a pair of `buffer-name' and `mode-line-format'.")
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun bottom-buffers-init ()
+    (when bottom-buffers
+      (bottom-buffers-show-mode-line))
+    (setq bottom-buffers
+          (cl-loop for w in (window-list)
+                   when (window-at-side-p w 'bottom)
+                   collect (with-current-buffer (window-buffer w)
+                             (cons (buffer-name) mode-line-format)))))
+
+  (add-hook 'helm-before-initialize-hook #'bottom-buffers-init)
+#+end_src
+
+2. *Hide mode line*
+
+#+begin_src emacs-lisp
+(defun bottom-buffers-hide-mode-line ()
+  (mapc (lambda (elt)
+          (with-current-buffer (car elt)
+            (setq-local mode-line-format nil)))
+        bottom-buffers))
+
+(add-hook 'helm-after-initialize-hook #'bottom-buffers-hide-mode-line)
+#+end_src
+
+3. *Restore mode line*
+
+#+begin_src emacs-lisp
+(defun bottom-buffers-show-mode-line ()
+  (when bottom-buffers
+    (mapc (lambda (elt)
+            (with-current-buffer (car elt)
+              (setq-local mode-line-format (cdr elt))))
+          bottom-buffers)
+    (setq bottom-buffers nil)))
+
+(add-hook 'helm-exit-minibuffer-hook #'bottom-buffers-show-mode-line)
+#+end_src
+
+#+begin_src emacs-lisp
+(defun helm-keyboard-quit-advice (orig-func &rest args)
+  (bottom-buffers-show-mode-line)
+  (apply orig-func args))
+
+(advice-add 'helm-keyboard-quit :around #'helm-keyboard-quit-advice)
+#+end_src
+
+change modeleine appearance
+
+#+begin_src emacs-lisp
+  (defun helm-mode-line-hook ()
+    (let ((color "#8b475d"))
+      (face-remap-add-relative
+       'mode-line `((:foreground ,color :background ,color) mode-line))
+      (face-remap-add-relative
+       'helm-candidate-number `((:foreground "black" :background ,color) mode-line))))
+
+  (add-hook 'helm-major-mode-hook 'helm-mode-line-hook)
+#+end_src
 * Fundamental help commands
 
   Use the following help commands liberally:
@@ -269,160 +338,8 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
      (setq helm-dash-browser-func 'eww))
   #+end_src
 
-#+begin_src emacs-lisp
-
-#+end_src
-
-Don't display the modeline in bottom buffers when helm is active. It's
-distracting, useless, and unsightly. The following code was grabbed from
-[[http://emacs.stackexchange.com/questions/15233/hide-modeline-in-all-bottom-windows-while-helm-is-active][StackExchange]].
-
-1. *Collect bottom buffers*
-
-#+begin_src emacs-lisp
-(defvar bottom-buffers nil
-  "List of bottom buffers before helm session.
-    Its element is a pair of `buffer-name' and `mode-line-format'.")
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun bottom-buffers-init ()
-    (when bottom-buffers
-      (bottom-buffers-show-mode-line))
-    (setq bottom-buffers
-          (cl-loop for w in (window-list)
-                   when (window-at-side-p w 'bottom)
-                   collect (with-current-buffer (window-buffer w)
-                             (cons (buffer-name) mode-line-format)))))
-
-  (add-hook 'helm-before-initialize-hook #'bottom-buffers-init)
-#+end_src
-
-2. *Hide mode line*
-
-#+begin_src emacs-lisp
-(defun bottom-buffers-hide-mode-line ()
-  (mapc (lambda (elt)
-          (with-current-buffer (car elt)
-            (setq-local mode-line-format nil)))
-        bottom-buffers))
-
-(add-hook 'helm-after-initialize-hook #'bottom-buffers-hide-mode-line)
-#+end_src
-
-3. *Restore mode line*
-
-#+begin_src emacs-lisp
-(defun bottom-buffers-show-mode-line ()
-  (when bottom-buffers
-    (mapc (lambda (elt)
-            (with-current-buffer (car elt)
-              (setq-local mode-line-format (cdr elt))))
-          bottom-buffers)
-    (setq bottom-buffers nil)))
-
-(add-hook 'helm-exit-minibuffer-hook #'bottom-buffers-show-mode-line)
-#+end_src
-
-#+begin_src emacs-lisp
-(defun helm-keyboard-quit-advice (orig-func &rest args)
-  (bottom-buffers-show-mode-line)
-  (apply orig-func args))
-
-(advice-add 'helm-keyboard-quit :around #'helm-keyboard-quit-advice)
-#+end_src
-
-change modeleine appearance
-
-#+begin_src emacs-lisp
-  (defun helm-mode-line-hook ()
-    (let ((color "#8b475d"))
-      (face-remap-add-relative
-       'mode-line `((:foreground ,color :background ,color) mode-line))
-      (face-remap-add-relative
-       'helm-candidate-number `((:foreground "black" :background ,color) mode-line))))
-
-  (add-hook 'helm-major-mode-hook 'helm-mode-line-hook)
-#+end_src
-
 ** cosmetic
-*** Pretty Symbols :pretty:appearance:unicode:
 
-#+begin_src emacs-lisp
-  (global-prettify-symbols-mode t)
-#+end_src
-
-Un-prettify when symbol is just before point.
-
-#+begin_src emacs-lisp
-  (setq prettify-symbols-unprettify-at-point 'right-edge)
-#+end_src
-
-*** ~rainbow-delimiters~ :parentheses:appearance:
-
-#+BEGIN_SRC emacs-lisp
-    (set-face-attribute 'rainbow-delimiters-depth-1-face nil :foreground "indian red")
-    (set-face-attribute 'rainbow-delimiters-depth-2-face nil :foreground "light sea green")
-    (set-face-attribute 'rainbow-delimiters-depth-3-face nil :foreground "orchid")
-    (set-face-attribute 'rainbow-delimiters-depth-4-face nil :foreground "goldenrod")
-    (set-face-attribute 'rainbow-delimiters-depth-5-face nil :foreground "olive drab")
-    (set-face-attribute 'rainbow-delimiters-depth-6-face nil :foreground "deep sky blue")
-    (set-face-attribute 'rainbow-delimiters-depth-7-face nil :foreground "violet red")
-    (set-face-attribute 'rainbow-delimiters-depth-8-face nil :foreground "SeaGreen2")
-    (set-face-attribute 'rainbow-delimiters-depth-9-face nil :foreground "chocolate")
-    (set-face-attribute 'rainbow-delimiters-unmatched-face nil :foreground "red")
-#+END_SRC
-
-*** ~rainbow-mode~
-    
-    ~rainbow-mode~ colorizes hex color codes. Useful when customizing Emacs
-    themes. For example: #E74C3C, #F92672, #9C91E4, #268BD2. By the way, use
-    =C-c u c=, ~helm-insert-color-hex~, to select color hexes and insert them at
-    point.
-
-#+begin_src emacs-lisp
-  (use-package rainbow-mode
-    :config
-    (add-hook 'org-mode-hook 'rainbow-mode)
-    (add-hook 'prog-mode-hook 'rainbow-mode)) 
-#+end_src
-
-** searching
-
-#+begin_src emacs-lisp
-  (require 'rgrep)
-
-  (eval-after-load "grep"
-    '(defadvice grep-mode (after grep-register-match-positions activate)
-       (add-hook 'compilation-filter-hook 'grep-register-match-positions nil t)))
-
-  (eval-after-load "multiple-cursors"
-    '(add-to-list 'mc--default-cmds-to-run-once 'mc/add-cursors-to-all-matches))
-
-  (eval-after-load "wgrep"
-    '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
-
-  (eval-after-load "grep"
-    '(progn
-       ;; Don't recurse into some directories
-       (add-to-list 'grep-find-ignored-directories "target")
-       (add-to-list 'grep-find-ignored-directories "node_modules")
-       (add-to-list 'grep-find-ignored-directories "vendor")
-
-       ;; Add custom keybindings
-       (define-key grep-mode-map "q" 'rgrep-quit-window)
-       (define-key grep-mode-map (kbd "C-<return>") 'rgrep-goto-file-and-close-rgrep)
-       (define-key grep-mode-map (kbd "C-x C-s") 'wgrep-save-all-buffers)
-
-       ;; Use same keybinding as occur
-       (setq wgrep-enable-key "e")))
-#+end_src
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c g R") 'rgrep)
-#+end_src
-
-* tools
 * Buffer navigation
 ** Re-centering
 
@@ -467,41 +384,6 @@ Un-prettify when symbol is just before point.
 
 #+begin_src emacs-lisp
   (add-hook 'occur-mode-find-occurrence-hook 'recenter)
-#+end_src
-
-** ~special-tab~
-
-#+begin_src emacs-lisp
-    (defvar special-tab-last-command nil)
-
-    (defun special-tab ()
-      "Wrapper for tab key invocation. 
-
-           If point is just before a close delimiter, skip forward until 
-           there is no closed delimiter in front of point. Otherwise, invoke 
-           normal tab command for current mode.
-
-           Must be bound to <tab> using bind-key* macro from bind-key package.
-
-           Note, this function will not be called if `override-global-mode' is
-           turned off."
-      (interactive)
-      (defun next-char-delims (delims)
-        (let ((char (and (not (equal (point) (point-max)))
-                         (string (char-after (point))))))
-          (when char (member char delims))))
-      (let ((open '("'" "\"" ")" "]"))
-            (closed '("'" "\"" "(" "[")))
-        (if (next-char-delims open)
-            (progn (forward-char 1)
-                   (while (next-char-delims open)
-                     (forward-char 1)))
-          (run-with-timer 0 nil (lambda () (setq last-command (key-binding (kbd "TAB")))))
-          (call-interactively (key-binding (kbd "TAB"))))))
-
-    (if (macrop 'bind-key*)        
-        (bind-key* (kbd "<tab>") 'special-tab)
-      (user-error "Must have bind-key from use-package.el to use special-tab function."))
 #+end_src
 
 * Windowing
@@ -652,15 +534,8 @@ The fringe is the area on the left and right edge of Emacs windows.
 #+end_src
 ** Finding files
 
-   ~get-personal-file-binding~ is used to binding a key to a file. Results in a
-   function, named appropriately, that is called to find =file= when =key= is
-   pressed. The advantage of this is that ~guide-key~ will display the binding
-   nicely.
-
-Use ~helm-locate~ to recursively find files.
-
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-x M-f") 'helm-locate)
+  
 #+end_src
 
 *** dired
@@ -700,15 +575,6 @@ crawl.
 * Editing
 
 #+begin_src emacs-lisp
-  (let ((inhibit-message nil))
-    (message "Configuring editing settings..."))
-#+end_src
-
-    Use my goodies repository for some stuff I like to use, for instance,
-    ~helm-insert-color-name~, for selecting colors and inserting their name at
-    point.
-
-#+begin_src emacs-lisp
   (add-to-list 'load-path (concat lisp-dir "goodies"))
   (unless (require 'dwc-goodies nil t)
     (warn "Could not load dwc-goodies"))
@@ -716,10 +582,7 @@ crawl.
 
 ** Basic Settings
 
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-M-z") 'zap-to-char)
-#+end_src
-
+  
 
 #+BEGIN_SRC emacs-lisp
   (setq global-mark-ring-max 5000      ; increase mark ring to contains 5000 entries
@@ -730,17 +593,8 @@ crawl.
         kill-whole-line t)             ; if NIL, kill whole line and move the next line up
 #+END_SRC
 
-~electric-indent-mode~ provides on-the-fly re-indentation
-
 #+BEGIN_SRC emacs-lisp
-  (setq electric-indent-mode nil)
-#+END_SRC
-
-*DISABLED* /what does this do?/
-
-#+BEGIN_SRC emacs-lisp
-;  (put 'downcase-region 'disabled nil)
-;  (put 'upcase-region 'disabled nil)
+ 
 #+END_SRC
 
 Delete tabs with backspace
@@ -751,21 +605,12 @@ Delete tabs with backspace
 
 Use space to indent by default
 
-#+BEGIN_SRC emacs-lisp
   (setq-default indent-tabs-mode nil)
-#+END_SRC
+
 
 Set appearance of a tab that is represented by 4 spaces
 
-#+BEGIN_SRC emacs-lisp
-  (setq-default tab-width 4)
-#+END_SRC
-
-Remap =C-z= to ~just-one-space~. 
-
-#+begin_src emacs-lisp
   (global-set-key (kbd "C-z") 'just-one-space)
-#+end_src
 
 Remap =M-z= to 
 
