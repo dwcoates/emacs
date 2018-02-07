@@ -836,7 +836,36 @@
                "C-n"        #'company-search-repeat-forward
                "C-p"        #'company-search-repeat-backward
                "C-s"        (λ! (company-search-abort) (company-filter-candidates))
-               [escape]     #'company-search-abort)))
+               [escape]     #'company-search-abort))
+       ;;
+       ;; Ido
+       ;; 
+       "M-x" 'smex
+       ;;
+       ;; Helm
+       ;; 
+       "C-c 7 w" 'helm-wikipedia-suggest
+       "C-c 7 g" 'helm-google-suggest
+       "C-c 7 s" 'helm-surfraw
+       "C-f"     'helm-apropos              ; great help function
+       "r"       'helm-info-emacs
+       "C-l"     'helm-locate-library
+       (:map isearch-mode-map 
+             "M-i" 'helm-swoop-from-isearch) ; hand search over to helm-swoop
+       (:map minibuffer-local-map
+             "C-M-p" 'helm-minibuffer-history)
+       (:after helm-swoop
+         (:map helm-swoop-map                  
+               "M-i" 'helm-multi-swoop-all-from-helm-swoop)) ; hand search over to helm-swoop
+       (:after helm
+         (:map helm-map
+               "C-i" 'helm-execute-persistent-action ; make TAB works in terminal 
+               "C-z" 'helm-select-action)  
+         (:map helm-grep-mode-map
+               "<return>" 'helm-grep-mode-jump-other-window
+               "n"  'helm-grep-mode-jump-other-window-forward
+               "p"  'helm-grep-mode-jump-other-window-backward)))
+       
    
   ;; (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
 
