@@ -844,12 +844,15 @@
        ;;
        ;; Helm
        ;; 
+       "C-x M-f" 'helm-locate
+       ;; Help commands
        "C-c 7 w" 'helm-wikipedia-suggest
        "C-c 7 g" 'helm-google-suggest
        "C-c 7 s" 'helm-surfraw
-       "C-f"     'helm-apropos              ; great help function
-       "r"       'helm-info-emacs
-       "C-l"     'helm-locate-library
+       (:map help-map
+         "C-f"   'helm-apropos              ; great help function
+         "C-r"   'helm-info-emacs
+         "C-l"   'helm-locate-library)
        (:map isearch-mode-map 
              "M-i" 'helm-swoop-from-isearch) ; hand search over to helm-swoop
        (:map minibuffer-local-map
