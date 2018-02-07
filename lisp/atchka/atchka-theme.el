@@ -7,6 +7,9 @@
 ;;
 ;;; Code:
 
+;; Nice color!
+;; dark cyan
+
 (deftheme atchka "A dark theme.")
 
 (let ((c '((class color) (min-colors 89)))
