@@ -18,6 +18,7 @@
   (package! nlinum-relative))
 (package! rainbow-delimiters)
 (package! visual-fill-column)
+(package! ws-butler)
 
 ;; core-popups.el
 (package! shackle)
@@ -29,6 +30,7 @@
 (package! command-log-mode)
 (package! editorconfig)
 (package! expand-region)
+(package! iedit)
 ;; (package! help-fns+)      ; not currently available on melpa
 (package! pcre2el)
 (package! smart-forward)

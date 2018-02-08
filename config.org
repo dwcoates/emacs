@@ -3,6 +3,15 @@
 * left behind
 This code keeps the semantic idle parser from running the CPU too hot.
 
+  #+BEGIN_SRC emacs-lisp
+    (set-face-attribute 'helm-candidate-number nil 
+                        :background "salmon2" 
+                        :foreground "black")
+    (set-face-attribute 'helm-source-header nil
+                        :foreground "#ff6347")
+  #+END_SRC
+
+
 #+begin_src emacs-lisp
   (setq semantic-idle-scheduler-setup-timer 10000) ; hack. Semantic idle scheduler using 95+% CPU
 #+end_src
@@ -13,125 +22,99 @@ Make ~emacs-lisp-mode~ the default major mode.
   (setq default-major-mode 'emacs-lisp-mode)
 #+end_src
 
-* Core
+#+begin_src emacs-lisp
+  (defun make-get-personal-file-key (file key)
+    "Doesn't handle duplicate filenames very well.
+    Does handle files and directorys with same basename, though"
+    (let ((function-symbol (make-symbol
+                            (concat "get-personal-"
+                                    (if (file-directory-p file)
+                                        (concat "dir:" (file-name-nondirectory file))
+                                        (concat"file:" (file-name-base file)))
+                                    ))))
+      `(progn
+         (defun ,function-symbol ()
+           (interactive)
+           (find-file ,file))
+         (global-set-key (kbd ,key) ',function-symbol))))
 
-This binding is just annoying, so remove it.
+  (defmacro get-personal-file-binding (file key)
+    (make-get-personal-file-key (file-truename (directory-file-name
+                                                (if (stringp file)
+                                                    file
+                                                  (symbol-value file))))
+                                key))
+#+end_src
+** disable helm modeline (possibly uselss)
+
+This code was useful before, but now doom makes helm come from minibuffer. Idk.
+1. *Collect bottom buffers*
 
 #+begin_src emacs-lisp
-  (global-unset-key (kbd "ESC ESC ESC"))
+(defvar bottom-buffers nil
+  "List of bottom buffers before helm session.
+    Its element is a pair of `buffer-name' and `mode-line-format'.")
 #+end_src
-
-** keybinds
 
 #+begin_src emacs-lisp
-  (bind-key* "M-s o" 'occur)
+  (defun bottom-buffers-init ()
+    (when bottom-buffers
+      (bottom-buffers-show-mode-line))
+    (setq bottom-buffers
+          (cl-loop for w in (window-list)
+                   when (window-at-side-p w 'bottom)
+                   collect (with-current-buffer (window-buffer w)
+                             (cons (buffer-name) mode-line-format)))))
+
+  (add-hook 'helm-before-initialize-hook #'bottom-buffers-init)
 #+end_src
 
-Hydra solution for navigating ~buffer-menu~.
-
- #+begin_src emacs-lisp
- (defhydra hydra-buffer-menu (:color pink
-                              :hint nil)
-   "
- ^Mark^             ^Unmark^           ^Actions^          ^Search
- ^^^^^^^^-----------------------------------------------------------------
- _m_: mark          _u_: unmark        _x_: execute       _R_: re-isearch
- _s_: save          _U_: unmark up     _b_: bury          _I_: isearch
- _d_: delete        ^ ^                _g_: refresh       _O_: multi-occur
- _D_: delete up     ^ ^                _T_: files only: % -28`Buffer-menu-files-only
- _~_: modified
- "
-   ("m" Buffer-menu-mark)
-   ("u" Buffer-menu-unmark)
-   ("U" Buffer-menu-backup-unmark)
-   ("d" Buffer-menu-delete)
-   ("D" Buffer-menu-delete-backwards)
-   ("s" Buffer-menu-save)
-   ("~" Buffer-menu-not-modified)
-   ("x" Buffer-menu-execute)
-   ("b" Buffer-menu-bury)
-   ("g" revert-buffer)
-   ("T" Buffer-menu-toggle-files-only)
-   ("O" Buffer-menu-multi-occur :color blue)
-   ("I" Buffer-menu-isearch-buffers :color blue)
-   ("R" Buffer-menu-isearch-buffers-regexp :color blue)
-   ("c" nil "cancel")
-   ("v" Buffer-menu-select "select" :color blue)
-   ("o" Buffer-menu-other-window "other-window" :color blue)
-   ("q" quit-window "quit" :color blue))
-
- (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body)
- #+end_src
-
-A Hydra approach to ~rectangle-mark-mode~.
+2. *Hide mode line*
 
 #+begin_src emacs-lisp
-    (require 'rect)
-    (defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
-                               :color pink
-                               :post (deactivate-mark))
-      "
-      ^_p_^     _d_elete    _s_tring
-    _b_   _f_   _o_k        _y_ank
-      ^_n_^     _w_ew-copy  _r_eset
-    ^^^^        _e_xchange  _u_ndo
-    ^^^^        ^ ^         _y_ank
-    "
-      ("b" rectangle-backward-char nil)
-      ("f" rectangle-forward-char nil)
-      ("p" rectangle-previous-line nil)
-      ("n" rectangle-next-line nil)
-      ("e" hydra-ex-point-mark nil)
-      ("w" copy-rectangle-as-kill nil)
-      ("d" delete-rectangle nil)
-      ("r" (if (region-active-p)
-               (deactivate-mark)
-             (rectangle-mark-mode 1)) nil)
-      ("y" yank-rectangle nil)
-      ("u" undo nil)
-      ("s" string-rectangle nil)
-      ("k" kill-rectangle nil)
-      ("o" nil nil))
+(defun bottom-buffers-hide-mode-line ()
+  (mapc (lambda (elt)
+          (with-current-buffer (car elt)
+            (setq-local mode-line-format nil)))
+        bottom-buffers))
 
-  (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
+(add-hook 'helm-after-initialize-hook #'bottom-buffers-hide-mode-line)
 #+end_src
 
-** core
-
- #+begin_src emacs-lisp
-   (defun smart-beginning-of-line ()
-       "Move point to first non-whitespace character or beginning-of-line.
-
-     Move point to the first non-whitespace character on this line.
-     If point was already at that position, move point to beginning of line."
-       (interactive)
-       (let ((oldpos (point)))
-         (back-to-indentation)
-         (and (= oldpos (point))
-              (if (equal major-mode 'org-mode)
-                  (org-beginning-of-line)
-                (beginning-of-line)))))
- #+end_src
-
- #+begin_src emacs-lisp
-   (global-set-key [home] 'smart-beginning-of-line)
-   (global-set-key (kbd "C-a") 'smart-beginning-of-line)
-   (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
- #+end_src
-
-
-   #+begin_src emacs-lisp
-(global-set-key (kbd "C-q") 'isearch-forward)
-(global-set-key (kbd "C-S-q") 'isearch-backward)
-#+end_src
-
-Isearch repeat...
+3. *Restore mode line*
 
 #+begin_src emacs-lisp
-(define-key isearch-mode-map (kbd "C-q") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "C-S-q") 'isearch-repeat-backward)
-   #+end_src
+(defun bottom-buffers-show-mode-line ()
+  (when bottom-buffers
+    (mapc (lambda (elt)
+            (with-current-buffer (car elt)
+              (setq-local mode-line-format (cdr elt))))
+          bottom-buffers)
+    (setq bottom-buffers nil)))
 
+(add-hook 'helm-exit-minibuffer-hook #'bottom-buffers-show-mode-line)
+#+end_src
+
+#+begin_src emacs-lisp
+(defun helm-keyboard-quit-advice (orig-func &rest args)
+  (bottom-buffers-show-mode-line)
+  (apply orig-func args))
+
+(advice-add 'helm-keyboard-quit :around #'helm-keyboard-quit-advice)
+#+end_src
+
+change modeleine appearance
+
+#+begin_src emacs-lisp
+  (defun helm-mode-line-hook ()
+    (let ((color "#8b475d"))
+      (face-remap-add-relative
+       'mode-line `((:foreground ,color :background ,color) mode-line))
+      (face-remap-add-relative
+       'helm-candidate-number `((:foreground "black" :background ,color) mode-line))))
+
+  (add-hook 'helm-major-mode-hook 'helm-mode-line-hook)
+#+end_src
 * Fundamental help commands
 
   Use the following help commands liberally:
@@ -232,25 +215,7 @@ These have to be fetched with doom's method
 
 * GUI
 
-#+begin_src emacs-lisp
-  (use-package diminish)
-#+end_src
-
- From the Hydra examples, increase/decrease buffer font size:
-
- #+begin_src emacs-lisp
-   (defhydra hydra-zoom (global-map "<f2>")
-     "For zooming buffer text."
-     ("i" text-scale-increase "in")
-     ("o" text-scale-decrease "out"))
- #+end_src
-
-** Hydra 
-
-Org-agenda:
 * Org
-
-  - org mode stuff
 
 ** agenda
 
@@ -364,296 +329,7 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
  #+end_src
 
 * UI
-** completion
-*** ~company~ :completion:popups:
-
-    ~company-mode~ is my auto-completion mode of choice. It's a pretty big
-    package, and is highly extensible and configurable. There are company
-    backends that people have written for all sorts of things; JavaScript,
-    org-mode, Python, C++, etc. Throughout this config, company backends will
-    be added for corresponding modes.
-
- *use-package Company*
-
- #+begin_src emacs-lisp
-   (use-package company
-     :init
-     (add-hook 'after-init-hook 'global-company-mode)
-     ;; provides a little popup for documentation
-     :bind*
-     (("C-S-;" . company-files)
-      ("C-;" . company-manual-begin)
-      :map company-active-map
-      ("C-n" . company-select-next)
-      ("C-p" . company-select-previous)
-      ("M-n" . company-next-page)
-      ("M-p" . company-previous-page))
-     :config
-     (use-package company-quickhelp
-       :config
-       (setq company-quickhelp-max-lines 10
-             company-idle-delay 2.0
-             company-quickhelp-delay 0.25)
-       (bind-key "M-h" 'company-quickhelp-manual-begin company-mode-map))
-     (add-to-list 'company-backends 'company-anaconda)
-     (progn
-       (setq company-backends (delete 'company-semantic company-backends))
-       (use-package helm-company
-         :bind ("C-c <tab>" . helm-company)))
-     (company-quickhelp-mode 1)
-     :diminish 'company-mode)
- #+end_src
-
- Use company in minibuffer.
-
- #+begin_src emacs-lisp
-(with-eval-after-load "company-autoloads"
-  (global-company-mode 1)
-
-  (setq company-tooltip-limit 20
-        company-minimum-prefix-length 1
-        company-echo-delay 0
-        company-begin-commands '(self-insert-command
-                                 c-electric-lt-gt c-electric-colon
-                                 completion-separator-self-insert-command)
-        company-idle-delay 0.2
-        company-show-numbers t
-        company-tooltip-align-annotations t)
-
-  (defvar-local company-col-offset 0 "Horisontal tooltip offset.")
-  (defvar-local company-row-offset 0 "Vertical tooltip offset.")
-
-  (defun company--posn-col-row (posn)
-    (let ((col (car (posn-col-row posn)))
-          ;; `posn-col-row' doesn't work well with lines of different height.
-          ;; `posn-actual-col-row' doesn't handle multiple-width characters.
-          (row (cdr (posn-actual-col-row posn))))
-      (when (and header-line-format (version< emacs-version "24.3.93.3"))
-        ;; http://debbugs.gnu.org/18384
-        (cl-decf row))
-      (cons (+ col (window-hscroll) company-col-offset) (+ row company-row-offset))))
-
-  (defun company-elisp-minibuffer (command &optional arg &rest ignored)
-    "`company-mode' completion back-end for Emacs Lisp in the minibuffer."
-    (interactive (list 'interactive))
-    (case command
-      ('prefix (and (minibufferp)
-                    (case company-minibuffer-mode
-                      ('execute-extended-command (company-grab-symbol))
-                      (t (company-capf `prefix)))))
-      ('candidates
-       (case company-minibuffer-mode
-         ('execute-extended-command (all-completions arg obarray 'commandp))
-         (t nil)))))
-
-  (defun minibuffer-company ()
-    (unless company-mode
-      (when (and global-company-mode (or (eq this-command #'execute-extended-command)
-                                         (eq this-command #'eval-expression)))
-
-        (setq-local company-minibuffer-mode this-command)
-
-        (setq-local completion-at-point-functions
-                    (list (if (fboundp 'elisp-completion-at-point)
-                              #'elisp-completion-at-point
-                            #'lisp-completion-at-point) t))
-
-        (setq-local company-show-numbers nil)
-        (setq-local company-backends '((company-elisp-minibuffer company-capf)))
-        (setq-local company-tooltip-limit 8)
-        (setq-local company-col-offset 1)
-        (setq-local company-row-offset 1)
-        (setq-local company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
-                                        company-preview-if-just-one-frontend))
-
-        (company-mode 1)
-        (when (eq this-command #'execute-extended-command)
-          (company-complete)))))
-
-  (add-hook 'minibuffer-setup-hook #'minibuffer-company)
-  ;;(remove-hook 'minibuffer-setup-hook #'minibuffer-company)
-  ;;(add-hook 'eval-expression-minibuffer-setup-hook #'minibuffer-company)
-  ;; (with-eval-after-load "company-flx-autoloads"
-  ;; (company-flx-mode))
-)
- #+end_src
-
-*** ~auto-complete~ :completion:popups:
-
-  ~auto-complete~ is another completion package. It's more or less dormant in my
-  configuration, but I load it here because why not.
-
- #+begin_src emacs-lisp
- (use-package auto-complete)
- #+end_src
-
-** selection
-
-  #+BEGIN_SRC emacs-lisp
-  (setq helm-gtags-prefix-key "\C-cg")
-  #+END_SRC
 *** helm
-
-  #+BEGIN_SRC emacs-lisp
-    (set-face-attribute 'helm-candidate-number nil 
-                        :background "salmon2" 
-                        :foreground "black")
-    (set-face-attribute 'helm-source-header nil
-                        :foreground "#ff6347")
-  #+END_SRC
-
-
- #+begin_src emacs-lisp
-   
-#+end_src
-
- Ido really insists on using it's own kill-buffer by default...
-
-#+begin_src emacs-lisp
-  (defun kill-buffer-wrapper () (interactive) (kill-buffer))
-  (unbind-key "C-x k")
-  (bind-key "C-x k" 'kill-buffer-wrapper)  
-#+end_src
-
- Ido should save its history files where everything else does!
-
-#+begin_src emacs-lisp
-  (setq-default ido-save-directory-list-file (concat saveplace-dir "ido.last"))
- #+end_src
-
-
-#+begin_src emacs-lisp
-  (use-package smex
-    :init (global-set-key (kbd "M-x") 'smex)
-    :config 
-    (smex-initialize)
-    :bind
-    ("C-z" . magit-status))
-#+end_src
-
-
-
- #+begin_src emacs-lisp
-   (use-package ivy
-     :init
-     (use-package counsel
-       :config
-       :bind*
-       ("C-x y" . counsel-org-tag))
-     :config
-     (set-face-attribute 'ivy-current-match nil :background "#ffb6c1" :foreground "black")
-     (setq ivy-height 5)
-     (setq ivy-format-function 'ivy-format-function-arrow))
- #+end_src
-
-#+begin_src emacs-lisp
-  (use-package swiper)
-#+end_src
-
-  Helm-flx improves helms scoring of results. Helm-fuzzier improves its fuzzy
-  matching. Seems useless.
-
-  #+begin_src emacs-lisp
-    (use-package helm-flx
-      :init ;(helm-flx-mode 1)
-      :config
-      ; (setq helm-flx-for-helm-find-files t ;; t by default
-      ;       helm-flx-for-helm-locate t)
-      )
-
-    (use-package helm-fuzzier
-      :init ;(helm-fuzzier-mode 1)
-      )
-  #+end_src
-
-  ~helm-swoop~ is an interface for searching for lines in a buffer using helm.
-
-  #+BEGIN_SRC emacs-lisp
-    (use-package helm-swoop
-      :init (progn
-              (global-set-key (kbd "C-c s") 'helm-swoop)
-              (global-set-key (kbd "C-c S") 'helm-multi-swoop-all))
-      :config (progn
-                ; When doing isearch, hand the word over to helm-swoop
-                (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-                ; From helm-swoop to helm-multi-swoop-all
-                (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-                ; Save buffer when helm-multi-swoop-edit complete
-                (setq helm-multi-swoop-edit-save t))
-                ; If this value is t, split window inside the current window
-                (setq helm-swoop-split-with-multiple-windows t)
-                ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-                (setq helm-swoop-split-direction 'split-window-vertically)
-                ;; If nil, you can slightly boost invoke speed in exchange for text color
-                (setq helm-swoop-speed-or-color t)
-                ;; Hack to make helm stop pre-inputting search
-                (setq helm-swoop-pre-input-function (lambda () nil)))
-  #+END_SRC
-
-  Can use =TAB= and =C-i= to perform the same action as =RETURN=, but without
-  killing the ~helm~ process. This is very useful, for example, when you want to
-  sift through Emacs Lisp documentation in a =C-h f= (~describe-function~) call.
-
-  #+begin_src emacs-lisp
-  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)  ; make TAB works in terminal
-#+end_src
-
-  Some helm bindings and additional commands.
-
-#+begin_src emacs-lisp
-  (define-key helm-map (kbd "C-z")  'helm-select-action)             ; list actions using C-z
-
-  (define-key helm-grep-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
-  (define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
-  (define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
-
-  (when (executable-find "curl")
-    (setq helm-google-suggest-use-curl-p t))
-
-  (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-
-  (global-set-key (kbd "C-c 7 w") 'helm-wikipedia-suggest)
-  (global-set-key (kbd "C-c 7 g") 'helm-google-suggest)
-  (global-set-key (kbd "C-c 7 s") 'helm-surfraw)
-
-  (global-set-key (kbd "C-x r j") 'jump-to-register)
-
-  (define-key 'help-command (kbd "C-f") 'helm-apropos)
-  (define-key 'help-command (kbd "r") 'helm-info-emacs)
-  (define-key 'help-command (kbd "C-l") 'helm-locate-library)
-
-  ;;; Save current position to mark ring
-  (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
-  #+END_SRC
-
-  Show minibuffer history with Helm
-
-  #+BEGIN_SRC emacs-lisp
-  (define-key minibuffer-local-map (kbd "M-p") 'helm-minibuffer-history)
-  #+END_SRC
-
-  Navigating file
-
-  #+BEGIN_SRC emacs-lisp
-  (define-key global-map [remap find-tag] 'helm-etags-select)
-  (define-key global-map [remap list-buffers] 'helm-buffers-list)
-  #+END_SRC
-
-  Use Helm to list eshell history:
-
-  #+BEGIN_SRC emacs-lisp
-  (add-hook 'eshell-mode-hook
-            (lambda ()
-                (local-set-key (kbd "C-c C-l") 'helm-eshell-history)))
-  #+END_SRC
-
-  Fuzzy matching for elisp helm completion. E.g., =helm-M-x= "fi ile" will
-  have "find-file" as one of the possible completions.
-
-  #+BEGIN_SRC emacs-lisp
-  (setq helm-lisp-fuzzy-completion t)
-  #+END_SRC
-
   #+begin_src emacs-lisp
     (use-package helm-dash
      :bind*
@@ -662,185 +338,8 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
      (setq helm-dash-browser-func 'eww))
   #+end_src
 
-#+begin_src emacs-lisp
-  (defun dwc-helm-source-buffers (buffers)
-    "Return sorted source-buffers.  Helm will not sort results by default."
-    (let ((last-used (subseq buffers 0 (min 5 (length buffers))))
-          (buffers (subseq buffers (min 6 (length buffers))))
-          dired-buffers
-          other-buffers
-          (buf-sort (lambda (bufs)
-                      (cl-sort bufs
-                               (lambda (a b)
-                                 (or (< (length a) (length b))
-                                     (and (= (length a) (length b))
-                                          (string-lessp a b))))))))
-      (dolist (buf buffers)
-        (if (with-current-buffer buf
-              (eq major-mode 'dired-mode))
-            (push buf dired-buffers)
-          (push buf other-buffers)))
-      (append
-       (funcall buf-sort last-used)
-       (funcall buf-sort other-buffers)
-       (funcall buf-sort dired-buffers))))
-
-  (defun helm-buffers-sort-dired-buffers (orig-fun &rest args)
-    (dwc-helm-source-buffers (apply orig-fun args)))
-
-  (advice-add 'helm-buffers-sort-transformer :around 'helm-buffers-sort-dired-buffers)
-#+end_src
-
-Don't display the modeline in bottom buffers when helm is active. It's
-distracting, useless, and unsightly. The following code was grabbed from
-[[http://emacs.stackexchange.com/questions/15233/hide-modeline-in-all-bottom-windows-while-helm-is-active][StackExchange]].
-
-1. *Collect bottom buffers*
-
-#+begin_src emacs-lisp
-(defvar bottom-buffers nil
-  "List of bottom buffers before helm session.
-    Its element is a pair of `buffer-name' and `mode-line-format'.")
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun bottom-buffers-init ()
-    (when bottom-buffers
-      (bottom-buffers-show-mode-line))
-    (setq bottom-buffers
-          (cl-loop for w in (window-list)
-                   when (window-at-side-p w 'bottom)
-                   collect (with-current-buffer (window-buffer w)
-                             (cons (buffer-name) mode-line-format)))))
-
-  (add-hook 'helm-before-initialize-hook #'bottom-buffers-init)
-#+end_src
-
-2. *Hide mode line*
-
-#+begin_src emacs-lisp
-(defun bottom-buffers-hide-mode-line ()
-  (mapc (lambda (elt)
-          (with-current-buffer (car elt)
-            (setq-local mode-line-format nil)))
-        bottom-buffers))
-
-(add-hook 'helm-after-initialize-hook #'bottom-buffers-hide-mode-line)
-#+end_src
-
-3. *Restore mode line*
-
-#+begin_src emacs-lisp
-(defun bottom-buffers-show-mode-line ()
-  (when bottom-buffers
-    (mapc (lambda (elt)
-            (with-current-buffer (car elt)
-              (setq-local mode-line-format (cdr elt))))
-          bottom-buffers)
-    (setq bottom-buffers nil)))
-
-(add-hook 'helm-exit-minibuffer-hook #'bottom-buffers-show-mode-line)
-#+end_src
-
-#+begin_src emacs-lisp
-(defun helm-keyboard-quit-advice (orig-func &rest args)
-  (bottom-buffers-show-mode-line)
-  (apply orig-func args))
-
-(advice-add 'helm-keyboard-quit :around #'helm-keyboard-quit-advice)
-#+end_src
-
-change modeleine appearance
-
-#+begin_src emacs-lisp
-  (defun helm-mode-line-hook ()
-    (let ((color "#8b475d"))
-      (face-remap-add-relative
-       'mode-line `((:foreground ,color :background ,color) mode-line))
-      (face-remap-add-relative
-       'helm-candidate-number `((:foreground "black" :background ,color) mode-line))))
-
-  (add-hook 'helm-major-mode-hook 'helm-mode-line-hook)
-#+end_src
-
 ** cosmetic
-*** Pretty Symbols :pretty:appearance:unicode:
 
-#+begin_src emacs-lisp
-  (global-prettify-symbols-mode t)
-#+end_src
-
-Un-prettify when symbol is just before point.
-
-#+begin_src emacs-lisp
-  (setq prettify-symbols-unprettify-at-point 'right-edge)
-#+end_src
-
-*** ~rainbow-delimiters~ :parentheses:appearance:
-
-#+BEGIN_SRC emacs-lisp
-    (set-face-attribute 'rainbow-delimiters-depth-1-face nil :foreground "indian red")
-    (set-face-attribute 'rainbow-delimiters-depth-2-face nil :foreground "light sea green")
-    (set-face-attribute 'rainbow-delimiters-depth-3-face nil :foreground "orchid")
-    (set-face-attribute 'rainbow-delimiters-depth-4-face nil :foreground "goldenrod")
-    (set-face-attribute 'rainbow-delimiters-depth-5-face nil :foreground "olive drab")
-    (set-face-attribute 'rainbow-delimiters-depth-6-face nil :foreground "deep sky blue")
-    (set-face-attribute 'rainbow-delimiters-depth-7-face nil :foreground "violet red")
-    (set-face-attribute 'rainbow-delimiters-depth-8-face nil :foreground "SeaGreen2")
-    (set-face-attribute 'rainbow-delimiters-depth-9-face nil :foreground "chocolate")
-    (set-face-attribute 'rainbow-delimiters-unmatched-face nil :foreground "red")
-#+END_SRC
-
-*** ~rainbow-mode~
-    
-    ~rainbow-mode~ colorizes hex color codes. Useful when customizing Emacs
-    themes. For example: #E74C3C, #F92672, #9C91E4, #268BD2. By the way, use
-    =C-c u c=, ~helm-insert-color-hex~, to select color hexes and insert them at
-    point.
-
-#+begin_src emacs-lisp
-  (use-package rainbow-mode
-    :config
-    (add-hook 'org-mode-hook 'rainbow-mode)
-    (add-hook 'prog-mode-hook 'rainbow-mode)) 
-#+end_src
-
-** searching
-
-#+begin_src emacs-lisp
-  (require 'rgrep)
-
-  (eval-after-load "grep"
-    '(defadvice grep-mode (after grep-register-match-positions activate)
-       (add-hook 'compilation-filter-hook 'grep-register-match-positions nil t)))
-
-  (eval-after-load "multiple-cursors"
-    '(add-to-list 'mc--default-cmds-to-run-once 'mc/add-cursors-to-all-matches))
-
-  (eval-after-load "wgrep"
-    '(define-key wgrep-mode-map (kbd "C-c C-æ") 'mc/add-cursors-to-all-matches))
-
-  (eval-after-load "grep"
-    '(progn
-       ;; Don't recurse into some directories
-       (add-to-list 'grep-find-ignored-directories "target")
-       (add-to-list 'grep-find-ignored-directories "node_modules")
-       (add-to-list 'grep-find-ignored-directories "vendor")
-
-       ;; Add custom keybindings
-       (define-key grep-mode-map "q" 'rgrep-quit-window)
-       (define-key grep-mode-map (kbd "C-<return>") 'rgrep-goto-file-and-close-rgrep)
-       (define-key grep-mode-map (kbd "C-x C-s") 'wgrep-save-all-buffers)
-
-       ;; Use same keybinding as occur
-       (setq wgrep-enable-key "e")))
-#+end_src
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c g R") 'rgrep)
-#+end_src
-
-* tools
 * Buffer navigation
 ** Re-centering
 
@@ -885,41 +384,6 @@ Un-prettify when symbol is just before point.
 
 #+begin_src emacs-lisp
   (add-hook 'occur-mode-find-occurrence-hook 'recenter)
-#+end_src
-
-** ~special-tab~
-
-#+begin_src emacs-lisp
-    (defvar special-tab-last-command nil)
-
-    (defun special-tab ()
-      "Wrapper for tab key invocation. 
-
-           If point is just before a close delimiter, skip forward until 
-           there is no closed delimiter in front of point. Otherwise, invoke 
-           normal tab command for current mode.
-
-           Must be bound to <tab> using bind-key* macro from bind-key package.
-
-           Note, this function will not be called if `override-global-mode' is
-           turned off."
-      (interactive)
-      (defun next-char-delims (delims)
-        (let ((char (and (not (equal (point) (point-max)))
-                         (string (char-after (point))))))
-          (when char (member char delims))))
-      (let ((open '("'" "\"" ")" "]"))
-            (closed '("'" "\"" "(" "[")))
-        (if (next-char-delims open)
-            (progn (forward-char 1)
-                   (while (next-char-delims open)
-                     (forward-char 1)))
-          (run-with-timer 0 nil (lambda () (setq last-command (key-binding (kbd "TAB")))))
-          (call-interactively (key-binding (kbd "TAB"))))))
-
-    (if (macrop 'bind-key*)        
-        (bind-key* (kbd "<tab>") 'special-tab)
-      (user-error "Must have bind-key from use-package.el to use special-tab function."))
 #+end_src
 
 * Windowing
@@ -1014,49 +478,6 @@ Key bindings for other files:
 (global-set-key (kbd "C-c o s")
                 (lambda () (interactive) (switch-to-buffer "*Scratch*")))
 #+end_src
-
-*** Hydra bindings
-
-#+begin_src emacs-lisp
-      (defhydra hydra-windows (global-map "C-S-o" :hint none)
-        "
-      Delete: _o_nly  _da_ce  _dw_indow  _db_uffer  _df_rame
-        Move: _s_wap, _b_alance
-      Frames: _f_rame new  _df_ delete
-        Misc: _a_ce  _u_ndo  _r_edo
-    Windmove: _h_, _j_, _k_, _l_
-      Adjust: _H_, _J_, _K_, _L_"
-        ;; Windmove
-        ("h" windmove-left)
-        ("j" windmove-down)
-        ("k" windmove-up)
-        ("l" windmove-right)
-        ;; Adjust
-        ("H" hydra-move-splitter-left)
-        ("J" hydra-move-splitter-down)
-        ("K" hydra-move-splitter-up)
-        ("L" hydra-move-splitter-right)
-        ;; undo/redo
-        ("u" winner-undo)
-        ("r" winner-redo) ;;fixme, not working?
-        ("o" delete-other-windows :exit t)
-        ("b" balance-windows)
-        ("a" ace-window :exit t)
-        ("f" find-file :exit t)
-        ("s" ace-swap-window)
-        ("da" ace-delete-window)
-        ("dw" delete-window)
-        ("db" kill-this-buffer)
-        ("df" delete-frame :exit t))
-
-  (defhydra hydra-splitter (global-map "C-M-s")
-      "splitter"
-      ("h" hydra-move-splitter-left)
-      ("j" hydra-move-splitter-down)
-      ("k" hydra-move-splitter-up)
-      ("l" hydra-move-splitter-right))
-#+end_src
-
 **** Helpers
 
 #+begin_src emacs-lisp
@@ -1111,55 +532,10 @@ The fringe is the area on the left and right edge of Emacs windows.
 #+begin_src emacs-lisp
   (setq fringe-mode '(4 . 4)) ;; set default fringe width to be 4 pixels on both sides
 #+end_src
-
-*** Cursor :cursor:idle:
-
-Change cursor when idle or in a different buffer. I like the vertical bar
-cursor, so this is nice when I need to find my cursor after not looking at the
-screen for minute.
-
-#+begin_src emacs-lisp
-  (use-package cursor-chg
-    :init
-    (curchg-toggle-cursor-type-when-idle)
-    (setq curch-idle-interval 0.5))
-#+end_src
-
 ** Finding files
 
-   ~get-personal-file-binding~ is used to binding a key to a file. Results in a
-   function, named appropriately, that is called to find =file= when =key= is
-   pressed. The advantage of this is that ~guide-key~ will display the binding
-   nicely.
-
 #+begin_src emacs-lisp
-  (defun make-get-personal-file-key (file key)
-    "Doesn't handle duplicate filenames very well.
-    Does handle files and directorys with same basename, though"
-    (let ((function-symbol (make-symbol
-                            (concat "get-personal-"
-                                    (if (file-directory-p file)
-                                        (concat "dir:" (file-name-nondirectory file))
-                                        (concat"file:" (file-name-base file)))
-                                    ))))
-      `(progn
-         (defun ,function-symbol ()
-           (interactive)
-           (find-file ,file))
-         (global-set-key (kbd ,key) ',function-symbol))))
-
-  (defmacro get-personal-file-binding (file key)
-    (make-get-personal-file-key (file-truename (directory-file-name
-                                                (if (stringp file)
-                                                    file
-                                                  (symbol-value file))))
-                                key))
-#+end_src
-
-Use ~helm-locate~ to recursively find files.
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-x M-f") 'helm-locate)
+  
 #+end_src
 
 *** dired
@@ -1196,188 +572,7 @@ crawl.
   (define-key dired-mode-map (kbd "S-<return>") 'dired-find-file-conservatively)
 #+end_src
 
-** Selection
-*** ~ace-window~ :jump:
-
- Jump quickly between windows and frames using just two key strokes
- with ace-window. Essential package:
-
- #+BEGIN_SRC emacs-lisp
-   (defun my/other-window ()
-     (other-window 1))
-
-   (defun ace-window-all-frames ()
-     (interactive)
-     (let ((aw-scope 'global))
-       (call-interactively 'ace-window)))
-
-   (use-package ace-window
-     :commands ace-window
-     :bind*
-     (("C-o" . ace-window)
-      ("M-o" . ace-window-all-frames))
-     :config
-     (setq aw-scope 'frame
-           aw-background t
-           aw-keys '(?j ?k ?l ?\; ?s ?d ?f ?g)
-           aw-dispatch-alist '((?x aw-delete-window " Ace - Delete Window")
-                               (?m aw-swap-window " Ace - Swap Window")
-                               (?n aw-flip-window)
-                               (?v aw-split-window-vert " Ace - Split Vert Window")
-                               (?b aw-split-window-horz " Ace - Split Horz Window")
-                               (?i delete-other-windows " Ace - Maximize Window")
-                               (?o my/other-window " Ace - Other window")))
-     :diminish 'ace-window)
- #+END_SRC
-
-*** ~ace-popup-menu~ :select:
-
-#+begin_src emacs-lisp
-  (use-package ace-popup-menu
-    :diminish 'ace-popup-menu)
-#+end_src
-
-** Saving/Restoring/Killing
-*** workspaces
-**** perspeen
-#+begin_src emacs-lisp
-  (use-package perspeen
-    :ensure t
-    :init
-    (setq perspeen-use-tab t)
-    :config
-    (perspeen-mode))
-#+end_src
-
-Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
-
-#+begin_src emacs-lisp
-(defun perspeen-create-ws ()
-  "Create a new workspace."
-  (interactive)
-  (perspeen-new-ws-internal)
-  (delete-other-windows)
-  (perspeen-update-mode-string))
-#+end_src
-
-*** ~desktop-save~ :save:
-
-    Currently turned off
-
-#+begin_src emacs-lisp
-  (setq desktop-basefilename "emacs.desktop"
-        desktop-path `(,saveplace-dir))
-#+end_src
-
-*** ~volatile-kill-buffers~
-
-#+begin_src emacs-lisp
-(defun volatile-kill-buffers ()
-   "Kill current buffer unconditionally."
-   (interactive)
-   (let ((buffer-modified-p nil))
-     (kill-buffer (current-buffer))))
-
-(global-set-key (kbd "C-x M-K") 'volatile-kill-buffers)
-#+end_src
-
-** Behavior
-
-  Force horizontal window splitting. No clue why anyone would want to split code
-  windows vertically, you just waste window space past column 80.
-
-   #+begin_src emacs-lisp
-     (setq split-width-threshold 80)
-     (setq split-height-threshold nil)
-   #+end_src
-
-*** ~zygospore~
-
-#+BEGIN_SRC emacs-lisp
-(use-package zygospore
-  :bind ("C-x 1" . zygospore-toggle-delete-other-windows))
-#+END_SRC
-
-*** ~shackle~ :popups:
-
-     Great package. It allows you to configure how popup messages are
-     handled. For instance, please stop creating the magit status buffer in
-     another window.
-
- #+begin_src emacs-lisp
-   (use-package shackle
-     :config
-     (shackle-mode 1)
-     (setq 
-      shackle-default-rule '(:inhibit-window-quit t :other t :align right)
-      shackle-rules
-      `(;; Util
-        ("^\\*.+-Profiler-Report .+\\*$"
-         :align below :size 0.3 :regexp t)
-        ("*Ido Completions*"
-         :align right :size 0.3)
-        ("*esup*"
-         :align below :size 0.4 :noselect t :inhibit-window-quit nil)
-        ("*minor-modes*"
-         :align below :size 0.5 :noselect t :inhibit-window-quit nil)
-        ("*eval*"
-         :align below :size 16  :noselect t :inhibit-window-quit nil)
-        (dired-mode :ignore t)
-        (helm-mode :ignore t)
-        ("*Deletions*" :inhibit-window-quit nil :same t)
-        ("\\`\\*helm.*?\\*\\'" :regexp t :align  :size 0.4)
-        ;; Emacs
-        ("*Pp Eval Output*"
-         :align below :size 0.3 :inhibit-window-quit nil)
-        ("*Apropos*"
-         :align below :size 0.3 :inhibit-window-quit t)
-        ("*Backtrace*"
-         :align below :size 25  :noselect t :inhibit-window-quit nil)
-        ("*Help*"
-         :align right :size 80 :select t)
-        ("\\*[hH]elp\[R\]*\\*" :regexp t :align right :size 80 :select t)
-        ("\\*help\[R\]*\\*" :regexp t :align right :size 80 :select t)
-        ("\\**Python Doc**\\*" :regexp t :align right :size 80 :select t)
-        ("\\**magit*"
-         :regexp t :same t :select t :inhibit-window-quit nil)
-        ("*Messages*"
-         :align below :size 15  :select t :inhibit-window-quit nil)
-        ("*Warnings*"
-         :align below :size 10  :noselect t :inhibit-window-quit nil)
-        (compilation-mode
-         :align below :size 15  :noselect t :inhibit-window-quit nil)
-        (eww-mode
-         :align below :size 30  :select t :inhibit-window-quit nil)
-        ("*command-log*"
-         :align right :size 28  :noselect t :inhibit-window-quit nil)
-        ;; vcs
-        ("*vc-diff*"
-         :align below :size 15  :noselect t :inhibit-window-quit nil)
-        ("*vc-change-log*"
-         :align below :size 15  :select t :inhibit-window-quit nil)
-        (vc-annotate-mode    :same t :inhibit-window-quit nil)
-        ("\\*Org Agenda\\*" :select t :inhibit-window-quit t))))
- #+end_src
-
- Emacs 25.1+ properly shows the completion window at the bottom of the current
- frame.
-
- #+begin_src emacs-lisp
-   (unless (version< emacs-version "25.1")
-     (push '("*Completions*"     :align below :size 30  :noselect t) 
-           shackle-rules))
- #+end_src
-
 * Editing
-
-#+begin_src emacs-lisp
-  (let ((inhibit-message nil))
-    (message "Configuring editing settings..."))
-#+end_src
-
-    Use my goodies repository for some stuff I like to use, for instance,
-    ~helm-insert-color-name~, for selecting colors and inserting their name at
-    point.
 
 #+begin_src emacs-lisp
   (add-to-list 'load-path (concat lisp-dir "goodies"))
@@ -1387,10 +582,7 @@ Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
 
 ** Basic Settings
 
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-M-z") 'zap-to-char)
-#+end_src
-
+  
 
 #+BEGIN_SRC emacs-lisp
   (setq global-mark-ring-max 5000      ; increase mark ring to contains 5000 entries
@@ -1401,95 +593,8 @@ Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
         kill-whole-line t)             ; if NIL, kill whole line and move the next line up
 #+END_SRC
 
-~electric-indent-mode~ provides on-the-fly re-indentation
-
-#+BEGIN_SRC emacs-lisp
-  (setq electric-indent-mode nil)
-#+END_SRC
-
-*DISABLED* /what does this do?/
-
-#+BEGIN_SRC emacs-lisp
-;  (put 'downcase-region 'disabled nil)
-;  (put 'upcase-region 'disabled nil)
-#+END_SRC
-
-Delete tabs with backspace
-
-#+BEGIN_SRC emacs-lisp
-  (setq backward-delete-char-untabify-method 'hungry)
-#+END_SRC
-
-Use space to indent by default
-
-#+BEGIN_SRC emacs-lisp
-  (setq-default indent-tabs-mode nil)
-#+END_SRC
-
-Set appearance of a tab that is represented by 4 spaces
-
-#+BEGIN_SRC emacs-lisp
-  (setq-default tab-width 4)
-#+END_SRC
-
-Remap =C-z= to ~just-one-space~. 
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-z") 'just-one-space)
-#+end_src
-
-Remap =M-z= to 
-
-#+begin_src emacs-lisp
-  (defun delete-space ()
-    "Kill the whitespace between two non-whitespace characters"
-    (interactive "*")
-    (if (and (region-active-p) (interactive-p))
-        (let* ((beg (region-beginning))
-              (end (region-end))
-              (num-lines (count-lines beg end)))
-          (save-excursion
-            (goto-char beg)
-            (cl-loop for i from 1 to num-lines
-                     do (progn (beginning-of-line)
-                               (delete-space)
-                               (forward-line)))))    
-      (save-excursion
-      (save-restriction
-        (save-match-data
-          (progn
-            (re-search-backward "[^ \t\r]" nil t)
-            (re-search-forward "[ \t\r]+" nil t)
-            (replace-match "" nil nil)))))))
-  (global-set-key (kbd "C-M-S-z") 'delete-space)
-#+end_src
-
-Remap =M-k= to ~kill-whole-line~ 
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "M-k") 'kill-whole-line)
-#+end_src
-
-Use ~subword-mode~, which treats camelcase components as word, so, for example,
-when backwards deleting a word, it will stop at the nearest capital letter.
-
-#+begin_src emacs-lisp
-(global-subword-mode 1)
-#+end_src
-
-#+begin_src emacs-lisp
-  (unbind-key "M-r" smartparens-mode-map)
-#+end_src
-
 *** Useful Packages
 **** ~volatile-highlights~
-
- #+BEGIN_SRC emacs-lisp
-   (use-package volatile-highlights
-     :config
-     (volatile-highlights-mode t)
-     :diminish 'volatile-highlights-mode)
- #+END_SRC
 
 **** ~clean-auto-indent-mode~
 
@@ -1500,58 +605,10 @@ when backwards deleting a word, it will stop at the nearest capital letter.
    (add-hook 'prog-mode-hook 'clean-aindent-mode))
  #+END_SRC
 
-**** ~dtrt-indent~
-
- #+BEGIN_SRC emacs-lisp
- (use-package dtrt-indent
-   :config
-   (setq dtrt-indent-verbosity 0)
-   (dtrt-indent-mode 1))
- #+END_SRC
-
-**** ~ws-butler~
-
- #+BEGIN_SRC emacs-lisp
-   (use-package ws-butler
-     :commands ws-butler
-     :init
-     (add-hook 'c-mode-common-hook 'ws-butler-mode)
-     (add-hook 'text-mode 'ws-butler-mode)
-     (add-hook 'fundamental-mode 'ws-butler-mode)
-     (add-hook 'prog-mode-hook 'ws-butler-mode)
-     :diminish 'ws-butler-mode)
- #+END_SRC
-
-**** ~anzu~
-
- #+BEGIN_SRC emacs-lisp
- (use-package anzu
-   :commands
-   (anzu-query-replace
-    anzu-query-replace-regexp)
-   :init
-   ;; Bindings
-   (bind-key "M-%" 'anzu-query-replace)
-   (bind-key "C-M-%" 'anzu-query-replace-regexp)
-   :config
-   (global-anzu-mode)
-   )
- #+END_SRC
-
 **** ~iedit~
 
-     When ~iedit~ mode is turned on, all the occurrences of the current region in
-     the buffer (possibly narrowed) or a region are highlighted.  If one
-     occurrence is modified, the change are applied to all other occurrences
-     simultaneously.
-
  #+BEGIN_SRC emacs-lisp
- (use-package iedit
-   :commands iedit-mode
-   :init
-   (bind-key "C-x ;" 'iedit-mode)
-   :config
-   (setq iedit-toggle-key-default nil))
+ 
  #+END_SRC
 
 **** ~expand-region~

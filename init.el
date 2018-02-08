@@ -15,11 +15,18 @@
        :core-ui
        company           ; the ultimate code completion backend
        helm              ; a search engine for love and life
-       ;; ivy
-       ;; ido
+       ivy
+       ido
 
        :gui
        theme
+       hl-todo
+       nav-flash
+       theme
+       unicode
+       modeline
+       vi-tilde-fringe
+       window-select
 
        :tools
        dired             ; making dired pretty [functional]
@@ -95,4 +102,4 @@
        ;; the defaults module. It contains a Spacemacs-inspired keybinding
        ;; scheme and additional ex commands for evil-mode. Use it as a reference
        ;; for your own.
-       :private default)
+       :personal basic)

@@ -7,14 +7,15 @@
 ;;
 ;;; Code:
 
-(use-package doom-themes)
+;; Nice color!
+;; dark cyan
 
 (deftheme atchka "A dark theme.")
 
 (let ((c '((class color) (min-colors 89)))
       ;; emphasis
-      (bold   doom-enable-bold)
-      (italic doom-enable-italic)
+      (bold  nil)
+      (italic nil)
       (padding `(:line-width 5))
       ;; colors
       (bg             "#1D1F20")
@@ -87,20 +88,20 @@
     (custom-theme-set-faces
      'atchka
      ;; Doom faces
-     `(doom-default
-       ((((type graphic)) :inherit default :background ,bg-l)
-        (t                :inherit default)))
-     `(doom-hl-line
-       ((((type graphic)) :background ,bg)
-        (t                :inherit hl-line)))
-     `(doom-linum
-       ((((type graphic)) :inherit linum :background ,bg-l)
-        (t                :inherit linum)))
-     `(doom-minibuffer-active ((,c (:background ,bg-l))))
-     `(doom-nlinum-highlight  ((,c (:foreground ,linum-hl-fg :bold nil))))
-     `(doom-flycheck-error    ((,c (:underline nil :foreground ,black :background ,red))))
-     `(doom-flycheck-warning  ((,c (:underline nil :foreground ,black :background ,yellow))))
-     `(doom-flycheck-info     ((,c (:underline nil :foreground ,black :background ,green))))
+     ;; `(doom-default
+     ;;   ((((type graphic)) :inherit default :background ,bg-l)
+     ;;    (t                :inherit default)))
+     ;; `(doom-hl-line
+     ;;   ((((type graphic)) :background ,bg)
+     ;;    (t                :inherit hl-line)))
+     ;; `(doom-linum
+     ;;   ((((type graphic)) :inherit linum :background ,bg-l)
+     ;;    (t                :inherit linum)))
+     ;; `(doom-minibuffer-active ((,c (:background ,bg-l))))
+     ;; `(doom-nlinum-highlight  ((,c (:foreground ,linum-hl-fg :bold nil))))
+     ;; `(doom-flycheck-error    ((,c (:underline nil :foreground ,black :background ,red))))
+     ;; `(doom-flycheck-warning  ((,c (:underline nil :foreground ,black :background ,yellow))))
+     ;; `(doom-flycheck-info     ((,c (:underline nil :foreground ,black :background ,green))))
      ;; Text
      `(default                             ((,c (:foreground ,fg :background ,bg))))
      `(fringe                              ((,c (:background ,bg-l :foreground ,grey-1))))
@@ -319,21 +320,21 @@
      'atchka
      `(vc-annotate-color-map
        '((20 .  ,green)
-         (40 .  ,(doom-blend yellow green (/ 1.0 3)))
-         (60 .  ,(doom-blend yellow green (/ 2.0 3)))
+         ;; (40 .  ,(doom-blend yellow green (/ 1.0 3)))
+         ;; (60 .  ,(doom-blend yellow green (/ 2.0 3)))
          (80 .  ,yellow)
-         (100 . ,(doom-blend orange yellow (/ 1.0 3)))
-         (120 . ,(doom-blend orange yellow (/ 2.0 3)))
+         ;; (100 . ,(doom-blend orange yellow (/ 1.0 3)))
+         ;; (120 . ,(doom-blend orange yellow (/ 2.0 3)))
          (140 . ,orange)
-         (160 . ,(doom-blend magenta orange (/ 1.0 3)))
-         (180 . ,(doom-blend magenta orange (/ 2.0 3)))
+         ;; (160 . ,(doom-blend magenta orange (/ 1.0 3)))
+         ;; (180 . ,(doom-blend magenta orange (/ 2.0 3)))
          (200 . ,magenta)
-         (220 . ,(doom-blend red magenta (/ 1.0 3)))
-         (240 . ,(doom-blend red magenta (/ 2.0 3)))
+         ;; (220 . ,(doom-blend red magenta (/ 1.0 3)))
+         ;; (240 . ,(doom-blend red magenta (/ 2.0 3)))
          (260 . ,red)
-         (280 . ,(doom-blend grey red (/ 1.0 4)))
-         (300 . ,(doom-blend grey red (/ 2.0 4)))
-         (320 . ,(doom-blend grey red (/ 3.0 4)))
+         ;; (280 . ,(doom-blend grey red (/ 1.0 4)))
+         ;; (300 . ,(doom-blend grey red (/ 2.0 4)))
+         ;; (320 . ,(doom-blend grey red (/ 3.0 4)))
          (340 . ,grey)
          (360 . ,grey)))
      `(vc-annotate-very-old-color nil)

@@ -34,6 +34,9 @@ line or use --debug-init to enable this.")
 (defvar doom-modules-dir (concat doom-emacs-dir "modules/")
   "Where configuration modules are stored.")
 
+(defvar doom-lisp-dir (concat doom-emacs-dir "lisp/")
+  "Extra lisp files.")
+
 (defvar doom-local-dir (concat doom-emacs-dir ".local/")
   "Root directory for local Emacs files. Use this as permanent storage for files
 that are safe to share across systems (if this config is symlinked across

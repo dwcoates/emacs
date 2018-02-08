@@ -45,7 +45,16 @@ modes are active and the buffer is read-only.")
  whitespace-display-mappings
  '((tab-mark ?\t [?› ?\t])
    (newline-mark ?\n [?¬ ?\n])
-   (space-mark ?\  [?·] [?.])))
+   (space-mark ?\  [?·] [?.]))
+ ;; Hungry backspace
+ backward-delete-char-untabify-method 'hungry)
+
+;; Enable intermediate Emacs features disabled by default
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
+;; Use subwords
+(global-subword-mode 1)
 
 ;; ediff
 (setq ediff-diff-options "-w"
@@ -175,57 +184,6 @@ extension, try to guess one."
 ;; Auto-close delimiters and blocks as you type
 (def-package! smartparens
   :hook (doom-init . smartparens-global-mode)
-  :bind*
-  (:map smartparens-mode-map
-        ;; delete behavior
-        ("<backspace>" . sp-backward-delete-char)
-        ("<C-backspace>" . backward-delete-char)
-        ("<M-backspace>" . sp-backward-kill-word)
-        ("<C-M-backspace>" . backward-kill-word)
-        ;; wrap/unwrap/rewrap
-        ("M-[" . sp-backward-unwrap-sexp)
-        ("M-]" . sp-unwrap-sexp)
-        ("M-s-[" . sp-rewrap-sexp)
-   :prefix "C-j" :prefix-map smartparens-mode-map
-   ;; wrapping
-   ("("  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "(")))
-   ("["  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "[")))
-   ("{"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "{")))
-   ("'"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "'")))
-   ("\"" . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "\"")))
-   ("_"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "_")))
-   ("`"  . (lambda (&optional arg) (interactive "P") (sp-wrap-with-pair "`")))
-   ;; sexp direction
-   ("a" . sp-beginning-of-sexp)
-   ("e" . sp-end-of-sexp)
-   ("i"   . sp-up-sexp)
-   ("j" . sp-backward-down-sexp)
-   ("l"   . sp-backward-up-sexp)
-   ("f" . sp-forward-sexp)
-   ("b" . sp-backward-sexp)
-   ("n" . sp-next-sexp)
-   ("p" . sp-previous-sexp)
-   ;; symbol direction
-   ("h" . sp-forward-symbol)
-   ("g" . sp-backward-symbol)
-   ;; slurping
-   ("t" . sp-forward-slurp-sexp)
-   ("w" . sp-forward-barf-sexp)
-   ("r"  . sp-backward-slurp-sexp)
-   ("q"  . sp-backward-barf-sexp)
-   ;; transposing
-   ("C-t" . sp-transpose-sexp)
-   ("M-t" . sp-transpose-hybrid-sexp)
-   ;; killing/copying
-   ("k" . sp-kill-sexp)
-   ("h"   . sp-kill-hybrid-sexp)
-   ("C-k"   . sp-backward-kill-sexp)
-   ("C-w" . sp-copy-sexp)
-   ;; deleting
-   ("d" . sp-delete-word)
-   ("C-d" . sp-delete-sexp)
-   ("<backspace>" . sp-backward-delete-symbol)
-   ("<C-backspace>" . sp-backward-kill-sexp))
   :config
   (defun sp-delete-sexp (arg)
      "Deletes sexp at point. Does not save to kill ring."
@@ -272,18 +230,12 @@ extension, try to guess one."
   :commands (ace-link-help ace-link-org))
 
 (def-package! avy
-  :commands (avy-goto-char-2 avy-goto-line)
-  :bind
-  (("C-l"   . avy-goto-line)
-   ("C-S-w"   . avy-kill-region)
-   ("C-S-l" . avy-copy-line)
-   ("<C-m>" . avy-goto-char-timer)
-   ("C-."   . avy-goto-char)
-   ("C-s" . avy-goto-char-in-paragraph)
-   ("C-r" . avy-goto-char-in-line))
-  :bind*
-  (("C-M-s"   . avy-goto-word-1))
+  :commands (avy-goto-char-2 avy-goto-line avy-goto-line avy-kill-region 
+             avy-copy-line avy-goto-char-in-line 
+             avy-goto-char-timer avy-goto-char avy-goto-char-in-paragraph )
+  :init  
   :config
+  ;; Settings
   (setq avy-all-windows nil
         avy-background  t
         avy-keys '(97  115 100 102 106 108 104 113 119
@@ -297,14 +249,14 @@ extension, try to guess one."
                              (?n . avy-narrow-region)
                              (?p . avy-action-copy-and-yank))
         avy-timeout-seconds .2)
-
+  ;; Execute functions
   (defun avy-action-copy (pt)
     "Copy sexp starting on PT."
     (save-excursion
       (let (str)
         (goto-char pt)
         (avy-forward-item)
-        (setq str ( (buffer-substring pt (point))))
+        (setq str (buffer-substring pt (point)))
         (when (fboundp 's-trim)
           (setq str (s-trim str)))
         (kill-new str)
@@ -314,12 +266,10 @@ extension, try to guess one."
        (window-frame (cdr dat)))
       (select-window (cdr dat))
       (goto-char (car dat))))
-
   (defun avy-action-copy-and-yank (pt)
     "Copy and yank sexp starting on PT."
     (avy-action-copy pt)
     (yank))
-
   (defun avy-action-execute-code (pt)
     (let* ((string (progn (avy-action-copy pt)
                           (substring-no-properties (pop kill-ring)))))
@@ -327,14 +277,12 @@ extension, try to guess one."
           (setq string (s-trim string))
         (warn "No s-trim function found, avy-action-execute-code may work poorly with Python code."))
       (python-send-string string)))
-
   (defun avy-narrow-region (pt)
     (narrow-to-region
      (save-excursion (beginning-of-line) (point))
      (save-excursion (avy-action-goto pt)
                      (end-of-line)
                      (point))))
-
   (defun avy-goto-char-in-paragraph (char)
   "Jump to the currently visible CHAR in current paragraph."
   (interactive (list (read-char "char: " t)))
@@ -352,6 +300,29 @@ extension, try to guess one."
                beg
                end)))))
 
+(def-package! ace-window
+             :commands (ace-window ace-window-all-frames)
+             :config
+             (defun ace-other-window ()
+               (other-window 1))
+
+             (defun ace-window-all-frames ()
+               (interactive)
+               (let ((aw-scope 'global))
+                 (call-interactively 'ace-window)))
+
+             (setq aw-scope 'frame
+                   aw-background t
+                   aw-keys '(?j ?k ?l ?\; ?s ?d ?f ?g)
+                   aw-dispatch-alist '((?x aw-delete-window " Ace - Delete Window")
+                                       (?m aw-swap-window " Ace - Swap Window")
+                                       (?n aw-flip-window)
+                                       (?v aw-split-window-vert " Ace - Split Vert Window")
+                                       (?b aw-split-window-horz " Ace - Split Horz Window")
+                                       (?i delete-other-windows " Ace - Maximize Window")
+                                       (?o my/other-window " Ace - Other window")))
+             :diminish 'ace-window)
+
 (def-package! command-log-mode
   :commands (command-log-mode global-command-log-mode)
   :config
@@ -362,10 +333,15 @@ extension, try to guess one."
 (def-package! expand-region
   :commands (er/expand-region er/contract-region er/mark-symbol er/mark-word))
 
+(def-package! iedit
+   :commands iedit-mode
+   :config
+   (setq iedit-toggle-key-default nil))
+
 ;; Currently not available?
-;; (def-package! help-fns+ ; Improved help commands
-;;   :commands (describe-buffer describe-command describe-file
-;;              describe-keymap describe-option describe-option-of-type))
+(def-package! help-fns+ ; Improved help commands
+  :commands (describe-buffer describe-command describe-file
+             describe-keymap describe-option describe-option-of-type))
 
 (def-package! pcre2el
   :commands rxt-quote-pcre)

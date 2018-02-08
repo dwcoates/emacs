@@ -1,17 +1,16 @@
 ;;; completion/ido/config.el -*- lexical-binding: t; -*-
 
+
 (def-package! ido
-  :commands '(ido-find-file ido-kill-buffer)
-  :bind
-  (:map global-map
-        "C-x C-f" 'ido-find-file
-        "C-x S-k" 'ido-kill-buffer)
+  :commands ido-file-file
+  :init
+  (map! :map global-map
+        [remap find-file] #'ido-find-file)
   :config
   (setq ido-ignore-buffers
         '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
           "^\\*.*Completions\\*$" "^\\*Ediff" "^\\*tramp" "^\\*cvs-"
           "_region_" " output\\*$" "^TAGS$" "^\*Ido")
-        ido-use-faces nil
         ido-confirm-unique-completion t
         ido-case-fold t
         ido-enable-tramp-completion nil
@@ -25,13 +24,8 @@
   (push "Icon\\?$" ido-ignore-files)
 
   (ido-mode 1)
-  (require 'ido-ubiquitous)
-  (ido-ubiquitous-mode 1)
 
-  (defun +ido|init ()
-    (require 'ido-vertical-mode)
-    ;; (ido-vertical-mode 1)
-
+  (defun +ido|init () 
     (require 'flx-ido)
     (flx-ido-mode +1)
 
@@ -66,3 +60,8 @@
              (insert "~/")
            (call-interactively #'self-insert-command)))))
   (add-hook 'ido-setup-hook #'+ido|setup-home-keybind))
+
+(def-package! smex
+  :commands smex
+  :config
+  (smex-initialize))

@@ -94,3 +94,44 @@ presentations."
     (run-hooks 'doom-pre-reload-theme-hook)
     (doom|init-ui)
     (run-hooks 'doom-post-reload-theme-hook)))
+
+;;;###autoload
+(defun hydra-move-splitter-left (arg)
+  "Move window splitter left."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'right))
+      (shrink-window-horizontally arg)
+    (enlarge-window-horizontally arg)))
+
+;;;###autoload
+(defun hydra-move-splitter-right (arg)
+  "Move window splitter right."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'right))
+      (enlarge-window-horizontally arg)
+    (shrink-window-horizontally arg)))
+
+;;;###autoload
+(defun hydra-move-splitter-up (arg)
+  "Move window splitter up."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'up))
+      (enlarge-window arg)
+    (shrink-window arg)))
+
+;;;###autoload
+(defun hydra-move-splitter-down (arg)
+  "Move window splitter down."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'up))
+      (shrink-window arg)
+    (enlarge-window arg)))
+
+;;;###autoload
+(defun fast-kill-buffer () 
+  (interactive) 
+  (kill-buffer))

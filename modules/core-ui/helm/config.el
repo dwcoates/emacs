@@ -11,30 +11,22 @@
 ;;
 
 (def-package! helm
-  :commands helm-M-x
+  :commands (helm-M-x helm-show-kill-ring helm-M-x helm-all-mark-rings helm-mini
+            helm-buffers-list helm-all-mark-rings helm-occur helm-insert-command-name)
   :init
-  :bind
-  (("C-x C-SPC" . helm-mark-ring))
-  :bind*
-  (("M-y" . helm-show-kill-ring)
-   ("M-X" . helm-M-x)
-   ("C-h SPC" . helm-all-mark-rings)
-   ("C-x b" . helm-mini)
-   ("C-x C-o" . helm-buffers-list)
-   ("C-h SPC" . helm-all-mark-rings)
-   ("C-c s" . helm-occur)
-   ("C-h F" . helm-insert-command-name)
-   :map helm-map
-   ("C-c C-y" . helm-yank-selection-and-quit)
-   ("C-i" . helm-select-action) ;; This is a big one. Use C-SPC to select entries,
-   ("C-S-p" . helm-previous-source)
-   ("C-S-n" . helm-next-source)
-   ;; then C-i (or TAB) to select an action to perform on
-   ;; those selected entries.
-   :map helm-buffer-map
-   ("C-c C-k" . helm-buffer-run-kill-buffers))
+  (map! :map global-map
+        "M-x" 'helm-M-x
+        "M-y"  'helm-show-kill-ring
+        "M-X"  'helm-M-x
+        "C-h SPC"  'helm-all-mark-rings
+        "C-x b"  'helm-mini
+        "C-x C-o"  'helm-buffers-list
+        "C-h SPC"  'helm-all-mark-rings
+        "C-c s"  'helm-occur
+        "C-h F"  'helm-insert-command-name)
 
   :config
+  (message "loaded helm")
   (load "helm-autoloads" nil t)
   (add-hook 'doom-init-hook #'helm-mode)
 
@@ -61,6 +53,38 @@
         helm-autoresize-max-height            10
         helm-moccur-show-buffer-fontification t ;; Keep fontification of results. Might be slower.
         helm-autoresize-min-height            3)
+  
+  ;; Save current position to mark ring
+  (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
+
+  ;; Sort helm source buffers
+  (defun dwc-helm-source-buffers (buffers)
+    "Return sorted source-buffers.  Helm will not sort results by default."
+    (let ((last-used (subseq buffers 0 (min 5 (length buffers))))
+          (buffers (subseq buffers (min 6 (length buffers))))
+          dired-buffers
+          other-buffers
+          (buf-sort (lambda (bufs)
+                      (cl-sort 
+                       bufs
+                       (lambda (a b)
+                         (or (< (length a) (length b))
+                             (and (= (length a) (length b))
+                                  (string-lessp a b))))))))
+      (dolist (buf buffers)
+        (if (with-current-buffer buf
+              (eq major-mode 'dired-mode))
+            (push buf dired-buffers)
+          (push buf other-buffers)))
+      (append
+       (funcall buf-sort last-used)
+       (funcall buf-sort other-buffers)
+       (funcall buf-sort dired-buffers))))
+
+  (defun helm-buffers-sort-dired-buffers (orig-fun &rest args)
+    (dwc-helm-source-buffers (apply orig-fun args)))
+
+  (advice-add 'helm-buffers-sort-transformer :around 'helm-buffers-sort-dired-buffers)
 
   ;;; Helm hacks
   (defun +helm*replace-prompt (plist)
@@ -78,7 +102,6 @@
 
   (map! :map global-map
         [remap apropos]                   #'helm-apropos
-        [remap find-file]                 #'helm-find-files
         [remap recentf-open-files]        #'helm-recentf
         [remap projectile-switch-to-buffer] #'helm-projectile-switch-to-buffer
         [remap projectile-recentf]        #'helm-projectile-recentf
@@ -88,10 +111,18 @@
         [remap noop-show-kill-ring]       #'helm-show-kill-ring
         [remap projectile-switch-project] #'helm-projectile-switch-project
         [remap projectile-find-file]      #'helm-projectile-find-file
-        [remap imenu-anywhere]            #'helm-imenu-anywhere
-        [remap execute-extended-command]  #'helm-M-x)
+        [remap imenu-anywhere]            #'helm-imenu-anywhere)
 
+  (map! :map helm-map
+        "C-c C-y"  'helm-yank-selection-and-quit
+        "C-i"  'helm-select-action ;; This is a big one. Use C-SPC to select entries
+        "C-S-p"  'helm-previous-source
+        "C-S-n"  'helm-next-source
+        :map helm-buffer-map
+        "C-c C-k"  'helm-buffer-run-kill-buffers)
+  
   :diminish 'helm-mode)
+
 
 (def-package! helm-locate
   :defer t
