@@ -5428,6 +5428,49 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
           ))
 #+end_src
 
+
+#+begin_src emacs-lisp
+(defun chess-read-pgn-from-buffer (&optional beg end)
+  (interactive (if (region-active-p)
+                   (list (region-beginning)
+                         (region-end))
+                 
+                 (list nil nil)))
+  (let ((game (chess-pgn-to-game (when (and beg end) (buffer-substring-no-properties beg end))))
+        (my-color t)
+        object
+        disable-popup) ; we start out as white always
+    (setq objects (chess-create-modules (list chess-default-display)
+					'chess--create-display
+					game my-color disable-popup))
+    (when (car objects)
+      (mapc 'chess-display-update objects)
+      (chess-module-set-leader (car objects))
+      (chess-display-popup (car objects)))))
+
+(global-set-key (kbd "C-c 7 p") 'chess-read-pgn-from-buffer)
+#+end_src
+
+#+begin_src emacs-lisp
+(defun chess-search-moves ()
+  (interactive)
+  (let ((end (1- chess-display-index))
+        (beg 0)
+        (index nil))
+    (let* ((table (make-hash-table :size end))
+           (l (mapc (lambda (i)
+                      (let* ((ply (chess-game-ply chess-module-game i))
+                             (san (chess-ply-keyword ply :san)))
+                        (when (and ply san)
+                          (let ((move-num (int-to-string (1+ (+ (/ i 2) (mod i 2))))))
+                            (puthash (concat move-num "." san) ply table)))))
+                    (number-sequence 0 end)))
+           (case-fold-search table))
+      (completing-read "Here: " table)
+      )))
+#+end_src
+
+
   The following code I've added to fix the undersizing of new chess buffers.
 
 #+begin_src emacs-lisp
