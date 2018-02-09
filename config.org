@@ -4917,7 +4917,7 @@ Sound command is set to =play= which is acquired on Ubuntu Linux with ~sudo apt 
       (switch-to-buffer buf)
       (org-mode)
       (when (not no-declutter)
-        (insert "#+OPTIONS: toc:nil num:nil prop:nil tags:nil title:nil\n#+LaTeX_CLASS_OPTIONS: [margin=0.2in]\n\n"))
+        (insert "#+OPTIONS: toc:nil num:nil prop:nil tags:nil title:nil ^:nil\n#+LaTeX_CLASS_OPTIONS: [margin=0.2in]\n\n"))
       (insert str)
       (beginning-of-buffer)
       (org-forward-heading-same-level 1 t)
