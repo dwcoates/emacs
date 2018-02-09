@@ -691,8 +691,9 @@ Un-prettify when symbol is just before point.
                                           ;; M-<next>/M-<prior>
        helm-ff-search-library-in-sexp t 
        helm-split-window-in-side-p    t 
-       helm-candidate-number-limit 500  
+       helm-candidate-number-limit    50  
        helm-ff-file-name-history-use-recentf nil
+       helm-moccur-show-buffer-fontification t
        helm-move-to-line-cycle-in-source     t 
        helm-buffers-fuzzy-matching           nil   
        helm-autoresize-max-height       10 ;;  Helm size. Don't want it to be too
