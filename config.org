@@ -1843,6 +1843,16 @@ Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
 ** Basic Settings
 
 #+begin_src emacs-lisp
+  (defun delete-horizontal-space-forward () ; adapted from `delete-horizontal-space'
+        "*Delete all spaces and tabs after point."
+        (interactive "*")
+        (delete-region (point) (progn (skip-chars-forward " \t") (point))))
+
+  (global-set-key (kbd "C-x _ d") 'delete-horizontal-space-forward)
+#+end_src
+
+
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-M-z") 'zap-to-char)
 #+end_src
 
