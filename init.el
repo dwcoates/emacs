@@ -1,6 +1,6 @@
 ;; inhibit minibuffer messages.
 ;; This must be set to nil at end of config.
-(setq inhibit-message t)
+(setq inhibit-message nil)
 
 ;; - TODO:
 ;; Require Emacs 25.1+

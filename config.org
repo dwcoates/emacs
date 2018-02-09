@@ -712,7 +712,7 @@ Un-prettify when symbol is just before point.
 
   Helm-dash is a great package that allows us to look up documentation with
   helm. It is mostly equivalent to Dash, but does not depend on it. Use
-  `helm-dash-install-docset' to download a docset fo a particular language (or
+  ~helm-dash-install-docset~ to download a docset fo a particular language (or
   language package).
 
   #+begin_src emacs-lisp
@@ -3227,6 +3227,7 @@ not yet support emacs due to a jupyter bug.
 *** ~lpy~
 
 #+begin_src emacs-lisp
+  (use-package lispy) ; dependency for lpy
   (add-to-list 'load-path "~/workspace/lpy")
   (use-package worf)
   (require 'cc-mode) ;; part of GNU Emacs.
@@ -3499,21 +3500,21 @@ Company-C-Headers enables the completion of C/C++ header file names using compan
 Minor mode for C/C++ code completion bindings.
 
 #+begin_src emacs-lisp
-  (use-package function-args
-    :ensure t
-    :commands (c++-mode c-mode)
-    :config
-    (require 'cc-mode)
-    (fa-config-default)
-    :bind
-    (:map
-     c-mode-map
-     ("C-c C-f C-h" . moo-complete)
-     ("C-c M-o s" . fa-show))
-    (:map
-     c++-mode-map
-     ("<C-tab>" . moo-complete)
-     ("C-c M-o s" . fa-show)))
+  ;; (use-package function-args
+  ;;   :ensure t
+  ;;   :commands (c++-mode c-mode)
+  ;;   :config
+  ;;   (require 'cc-mode)
+  ;;   (fa-config-default)
+  ;;   :bind
+  ;;   (:map
+  ;;    c-mode-map
+  ;;    ("C-c C-f C-h" . moo-complete)
+  ;;    ("C-c M-o s" . fa-show))
+  ;;   (:map
+  ;;    c++-mode-map
+  ;;    ("<C-tab>" . moo-complete)
+  ;;    ("C-c M-o s" . fa-show)))
 #+end_src
 
 Don't ask if I really want to compile:
