@@ -1,6 +1,9 @@
 [submodule "OfficeCodeProFont"]
 	path = Office-Code-Pro
 	url = https://github.com/nathco/Office-Code-Pro
+[submodule "emacs-chess"]
+	path = list/emacs-chess
+	url = git@github.com:dwcoates/emacs-chess.git
 [submodule "goodies"]
 	path = lisp/goodies
 	url = https://github.com/dwcoates/goodies
