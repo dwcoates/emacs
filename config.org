@@ -963,6 +963,7 @@ distracting, useless, and unsightly. The following code was grabbed from
   (defun kill-buffer-wrapper () (interactive) (kill-buffer))
   (unbind-key "C-x k")
   (bind-key "C-x k" 'kill-buffer-wrapper)  
+  (bind-key "C-x C-k k" (lambda () (interactive) (kill-buffer) (delete-window)))  
 #+end_src
 
  Ido should save its history files where everything else does!
@@ -5174,6 +5175,17 @@ directory, and if one doesn't exit, it creates it.
     (re-search-forward eshell-prompt-regexp nil t (or n -1)))
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun eshell/delete ()
+    "Delete entire eshell buffer contents."        
+    (interactive)
+    (delete-region (point-min) (point-max))
+    (eshell-emit-prompt))
+
+  (bind-key "C-c <C-backspace>" 'eshell/delete eshell-mode-map)
+#+end_src
+
+
 Make ~eshell~ cache passwords
 
 #+begin_src emacs-lisp
@@ -5425,30 +5437,32 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
           chess-images-default-size 58
           ;; I like it in current frame.
           chess-images-separate-frame nil 
-          ))
+          )
+    (bind-key "<left>" 'chess-display-move-backward chess-display-mode-map)
+    (bind-key "<right>" 'chess-display-move-forward chess-display-mode-map))
 #+end_src
 
-
 #+begin_src emacs-lisp
-(defun chess-read-pgn-from-buffer (&optional beg end)
-  (interactive (if (region-active-p)
-                   (list (region-beginning)
-                         (region-end))
-                 
-                 (list nil nil)))
-  (let ((game (chess-pgn-to-game (when (and beg end) (buffer-substring-no-properties beg end))))
-        (my-color t)
-        object
-        disable-popup) ; we start out as white always
-    (setq objects (chess-create-modules (list chess-default-display)
-					'chess--create-display
-					game my-color disable-popup))
-    (when (car objects)
-      (mapc 'chess-display-update objects)
-      (chess-module-set-leader (car objects))
-      (chess-display-popup (car objects)))))
+  (defun chess-read-pgn-from-buffer (&optional beg end)
+    (interactive (if (region-active-p)
+                     (list (region-beginning)
+                           (region-end))
 
-(global-set-key (kbd "C-c 7 p") 'chess-read-pgn-from-buffer)
+                   (list nil nil)))
+    (let ((game (chess-pgn-to-game (when (and beg end) (buffer-substring-no-properties beg end))))
+          (my-color t)
+          object
+          disable-popup) ; we start out as white always
+      (setq objects (chess-create-modules (list chess-default-display)
+                      'chess--create-display
+                      game my-color disable-popup))
+      (when (car objects)
+        (mapc 'chess-display-update objects)
+        (chess-module-set-leader (car objects))
+        (save-excursion (chess-display-popup (car objects)))
+        (switch-to-buffer-other-window (car objects)))))
+
+  (global-set-key (kbd "C-c 7 p") 'chess-read-pgn-from-buffer)
 #+end_src
 
 #+begin_src emacs-lisp
