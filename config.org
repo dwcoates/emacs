@@ -5038,6 +5038,23 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
 
 ** Terminal
 
+#+begin_src emacs-lisp
+  (defun nothin () 
+    (interactive)
+    eshell-previous-prompt)
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun eshell-copy-previous-output-as-kill ()
+    (interactive)
+    (save-excursion 
+      (eshell-show-output 4)
+      (kill-new (buffer-substring-no-properties (point-min) (point-max)))
+      (widen)))
+
+  (bind-key "C-c w" 'eshell-copy-previous-output-as-kill)
+#+end_src
+
 Track eshell sessions:
 
 #+begin_src emacs-lisp
