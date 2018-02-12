@@ -5408,6 +5408,8 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
 
 #+begin_src emacs-lisp
   (use-package chess
+    :ensure nil   
+    :load-path "./lisp/emacs-chess"
     :config 
     (setq chess-images-directory 
           (concat user-emacs-directory 
@@ -5436,6 +5438,7 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
            max-char-width
            (cdr (assq 'font (frame-parameters))))
         (dwc-chess-display-popup-in-window nil (+ max-char-height 1)))))
+
   (setq chess-images-popup-function 'dwc-chess-images-popup)
 #+end_src
 
