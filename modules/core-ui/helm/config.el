@@ -46,11 +46,12 @@
   (setq helm-scroll-amount                    4
         helm-ff-search-library-in-sexp        t
         helm-split-window-in-side-p           t
-        helm-candidate-number-limit           250
+        helm-candidate-number-limit           50 ;; No reason for more matches, and it's faster this way
         helm-ff-file-name-history-use-recentf nil
         helm-move-to-line-cycle-in-source     t
         helm-buffers-fuzzy-matching           nil
         helm-autoresize-max-height            10
+        helm-moccur-show-buffer-fontification t ;; Keep fontification of results. Might be slower.
         helm-autoresize-min-height            3)
   
   ;; Save current position to mark ring
