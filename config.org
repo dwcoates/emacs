@@ -387,41 +387,6 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
 #+end_src
 
 ** General Appearance
-*** Fringe :appearance:general:window:
-*** dired
-
-#+begin_src emacs-lisp
-      (use-package dired-details
-        :config
-        (setq-default dired-details-hidden-string "--- ")
-        (setq dired-dwim-target t)
-        (dired-details-install)
-        :bind
-        ("C-c C-p" . dired-up-directory))
-      (use-package dired-subtree
-        :config
-        (define-key dired-mode-map "i" 'dired-subtree-insert)
-        (define-key dired-mode-map ";" 'dired-subtree-remove))
-#+end_src
-
-Use =S-<return>= to open a file in fundamental mode with certain costly minor
-modes switched off. Useful when opening large files that can slow Emacs to a
-crawl.
-
-#+begin_src emacs-lisp
-  (defun dired-find-file-conservatively ()
-    (interactive)
-    (let ((auto-mode-alist nil)) ;; speeds up long lines. see https://emacs.stackexchange.com/questions/598/how-do-i-prevent-extremely-long-lines-making-emacs-slow
-      (dired-find-file)
-      ;; disable costly modes
-      (fundamental-mode)
-      (when (boundp 'smartparens-mode)
-        (smartparens-mode -1))
-      (setq-local bidi-display-reordering nil)))
-
-  (define-key dired-mode-map (kbd "S-<return>") 'dired-find-file-conservatively)
-#+end_src
-
 * Editing
 
 #+begin_src emacs-lisp
@@ -432,42 +397,13 @@ crawl.
 
 ** Basic Settings
 
-  
-
-#+BEGIN_SRC emacs-lisp
-  (setq global-mark-ring-max 5000      ; increase mark ring to contains 5000 entries
-        mark-ring-max 10000            ; increase kill ring to contains 10000 entries
-        mode-require-final-newline t   ; add a newline to end of file
-        tab-width 4                    ; default to 4 visible spaces to display a tab
-        kill-ring-max 10000            ; increase kill-ring capacity
-        kill-whole-line t)             ; if NIL, kill whole line and move the next line up
-#+END_SRC
-
 *** Useful Packages
-**** ~volatile-highlights~
-
 **** ~clean-auto-indent-mode~
-
  #+BEGIN_SRC emacs-lisp
  (use-package clean-aindent-mode
    :commands clean-aindent-mode
    :init
    (add-hook 'prog-mode-hook 'clean-aindent-mode))
- #+END_SRC
-
-**** ~iedit~
-
- #+BEGIN_SRC emacs-lisp
- 
- #+END_SRC
-
-**** ~expand-region~
-
- #+BEGIN_SRC emacs-lisp
-     (use-package expand-region
-       :commands er/expand-region
-       :init
-       )
  #+END_SRC
 
 **** ~duplicate-thing~

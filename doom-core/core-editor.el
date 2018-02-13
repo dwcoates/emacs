@@ -356,11 +356,11 @@ extension, try to guess one."
   :commands (wgrep-setup wgrep-change-to-wgrep-mode)
   :config (setq wgrep-auto-save-buffer t))
 
- (def-package! duplicate-thing
-   :commands duplicate-thing
-   :init
-   (map! global-map
-         "M-c" 'duplicate-thing))
+(def-package! duplicate-thing
+  :commands duplicate-thing
+  :init
+  (map! global-map
+        "M-c" 'duplicate-thing))
 
 (provide 'core-editor)
 ;;; core-editor.el ends here
