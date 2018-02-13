@@ -3,7 +3,7 @@
 ;; This files defines a Spacemacs-esque keybinding scheme
 
 (map! :map global-map
-      "C-c p x x" 'forward-char)
+      "S-<return>" #'dired-find-file-conservatively)
 
 (map! :map global-map
       :prefix "C-x"
