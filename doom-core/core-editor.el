@@ -39,6 +39,9 @@ modes are active and the buffer is read-only.")
  truncate-partial-width-windows 50
  ;; whitespace-mode
  whitespace-line-column fill-column
+ mark-ring-max 10000
+ mode-require-final-newline t
+ kill-whole-line t             ; if NIL, kill whole line and move the next line up
  whitespace-style
  '(face indentation tabs tab-mark spaces space-mark newline newline-mark
    trailing lines-tail)
@@ -352,6 +355,12 @@ extension, try to guess one."
 (def-package! wgrep
   :commands (wgrep-setup wgrep-change-to-wgrep-mode)
   :config (setq wgrep-auto-save-buffer t))
+
+ (def-package! duplicate-thing
+   :commands duplicate-thing
+   :init
+   (map! global-map
+         "M-c" 'duplicate-thing))
 
 (provide 'core-editor)
 ;;; core-editor.el ends here

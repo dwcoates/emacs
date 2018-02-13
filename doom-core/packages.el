@@ -37,6 +37,7 @@
 (package! smartparens)
 (package! undo-tree)
 (package! wgrep)
+(package! duplicate-thing)
 
 ;; core-projects.el
 (package! projectile)
