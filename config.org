@@ -1250,8 +1250,20 @@ Isearch repeat...
 *** ~occur~
 
 #+begin_src emacs-lisp
-  (bind-key* "M-s o" 'occur)
+  (bind-key* "M-s o" 'occur-symbol-at-point)
 #+end_src
+
+#+BEGIN_SRC emacs-lisp
+  (eval-after-load 'helm-moccur-mode
+    (defun helm-symbol-occur ()
+      (interactive)
+      (let ((sym (thing-at-point 'symbol)))
+        (when sym
+          (push (regexp-quote sym) regexp-history)) ;regexp-history defvared in replace.el
+        (call-interactively 'helm-occur))))
+
+  (bind-key "C-c s" 'helm-symbol-occur)
+#+END_SRC
 
 ** Grep
 *** ~rgrep~ :search:regexp:
