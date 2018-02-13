@@ -1,7 +1,17 @@
 #+Title:  Emacs configuration file
 
 * left behind
-This code keeps the semantic idle parser from running the CPU too hot.
+  This code keeps the semantic idle parser from running the CPU too hot.
+
+  #+BEGIN_SRC emacs-lisp
+  (set-face-attribute 'helm-candidate-number nil 
+                      :background "salmon2" 
+                      :foreground "black")
+  (set-face-attribute 'helm-source-header nil
+                      :foreground "#ff6347")  
+  (global-set-key (kbd "M-L") 'reposition-window)
+  (global-set-key (kbd "C-S-l") 'recenter-top-bottom)
+  #+END_SRC
 
   #+BEGIN_SRC emacs-lisp
     (set-face-attribute 'helm-candidate-number nil 
@@ -328,158 +338,10 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
    (use-package free-keys)
  #+end_src
 
-* UI
-*** helm
-  #+begin_src emacs-lisp
-    (use-package helm-dash
-     :bind*
-     (("C-c C-?" . helm-dash-at-point))
-     :config
-     (setq helm-dash-browser-func 'eww))
-  #+end_src
-
-** cosmetic
-
-* Buffer navigation
-** Re-centering
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "M-L") 'reposition-window)
-  (global-set-key (kbd "C-S-l") 'recenter-top-bottom)
-#+end_src
-
-  Use up and down arrows to step through occur. Means I can sit back and rifle
-  through code.
-
-#+begin_src emacs-lisp
-  (defun occur-step (arg)
-    (interactive "P")
-    (let* ((num 0)
-           (arg (or arg 1))
-           (foo (if (or (not arg) (>= arg 0))
-                    'occur-next
-                  'occur-prev)))
-      (while (< num (abs arg))
-        (setq num (1+ num))
-        (funcall foo)))
-    (recenter))
-
-  (defun occur-step-forward (arg)
-    (interactive "P")
-    (let ((arg (if arg (abs arg) 1)))
-      (occur-step arg))
-    (occur-mode-display-occurrence))
-
-  (defun occur-step-backward (arg)
-    (interactive "P")
-    (let ((arg (if arg (- (abs arg)) -1)))
-      (occur-step arg))
-    (occur-mode-display-occurrence))
-
-  (define-key occur-mode-map (kbd "<down>") 'occur-step-forward)
-  (define-key occur-mode-map (kbd "<up>") 'occur-step-backward) 
-#+end_src
-
-  Better display occurrence
-
-#+begin_src emacs-lisp
-  (add-hook 'occur-mode-find-occurrence-hook 'recenter)
-#+end_src
 
 * Windowing
 
-#+begin_src emacs-lisp
-  (let ((inhibit-message nil))
-    (message "Configuring window/buffer/frame management..."))
-#+end_src
-
-** windmove
-
-#+begin_src emacs-lisp
-(use-package windmove)
-#+end_src
-
 ** Basic Settings
-
-Add a more convenient ~other-frame~ binding
-
-#+begin_src emacs-lisp
-  (bind-keys*
-   ("M-o" . other-window))
-#+end_src
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-x C-b") nil)
-#+end_src
-
-Remaps the other-window command. In general, commands with consecutive 
-
-#+begin_src emacs-lisp 
-  (global-set-key (kbd "C-x o") 'other-window)
-  (global-set-key (kbd "C-x O") 'other-frame)
-  (global-set-key (kbd "C-c b") 'switch-to-other-buffer)
-  (global-set-key (kbd "C-x M-t") 'transpose-windows)
-#+end_src
-
-Quickly move the cursor to the first instance of a character with iy-go-to-char:
-
-#+begin_src emacs-lisp
-(use-package iy-go-to-char)
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun safe-file-visit-hook ()
-    "If a file is over a given size, make the buffer read only."
-    (when (> (buffer-size) (* 1024 1024))
-      (print 
-       "Buffer set to read-only mode due to its size. See `safe-file-visit-hook'.")
-      (setq buffer-read-only t)
-      (buffer-disable-undo)
-      (fundamental-mode)))
-
-  (add-hook 'find-file-hook 'safe-file-visit-hook)
-#+end_src
-
-General navigation bindings:
-
-#+begin_src emacs-lisp
-(global-unset-key (kbd "C-x 5 0"))
-(global-set-key (kbd "C-x 5 DEL") 'delete-frame)
-
-(global-unset-key (kbd "C-x 0"))
-(global-set-key (kbd "C-x DEL") 'delete-window)
-#+end_src
-
-Key bindings for other files:
-
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-c o f C-e")
-                (lambda ()
-                  (interactive)
-                  (find-file-other-window "~/.emacs.d/custom/")))
-
-(define-key org-mode-map (kbd "C-c o i") nil)
-(global-set-key (kbd "C-c o i")
-                (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
-(global-set-key (kbd "C-c o C-i")
-                (lambda ()
-                  (interactive)
-                  (find-file-other-window "~/.emacs.d/init.el")))
-
-(global-set-key (kbd "C-c o c")
-                (lambda () (interactive) (find-file "~/.emacs.d/config.org")))
-(global-set-key (kbd "C-c o C-c")
-                (lambda ()
-                  (interactive)
-                  (find-file-other-window "~/.emacs.d/config.org")))
-
-(global-set-key (kbd "C-c o m")
-                (lambda () (interactive) (switch-to-buffer "*Messages*")))
-(global-set-key (kbd "C-c o s")
-                (lambda () (interactive) (switch-to-buffer "*Scratch*")))
-#+end_src
-**** Helpers
-
 #+begin_src emacs-lisp
   (defun hydra-move-splitter-left (arg)
     "Move window splitter left."
@@ -526,18 +388,6 @@ Key bindings for other files:
 
 ** General Appearance
 *** Fringe :appearance:general:window:
-
-The fringe is the area on the left and right edge of Emacs windows. 
-
-#+begin_src emacs-lisp
-  (setq fringe-mode '(4 . 4)) ;; set default fringe width to be 4 pixels on both sides
-#+end_src
-** Finding files
-
-#+begin_src emacs-lisp
-  
-#+end_src
-
 *** dired
 
 #+begin_src emacs-lisp
