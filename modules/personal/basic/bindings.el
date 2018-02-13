@@ -3,7 +3,12 @@
 ;; This files defines a Spacemacs-esque keybinding scheme
 
 (map! :map global-map
-      "S-<return>" #'dired-find-file-conservatively)
+      "S-<return>" #'dired-find-file-conservatively
+      "RET"        #'newline-and-indent
+      "C-x w"      #'whitespace-mode
+      "C-c <delete>" #'delete-region
+
+      )
 
 (map! :map global-map
       :prefix "C-x"

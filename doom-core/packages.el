@@ -38,6 +38,7 @@
 (package! undo-tree)
 (package! wgrep)
 (package! duplicate-thing)
+(package! whole-line-or-region)
 
 ;; core-projects.el
 (package! projectile)

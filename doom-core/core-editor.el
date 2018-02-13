@@ -362,5 +362,7 @@ extension, try to guess one."
   (map! global-map
         "M-c" 'duplicate-thing))
 
+(def-package! whole-line-or-region)
+
 (provide 'core-editor)
 ;;; core-editor.el ends here
