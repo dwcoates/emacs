@@ -14,8 +14,9 @@
       "C-x M-t" #'transpose-windows
       "C-x 5 DEL" #'delete-frame
       "C-x DEL"   #'delete-window
-      :map org-mode-map
-      "C-c o i" nil)
+      (:after org-mode
+        :map org-mode-map
+        "C-c o i" nil))
 
 ;; (global-unset-key (kbd "C-x 0"))
 ;; (global-unset-key (kbd "C-x 5 0"))
