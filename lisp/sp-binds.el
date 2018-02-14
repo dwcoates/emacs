@@ -1,6 +1,7 @@
 (bind-keys*
  :map smartparens-mode-map
  ;; delete behavior
+ ("M-d" . sp-kill-word)
  ("<backspace>" . sp-backward-delete-char)
  ("<C-backspace>" . backward-delete-char)
  ("<M-backspace>" . sp-backward-kill-word)
@@ -48,11 +49,11 @@
  ("C-k"   . sp-backward-kill-sexp)
  ("C-w" . sp-copy-sexp)
  ;; deleting
- ("d" . sp-delete-word)
+ ("d" . kill-word)
  ("C-d" . sp-delete-sexp)
- ("<backspace>" . sp-backward-delete-symbol)
- ("<C-backspace>" . sp-backward-kill-sexp))
-
+ ("<backspace>" . backward-kill-word)
+ ("<C-backspace>" . sp-backward-delete-symbol)
+ ("<M-backspace>" . sp-backward-delete-sexp))
 
 (when (macrop 'defhydra)
   (defhydra hydra-smartparens (:hint none)
