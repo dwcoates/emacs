@@ -34,13 +34,13 @@ line or use --debug-init to enable this.")
 (defvar doom-modules-dir (concat doom-emacs-dir "modules/")
   "Where configuration modules are stored.")
 
-(defvar doom-lisp-dir (concat doom-emacs-dir "lisp/")
-  "Extra lisp files.")
-
 (defvar doom-local-dir (concat doom-emacs-dir ".local/")
   "Root directory for local Emacs files. Use this as permanent storage for files
 that are safe to share across systems (if this config is symlinked across
 several computers).")
+
+(defvar doom-lisp-dir (concat doom-local-dir "site-packages/")
+  "Extra lisp files, usually compiled from source.")
 
 (defvar doom-etc-dir (concat doom-local-dir "etc/")
   "Directory for non-volatile storage.
@@ -53,7 +53,7 @@ dependencies or long-term shared data.")
 
 Use this for files that change often, like cache files.")
 
-(defvar doom-packages-dir (concat doom-local-dir "packages/")
+(defvar doom-packages-dir (concat doom-local-dir "dist-packages/")
   "Where package.el and quelpa plugins (and their caches) are stored.")
 
 (defvar doom-autoload-file (concat doom-local-dir "autoloads.el")
