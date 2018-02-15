@@ -40,6 +40,15 @@
           :n "d" #'dired-do-delete
           :n "r" #'dired-do-rename)))
 
+(defun dired-find-file-conservatively ()
+  (interactive)
+  (let ((auto-mode-alist nil)) ;; speeds up long lines. see https://emacs.stackexchange.com/questions/598/how-do-i-prevent-extremely-long-lines-making-emacs-slow
+    (dired-find-file)
+    ;; disable costly modes
+    (fundamental-mode)
+    (when (boundp 'smartparens-mode)
+      (smartparens-mode -1))
+    (setq-local bidi-display-reordering nil)))
 
 ;;
 ;; Packages
@@ -59,3 +68,16 @@
   (add-hook 'dired-initial-position-hook #'dired-k)
   (add-hook 'dired-after-readin-hook #'dired-k-no-revert))
 
+(def-package! dired-details
+  :config
+  (dired-details-install)
+  (setq-default dired-details-hidden-string "--- ")
+  (setq dired-dwim-target t)
+  (map!
+   "C-c C-p" dired-up-directory))
+
+(def-package! dired-subtree
+  :config
+  (map! dired-mode-map
+        "i" 'dired-subtree-insert
+        ";" 'dired-subtree-remove))
