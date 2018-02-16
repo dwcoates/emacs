@@ -426,7 +426,7 @@ Un-prettify when symbol is just before point.
      (add-hook 'after-init-hook 'global-company-mode)
      ;; provides a little popup for documentation
      :bind*
-     (("C-S-;" . company-files)
+     (("C-:" . company-files)
       ("C-;" . company-manual-begin)
       :map company-active-map
       ("C-n" . company-select-next)
