@@ -3770,8 +3770,8 @@ My clojure-mode hook
    I was having some problems with it throwing errors.
 
 #+begin_src emacs-lisp
-  (add-to-list 'load-path "~/ess/lisp/")
-  (when (load "ess-site" t)
+  (add-to-list 'load-path "~/.emacs.d/.local/site-packages/ess/")
+  (when (load "ess-site" )
     (defun my/ess-mode-hook-funct ()
       (smartparens-mode t))
     (add-hook 'ess-mode-hook 'my/ess-mode-hook-funct))
