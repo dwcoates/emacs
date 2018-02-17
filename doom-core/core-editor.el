@@ -359,8 +359,7 @@ extension, try to guess one."
 (def-package! duplicate-thing
   :commands duplicate-thing
   :init
-  (map! :map global-map
-        "M-c" #'duplicate-thing))
+  )
 
 (def-package! whole-line-or-region)
 

@@ -746,11 +746,13 @@
       
        "C-x k" 'fast-kill-buffer
        ;; Editing
-       [home] 'smart-beginning-of-line
-       "C-a" 'smart-beginning-of-line
+       [home]  'smart-beginning-of-line
+       "C-a"   'smart-beginning-of-line
        "C-x ;" 'iedit-mode
        ;; Searching
        "M-s o" 'occur
+       ;; Thing
+       "M-c"   'duplicate-thing
        ;;
        ;; Ace-window
        ;;
