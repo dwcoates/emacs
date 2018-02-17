@@ -646,7 +646,7 @@
 ;; Window navigation
 (defhydra hydra-windows (global-map "C-S-o" :hint none)
   "
-      Delete: _o_nly  _da_ce  _dw_indow  _db_uffer  _df_rame
+      Delete: _da_ce  _dw_indow  _db_uffer  _df_rame
         Move: _s_wap, _b_alance
       Frames: _f_rame new  _df_ delete
         Misc: _a_ce  _u_ndo  _r_edo
