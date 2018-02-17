@@ -17,7 +17,6 @@
   (map! :map global-map
         "M-x" 'helm-M-x
         "M-y"  'helm-show-kill-ring
-        "M-X"  'helm-M-x
         "C-h SPC"  'helm-all-mark-rings
         "C-x b"  'helm-mini
         "C-x C-o"  'helm-buffers-list
