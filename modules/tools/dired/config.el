@@ -68,16 +68,16 @@
   (add-hook 'dired-initial-position-hook #'dired-k)
   (add-hook 'dired-after-readin-hook #'dired-k-no-revert))
 
-(def-package! dired-details
-  :config
-  (dired-details-install)
-  (setq-default dired-details-hidden-string "--- ")
-  (setq dired-dwim-target t)
-  (map!
-   "C-c C-p" dired-up-directory))
+;; (def-package! dired-details
+;;   :config
+;;   (dired-details-install)
+;;   (setq-default dired-details-hidden-string "--- ")
+;;   (setq dired-dwim-target t)
+;;   (map! :map dired-mode-map
+;;    "C-c C-p" dired-up-directory))
 
 (def-package! dired-subtree
   :config
-  (map! dired-mode-map
-        "i" 'dired-subtree-insert
-        ";" 'dired-subtree-remove))
+  (map! :map dired-mode-map
+        "i" #'dired-subtree-insert
+        ";" #'dired-subtree-remove))
