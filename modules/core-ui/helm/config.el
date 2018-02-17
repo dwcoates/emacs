@@ -25,7 +25,6 @@
         "C-h F"  'helm-insert-command-name)
 
   :config
-  (message "loaded helm")
   (load "helm-autoloads" nil t)
   (add-hook 'doom-init-hook #'helm-mode)
 
