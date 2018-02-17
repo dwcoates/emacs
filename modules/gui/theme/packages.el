@@ -5,3 +5,5 @@
            :repo "dwcoates/atchka"
            :files ("*")))
 
+;; Brighten non-source buffers
+(package! solaire-mode)
