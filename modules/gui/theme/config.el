@@ -15,7 +15,7 @@
           (and (not buffer-file-name)
                (let ((mini-win (active-minibuffer-window)))
                  (when mini-win
-                   (equal (window-buffer mini-win)))))
+                   (equal (window-buffer mini-win) buf))))
           ))
 
   ;; Minibuffer
