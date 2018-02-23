@@ -5441,7 +5441,10 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
 #+begin_src emacs-lisp
   (defun current-fen-to-clipboard ()
     (interactive)
-    (kill-new (chess-pos-to-fen (chess-game-pos chess-module-game))))
+    ;(kill-new (chess-pos-to-fen (chess-game-pos chess-module-game (chess-game-index chess-module-game)) ))
+    (message "%s" (chess-ply-pos chess-module-game))
+    (message "%s" (chess-game-ply chess-module-game))
+    )
 
   (define-key chess-display-mode-map (kbd "C-w") 'current-fen-to-clipboard)
 #+end_src
