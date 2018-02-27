@@ -1804,6 +1804,30 @@ Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
 * Editing
 
 #+begin_src emacs-lisp
+  (use-package highlight-indentation)
+
+  (add-hook 'prog-mode-hook highlight-indentation-mode)
+#+end_src
+
+
+#+begin_src emacs-lisp
+  (defun int-to-binary-string (i)
+    "convert an integer into it's binary representation in string format"
+    (let ((res ""))
+      (while (not (= i 0))
+        (setq res (concat (if (= 1 (logand i 1)) "1" "0") res))
+        (setq i (lsh i -1)))
+      (if (string= res "")
+          (setq res "0"))
+      res))
+
+  (defun to-binary-string ()
+    (interactive) 
+    (message "%s" (number-at-point)))
+#+end_src
+
+
+#+begin_src emacs-lisp
   (let ((inhibit-message nil))
     (message "Configuring editing settings..."))
 #+end_src
