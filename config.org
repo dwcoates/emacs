@@ -1250,7 +1250,7 @@ Isearch repeat...
 *** ~occur~
 
 #+begin_src emacs-lisp
-  (bind-key* "M-s o" 'occur-symbol-at-point)
+  (bind-key* "M-s o" 'occur)
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
