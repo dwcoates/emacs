@@ -1742,7 +1742,7 @@ Redefine ~perspeen-create-ws~ to create a new workspace with only one window.
      :config
      (shackle-mode 1)
      (setq 
-      shackle-default-rule '(:inhibit-window-quit t :other t :align right)
+      shackle-default-rule '(:inhibit-window-quit t :other t :align right :size 80)
       shackle-rules
       `(;; Util
         ("^\\*.+-Profiler-Report .+\\*$"
