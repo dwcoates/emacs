@@ -1184,13 +1184,13 @@ Isearch repeat...
   searched, it will use helm-swoop. Nice idea.
 
   #+begin_src emacs-lisp
-    (use-package ace-isearch
-      :init 
-      (global-ace-isearch-mode)
-      :config
-      (setq ace-isearch-use-jump nil)
-      (setq ace-isearch-jump-delay 2)
-      :diminish 'ace-isearch-mode)
+    ;; (use-package ace-isearch
+    ;;   :init 
+    ;;   (global-ace-isearch-mode)
+    ;;   :config
+    ;;   (setq ace-isearch-use-jump nil)
+    ;;   (setq ace-isearch-jump-delay 2)
+    ;;   :diminish 'ace-isearch-mode)
   #+end_src
 
   Make iterative searching default to regexp searching, which I find much
@@ -1203,17 +1203,17 @@ Isearch repeat...
   Use ~swiper~ instead of ~helm-swoop~.
 
 #+begin_src emacs-lisp
-  (defun ace-isearch-swiper-from-isearch ()
-    "Invoke `helm-swoop' from ace-isearch."
-    (interactive)
-    (let (($query (if isearch-regexp
-                      isearch-string
-                    (regexp-quote isearch-string))))
-      (let (search-nonincremental-instead)
-        (ignore-errors (isearch-exit)))
-      (swiper $query)))
+  ;; (defun ace-isearch-swiper-from-isearch ()
+  ;;   "Invoke `helm-swoop' from ace-isearch."
+  ;;   (interactive)
+  ;;   (let (($query (if isearch-regexp
+  ;;                     isearch-string
+  ;;                   (regexp-quote isearch-string))))
+  ;;     (let (search-nonincremental-instead)
+  ;;       (ignore-errors (isearch-exit)))
+  ;;     (swiper $query)))
 
-  (setq ace-isearch-function-from-isearch 'ace-isearch-swiper-from-isearch)
+  ;; (setq ace-isearch-function-from-isearch 'ace-isearch-swiper-from-isearch)
 #+end_src
 
 *** ~isearcher~
@@ -1968,7 +1968,9 @@ when backwards deleting a word, it will stop at the nearest capital letter.
      (load-file (concat lisp-dir "sp-binds.el"))
      (defun sp-lisp-pair-pred (_ _ _)
        (interactive) 
-       (not (or (eq major-mode 'emacs-lisp-mode) (eq major-mode 'org-mode))))
+       (not (or (eq major-mode 'emacs-lisp-mode) (eq major-mode 'org-mode)
+                (eq major-mode 'magit-mode) (eq major-mode 'c++-mode) (eq major-mode 'c-mode)
+                (eq major-mode 'text-mode))))
      (sp-pair "'" nil :when '(sp-lisp-pair-pred) :actions '(insert wrap)) 
      (setq sp-base-key-bindings 'paredit)
      (setq sp-autoskip-closing-pair 'always)
