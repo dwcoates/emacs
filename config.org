@@ -5034,6 +5034,12 @@ Insert a new Task heading. These are used by org-capture. ID is saved in kill ri
   )
 #+end_src
 
+** Table
+
+#+begin_src emacs-lisp
+(define-key org-mode-map (kbd "C-c n") 'org-table-next-row)
+#+end_src
+
 * Emacs as a Auxiliary Interface
 
 #+begin_src emacs-lisp
