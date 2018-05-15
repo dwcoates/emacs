@@ -3249,18 +3249,6 @@ not yet support emacs due to a jupyter bug.
      (add-hook 'python-mode-hook 'lpy-mode))
 #+end_src
 
-*** Python Shell
-
-#+begin_src emacs-lisp 
-  (defun python-switch-to-shell-same-window ()
-    (interactive)
-    (let ((python-buffer (python-shell-get-buffer)))
-      (if python-buffer
-          (switch-to-buffer python-buffer)
-        (message "No python process running"))))
-#+end_src
-
-
 **** IPython *DISABLED*
 
  see [[http://emacs.stackexchange.com/questions/24750/emacs-freezes-with-ipython-5-0-0][here]] for info on IPython 5 is not working properly in Emacs.
@@ -3798,7 +3786,7 @@ My clojure-mode hook
 
 #+begin_src emacs-lisp
   (add-to-list 'load-path "~/.emacs.d/.local/site-packages/ess/")
-  (when (load "ess-site" )
+  (when (load "ess-site" t)
     (defun my/ess-mode-hook-funct ()
       (smartparens-mode t))
     (add-hook 'ess-mode-hook 'my/ess-mode-hook-funct))
@@ -5458,7 +5446,6 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
 #+begin_src emacs-lisp
   (use-package chess
     :ensure nil   
-    :load-path "./lisp/emacs-chess"
     :config 
     (setq chess-images-directory 
           (concat user-emacs-directory 
@@ -5476,8 +5463,7 @@ pdf-tools is an improvment on Emacs' doc-view mode. Lets us search, follow links
     (interactive)
     ;(kill-new (chess-pos-to-fen (chess-game-pos chess-module-game (chess-game-index chess-module-game)) ))
     (message "%s" (chess-ply-pos chess-module-game))
-    (message "%s" (chess-game-ply chess-module-game))
-    )
+    (message "%s" (chess-game-ply chess-module-game)))
 
   (define-key chess-display-mode-map (kbd "C-w") 'current-fen-to-clipboard)
 #+end_src
