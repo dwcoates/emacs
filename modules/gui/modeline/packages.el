@@ -8,4 +8,4 @@
 (package! anzu)
 (package! eldoc-eval)
 (package! shrink-path)
-(package! smart-mode-line)
+;; (package! smart-mode-line)
