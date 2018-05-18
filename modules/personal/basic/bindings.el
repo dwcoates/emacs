@@ -739,7 +739,7 @@
   ("o" Buffer-menu-other-window "other-window" :color blue)
   ("q" quit-window "quit" :color blue))
 
-(map!  ;;
+(map!
  ;; Core
  ;;
  ;; UI
