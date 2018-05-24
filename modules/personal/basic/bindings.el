@@ -756,7 +756,7 @@
  ;;
  ;; Ace-window
  ;;
- (:map global-map
+ (:map override-global-map
    "C-o" 'ace-window
    "M-o" 'ace-window-all-frames)
  ;;
