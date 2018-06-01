@@ -1,14 +1,24 @@
 ;;; private/default/+bindings.el -*- lexical-binding: t; -*-
+
+(unbind-key "C-z" global-map) ;; Remove suspend-frame binding (also bound to C-x C-z)
+(unbind-key "C-x f" global-map) ;; Remove set-fill-column binding
+(unbind-key "C-x s" global-map) ;; Remove save file (also bound to C-x C-s)
+(unbind-key "C-x e" global-map) ;; Remove next-error binding
 
-;; This files defines a Spacemacs-esque keybinding scheme
+(define-key input-decode-map [?\C-m] [C-m]) ;; Distinguish C-m from carriage return
 
 (map!
- :prefix "C-x"
- :desc "Newline and indent" "RET" #'newline-and-indent
- :desc "Whitespace mdoe"    "w"   #'whitespace-mode
- :desc "Blink cursor line"  "M-=" #'+doom/blink-cursor)
-
-(unbind-key "C-z" global-map) ;; Remove suspend-frame binding (also bound to C-x C-z)
+ :prefix "C-c"
+ (:after yasnippet
+   (:map yas-keymap
+     "e"           #'+snippets/goto-end-of-field
+     "a"           #'+snippets/goto-start-of-field
+     "DEL" #'+snippets/delete-to-start-of-field
+     [backspace]     #'+snippets/delete-backward-char
+     [delete]        #'+snippets/delete-forward-char-or-field)
+   (:map yas-minor-mode-map
+     "<tab>" yas-maybe-expand
+     "<tab>" #'+snippets/expand-on-region)))
 
 (map!
  (:desc "workspace" :prefix "C-z"
@@ -36,37 +46,6 @@
    :desc "Switch to 9th workspace"  "9"   (λ! (+workspace/switch-to 8))))
 
 (map!
- (:desc "popups" :prefix "C-x"
-   :desc "Cycle through popup windows" "p" #'doom/other-popup))
-
-(unbind-key "C-x f" global-map)
-
-(map!
- (:desc "file" :prefix "C-x"
-   :desc "Find file"                 "C-f" #'find-file
-   :desc "Find file in project"      "M-f" #'projectile-find-file
-   (:prefix "f"
-     :desc "Sudo find file"            "F" #'doom/sudo-find-file
-     :desc "Find file from here"       "?" #'counsel-file-jump
-     :desc "Find file on line"         "<return>" #'dired-find-file-conservatively
-     :desc "Find other file"           "a" #'projectile-find-other-file
-     :desc "Open project editorconfig" "c" #'editorconfig-find-current-editorconfig
-     :desc "Recent files"              "r" #'recentf-open-files
-     :desc "Recent project files"      "R" #'projectile-recentf
-     :desc "Yank filename"             "y" #'+default/yank-buffer-filename)))
-
-(map!
- (:desc "buffer" :prefix "C-x"
-   :desc "Switch buffer"           "B" #'switch-to-buffer
-   :desc "Kill buffer"             "k" #'doom/kill-this-buffer
-   :desc "Kill other buffers"      "o" #'doom/kill-other-buffers
-   :desc "Pop scratch buffer"      "x" #'doom/open-scratch-buffer
-   :desc "Bury buffer"             "z" #'bury-buffer
-   :desc "Next buffer"             "]" #'doom/next-buffer
-   :desc "Previous buffer"         "[" #'doom/previous-buffer
-   :desc "Sudo edit this file"     "S" #'doom/sudo-this-file))
-
-(map!
  (:desc "help" :prefix "C-h"
    :desc "Apropos"                "a" #'apropos
    :desc "Reload theme"           "R" #'doom//reload-theme
@@ -89,8 +68,6 @@
    :desc "Info"                   "i" #'info
    :desc "Toggle profiler"        "p" #'doom/toggle-profiler))
 
-(define-key input-decode-map [?\C-m] [C-m]) ;; Distinguis C-m from carriage return
-
 (map!
  (:desc "git" :prefix "<C-m>"
    :desc "Git status"             "s" #'magit-status
@@ -101,10 +78,37 @@
    :desc "Git revert buffer"      "R" #'vc-revert
    :desc "List gists"             "g" #'+gist:list
    :desc "Next hunk"              "]" #'git-gutter:next-hunk
-   :desc "Previous hunk"          "[" #'git-gutter:previous-hunk))
+   :desc "Previous hunk"          "[" #'git-gutter:previous-hunk
 
 (map!
  :prefix "C-x"
+ :desc "Newline and indent" "RET" #'newline-and-indent
+ (:desc "visualize"
+   :desc "Whitespace mdoe"    "w"   #'whitespace-mode
+   :desc "Blink cursor line"  "M-=" #'+doom/blink-cursor)
+ (:desc "popups"
+   :desc "Cycle through popup windows" "p" #'doom/other-popup)
+ (:desc "file"
+   :desc "Find file"                 "C-f" #'find-file
+   :desc "Find file in project"      "M-f" #'projectile-find-file
+   (:prefix "f"
+     :desc "Sudo find file"            "F" #'doom/sudo-find-file
+     :desc "Find file from here"       "?" #'counsel-file-jump
+     :desc "Find file on line"         "<return>" #'dired-find-file-conservatively
+     :desc "Find other file"           "a" #'projectile-find-other-file
+     :desc "Open project editorconfig" "c" #'editorconfig-find-current-editorconfig
+     :desc "Recent files"              "r" #'recentf-open-files
+     :desc "Recent project files"      "R" #'projectile-recentf
+     :desc "Yank filename"             "y" #'+default/yank-buffer-filename))
+ (:desc "buffer"
+   :desc "Switch buffer"           "B" #'switch-to-buffer
+   :desc "Kill buffer"             "k" #'doom/kill-this-buffer
+   :desc "Kill other buffers"      "o" #'doom/kill-other-buffers
+   :desc "Pop scratch buffer"      "x" #'doom/open-scratch-buffer
+   :desc "Bury buffer"             "z" #'bury-buffer
+   :desc "Next buffer"             "]" #'doom/next-buffer
+   :desc "Previous buffer"         "[" #'doom/previous-buffer
+   :desc "Sudo edit this file"     "S" #'doom/sudo-this-file)
  (:desc "toggle" :prefix "t"
    :desc "Flyspell"               "s" #'flyspell-mode
    :desc "Flycheck"               "f" #'flycheck-mode
@@ -113,71 +117,41 @@
    :desc "Indent guides"          "i" #'highlight-indentation-mode
    :desc "Indent guides (column)" "I" #'highlight-indentation-current-column-mode
    :desc "Impatient mode"         "h" #'+impatient-mode/toggle
-   :desc "Big mode"               "b" #'doom-big-font-mode))
-
-(map!
- :prefix "C-x"
+   :desc "Big mode"               "b" #'doom-big-font-mode)
  (:desc "project" :prefix "P"
-   :desc "Browse project"           "." #'+default/browse-project
-   :desc "Find file in project"     "/" #'projectile-find-file
-   :desc "Run cmd in project root"  "!" #'projectile-run-shell-command-in-root
-   :desc "Switch project"           "p" #'projectile-switch-project
-   :desc "Recent project files"     "r" #'projectile-recentf
-   :desc "List project tasks"       "t" #'+ivy/tasks
-   :desc "Pop term in project"      "o" #'+term/open-popup-in-project
-   :desc "Invalidate cache"         "x" #'projectile-invalidate-cache))
-
-(unbind-key "C-x s" global-map)
-
-(map!
- :prefix "C-x"
+  :desc "Browse project"           "." #'+default/browse-project
+  :desc "Find file in project"     "/" #'projectile-find-file
+  :desc "Run cmd in project root"  "!" #'projectile-run-shell-command-in-root
+  :desc "Switch project"           "p" #'projectile-switch-project
+  :desc "Recent project files"     "r" #'projectile-recentf
+  :desc "List project tasks"       "t" #'+ivy/tasks
+  :desc "Pop term in project"      "o" #'+term/open-popup-in-project
+  :desc "Invalidate cache"         "x" #'projectile-invalidate-cache)
  (:desc "snippets" :prefix "s"
-   :desc "New snippet"             "n" #'yas-new-snippet
-   :desc "Insert snippet"          "i" #'yas-insert-snippet
-   :desc "Find snippet for mode"   "s" #'yas-visit-snippet-file
-   :desc "Find snippet"            "S" #'+default/find-in-snippets))
-
-(map!
- :prefix "C-x"
+  :desc "New snippet"             "n" #'yas-new-snippet
+  :desc "Insert snippet"          "i" #'yas-insert-snippet
+  :desc "Find snippet for mode"   "s" #'yas-visit-snippet-file
+  :desc "Find snippet"            "S" #'+default/find-in-snippets)
  (:desc "code" :prefix "c"
-   :desc "List errors"                "x" #'flycheck-list-errors
-   :desc "Evaluate buffer/region"     "e" #'+eval/buffer
-   :desc "Evaluate region"            "e" #'+eval/region
-   :desc "Evaluate & replace region"  "E" #'+eval:replace-region
-   :desc "Build tasks"                "b" #'+eval/build
-   :desc "Jump to definition"         "d" #'+jump/definition
-   :desc "Jump to references"         "D" #'+jump/references
-   :desc "Open REPL"                  "r" #'+eval/open-repl))
-
-(unbind-key "C-x e" global-map)
-
-(map!
- :prefix "C-x"
+  :desc "List errors"                "x" #'flycheck-list-errors
+  :desc "Evaluate buffer/region"     "e" #'+eval/buffer
+  :desc "Evaluate region"            "e" #'+eval/region
+  :desc "Evaluate & replace region"  "E" #'+eval:replace-region
+  :desc "Build tasks"                "b" #'+eval/build
+  :desc "Jump to definition"         "d" #'+jump/definition
+  :desc "Jump to references"         "D" #'+jump/references
+  :desc "Open REPL"                  "r" #'+eval/open-repl)
  (:desc "errors" :prefix "e"
-   :desc "Next error" "n" #'next-error
-   :desc "Previous error" "p" #'previous-error
-   :desc "Correct next word spelling" "w" #'flyspell-correct-word-generic
-   :desc "Correct previous word spelling" "W" #'flyspell-correct-previous-word-generic
-   (:after flycheck
-     :map flycheck-error-list-mode-map
-     "C-n" #'flycheck-error-list-next-error
-     "C-p" #'flycheck-error-list-previous-error
-     "j"   #'flycheck-error-list-next-error
-     "RET" #'flycheck-error-list-goto-error)))
-
-      ;; yasnippet
-(map!
- :prefix "C-c"
- (:after yasnippet
-   (:map yas-keymap
-     "e"           #'+snippets/goto-end-of-field
-     "a"           #'+snippets/goto-start-of-field
-     "DEL" #'+snippets/delete-to-start-of-field
-     [backspace]     #'+snippets/delete-backward-char
-     [delete]        #'+snippets/delete-forward-char-or-field)
-   (:map yas-minor-mode-map
-     "<tab>" yas-maybe-expand
-     "<tab>" #'+snippets/expand-on-region)))
+  :desc "Next error" "n" #'next-error
+  :desc "Previous error" "p" #'previous-error
+  :desc "Correct next word spelling" "w" #'flyspell-correct-word-generic
+  :desc "Correct previous word spelling" "W" #'flyspell-correct-previous-word-generic
+  (:after flycheck
+    :map flycheck-error-list-mode-map
+    "C-n" #'flycheck-error-list-next-error
+    "C-p" #'flycheck-error-list-previous-error
+    "j"   #'flycheck-error-list-next-error
+    "RET" #'flycheck-error-list-goto-error)))
 
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
