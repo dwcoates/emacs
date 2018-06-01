@@ -99,6 +99,20 @@
    :desc "Info"                   "i" #'info
    :desc "Toggle profiler"        "p" #'doom/toggle-profiler))
 
+(define-key input-decode-map [?\C-m] [C-m]) ;; Distinguis C-m from carriage return
+
+(map!
+ (:desc "git" :prefix "<C-m>"
+   :desc "Git status"             "s" #'magit-status
+   :desc "Git blame"              "b" #'magit-blame
+   :desc "Git time machine"       "t" #'git-timemachine-toggle
+   :desc "Git stage hunk"         "a" #'git-gutter:stage-hunk
+   :desc "Git revert hunk"        "r" #'git-gutter:revert-hunk
+   :desc "Git revert buffer"      "R" #'vc-revert
+   :desc "List gists"             "g" #'+gist:list
+   :desc "Next hunk"              "]" #'git-gutter:next-hunk
+   :desc "Previous hunk"          "[" #'git-gutter:previous-hunk))
+
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
 
@@ -131,17 +145,6 @@
 ;;         :desc "Jump to references"        :n  "D" #'+jump/references
 ;;         :desc "Open REPL"                 :n  "r" #'+eval/open-repl
 ;;         :v  "r" #'+eval:repl)
-
-;;       (:desc "git" :prefix "g"
-;;         :desc "Git status"            :n  "S" #'magit-status
-;;         :desc "Git blame"             :n  "b" #'magit-blame
-;;         :desc "Git time machine"      :n  "t" #'git-timemachine-toggle
-;;         :desc "Git stage hunk"        :n  "s" #'git-gutter:stage-hunk
-;;         :desc "Git revert hunk"       :n  "r" #'git-gutter:revert-hunk
-;;         :desc "Git revert buffer"     :n  "R" #'vc-revert
-;;         :desc "List gists"            :n  "g" #'+gist:list
-;;         :desc "Next hunk"             :nv "]" #'git-gutter:next-hunk
-;;         :desc "Previous hunk"         :nv "[" #'git-gutter:previous-hunk)
 
 ;;       (:desc "insert" :prefix "i"
 ;;         :desc "From kill-ring"        :nv "y" #'counsel-yank-pop
