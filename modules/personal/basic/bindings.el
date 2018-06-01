@@ -113,6 +113,18 @@
    :desc "Next hunk"              "]" #'git-gutter:next-hunk
    :desc "Previous hunk"          "[" #'git-gutter:previous-hunk))
 
+(map!
+ :prefix "C-x"
+ (:desc "toggle" :prefix "t"
+   :desc "Flyspell"               "s" #'flyspell-mode
+   :desc "Flycheck"               "f" #'flycheck-mode
+   :desc "Line numbers"           "l" #'doom/toggle-line-numbers
+   :desc "Fullscreen"             "f" #'doom/toggle-fullscreen
+   :desc "Indent guides"          "i" #'highlight-indentation-mode
+   :desc "Indent guides (column)" "I" #'highlight-indentation-current-column-mode
+   :desc "Impatient mode"         "h" #'+impatient-mode/toggle
+   :desc "Big mode"               "b" #'doom-big-font-mode))
+
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
 
@@ -208,18 +220,6 @@
 ;;         :desc "Insert snippet"         :nv "i" #'yas-insert-snippet
 ;;         :desc "Find snippet for mode"  :n  "s" #'yas-visit-snippet-file
 ;;         :desc "Find snippet"           :n  "S" #'+default/find-in-snippets)
-
-;;       (:desc "toggle" :prefix "t"
-;;         :desc "Flyspell"               :n "s" #'flyspell-mode
-;;         :desc "Flycheck"               :n "f" #'flycheck-mode
-;;         :desc "Line numbers"           :n "l" #'doom/toggle-line-numbers
-;;         :desc "Fullscreen"             :n "f" #'doom/toggle-fullscreen
-;;         :desc "Indent guides"          :n "i" #'highlight-indentation-mode
-;;         :desc "Indent guides (column)" :n "I" #'highlight-indentation-current-column-mode
-;;         :desc "Impatient mode"         :n "h" #'+impatient-mode/toggle
-;;         :desc "Big mode"               :n "b" #'doom-big-font-mode
-;;         :desc "Evil goggles"           :n "g" #'+evil-goggles/toggle)
-
 
 ;;       ;; --- Personal vim-esque bindings ------------------
 ;;       :n  "zx" #'doom/kill-this-buffer
