@@ -154,7 +154,7 @@
  (:desc "git" :prefix "<C-m>"
    :desc "Git status"             "s" #'magit-status
    :desc "Git blame"              "b" #'magit-blame
-   :desc "Git time machine"       "t" #'git-timemachine-toggle
+   :desc "Git time machine"       "T" #'git-timemachine-toggle
    :desc "Git stage hunk"         "a" #'git-gutter:stage-hunk
    :desc "Git revert hunk"        "r" #'git-gutter:revert-hunk
    :desc "Git revert buffer"      "R" #'vc-revert
@@ -173,7 +173,16 @@
      "r"   #'gist-list-reload
      "s"   #'gist-star
      "S"   #'gist-unstar
-     "y"   #'gist-print-current-url)))
+     "y"   #'gist-print-current-url)
+   (:after git-timemachine
+     :prefix "t"
+     (:map git-timemachine-mode-map
+       "C-p" #'git-timemachine-show-previous-revision
+       "C-n" #'git-timemachine-show-next-revision
+       "["  #'git-timemachine-show-previous-revision
+       "]"  #'git-timemachine-show-next-revision
+       "q"   #'git-timemachine-quit
+       "b"  #'git-timemachine-blame))))
 
 (map!
  (:after neotree
