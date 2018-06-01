@@ -146,6 +146,18 @@
    :desc "Find snippet for mode"   "s" #'yas-visit-snippet-file
    :desc "Find snippet"            "S" #'+default/find-in-snippets))
 
+(map!
+ :prefix "C-x"
+ (:desc "code" :prefix "c"
+   :desc "List errors"                "x" #'flycheck-list-errors
+   :desc "Evaluate buffer/region"     "e" #'+eval/buffer
+   :desc "Evaluate region"            "e" #'+eval/region
+   :desc "Evaluate & replace region"  "E" #'+eval:replace-region
+   :desc "Build tasks"                "b" #'+eval/build
+   :desc "Jump to definition"         "d" #'+jump/definition
+   :desc "Jump to references"         "D" #'+jump/references
+   :desc "Open REPL"                  "r" #'+eval/open-repl))
+
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
 
@@ -167,17 +179,6 @@
 ;;       :desc "Toggle last popup"       :n "~"   #'doom/popup-toggle
 ;;       :desc "Blink cursor line"       :n "DEL" #'+doom/blink-cursor
 ;;       :desc "Jump to bookmark"        :n "RET" #'bookmark-jump
-
-;;       (:desc "code" :prefix "c"
-;;         :desc "List errors"               :n  "x" #'flycheck-list-errors
-;;         :desc "Evaluate buffer/region"    :n  "e" #'+eval/buffer
-;;         :v  "e" #'+eval/region
-;;         :desc "Evaluate & replace region" :nv "E" #'+eval:replace-region
-;;         :desc "Build tasks"               :nv "b" #'+eval/build
-;;         :desc "Jump to definition"        :n  "d" #'+jump/definition
-;;         :desc "Jump to references"        :n  "D" #'+jump/references
-;;         :desc "Open REPL"                 :n  "r" #'+eval/open-repl
-;;         :v  "r" #'+eval:repl)
 
 ;;       (:desc "insert" :prefix "i"
 ;;         :desc "From kill-ring"        :nv "y" #'counsel-yank-pop
