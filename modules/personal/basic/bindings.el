@@ -174,6 +174,20 @@
      "j"   #'flycheck-error-list-next-error
      "RET" #'flycheck-error-list-goto-error)))
 
+      ;; yasnippet
+(map!
+ :prefix "C-c"
+ (:after yasnippet
+   (:map yas-keymap
+     "e"           #'+snippets/goto-end-of-field
+     "a"           #'+snippets/goto-start-of-field
+     "DEL" #'+snippets/delete-to-start-of-field
+     [backspace]     #'+snippets/delete-backward-char
+     [delete]        #'+snippets/delete-forward-char-or-field)
+   (:map yas-minor-mode-map
+     "<tab>" yas-maybe-expand
+     "<tab>" #'+snippets/expand-on-region)))
+
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
 
@@ -395,21 +409,6 @@
 ;;       ;; undo-tree -- undo/redo for visual regions
 ;;       :v "C-u" #'undo-tree-undo
 ;;       :v "C-r" #'undo-tree-redo
-
-;;       ;; yasnippet
-;;       (:after yasnippet
-;;         (:map yas-keymap
-;;           "C-e"           #'+snippets/goto-end-of-field
-;;           "C-a"           #'+snippets/goto-start-of-field
-;;           "<M-right>"     #'+snippets/goto-end-of-field
-;;           "<M-left>"      #'+snippets/goto-start-of-field
-;;           "<M-backspace>" #'+snippets/delete-to-start-of-field
-;;           [escape]        #'evil-normal-state
-;;           [backspace]     #'+snippets/delete-backward-char
-;;           [delete]        #'+snippets/delete-forward-char-or-field)
-;;         (:map yas-minor-mode-map
-;;           :i "<tab>" yas-maybe-expand
-;;           :v "<tab>" #'+snippets/expand-on-region))
 
 
 ;;       ;; --- Major mode bindings --------------------------
@@ -763,29 +762,3 @@
 ;; (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body)                       
 
 ;; goes in core
-
-
-;; (map!      ;; Text-scaling
-;;       "M-+"       (λ! (text-scale-set 0))
-;;       "M-="       #'text-scale-increase
-;;       "M--"       #'text-scale-decrease
-
-;;       ;; Simple window navigation/manipulation
-;;       "C-`"       #'doom/popup-toggle
-;;       "C-~"       #'doom/popup-raise
-;;       "M-t"       #'+workspace/new
-;;       "M-T"       #'+workspace/display
-;;       "M-w"       #'delete-window
-;;       "M-W"       #'+workspace/close-workspace-or-frame
-;;       "M-n"       #'evil-buffer-new
-;;       "M-N"       #'make-frame
-;;       "M-1"       (λ! (+workspace/switch-to 0))
-;;       "M-2"       (λ! (+workspace/switch-to 1))
-;;       "M-3"       (λ! (+workspace/switch-to 2))
-;;       "M-4"       (λ! (+workspace/switch-to 3))
-;;       "M-5"       (λ! (+workspace/switch-to 4))
-;;       "M-6"       (λ! (+workspace/switch-to 5))
-;;       "M-7"       (λ! (+workspace/switch-to 6))
-;;       "M-8"       (λ! (+workspace/switch-to 7))
-;;       "M-9"       (λ! (+workspace/switch-to 8))
-;;       "M-0"       #'+workspace/switch-to-last)
