@@ -69,7 +69,6 @@
    :desc "Switch buffer"           "B" #'switch-to-buffer
    :desc "Kill buffer"             "k" #'doom/kill-this-buffer
    :desc "Kill other buffers"      "o" #'doom/kill-other-buffers
-   :desc "Save buffer"             "s" #'save-buffer
    :desc "Pop scratch buffer"      "x" #'doom/open-scratch-buffer
    :desc "Bury buffer"             "z" #'bury-buffer
    :desc "Next buffer"             "]" #'doom/next-buffer
@@ -125,7 +124,6 @@
    :desc "Impatient mode"         "h" #'+impatient-mode/toggle
    :desc "Big mode"               "b" #'doom-big-font-mode))
 
-
 (map!
  :prefix "C-x"
  (:desc "project" :prefix "P"
@@ -137,6 +135,16 @@
    :desc "List project tasks"       "t" #'+ivy/tasks
    :desc "Pop term in project"      "o" #'+term/open-popup-in-project
    :desc "Invalidate cache"         "x" #'projectile-invalidate-cache))
+
+(unbind-key "C-x s" global-map)
+
+(map!
+ :prefix "C-x"
+ (:desc "snippets" :prefix "s"
+   :desc "New snippet"             "n" #'yas-new-snippet
+   :desc "Insert snippet"          "i" #'yas-insert-snippet
+   :desc "Find snippet for mode"   "s" #'yas-visit-snippet-file
+   :desc "Find snippet"            "S" #'+default/find-in-snippets))
 
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
@@ -217,61 +225,6 @@
 ;;         :desc "Diff local & remote"    :n "D" #'+upload/diff
 ;;         :desc "Browse remote files"    :n "." #'+upload/browse
 ;;         :desc "Detect remote changes"  :n ">" #'+upload/check-remote)
-
-;;       (:desc "snippets" :prefix "s"
-;;         :desc "New snippet"            :n  "n" #'yas-new-snippet
-;;         :desc "Insert snippet"         :nv "i" #'yas-insert-snippet
-;;         :desc "Find snippet for mode"  :n  "s" #'yas-visit-snippet-file
-;;         :desc "Find snippet"           :n  "S" #'+default/find-in-snippets)
-
-;;       ;; --- Personal vim-esque bindings ------------------
-;;       :n  "zx" #'doom/kill-this-buffer
-;;       :n  "ZX" #'bury-buffer
-;;       :n  "]b" #'doom/next-buffer
-;;       :n  "[b" #'doom/previous-buffer
-;;       :n  "]w" #'+workspace/switch-right
-;;       :n  "[w" #'+workspace/switch-left
-;;       :m  "gt" #'+workspace/switch-right
-;;       :m  "gT" #'+workspace/switch-left
-;;       :m  "gd" #'+jump/definition
-;;       :m  "gD" #'+jump/references
-;;       :m  "gh" #'+jump/documentation
-;;       :n  "gp" #'+evil/reselect-paste
-;;       :n  "gr" #'+eval:region
-;;       :n  "gR" #'+eval/buffer
-;;       :v  "gR" #'+eval:replace-region
-;;       :v  "@"  #'+evil:macro-on-all-lines
-;;       :n  "g@" #'+evil:macro-on-all-lines
-;;       ;; repeat in visual mode (FIXME buggy)
-;;       :v  "."  #'evil-repeat
-;;       ;; don't leave visual mode after shifting
-;;       :v  "<"  #'+evil/visual-dedent  ; vnoremap < <gv
-;;       :v  ">"  #'+evil/visual-indent  ; vnoremap > >gv
-;;       ;; paste from recent yank register (which isn't overwritten)
-;;       :v  "C-p" "\"0p"
-
-;;       (:map evil-window-map ; prefix "C-w"
-;;         ;; Navigation
-;;         "C-h"     #'evil-window-left
-;;         "C-j"     #'evil-window-down
-;;         "C-k"     #'evil-window-up
-;;         "C-l"     #'evil-window-right
-;;         "C-w"     #'ace-window
-;;         ;; Swapping windows
-;;         "H"       #'+evil/window-move-left
-;;         "J"       #'+evil/window-move-down
-;;         "K"       #'+evil/window-move-up
-;;         "L"       #'+evil/window-move-right
-;;         "C-S-w"   #'ace-swap-window
-;;         ;; Window undo/redo
-;;         "u"       #'winner-undo
-;;         "C-u"     #'winner-undo
-;;         "C-r"     #'winner-redo
-;;         "o"       #'doom/window-enlargen
-;;         ;; Delete window
-;;         "c"       #'+workspace/close-window-or-workspace
-;;         "C-C"     #'ace-delete-window)
-
 
 ;;       ;; --- Plugin bindings ------------------------------
 ;;       ;; auto-yasnippet
