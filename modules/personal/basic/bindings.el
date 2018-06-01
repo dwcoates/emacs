@@ -125,6 +125,19 @@
    :desc "Impatient mode"         "h" #'+impatient-mode/toggle
    :desc "Big mode"               "b" #'doom-big-font-mode))
 
+
+(map!
+ :prefix "C-x"
+ (:desc "project" :prefix "P"
+   :desc "Browse project"           "." #'+default/browse-project
+   :desc "Find file in project"     "/" #'projectile-find-file
+   :desc "Run cmd in project root"  "!" #'projectile-run-shell-command-in-root
+   :desc "Switch project"           "p" #'projectile-switch-project
+   :desc "Recent project files"     "r" #'projectile-recentf
+   :desc "List project tasks"       "t" #'+ivy/tasks
+   :desc "Pop term in project"      "o" #'+term/open-popup-in-project
+   :desc "Invalidate cache"         "x" #'projectile-invalidate-cache))
+
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
 
@@ -192,16 +205,6 @@
 ;;           :desc "Send project to Transmit"  :n "U" #'+macos/send-project-to-transmit
 ;;           :desc "Send to Launchbar"         :n "l" #'+macos/send-to-launchbar
 ;;           :desc "Send project to Launchbar" :n "L" #'+macos/send-project-to-launchbar))
-
-;;       (:desc "project" :prefix "p"
-;;         :desc "Browse project"          :n  "." #'+default/browse-project
-;;         :desc "Find file in project"    :n  "/" #'projectile-find-file
-;;         :desc "Run cmd in project root" :nv "!" #'projectile-run-shell-command-in-root
-;;         :desc "Switch project"          :n  "p" #'projectile-switch-project
-;;         :desc "Recent project files"    :n  "r" #'projectile-recentf
-;;         :desc "List project tasks"      :n  "t" #'+ivy/tasks
-;;         :desc "Pop term in project"     :n  "o" #'+term/open-popup-in-project
-;;         :desc "Invalidate cache"        :n  "x" #'projectile-invalidate-cache)
 
 ;;       (:desc "quit" :prefix "q"
 ;;         :desc "Quit"                   :n "q" #'evil-save-and-quit
