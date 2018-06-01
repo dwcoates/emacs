@@ -79,6 +79,19 @@
    :desc "List gists"             "g" #'+gist:list
    :desc "Next hunk"              "]" #'git-gutter:next-hunk
    :desc "Previous hunk"          "[" #'git-gutter:previous-hunk
+   (:after gist    ;;TODO install gist
+     :map gist-list-menu-mode-map
+     :prefix "i"
+     "RET" #'+gist/open-current
+     "b"   #'gist-browse-current-url
+     "c"   #'gist-add-buffer
+     "d"   #'gist-kill-current
+     "f"   #'gist-fork
+     "q"   #'quit-window
+     "r"   #'gist-list-reload
+     "s"   #'gist-star
+     "S"   #'gist-unstar
+     "y"   #'gist-print-current-url)))
 
 (map!
  :prefix "C-x"
@@ -272,20 +285,6 @@
 ;;           :n "]]"  #'git-timemachine-show-next-revision
 ;;           :n "q"   #'git-timemachine-quit
 ;;           :n "gb"  #'git-timemachine-blame))
-
-;;       ;; gist
-;;       (:after gist
-;;         :map gist-list-menu-mode-map
-;;         :n "RET" #'+gist/open-current
-;;         :n "b"   #'gist-browse-current-url
-;;         :n "c"   #'gist-add-buffer
-;;         :n "d"   #'gist-kill-current
-;;         :n "f"   #'gist-fork
-;;         :n "q"   #'quit-window
-;;         :n "r"   #'gist-list-reload
-;;         :n "s"   #'gist-star
-;;         :n "S"   #'gist-unstar
-;;         :n "y"   #'gist-print-current-url)
 
 ;;         (:after helm-files
 ;;           (:map helm-generic-files-map
