@@ -75,6 +75,30 @@
    :desc "Next buffer"             "]" #'doom/next-buffer
    :desc "Previous buffer"         "[" #'doom/previous-buffer
    :desc "Sudo edit this file"     "S" #'doom/sudo-this-file))
+
+(map!
+ (:desc "help" :prefix "C-h"
+   :desc "Apropos"                "a" #'apropos
+   :desc "Reload theme"           "R" #'doom//reload-theme
+   :desc "Find library"           "l" #'find-library
+   :desc "Toggle Emacs log"       "m" #'doom/popup-toggle-messages
+   :desc "Command log"            "L" #'global-command-log-mode
+   :desc "Describe function"      "f" #'describe-function
+   :desc "Describe key"           "k" #'describe-key
+   :desc "Describe char"          "c" #'describe-char
+   :desc "Describe mode"          "M" #'describe-mode
+   :desc "Describe variable"      "v" #'describe-variable
+   :desc "Describe face"          "F" #'describe-face
+   :desc "Describe DOOM setting"  "s" #'doom/describe-setting
+   :desc "Describe DOOM module"   "d" #'doom/describe-module
+   :desc "Find definition"        "." #'+jump/definition
+   :desc "Find references"        "/" #'+jump/references
+   :desc "Find documentation"     "h" #'+jump/documentation
+   :desc "What face"              "'" #'doom/what-face
+   :desc "What minor modes"       ";" #'doom/what-minor-mode
+   :desc "Info"                   "i" #'info
+   :desc "Toggle profiler"        "p" #'doom/toggle-profiler))
+
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
 
@@ -118,29 +142,6 @@
 ;;         :desc "List gists"            :n  "g" #'+gist:list
 ;;         :desc "Next hunk"             :nv "]" #'git-gutter:next-hunk
 ;;         :desc "Previous hunk"         :nv "[" #'git-gutter:previous-hunk)
-
-;;       (:desc "help" :prefix "h"
-;;         :n "h" help-map
-;;         :desc "Apropos"               :n  "a" #'apropos
-;;         :desc "Reload theme"          :n  "R" #'doom//reload-theme
-;;         :desc "Find library"          :n  "l" #'find-library
-;;         :desc "Toggle Emacs log"      :n  "m" #'doom/popup-toggle-messages
-;;         :desc "Command log"           :n  "L" #'global-command-log-mode
-;;         :desc "Describe function"     :n  "f" #'describe-function
-;;         :desc "Describe key"          :n  "k" #'describe-key
-;;         :desc "Describe char"         :n  "c" #'describe-char
-;;         :desc "Describe mode"         :n  "M" #'describe-mode
-;;         :desc "Describe variable"     :n  "v" #'describe-variable
-;;         :desc "Describe face"         :n  "F" #'describe-face
-;;         :desc "Describe DOOM setting" :n  "s" #'doom/describe-setting
-;;         :desc "Describe DOOM module"  :n  "d" #'doom/describe-module
-;;         :desc "Find definition"       :n  "." #'+jump/definition
-;;         :desc "Find references"       :n  "/" #'+jump/references
-;;         :desc "Find documentation"    :n  "h" #'+jump/documentation
-;;         :desc "What face"             :n  "'" #'doom/what-face
-;;         :desc "What minor modes"      :n  ";" #'doom/what-minor-mode
-;;         :desc "Info"                  :n  "i" #'info
-;;         :desc "Toggle profiler"       :n  "p" #'doom/toggle-profiler)
 
 ;;       (:desc "insert" :prefix "i"
 ;;         :desc "From kill-ring"        :nv "y" #'counsel-yank-pop
