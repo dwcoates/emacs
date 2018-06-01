@@ -49,6 +49,21 @@
  (:desc "popups" :prefix "C-x"
    :desc "Cycle through popup windows" "p" #'doom/other-popup))
 
+(unbind-key "C-x f" global-map)
+
+(map!
+ (:desc "file" :prefix "C-x"
+   :desc "Find file"                 "C-f" #'find-file
+   :desc "Find file in project"      "M-f" #'projectile-find-file
+   (:prefix "f"
+     :desc "Sudo find file"            "F" #'doom/sudo-find-file
+     :desc "Find file from here"       "?" #'counsel-file-jump
+     :desc "Find other file"           "a" #'projectile-find-other-file
+     :desc "Open project editorconfig" "c" #'editorconfig-find-current-editorconfig
+     :desc "Recent files"              "r" #'recentf-open-files
+     :desc "Recent project files"      "R" #'projectile-recentf
+     :desc "Yank filename"             "y" #'+default/yank-buffer-filename)))
+
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
 
@@ -84,29 +99,6 @@
 ;;         :desc "Imenu across buffers"  :nv "I" #'imenu-anywhere
 ;;         :desc "Online providers"      :nv "o" #'+jump/online-select)
 
-;;       (:desc "workspace" :prefix "TAB"
-;;         :desc "Display tab bar"          :n "TAB" #'+workspace/display
-;;         :desc "New workspace"            :n "n"   #'+workspace/new
-;;         :desc "Load workspace from file" :n "l"   #'+workspace/load
-;;         :desc "Load last session"        :n "L"   (λ! (+workspace/load-session))
-;;         :desc "Save workspace to file"   :n "s"   #'+workspace/save
-;;         :desc "Autosave current session" :n "S"   #'+workspace/save-session
-;;         :desc "Switch workspace"         :n "."   #'+workspace/switch-to
-;;         :desc "Delete session"           :n "X"   #'+workspace/kill-session
-;;         :desc "Delete this workspace"    :n "d"   #'+workspace/delete
-;;         :desc "Load session"             :n "L"   #'+workspace/load-session
-;;         :desc "Next workspace"           :n "]"   #'+workspace/switch-right
-;;         :desc "Previous workspace"       :n "["   #'+workspace/switch-left
-;;         :desc "Switch to 1st workspace"  :n "1"   (λ! (+workspace/switch-to 0))
-;;         :desc "Switch to 2nd workspace"  :n "2"   (λ! (+workspace/switch-to 1))
-;;         :desc "Switch to 3rd workspace"  :n "3"   (λ! (+workspace/switch-to 2))
-;;         :desc "Switch to 4th workspace"  :n "4"   (λ! (+workspace/switch-to 3))
-;;         :desc "Switch to 5th workspace"  :n "5"   (λ! (+workspace/switch-to 4))
-;;         :desc "Switch to 6th workspace"  :n "6"   (λ! (+workspace/switch-to 5))
-;;         :desc "Switch to 7th workspace"  :n "7"   (λ! (+workspace/switch-to 6))
-;;         :desc "Switch to 8th workspace"  :n "8"   (λ! (+workspace/switch-to 7))
-;;         :desc "Switch to 9th workspace"  :n "9"   (λ! (+workspace/switch-to 8)))
-
 ;;       (:desc "buffer" :prefix "b"
 ;;         :desc "Switch buffer"           :n "B" #'switch-to-buffer
 ;;         :desc "Kill buffer"             :n "k" #'doom/kill-this-buffer
@@ -128,21 +120,6 @@
 ;;         :desc "Jump to references"        :n  "D" #'+jump/references
 ;;         :desc "Open REPL"                 :n  "r" #'+eval/open-repl
 ;;         :v  "r" #'+eval:repl)
-
-;;       (:desc "file" :prefix "f"
-;;         :desc "Find file"                 :n "." #'find-file
-;; p        :desc "Sudo find file"            :n ">" #'doom/sudo-find-file
-;;         :desc "Find file in project"      :n "/" #'projectile-find-file
-;;         :desc "Find file from here"       :n "?" #'counsel-file-jump
-;;         :desc "Find other file"           :n "a" #'projectile-find-other-file
-;;         :desc "Open project editorconfig" :n "c" #'editorconfig-find-current-editorconfig
-;;         :desc "Find file in dotfiles"     :n "d" #'+default/find-in-dotfiles
-;;         :desc "Browse dotfiles"           :n "D" #'+default/browse-dotfiles
-;;         :desc "Find file in emacs.d"      :n "e" #'+default/find-in-emacsd
-;;         :desc "Browse emacs.d"            :n "E" #'+default/browse-emacsd
-;;         :desc "Recent files"              :n "r" #'recentf-open-files
-;;         :desc "Recent project files"      :n "R" #'projectile-recentf
-;;         :desc "Yank filename"             :n "y" #'+default/yank-buffer-filename)
 
 ;;       (:desc "git" :prefix "g"
 ;;         :desc "Git status"            :n  "S" #'magit-status
