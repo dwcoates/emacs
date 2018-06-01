@@ -18,7 +18,7 @@
       "e" #'previous-error
       "h" #'smart-backward)
 
-(unbind-key "C-z" global-map)
+(unbind-key "C-z" global-map) ;; Remove suspend-frame binding (also bound to C-x C-z)
 
 (map!
  (:desc "workspace" :prefix "C-z"
@@ -44,6 +44,10 @@
    :desc "Switch to 7th workspace"  "7"   (λ! (+workspace/switch-to 6))
    :desc "Switch to 8th workspace"  "8"   (λ! (+workspace/switch-to 7))
    :desc "Switch to 9th workspace"  "9"   (λ! (+workspace/switch-to 8))))
+
+(map!
+ (:desc "popups" :prefix "C-x"
+   :desc "Cycle through popup windows" "p" #'doom/other-popup))
 
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
