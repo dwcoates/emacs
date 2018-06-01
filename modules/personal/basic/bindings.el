@@ -64,6 +64,17 @@
      :desc "Recent project files"      "R" #'projectile-recentf
      :desc "Yank filename"             "y" #'+default/yank-buffer-filename)))
 
+(map!
+ (:desc "buffer" :prefix "C-x"
+   :desc "Switch buffer"           "B" #'switch-to-buffer
+   :desc "Kill buffer"             "k" #'doom/kill-this-buffer
+   :desc "Kill other buffers"      "o" #'doom/kill-other-buffers
+   :desc "Save buffer"             "s" #'save-buffer
+   :desc "Pop scratch buffer"      "x" #'doom/open-scratch-buffer
+   :desc "Bury buffer"             "z" #'bury-buffer
+   :desc "Next buffer"             "]" #'doom/next-buffer
+   :desc "Previous buffer"         "[" #'doom/previous-buffer
+   :desc "Sudo edit this file"     "S" #'doom/sudo-this-file))
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
 
@@ -85,30 +96,6 @@
 ;;       :desc "Toggle last popup"       :n "~"   #'doom/popup-toggle
 ;;       :desc "Blink cursor line"       :n "DEL" #'+doom/blink-cursor
 ;;       :desc "Jump to bookmark"        :n "RET" #'bookmark-jump
-
-
-
-;;       (:desc "next..." :prefix "]"
-;;         :desc "Buffer"                :nv "b" #'doom/next-buffer
-;;         :desc "Diff Hunk"             :nv "d" #'git-gutter:next-hunk
-;;         :desc "Error"                 :nv "e" #'next-error
-;;         :desc "Workspace"             :nv "w" #'+workspace/switch-right)
-
-;;       (:desc "search" :prefix "/"
-;;         :desc "Imenu"                 :nv "i" #'imenu
-;;         :desc "Imenu across buffers"  :nv "I" #'imenu-anywhere
-;;         :desc "Online providers"      :nv "o" #'+jump/online-select)
-
-;;       (:desc "buffer" :prefix "b"
-;;         :desc "Switch buffer"           :n "B" #'switch-to-buffer
-;;         :desc "Kill buffer"             :n "k" #'doom/kill-this-buffer
-;;         :desc "Kill other buffers"      :n "o" #'doom/kill-other-buffers
-;;         :desc "Save buffer"             :n "s" #'save-buffer
-;;         :desc "Pop scratch buffer"      :n "x" #'doom/open-scratch-buffer
-;;         :desc "Bury buffer"             :n "z" #'bury-buffer
-;;         :desc "Next buffer"             :n "]" #'doom/next-buffer
-;;         :desc "Previous buffer"         :n "[" #'doom/previous-buffer
-;;         :desc "Sudo edit this file"     :n "S" #'doom/sudo-this-file)
 
 ;;       (:desc "code" :prefix "c"
 ;;         :desc "List errors"               :n  "x" #'flycheck-list-errors
