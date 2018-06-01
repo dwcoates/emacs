@@ -2,21 +2,11 @@
 
 ;; This files defines a Spacemacs-esque keybinding scheme
 
-(map! :map global-map
-      "S-<return>" #'dired-find-file-conservatively
-      "RET"        #'newline-and-indent
-      "C-x w"      #'whitespace-mode
-      "C-c <delete>" #'delete-region
-
-      )
-
-(map! :map global-map
-      :prefix "C-x"
-      "b" #'doom/previous-buffer
-      "d" #'git-gutter:previous-hunk
-      "w" #'+workspace/switch-left
-      "e" #'previous-error
-      "h" #'smart-backward)
+(map!
+ :prefix "C-x"
+ :desc "Newline and indent" "RET" #'newline-and-indent
+ :desc "Whitespace mdoe"    "w"   #'whitespace-mode
+ :desc "Blink cursor line"  "M-=" #'+doom/blink-cursor)
 
 (unbind-key "C-z" global-map) ;; Remove suspend-frame binding (also bound to C-x C-z)
 
@@ -58,6 +48,7 @@
    (:prefix "f"
      :desc "Sudo find file"            "F" #'doom/sudo-find-file
      :desc "Find file from here"       "?" #'counsel-file-jump
+     :desc "Find file on line"         "<return>" #'dired-find-file-conservatively
      :desc "Find other file"           "a" #'projectile-find-other-file
      :desc "Open project editorconfig" "c" #'editorconfig-find-current-editorconfig
      :desc "Recent files"              "r" #'recentf-open-files
@@ -200,14 +191,8 @@
 
 ;;       "C-x p"     #'doom/other-popup
 
-;;       ;; --- <leader> -------------------------------------
-;;       :desc "Pop up scratch buffer"   :nv "x"  #'doom/open-scratch-buffer
-;;       :desc "Org Capture"             :nv "X"  #'+org-capture/open
-
 ;;       ;; Most commonly used
-;;       :desc "Find file in project"    :n "SPC" #'projectile-find-file
-;;       :desc "Toggle last popup"       :n "~"   #'doom/popup-toggle
-;;       :desc "Blink cursor line"       :n "DEL" #'+doom/blink-cursor
+
 ;;       :desc "Jump to bookmark"        :n "RET" #'bookmark-jump
 
 ;;       (:desc "insert" :prefix "i"
