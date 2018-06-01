@@ -1,9 +1,11 @@
 ;;; private/default/+bindings.el -*- lexical-binding: t; -*-
-
+
 (unbind-key "C-z" global-map) ;; Remove suspend-frame binding (also bound to C-x C-z)
 (unbind-key "C-x f" global-map) ;; Remove set-fill-column binding
 (unbind-key "C-x s" global-map) ;; Remove save file (also bound to C-x C-s)
 (unbind-key "C-x e" global-map) ;; Remove next-error binding
+(unbind-key "C-x b" global-map) ;; Remove doom/previous-buffer
+(unbind-key "C-x o" global-map) ;; Remove doom/kill-other-buffers
 
 (define-key input-decode-map [?\C-m] [C-m]) ;; Distinguish C-m from carriage return
 
@@ -113,7 +115,7 @@
      :desc "Recent files"              "r" #'recentf-open-files
      :desc "Recent project files"      "R" #'projectile-recentf
      :desc "Yank filename"             "y" #'+default/yank-buffer-filename))
- (:desc "buffer"
+ (:desc "buffer" :prefix "b"
    :desc "Switch buffer"           "B" #'switch-to-buffer
    :desc "Kill buffer"             "k" #'doom/kill-this-buffer
    :desc "Kill other buffers"      "o" #'doom/kill-other-buffers
@@ -164,7 +166,14 @@
     "C-n" #'flycheck-error-list-next-error
     "C-p" #'flycheck-error-list-previous-error
     "j"   #'flycheck-error-list-next-error
-    "RET" #'flycheck-error-list-goto-error)))
+    "RET" #'flycheck-error-list-goto-error))
+ (:desc "open" :prefix "o"
+   :desc "Default browser"        "b" #'browse-url-of-file
+   :desc "Debugger"               "d" #'+debug/open
+   :desc "REPL"                   "r" #'+eval/open-repl
+   :desc "Neotree"                "n" #'neotree-toggle
+   :desc "Terminal"               "t" #'+term/open-popup
+   :desc "Terminal in project"    "T" #'+term/open-popup-in-project))
 
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
@@ -193,14 +202,7 @@
 ;;         :desc "Browse mode notes"     :n  "m" #'+org/browse-notes-for-major-mode
 ;;         :desc "Browse project notes"  :n  "p" #'+org/browse-notes-for-project)
 
-;;       (:desc "open" :prefix "o"
-;;         :desc "Default browser"       :n  "b" #'browse-url-of-file
-;;         :desc "Debugger"              :n  "d" #'+debug/open
-;;         :desc "REPL"                  :n  "r" #'+eval/open-repl
-;;         :v  "r" #'+eval:repl
-;;         :desc "Neotree"               :n  "n" #'+neotree/toggle
-;;         :desc "Terminal"              :n  "t" #'+term/open-popup
-;;         :desc "Terminal in project"   :n  "T" #'+term/open-popup-in-project
+
 
 ;;         ;; applications
 ;;         :desc "APP: elfeed"           :n "E" #'=rss
