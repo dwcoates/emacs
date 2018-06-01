@@ -314,21 +314,6 @@
 ;;         :n "S"   #'gist-unstar
 ;;         :n "y"   #'gist-print-current-url)
 
-;;       ;; helm
-;;       (:after helm
-;;         (:map helm-map
-;;           "ESC"        nil
-;;           "C-S-n"      #'helm-next-source
-;;           "C-S-p"      #'helm-previous-source
-;;           "C-u"        #'helm-delete-minibuffer-contents
-;;           "C-w"        #'backward-kill-word
-;;           "C-r"        #'evil-paste-from-register ; Evil registers in helm! Glorious!
-;;           "C-b"        #'backward-word
-;;           [left]       #'backward-char
-;;           [right]      #'forward-char
-;;           [escape]     #'helm-keyboard-quit
-;;           [tab]        #'helm-execute-persistent-action)
-
 ;;         (:after helm-files
 ;;           (:map helm-generic-files-map
 ;;             :e "ESC"     #'helm-keyboard-quit)
@@ -738,30 +723,38 @@
  ;;
  ;; Helm
  ;;
- "C-x M-f" 'helm-locate
- ;; Help commands
- "C-c 7 w" 'helm-wikipedia-suggest
- "C-c 7 g" 'helm-google-suggest
- "C-c 7 s" 'helm-surfraw
- (:map help-map
-   "C-f"   'helm-apropos              ; great help function
-   "C-r"   'helm-info-emacs
-   "C-l"   'helm-locate-library)
- (:map isearch-mode-map
-   "M-i" 'helm-swoop-from-isearch) ; hand search over to helm-swoop
- (:map minibuffer-local-map
-   "C-M-p" 'helm-minibuffer-history)
  (:after helm-swoop
    (:map helm-swoop-map
-     "M-i" 'helm-multi-swoop-all-from-helm-swoop)) ; hand search over to helm-swoop
+     "M-i" 'helm-multi-swoop-all-from-helm-swoop)
+    (:map isearch-mode-map
+      "M-i" 'helm-swoop-from-isearch)) ; hand search over to helm-swoop
  (:after helm
+   :prefix "C-x"
+   "M-f" 'helm-locate
+   ;; Help commands
+   "7 w" 'helm-wikipedia-suggest
+   "7 g" 'helm-google-suggest
+   "7 s" 'helm-surfraw
    (:map helm-map
+     :prefix ""
      "C-i" 'helm-execute-persistent-action ; make TAB works in terminal
-     "C-z" 'helm-select-action)
+     "C-z" 'helm-select-action
+     "ESC"        nil
+     "C-S-n"      #'helm-next-source
+     "C-S-p"      #'helm-previous-source
+     [left]       #'backward-char
+     [right]      #'forward-char
+     [escape]     #'helm-keyboard-quit
+     [tab]        #'helm-execute-persistent-action
+     "C-f"   'helm-apropos              ; great help function
+     "C-r"   'helm-info-emacs
+     "C-l"   'helm-locate-library)
    (:map helm-grep-mode-map
      "<return>" 'helm-grep-mode-jump-other-window
      "n"  'helm-grep-mode-jump-other-window-forward
-     "p"  'helm-grep-mode-jump-other-window-backward)))
+     "p"  'helm-grep-mode-jump-other-window-backward)
+   (:map minibuffer-local-map
+     "C-M-p" 'helm-minibuffer-history)))
        
    
   ;; (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
