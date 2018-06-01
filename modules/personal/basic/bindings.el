@@ -158,6 +158,22 @@
    :desc "Jump to references"         "D" #'+jump/references
    :desc "Open REPL"                  "r" #'+eval/open-repl))
 
+(unbind-key "C-x e" global-map)
+
+(map!
+ :prefix "C-x"
+ (:desc "errors" :prefix "e"
+   :desc "Next error" "n" #'next-error
+   :desc "Previous error" "p" #'previous-error
+   :desc "Correct next word spelling" "w" #'flyspell-correct-word-generic
+   :desc "Correct previous word spelling" "W" #'flyspell-correct-previous-word-generic
+   (:after flycheck
+     :map flycheck-error-list-mode-map
+     "C-n" #'flycheck-error-list-next-error
+     "C-p" #'flycheck-error-list-previous-error
+     "j"   #'flycheck-error-list-next-error
+     "RET" #'flycheck-error-list-goto-error)))
+
 ;; (map! 
 ;;       [remap find-tag]         #'projectile-find-tag
 
@@ -273,96 +289,6 @@
 ;;           [backtab]  #'+ivy/wgrep-occur      ; search/replace on results
 ;;           "C-SPC"    #'ivy-call-and-recenter ; preview
 ;;           "M-RET"    (+ivy-do-action! #'+ivy-git-grep-other-window-action)))
-
-;;       ;; evil-commentary
-;;       :n  "gc"  #'evil-commentary
-
-;;       ;; evil-exchange
-;;       :n  "gx"  #'evil-exchange
-
-;;       ;; evil-matchit
-;;       :nv [tab] #'+evil/matchit-or-toggle-fold
-
-;;       ;; evil-magit
-;;       (:after evil-magit
-;;         :map (magit-status-mode-map magit-revision-mode-map)
-;;         :n "C-j" nil
-;;         :n "C-k" nil)
-
-;;       ;; evil-mc
-;;       (:prefix "gz"
-;;         :nv "m" #'evil-mc-make-all-cursors
-;;         :nv "u" #'evil-mc-undo-all-cursors
-;;         :nv "z" #'+evil/mc-make-cursor-here
-;;         :nv "t" #'+evil/mc-toggle-cursors
-;;         :nv "n" #'evil-mc-make-and-goto-next-cursor
-;;         :nv "p" #'evil-mc-make-and-goto-prev-cursor
-;;         :nv "N" #'evil-mc-make-and-goto-last-cursor
-;;         :nv "P" #'evil-mc-make-and-goto-first-cursor
-;;         :nv "d" #'evil-mc-make-and-goto-next-match
-;;         :nv "D" #'evil-mc-make-and-goto-prev-match)
-;;       (:after evil-mc
-;;         :map evil-mc-key-map
-;;         :nv "C-n" #'evil-mc-make-and-goto-next-cursor
-;;         :nv "C-N" #'evil-mc-make-and-goto-last-cursor
-;;         :nv "C-p" #'evil-mc-make-and-goto-prev-cursor
-;;         :nv "C-P" #'evil-mc-make-and-goto-first-cursor)
-
-;;       ;; evil-multiedit
-;;       :v  "R"     #'evil-multiedit-match-all
-;;       :n  "M-d"   #'evil-multiedit-match-symbol-and-next
-;;       :n  "M-D"   #'evil-multiedit-match-symbol-and-prev
-;;       :v  "M-d"   #'evil-multiedit-match-and-next
-;;       :v  "M-D"   #'evil-multiedit-match-and-prev
-;;       :nv "C-M-d" #'evil-multiedit-restore
-;;       (:after evil-multiedit
-;;         (:map evil-multiedit-state-map
-;;           "M-d" #'evil-multiedit-match-and-next
-;;           "M-D" #'evil-multiedit-match-and-prev
-;;           "RET" #'evil-multiedit-toggle-or-restrict-region)
-;;         (:map (evil-multiedit-state-map evil-multiedit-insert-state-map)
-;;           "C-n" #'evil-multiedit-next
-;;           "C-p" #'evil-multiedit-prev))
-
-;;       ;; evil-snipe
-;;       (:after evil-snipe
-;;         (:after evil-easymotion
-;;           ;; Binding to switch to evil-easymotion/avy after a snipe
-;;           :map evil-snipe-parent-transient-map
-;;           "C-;" (λ! (require 'evil-easymotion)
-;;                     (call-interactively
-;;                      (evilem-create #'evil-snipe-repeat
-;;                                     :bind ((evil-snipe-scope 'whole-buffer)
-;;                                            (evil-snipe-enable-highlight)
-;;                                            (evil-snipe-enable-incremental-highlight)))))))
-
-;;       ;; evil-surround
-;;       :v  "S"  #'evil-surround-region
-;;       :o  "s"  #'evil-surround-edit
-;;       :o  "S"  #'evil-Surround-edit
-
-;;       ;; expand-region
-;;       :v  "v"  #'er/expand-region
-;;       :v  "V"  #'er/contract-region
-
-;;       ;; flycheck
-;;       :m  "]e" #'next-error
-;;       :m  "[e" #'previous-error
-;;       (:after flycheck
-;;         :map flycheck-error-list-mode-map
-;;         :n "C-n" #'flycheck-error-list-next-error
-;;         :n "C-p" #'flycheck-error-list-previous-error
-;;         :n "j"   #'flycheck-error-list-next-error
-;;         :n "k"   #'flycheck-error-list-previous-error
-;;         :n "RET" #'flycheck-error-list-goto-error)
-
-;;       ;; flyspell
-;;       :m  "]S" #'flyspell-correct-word-generic
-;;       :m  "[S" #'flyspell-correct-previous-word-generic
-
-;;       ;; git-gutter
-;;       :m  "]d" #'git-gutter:next-hunk
-;;       :m  "[d" #'git-gutter:previous-hunk
 
 ;;       ;; git-timemachine
 ;;       (:after git-timemachine
