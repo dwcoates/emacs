@@ -37,7 +37,7 @@ modes are active and the buffer is read-only.")
  ;; Wrapping
  truncate-lines t
  truncate-partial-width-windows 50
- ;; whitespace-mode
+ ;; Whitespace-mode
  whitespace-line-column fill-column
  mark-ring-max 10000
  mode-require-final-newline t
@@ -49,8 +49,10 @@ modes are active and the buffer is read-only.")
  '((tab-mark ?\t [?› ?\t])
    (newline-mark ?\n [?¬ ?\n])
    (space-mark ?\  [?·] [?.]))
- ;; Hungry backspace
+ ;; Deleting
  backward-delete-char-untabify-method 'hungry)
+
+(delete-selection-mode 1) ;;
 
 ;; Enable intermediate Emacs features disabled by default
 (put 'downcase-region 'disabled nil)
