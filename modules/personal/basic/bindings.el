@@ -10,8 +10,9 @@
 (define-key input-decode-map [?\C-m] [C-m]) ;; Distinguish C-m from carriage return
 
 (map!
- :prefix "C-x"
+ :map global-map
  :desc "Newline and indent" "RET" #'newline-and-indent
+ :prefix "C-x"
  :desc "Previous buffer" "C-b" #'doom/previous-buffer
  (:desc "visualize"
    :desc "Whitespace mdoe"    "w"   #'whitespace-mode
