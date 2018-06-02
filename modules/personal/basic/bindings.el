@@ -12,6 +12,7 @@
 (map!
  :prefix "C-x"
  :desc "Newline and indent" "RET" #'newline-and-indent
+ :desc "Previous buffer" "C-b" #'doom/previous-buffer
  (:desc "visualize"
    :desc "Whitespace mdoe"    "w"   #'whitespace-mode
    :desc "Blink cursor line"  "M-=" #'+doom/blink-cursor)
