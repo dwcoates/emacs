@@ -112,11 +112,12 @@
 
   (map! :map helm-map
         "C-c C-y"  'helm-yank-selection-and-quit
-        "C-i"  'helm-select-action ;; This is a big one. Use C-SPC to select entries
         "C-S-p"  'helm-previous-source
         "C-S-n"  'helm-next-source
         :map helm-buffer-map
         "C-c C-k"  'helm-buffer-run-kill-buffers)
+
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)  ; make TAB works in terminal
 
   :diminish 'helm-mode)
 

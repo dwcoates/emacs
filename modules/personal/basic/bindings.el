@@ -494,7 +494,6 @@
    "7 s" 'helm-surfraw
    (:map helm-map
      :prefix ""
-     "C-i" 'helm-execute-persistent-action ; make TAB works in terminal
      "C-z" 'helm-select-action
      "ESC"        nil
      "C-S-n"      #'helm-next-source
