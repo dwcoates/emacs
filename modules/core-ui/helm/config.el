@@ -12,8 +12,7 @@
 
 (def-package! helm
   :commands (helm-M-x helm-show-kill-ring helm-M-x helm-all-mark-rings helm-mini
-            helm-buffers-list helm-all-mark-rings helm-occur helm-insert-command-name
-            describe-function describe-variable describe-mode)
+             helm-buffers-list helm-all-mark-rings helm-occur helm-insert-command-name helm-mode)
   :init
   (map! :map global-map
         "M-x" 'helm-M-x
@@ -24,12 +23,10 @@
         "C-h SPC"  'helm-all-mark-rings
         "C-c s"  'helm-occur
         "C-h F"  'helm-insert-command-name)
-
-  :config
-  (helm-mode 1)
-  (load "helm-autoloads" nil t)
   (add-hook 'doom-init-hook #'helm-mode)
 
+  :config
+  (load "helm-autoloads" nil t)
   (helm-autoresize-mode t)
 
   (defvar helm-projectile-find-file-map (make-sparse-keymap))
@@ -120,9 +117,8 @@
         "C-S-n"  'helm-next-source
         :map helm-buffer-map
         "C-c C-k"  'helm-buffer-run-kill-buffers)
-  
-  :diminish 'helm-mode)
 
+  :diminish 'helm-mode)
 
 (def-package! helm-locate
   :defer t
