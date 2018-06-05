@@ -439,6 +439,7 @@
  ;;
  ;; Company
  ;;
+ :desc "Completion at point" "C-;" #'company-complete
  (:prefix "C-c"
    (:prefix "*"
      "l"   #'+company/whole-lines
