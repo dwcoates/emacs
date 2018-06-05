@@ -12,7 +12,8 @@
 
 (def-package! helm
   :commands (helm-M-x helm-show-kill-ring helm-M-x helm-all-mark-rings helm-mini
-            helm-buffers-list helm-all-mark-rings helm-occur helm-insert-command-name)
+            helm-buffers-list helm-all-mark-rings helm-occur helm-insert-command-name
+            describe-function describe-variable describe-mode)
   :init
   (map! :map global-map
         "M-x" 'helm-M-x
@@ -25,6 +26,7 @@
         "C-h F"  'helm-insert-command-name)
 
   :config
+  (helm-mode 1)
   (load "helm-autoloads" nil t)
   (add-hook 'doom-init-hook #'helm-mode)
 
