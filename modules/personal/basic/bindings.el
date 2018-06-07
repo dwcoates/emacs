@@ -213,49 +213,33 @@
    "q"         #'neotree-hide
    "R"         #'neotree-refresh))
 
-;; (map! 
-;;       [remap find-tag]         #'projectile-find-tag
-
-;;       (:after debug
-;;         ;; For elisp debugging
-;;         :map debugger-mode-map
-;;         :n "RET" #'debug-help-follow
-;;         :n "e"   #'debugger-eval-expression
-;;         :n "n"   #'debugger-step-through
-;;         :n "c"   #'debugger-continue)
-
 (map!
  (:map input-decode-map
    [S-iso-lefttab] [backtab]
    (:unless window-system "TAB" [tab])) ; Fix TAB in terminal
-
       ;; I want C-a and C-e to be a little smarter. C-a will jump to
       ;; indentation. Pressing it again will send you to the true bol. Same goes
       ;; for C-e, except it will ignore comments and trailing whitespace before
       ;; jumping to eol.
-      :i "C-a" #'doom/backward-to-bol-or-indent
-      :i "C-e" #'doom/forward-to-last-non-comment-or-eol
-      :i "C-u" #'doom/backward-kill-to-bol-and-indent
+      "C-a" #'doom/backward-to-bol-or-indent
+      ; "C-e" #'doom/forward-to-last-non-comment-or-eol
+      "C-u" #'doom/backward-kill-to-bol-and-indent
 
       ;; textmate-esque newline insertion
-      :i [M-return]     #'evil-open-below
-      :i [S-M-return]   #'evil-open-above
+      [M-return]     #'evil-open-below
+      [S-M-return]   #'evil-open-above
       ;; textmate-esque deletion
       [M-backspace]     #'doom/backward-kill-to-bol-and-indent
-      :i [backspace]    #'delete-backward-char
-      :i [M-backspace]  #'doom/backward-kill-to-bol-and-indent
-      ;; Emacsien motions for insert mode
-      :i "C-b" #'backward-word
-      :i "C-f" #'forward-word
+      [backspace]    #'delete-backward-char
+      [M-backspace]  #'doom/backward-kill-to-bol-and-indent
 
       ;; Highjacks space/backspace to:
       ;;   a) balance spaces inside brackets/parentheses ( | ) -> (|)
       ;;   b) delete space-indented blocks intelligently
       ;;   c) do none of this when inside a string
-      :i "SPC"                          #'doom/inflate-space-maybe
-      :i [remap delete-backward-char]   #'doom/deflate-space-maybe
-      :i [remap newline]                #'doom/newline-and-indent)
-
+      "SPC"                          #'doom/inflate-space-maybe
+      [remap delete-backward-char]   #'doom/deflate-space-maybe
+      [remap newline]                #'doom/newline-and-indent)
 
 ;; Buffer zooming
 (defhydra hydra-text-zoom (:hint t :color red)
@@ -370,7 +354,6 @@
  "C-x k" 'fast-kill-buffer
  ;; Editing
  [home]  'smart-beginning-of-line
- "C-a"   'smart-beginning-of-line
  "C-x ;" 'iedit-mode
  ;; Searching
  "M-s o" 'occur
