@@ -214,6 +214,9 @@ extension, try to guess one."
 
   (sp-local-pair '(xml-mode nxml-mode php-mode) "<!--" "-->"
                  :post-handlers '(("| " "SPC")))
+
+  (sp-local-pair '(lisp-mode) "'" "'" :actions nil)
+
   :diminish 'smartparens-mode)
 
 ;; Branching undo
