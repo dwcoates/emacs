@@ -176,17 +176,19 @@ recognized by DOOM's popup system. They are:
   (dolist (param `(popup ,@doom-popup-window-parameters))
     (push (cons param 'writable) window-persistent-parameters))
 
-  (let ((map doom-popup-mode-map))
-    (define-key map [escape]    #'doom/popup-close-maybe)
-    (define-key map (kbd "ESC") #'doom/popup-close-maybe)
-    (define-key map [remap quit-window] #'doom/popup-close-maybe)
-    (define-key map [remap doom/kill-this-buffer] #'doom/popup-close-maybe)
-    (define-key map [remap split-window-right]              #'ignore)
-    (define-key map [remap split-window-below]              #'ignore)
-    (define-key map [remap split-window-horizontally]       #'ignore)
-    (define-key map [remap split-window-vertically]         #'ignore)
-    (define-key map [remap mouse-split-window-horizontally] #'ignore)
-    (define-key map [remap mouse-split-window-vertically]   #'ignore)))
+  ;;FIXME: Why is does this break bindings for forward-word, M-x, etc in popups?
+  ;; (let ((map doom-popup-mode-map))
+  ;;   (define-key map [escape]    #'doom/popup-close-maybe)
+  ;;   (define-key map (kbd "ESC") #'doom/popup-close-maybe)
+  ;;   (define-key map [remap quit-window] #'doom/popup-close-maybe)
+  ;;   (define-key map [remap doom/kill-this-buffer] #'doom/popup-close-maybe)
+  ;;   (define-key map [remap split-window-right]              #'ignore)
+  ;;   (define-key map [remap split-window-below]              #'ignore)
+  ;;   (define-key map [remap split-window-horizontally]       #'ignore)
+  ;;   (define-key map [remap split-window-vertically]         #'ignore)
+  ;;   (define-key map [remap mouse-split-window-horizontally] #'ignore)
+  ;;   (define-key map [remap mouse-split-window-vertically]   #'ignore))
+  )
 
 
 ;;
