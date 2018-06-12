@@ -6,6 +6,7 @@
 (unbind-key "C-x e" global-map) ;; Remove next-error binding
 (unbind-key "C-x b" global-map) ;; Remove doom/previous-buffer
 (unbind-key "C-x o" global-map) ;; Remove doom/kill-other-buffers
+(unbind-key "C-x SPC" global-map) ;; Remove rectangle-mark-mode
 
 (define-key input-decode-map [?\C-m] [C-m]) ;; Distinguish C-m from carriage return
 
@@ -13,6 +14,7 @@
  :map global-map
  :desc "Newline and indent" "RET" #'newline-and-indent
  :prefix "C-x"
+ :desc "Execute kmacro" "SPC" #'kmacro-call-macro
  :desc "Previous buffer" "C-b" #'doom/previous-buffer
  (:desc "visualize"
    :desc "Whitespace mdoe"    "w"   #'whitespace-mode
@@ -494,11 +496,10 @@
      "p"  'helm-grep-mode-jump-other-window-backward)
    (:map minibuffer-local-map
      "C-M-p" 'helm-minibuffer-history)))
-       
-   
+
   ;; (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
 
-;; (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)   
-;; (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body)                       
+;; (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
+;; (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body)
 
 ;; goes in core
