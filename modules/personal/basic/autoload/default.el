@@ -14,3 +14,13 @@
              (org-beginning-of-line)
            (beginning-of-line)))))
 
+
+;;;###autoload
+(defun +add-file-name-to-clipboard ()
+  "Put the current file name on the clipboard"
+  (interactive)
+  (let ((filename
+         (if (equal major-mode 'dired-mode)
+             (file-truename (dired-file-name-at-point))
+           (buffer-file-name))))
+    (message "Copied \'%s\' to clipboard" (kill-new filename))))

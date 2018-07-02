@@ -32,7 +32,7 @@
      :desc "Open project editorconfig" "c" #'editorconfig-find-current-editorconfig
      :desc "Recent files"              "r" #'recentf-open-files
      :desc "Recent project files"      "R" #'projectile-recentf
-     :desc "Yank filename"             "y" #'+default/yank-buffer-filename))
+     :desc "Yank filename"             "y" #'+add-file-name-to-clipboard))
  (:desc "buffer" :prefix "b"
    :desc "Switch buffer"           "B" #'switch-to-buffer
    :desc "Kill buffer"             "k" #'doom/kill-this-buffer
