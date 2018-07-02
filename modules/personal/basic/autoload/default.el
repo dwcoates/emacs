@@ -1,7 +1,7 @@
 ;; personal/basic/autoload/default.el -*- lexical-binding: t; -*-
 
 ;;;###autoload
-(defun smart-beginning-of-line ()
+(defun +smart-beginning-of-line ()
   "Move point to first non-whitespace character or beginning-of-line.
 
      Move point to the first non-whitespace character on this line.
