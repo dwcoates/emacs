@@ -412,13 +412,13 @@
      "C-t"  'sp-transpose-sexp
      "M-t"  'sp-transpose-hybrid-sexp
      ;; killing/copying
-     "k"  'sp-kill-sexp
+     "C-k"  'sp-kill-sexp
      "h"    'sp-kill-hybrid-sexp
-     "C-k"    'sp-backward-kill-sexp
+     "k"    'sp-kill-symbol
      "C-w"  'sp-copy-sexp
      ;; deleting
-     "d"  'sp-delete-word
      "C-d"  'sp-delete-sexp
+     "d"  'sp-delete-symbol
      "<backspace>"  'sp-backward-delete-symbol
      "<C-backspace>"  'sp-backward-kill-sexp))
  ;;
