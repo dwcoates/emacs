@@ -1,0 +1,8 @@
+;; Object emacs
+;; EIEIO PERSISTENT OBJECT
+(pcache-repository "emacs"
+  :file "emacs"
+  :object-name "emacs"
+  :version "25.3.2/0.4"
+  :entries #s(hash-table size 65 test eql rehash-size 1.5 rehash-threshold 0.8 data (last-pkg-refresh [eieio-class-tag--pcache-entry 1528754993.649106 900 t nil]))
+  :timestamp 1528754996.5898025)

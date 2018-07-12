@@ -1,0 +1,183 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/dodge/workspace/ChessCom/ceac/tester/files/" . "pgns/")
+ ("/home/dodge/workspace/ChessCom/ceac/tester/" . "files/")
+ ("/home/dodge/workspace/ChessCom/ceac/balancer/" . "libs/")
+ ("/home/dodge/Downloads/" . "notes_for_dodge/")
+ ("/home/dodge/.emacs.d/modules/feature/" . "version-control/")
+ ("/home/" . "dodge/")
+ ("/home/dodge/.config/" . "i3/")
+ ("/home/dodge/.emacs.d/modules/core-ui/" . "helm/")
+ ("/home/dodge/.emacs.d/modules/lang/" . "javascript/")
+ ("/home/dodge/doom-emacs/modules/lang/" . "python/")
+ ("/home/dodge/doom-emacs/modules/" . "lang/")
+ ("/home/dodge/doom-emacs/" . "modules/")
+ ("/home/dodge/workspace/ChessCom/ceac/chess_engines/stockfish-tep/" . "src/")
+ ("/home/dodge/workspace/ChessCom/ceac/chess_engines/" . "stockfish-tep/")
+ ("/home/dodge/workspace/ChessCom/ceac/" . "engine/")
+ ("/home/dodge/.emacs.d/modules/personal/" . "basic/")
+ ("/home/dodge/.emacs.d/modules/" . "personal/")
+ ("/home/dodge/workspace/ChessCom/" . "ceac/")
+ ("/home/dodge/workspace/" . "ChessCom/")
+ ("/home/dodge/.emacs.d/" . "modules/")
+ ("/home/dodge/" . "workspace/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/dodge/workspace/ChessCom/ceac/"
+ "/home/dodge/workspace/ChessCom/ceac/engine/"
+ "/home/dodge/workspace/ChessCom/ceac/jce/"
+ "/home/dodge/workspace/ChessCom/ceac/balancer/"
+ "/home/dodge/"
+ "/home/dodge/workspace/craigs-politics/"
+ "/home/dodge/.emacs.d/"
+ "/home/dodge/workspace/ChessCom/ceac/shared_libs/"
+ "/home/dodge/workspace/ChessCom/ceac/tester/files/pgns/"
+ "/home/dodge/workspace/ChessCom/ceac/tester/"
+ "/home/dodge/workspace/ChessCom/ceac/TEP/"
+ "/home/dodge/workspace/ChessCom/ceac/tester/files/json/"
+ "/home/dodge/workspace/ChessCom/ceac/balancer/libs/"
+ "/home/dodge/.config/i3/"
+ "/home/dodge/Downloads/notes_for_dodge/"
+ "/home/dodge/.emacs.d/modules/lang/cc/"
+ "/home/dodge/workspace/ChessCom/ceac/chess_engines/stockfish-tep/src/"
+ "/home/dodge/.emacs.d/modules/personal/basic/"
+ "/home/dodge/.emacs.d/doom-core/"
+ "/home/dodge/.emacs.d/modules/feature/version-control/"
+ "/home/dodge/.emacs.d/modules/core-ui/helm/"
+ "/home/dodge/.emacs.d/modules/lang/javascript/"
+ "/home/dodge/.emacs.d/modules/lang/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "erik_games2.pgn"
+ "erik_games.pgn"
+ "found_tactics_readable.txt"
+ "engine.js"
+ "chess.js"
+ "tester.js"
+ "engineManager.js"
+ "balancer.js"
+ ".bashrc"
+ "spider_log"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/dodge/workspace/ChessCom/ceac/engine/" (23362 57584 515600 73000) "../" "movies.txt" "#%2Aediff-merge%2A#2041tbJ#" "engine.js" "./" "engine-test.js" "bench/" "config-sample.js")
+
+ ("/home/dodge/workspace/ChessCom/ceac/jce/" (23362 53900 643570 139000) "bookReader.js" "engineManager.js" "README.md" "../" "chess.js" "./" "book.json")
+
+ ("/home/dodge/workspace/ChessCom/ceac/balancer/" (23362 53903 143417 885000) "#%2Aediff-merge%3C6%3E%2A#2252A9T#" "shutter.js" "balancer-test.js" "../" "pm2.balancer.config.js" "./" "balancer.js" "tester.js" "libs/" "config-sample.js")
+
+ ("/home/dodge/workspace/ChessCom/ceac/" (23362 53900 643570 139000) ".circleci/" "tester/" "output.dat" ".gitignore" "notes.org" "config.dist.json" "jce/" "../" "controller.js" "bad_tactics.pgn" "node_modules/" "TEP/" "Simple Delegated Authentication.md" "tactic2.pgn" "good_tactics.pgn" "bad_checked_tactics.pgn" "cloud diagram.png" "balancer/" "erik_games2.pgn" "L2/" ".git/" "erik_games.pgn" "dev_modules/" "found_tactics_readable.txt" "./" "package.json" "engine/" "cli/" "chess_engines/" ".tern-port" "coverage/" "hard_tactics_data.txt" "shared_libs/" "package-lock.json" "readme.md")
+
+ ("/home/dodge/workspace/ChessCom/ceac/TEP/" (23362 53900 615571 831000) "#%2Aediff-merge%3C2%3E%2A#2252maf#" "thematicEvaluator.js" "tep_stats_db.json" "high_level_tactics.pgn" "TEPBuildGames.js" "../" "TEP-server.js" "stressBalancer.js" "games/" "./" "TEP-test.js" "TEPBuilder.js" "getTactics.py" "#%2Aediff-merge%2A#2252_7M#" "pm2.tep.config.js" "config-sample.js")
+
+ ("/home/dodge/.emacs.d/modules/gui/theme/" (23321 60608 409013 990000) "../" "autoload.el" "./" "test/" "config.el" "packages.el")
+
+ ("/home/dodge/.emacs.d/" (23362 35719 15247 740000) "modules/" "README.md" "init.el" ".gitignore" "config.org" "Makefile" "../" "session.103a880a0ef30af05315299506767823600000131850060" "var/" "session.10affc2f469138697c15299505084896400000021330060" "smex-items" "abbrev_defs" ".git/" ".gitmodules" "doom-core/" "./" "dependencies/" "snippets/" "config.el" "lisp/" ".org-notes-locations" ".local/" "Office-Code-Pro/" "network-security.data" "custom.el" "eshell/")
+
+ ("/home/dodge/" (23362 35629 379726 742000) "workspace/" ".config/" ".fehbg" ".ICEauthority" "libflashplayer.so" "background.jpg" "personal/" ".gphoto/" "dist/" ".gnupg/" "license.pdf" ".bashrc" "../" "node_modules/" ".cache/" ".bash_logout" ".macromedia/" "Templates/" "Public/" "rtags/" "Videos/" ".npm/" "Desktop/" "core" ".node_repl_history" ".gconf/" "LGPL/" ".bash_history" ".pm2/" "_gpgbuilder" ".gitconfig" ".emacs.d/" ".sudo_as_admin_successful" ".ssh/" "./" ".profile" "usr/" "readme.txt" ".pki/" "Downloads/" ".bzr.log" "doom-emacs/" "Documents/" ".dbus/" "Music/" ".zoom/" ".mozilla/" "Pictures/" ".gnome/" ".local/" ".pam_environment")
+
+ ("/home/dodge/workspace/ChessCom/ceac/tester/files/" (23358 34450 86730 737000) "json/" "sample_cert/" "stockfish.wasm" "freePortTester.js" "stockfish-tep.wasm" "../" "helper.js" "pgns/" "stockfish.js" "./" "stockfish-tep.js")
+
+ ("/home/dodge/workspace/ChessCom/ceac/shared_libs/" (23358 35654 487619 99000) "tsv-test.js" "tsv.js" "misc.js" "../" "to_pgn.py" "erik_games.pgn" "./" "erik_games.json")
+
+ ("/home/dodge/workspace/ChessCom/ceac/chess_engines/stockfish-tep/src/" (23358 34445 18764 903000) "main.o" "position.cpp" "movegen.o" "movepick.h" "checkmate.o" "assessment.o" "stockfish.wasm" "uci.h" "material.o" "movegen.h" "bitbase.cpp" "timeman.o" "movegen.cpp" "pre.js" "Makefile" "thread_win32.h" "material.h" "benchmark.cpp" "endgame.h" "types.h" "uci.o" "assessment.h" "misc.cpp" "../" "position.h" "thread.h" "license.js" "endgame.cpp" "dbug.txt" "pawns.cpp" "movepick.cpp" "position.o" "pawns.o" "pawns.h" "search.h" "bitbase.o" "evaluate.cpp" "ucioption.o" "material.cpp" "timeman.cpp" "timeman.h" "stockfish.asm.js" "evaluate.h" "assessment.cpp" "movepick.o" "misc.o" "search.cpp" "main.cpp" "benchmark.o" "stockfish.js" "evaluate.o" "psqt.o" "post.js" "uci.cpp" "bitboard.o" "output_tester.py" ".depend" "thread.o" "./" "checkmate.h" "thread.cpp" "bitboard.cpp" "checkmate.cpp" "tt.o" "misc.h" "tt.cpp" "psqt.cpp" "build" "search.o" "ucioption.cpp" "tt.h" "assess_types.h" "syzygy/" "endgame.o" "bitboard.h")
+
+ ("/home/dodge/workspace/ChessCom/ceac/balancer/libs/" (23358 34450 82730 764000) "#%2Aediff-merge%2A#2114yIG#" "classifyMoves.js" "../" "calTime.js" "client-tester/" "calTime-test.js" "./" "quickGamePhase.js" "numeric_blobs.json" "#%2Aediff-merge%2A#2877rcd#" "simpleServer.js" "quickGamePhase-test.js")
+
+ ("/home/dodge/workspace/ChessCom/ceac/tester/files/json/" (23358 34450 110730 576000) "throwaway.json" "null-moves.json" "sudden.json" "tactic-material.json" "black-always-better.json" "boden.json" "../" "game-with-time.json" "two-bishops.json" "before-checkmate.json" "forced-three-fold.json" "two-rooks.json" "backrank.json" "gm-game.json" "missed-critical.json" "arabian.json" "smothered.json" "balanced.json" "scholars.json" "tactic1.json" "tactic-longer3.json" "sudden-10.json" "time-short.json" "forced-mate.json" "./" "white-always-better.json" "tactic-longer1.json" "tactic-longer2.json" "chess960-game.json" "fools.json" "unknown-mate.json" "smooth.json" "tactic2.json" "tactic-mate-(black).json" "rough.json" "wild-starting-in-middle-game.json" "sharp-ending_in_threefold.json" "stalemate.json" "throwaway-sudden.json")
+
+ ("/home/dodge/workspace/ChessCom/ceac/tester/files/pgns/" (23358 34450 110730 576000) "game-with-time.pgn" "balanced.pgn" "stalemate.pgn" "time-short.pgn" "../" "rough.pgn" "tactic-longer3.pgn" "fools.pgn" "null-moves.pgn" "scholars.pgn" "sudden-10.pgn" "tactic2.pgn" "arabian.pgn" "missed-critical.pgn" "throwaway.pgn" "before-checkmate.pgn" "unknown-mate.pgn" "two-bishops.pgn" "boden.pgn" "./" "chess960-game.pgn" "sharp-ending_in_threefold.pgn" "tactic-mate-(black).pgn" "wild-starting-in-middle-game.pgn" "tactic-material.pgn" "tactic-longer1.pgn" "gm-game.pgn" "smooth.pgn" "smothered.pgn" "forced-mate.pgn" "forced-three-fold.pgn" "tactic-longer2.pgn" "throwaway-sudden.pgn" "backrank.pgn" "black-always-better.pgn" "tactic1.pgn" "sudden.pgn" "white-always-better.pgn" "two-rooks.pgn")
+
+ ("/home/dodge/workspace/ChessCom/ceac/tester/" (23358 34450 110730 576000) "../" "test.js" "files/" "./" "coverage/")
+
+ ("/home/dodge/.emacs.d/modules/lang/" (23326 62244 186903 139000) "../" "javascript/" "python/" "./" "lisp/" "cc/")
+
+ ("/home/dodge/.emacs.d/modules/personal/basic/" (23354 27326 744897 821000) "../" "autoload/" "bindings.el" "./" "config.el" "packages.el")
+
+ ("/home/dodge/Downloads/notes_for_dodge/" (23344 28816 336216 887000) "../" "dan_tep_notes_cmd_output_case_2.txt" "dan_tep_notes.txt" "./" "dan_tep_notes_cmd_output_case_3.txt" "dan_tep_notes_cmd_output_case_1.txt" "notes-for-notes-fordan-case-1.txt")
+
+ ("/home/dodge/.config/i3/" (23345 13521 705785 967000) "config_backup" "../" "config_backup2" "workspace_9.json" "workspace_8.json" "config" "workspace_7.json" "backupconfig" ".git/" "./" "workspace_10.json" "config_v1" "touch" "config.save" "load_layouts.sh" "workspace-1.json")
+
+ ("/home/dodge/.config/" (23326 31451 954372 620000) "goa-1.0/" "gtk-3.0/" "configstore/" "google-chrome/" "user-dirs.locale" "zoomus.conf" "dconf/" "../" "Slack/" "pavucontrol.ini" "ibus/" "evolution/" "bitpay/" "menus/" "nautilus/" "pulse/" "gnome-initial-setup-done" "./" "user-dirs.dirs" "enchant/" "gnome-session/" "i3/" "gedit/")
+
+ ("/home/dodge/Downloads/" (23341 16724 161265 878000) "../" "zoom_amd64.deb" "notes_for_dodge/" "notes_for_dodge.zip" "BitPay-linux.zip" "slack-desktop-3.2.0-beta25a7a50e-amd64.deb" "./" "BitPay.dmg" "BitPay-linux/" "3000_plus_problems.pgn")
+
+ ("/home/dodge/.emacs.d/modules/lang/cc/" (23314 53633 724863 900000) "../" "autoload.el" "./" "README.org" "config.el" "packages.el")
+
+ ("/home/dodge/workspace/ChessCom/ceac/chess_engines/stockfish-tep/" (23319 5357 497078 771000) "startup_tester.js" "src/" ".gitignore" "clean.sh" "assess/" "test_load_engine.js" "stockfishjs" "../" "AUTHORS" "Copying.txt" "build.js" "tests/" "load_engine.js" "appveyor.yml" "attributes.pdf" "example/" "./" "tester.js" "license.txt" "create_branch_at.js" "rolling_merge.js" "engine-interface.txt" "readme.md")
+
+ ("/home/dodge/.emacs.d/modules/lang/javascript/" (23321 60608 409013 990000) "../" "autoload.el" "./" "README.org" "config.el" "packages.el" "+screeps.el")
+
+ ("/home/dodge/.emacs.d/modules/core-ui/helm/" (23321 60608 397014 876000) "../" "autoload/" "./" "config.el" "packages.el")
+
+ ("/home/dodge/.emacs.d/modules/feature/version-control/" (23321 60608 405014 285000) "../" "autoload.el" "./" "+git.el" "config.el" "packages.el")
+
+ ("/home/dodge/.emacs.d/doom-core/" (23321 60608 397014 876000) "core.el" "core-projects.el" "core-editor.el" "core-popups.el" "core-utility.el" "../" "core-keybinds.el" "autoload/" "core-packages.el" "core-lib.el" "./" "LICENSE" "core-ui.el" "core-os.el" "test/" "packages.el")
+
+ ("/home/dodge/.emacs.d/modules/" (23321 60608 413013 695000) "lang/" "feature/" "personal/" "../" "gui/" "tools/" "./" "core-ui/")
+
+ ("/usr/share/emacs/25.3/etc/" (23293 49311 797967 800000) "GNUS-NEWS" "e/" "HISTORY" "publicsuffix.txt.gz" "WHY-FREE" "emacs.icon" "org/" "CENSORSHIP" "NEWS.24" "README" "MH-E-NEWS" "JOKES" "images/" "refcards/" "compilation.txt" "../" "package-keyring.gpg" "future-bug" "NEWS.22" "AUTHORS" "NEWS.19" "TODO" "LINUX-GNU" "FTP" "PROBLEMS" "ORDERS" "emacs.desktop" "NEWS.18" "yow.lines" "THE-GNU-PROJECT" "tutorials/" "grep.txt" "enriched.txt" "GNU" "gnus/" "COPYING" "ps-prin1.ps" "DOC" "CALC-NEWS" "edt-user.el" "TERMS" "rgb.txt" "themes/" "emacs.appdata.xml" "./" "forms/" "NXML-NEWS" "emacs-buffer.gdb" "NEWS.23" "spook.lines" "DEVEL.HUMOR" "ETAGS.README" "HELLO" "MORE.STUFF" "schema/" "srecode/" "ERC-NEWS" "NEWS.20" "gnus-tut.txt" "ORG-NEWS" "DEBUG" "NEXTSTEP" "charsets/" "ps-prin0.ps" "DISTRIB" "MACHINES" "ses-example.ses" "NEWS.1-17" "ETAGS.EBNF" "nxml/" "NEWS" "NEWS.21")
+
+ ("/home/dodge/.emacs.d/.local/dist-packages/elpa/helm-core-20180514.500/" (23294 21746 290834 411000) "helm-multi-match.el" "../" "helm-lib.elc" "helm.el" "helm.elc" "helm-source.elc" "helm-source.el" "./" "helm-lib.el" "helm-core-pkg.el" "helm-multi-match.elc" "helm-core-autoloads.el")
+
+ ("/home/dodge/.emacs.d/modules/personal/" (23318 59253 291128 737000) "../" "evil/" "basic/" "./")
+
+ ("/home/dodge/.emacs.d/.local/" (23320 11796 836365 446000) "dist-packages/" "etc/" "autoloads.el" "../" "cache/" "./")
+
+ ("/home/dodge/.emacs.d/.local/dist-packages/" (23294 21727 475366 135000) "../" "quelpa/" "./" "elpa/")
+
+ ("/home/dodge/.emacs.d/.local/dist-packages/elpa/" (23320 11804 92316 49000) "impatient-mode-20180124.1828/" "pcache-20170105.1414/" "vi-tilde-fringe-20141027.1942/" "dired-subtree-20170910.1521/" "unicode-fonts-20150826.1532/" "pythonic-20180525.233/" "flx-ido-20180117.719/" "rotate-text-20111203.2039/" "use-package-20180314.1143/" "gist-20171127.2006/" "ws-butler-20170111.1534/" "skewer-mode-20180528.928/" "eslintd-fix-20180429.755/" "f-20180106.122/" "ace-link-20180308.100/" "ssh-deploy-20180424.2207/" "helm-ag-20170209.745/" "git-timemachine-20180307.414/" "dired-hacks-utils-20160527.1436/" "rainbow-delimiters-20170929.432/" "magit-20180517.1443/" "ucs-utils-20150826.714/" "highlight-numbers-20170905.342/" "multi-term-20160619.233/" "dired-k-20170313.803/" "nav-flash-20140508.1341/" "flycheck-20180509.845/" "dash-20180413.30/" "duplicate-thing-20120515.948/" "logito-20120225.1255/" "quickrun-20170222.1715/" "undo-tree-0.6.5.signed" "which-key-20180426.733/" "highlight-indentation-20171218.137/" "font-utils-20150806.1051/" "flyspell-correct-popup-20180427.1135/" "helm-20180512.51/" "bind-key-20180512.2130/" "crm-custom-20160116.1606/" "eldoc-eval-20150512.506/" "fringe-helper-20140620.1409/" "magit-popup-20180509.1041/" "js2-refactor-20180502.342/" "all-the-icons-20180125.757/" "persp-mode-20180410.1252/" "projectile-20180507.129/" "smartparens-20180430.220/" "ivy-20180515.1057/" "ghub-20180417.1527/" "iedit-20180207.219/" "list-utils-20160414.702/" "nlinum-1.8.1/" "pip-requirements-20180602.1034/" "hydra-20180508.1008/" "hl-todo-20180327.1716/" "dumb-jump-20180507.2133/" "gnupg/" "command-log-mode-20160412.2147/" "undo-tree-0.6.5/" "helm-swoop-20180215.354/" "ace-window-20180123.1111/" "shackle-20171209.1401/" "anaconda-mode-20180603.1712/" "makefile-executor-20180410.30/" "whole-line-or-region-20180324.2119/" "async-20180424.2250/" "shrink-path-20170812.1947/" "auto-yasnippet-20180503.1208/" "anzu-20161017.907/" "coffee-mode-20170324.240/" "pkg-info-20150517.443/" "ido-vertical-mode-20160429.1037/" "let-alist-1.0.5/" "pcre2el-20161120.1303/" "persistent-soft-20150223.1053/" "pos-tip-20150318.813/" "ivy-hydra-20180208.912/" "nodejs-repl-20170722.443/" "nlinum-relative-20160526.8/" "smart-forward-20140430.13/" "web-beautify-20161115.1447/" "neotree-20170522.758/" "parent-mode-20150824.1600/" "emacs-snippets-20180512.937/" "rjsx-mode-20180418.647/" "helm-describe-modes-20160212.18/" "nlinum-hl-20170613.1748/" "epl-20180205.1249/" "multiple-cursors-20180406.1350/" "flycheck-pos-tip-20170504.1504/" "tern-20170925.1333/" "atchka-theme-20180217.1634/" "git-gutter-20161105.656/" "avy-20180514.1100/" "flx-20151030.1112/" "imenu-list-20171120.1255/" "yasnippet-20180513.1004/" "flyspell-correct-20180427.1135/" "popup-20160709.729/" "visual-fill-column-20180511.211/" "wgrep-20141016.1656/" "memoize-20170720.1802/" "company-quickhelp-20180323.1200/" "gitignore-mode-20180318.1256/" "expand-region-20171217.2125/" "company-statistics-20170210.1133/" "counsel-projectile-20180502.1325/" "gitconfig-mode-20180318.1256/" "company-dict-20180216.156/" "s-20180406.108/" "helm-core-20180514.500/" "swiper-20180402.1857/" "htmlize-20180412.1244/" "quelpa-20180325.1338/" "xref-js2-20170530.126/" "helm-projectile-20180418.2223/" "js2-mode-20180521.1523/" "with-editor-20180414.757/" "helm-company-20180213.1405/" "simple-httpd-20180218.538/" "helm-css-scss-20140626.1725/" "solaire-mode-20180328.343/" "editorconfig-20180508.2128/" "gh-20180308.1338/" "smex-20151212.1409/" "nlinum-1.8.1.signed" "git-gutter-fringe-20170112.2133/" "company-20180501.11/" "marshal-20180124.439/" "git-link-20180423.1929/" "counsel-20180517.1140/" "git-commit-20180411.1649/" "nose-20140520.948/" "helm-c-yasnippet-20170128.742/" "let-alist-1.0.5.signed" "ht-20180129.1434/" "archives/" "imenu-anywhere-20170805.1155/" "../" "./")
+
+ ("/home/dodge/.emacs.d/.local/dist-packages/elpa/which-key-20180426.733/" (23294 21757 170531 755000) "which-key.elc" "which-key-pkg.el" "../" "which-key-autoloads.el" "which-key.el" "./")
+
+ ("/home/dodge/.emacs.d/modules/feature/" (23318 59253 291128 737000) "version-control/" "jump/" "../" "workspaces/" "eval/" "./" "file-templates/" "snippets/" "debugger/" "spellcheck/" "syntax-checker/")
+
+ ("/home/dodge/.emacs.d/modules/tools/" (23318 59253 295128 705000) "rgb/" "neotree/" "make/" "../" "tmux/" "macos/" "electric-indent/" "rotate-text/" "imenu/" "upload/" "dired/" "./" "impatient-mode/" "gist/" "term/")
+
+ ("/home/dodge/workspace/craigs-politics/" (23318 63513 978042 802000) "README.md" ".gitignore" "politics.ipynb" "politics.pdf" "data/" "craigcrawler/" "../" "spider_log" "politics.html" "politics.py" "scrapy.cfg" ".git/" "./" "img/" ".gitattributes" "politics.org" ".ipynb_checkpoints/")
+
+ ("/home/dodge/workspace/" (23318 63511 801904 648000) "i3-gaps/" "craigs-politics/" "emacs/" "../" "ChessCom/" "./")
+
+ ("/home/dodge/.emacs.d/modules/lang/python/" (23314 53633 728863 765000) "../" "autoload.el" "./" "config.el" "packages.el")
+
+ ("/home/dodge/doom-emacs/modules/lang/python/" (23314 53633 728863 765000) "../" "autoload.el" "./" "config.el" "packages.el")
+
+ ("/home/dodge/workspace/ChessCom/ceac/TEP/games/" (23318 61129 89678 480000) "jB6Vw.pgn" "157ks.pgn" "sL4qm.pgn" "Mgv0j.pgn" "nv4VC.pgn" "frSgQ.pgn" "wxgkI.pgn" "NOM5o.pgn" "Jv7OP.pgn" "gtM1G.pgn" "EMO8t.pgn" "WHhI6.pgn" "hCt6n.pgn" "tXnMq.pgn" "Gd1Ps.pgn" "PSqbN.pgn" "05Im8.pgn" "bbhxC.pgn" "NlIUA.pgn" "4fWwn.pgn" "PN88r.pgn" "00mve.pgn" "WdRjx.pgn" "qkOfP.pgn" "BftbF.pgn" "VmneW.pgn" "qIimK.pgn" "ZYdSr.pgn" "Qoo8W.pgn" "Mnq87.pgn" "7Yt1q.pgn" "RXaCQ.pgn" "1PUTs.pgn" "rV9tj.pgn" "bzo4k.pgn" "UkRBu.pgn" "LAwSQ.pgn" "z1JbT.pgn" "U2zhg.pgn" "efwaZ.pgn" "uNyJZ.pgn" "H98Ei.pgn" "93cSs.pgn" "Yq6mn.pgn" "Bc4e3.pgn" "qtRME.pgn" "EmjQF.pgn" "nf5GQ.pgn" "5JgaJ.pgn" "VhFNZ.pgn" "wTFYL.pgn" "93cTf.pgn" "TotAi.pgn" "kfJBb.pgn" "9QVs2.pgn" "KFa1T.pgn" "pF8QG.pgn" "DaaWR.pgn" "5dKyy.pgn" "FfDXX.pgn" "bG0pw.pgn" "6LwI5.pgn" "SayGS.pgn" "QFQZi.pgn" "Q5HLZ.pgn" "fYUIq.pgn" "LZyaU.pgn" "QdHdB.pgn" "VDkio.pgn" "vAaAV.pgn" "j9tJU.pgn" "Lqbhu.pgn" "0jXAe.pgn" "iBfy7.pgn" "bG5rd.pgn" "YjEC7.pgn" "qgjrD.pgn" "0rgMI.pgn" "MK5WC.pgn" "JCUtl.pgn" "tVndO.pgn" "c7p3E.pgn" "OofzN.pgn" "LCP7n.pgn" "qDKqO.pgn" "iYs4d.pgn" "aWuul.pgn" "nx8Ro.pgn" "7dU49.pgn" "KuVq8.pgn" "4sJwb.pgn" "gACdw.pgn" "YDOYp.pgn" "9iaBA.pgn" "XsPCm.pgn" "2jVZb.pgn" "KUKhN.pgn" "fbd7M.pgn" "hsE7O.pgn" "vWtqh.pgn" "dzs3M.pgn" "6QZh3.pgn" "2gLVr.pgn" "6Z6W8.pgn" "r5Kg3.pgn" "kUpTk.pgn" "AmQs4.pgn" "imSNJ.pgn" "IlA3d.pgn" "3Un8d.pgn" "kNIq4.pgn" "jmMWK.pgn" "euUDT.pgn" "GzPYB.pgn" "kda7s.pgn" "bbiaD.pgn" "cAjPt.pgn" "4Htv7.pgn" "vXFrC.pgn" "0fHCF.pgn" "ruOwe.pgn" "kCPES.pgn" "NRFdR.pgn" "yvRiC.pgn" "jnn4b.pgn" "V9ltX.pgn" "Mb52T.pgn" "HxCf1.pgn" "HQe74.pgn" "kQoxA.pgn" "wmzZz.pgn" "eNJkk.pgn" "jZZFu.pgn" "WV0Ic.pgn" "xiU3U.pgn" "B4eaR.pgn" "gsuwy.pgn" "fudAD.pgn" "dAstN.pgn" "VUnXZ.pgn" "RfMrI.pgn" "PZtNE.pgn" "Awz91.pgn" "qdGs8.pgn" "RHn6A.pgn" "BQqee.pgn" "jajhO.pgn" "lcoU0.pgn" "qOby4.pgn" "Zex25.pgn" "Nac7l.pgn" "D8DyI.pgn" "kP2N1.pgn" "4ND1W.pgn" "73MXk.pgn" "JM1Dk.pgn" "deeng.pgn" "x1LYV.pgn" "5oMgQ.pgn" "yGbP1.pgn" "IHTFW.pgn" "6NS6J.pgn" "tvyvQ.pgn" "3Gfav.pgn" "1vlEG.pgn" "pnQRY.pgn" "aV4mW.pgn" "nKTHj.pgn" "hg1UI.pgn" "4uG94.pgn" "YAwjy.pgn" "HPsyE.pgn" "2wLUm.pgn" "pJtvK.pgn" "OgkCJ.pgn" "HGnJs.pgn" "ePiu3.pgn" "S3gZ4.pgn" "aUeWG.pgn" "kqIK9.pgn" "EvDHD.pgn" "rMRhZ.pgn" "ItH7x.pgn" "TM1Hm.pgn" "ACKyy.pgn" "qYsjf.pgn" "kZnP7.pgn" "WrUwi.pgn" "CtQ9p.pgn" "mWg8I.pgn" "lSRar.pgn" "kR89Q.pgn" "spvec.pgn" "c5xkA.pgn" "RMIXP.pgn" "ehH69.pgn" "y54jE.pgn" "8ZgyW.pgn" "uIO2x.pgn" "DVS3l.pgn" "3oBtG.pgn" "aK0nU.pgn" "2MNL1.pgn" "xSyR4.pgn" "3dku5.pgn" "u7eQS.pgn" "g0Pv3.pgn" "9W4Bf.pgn" "ol7I1.pgn" "7pPTy.pgn" "94u4W.pgn" "3o3Vp.pgn" "rGkFq.pgn" "daOkD.pgn" "fZKot.pgn" "dOHBo.pgn" "OixO5.pgn" "zkSu2.pgn" "rt26s.pgn" "7lB8d.pgn" "Yg66B.pgn" "Kj1jq.pgn" "E7IPa.pgn" "gSinq.pgn" "tnmVZ.pgn" "TJUwB.pgn" "ZPkna.pgn" "CJ6qo.pgn" "3CT6b.pgn" "G0DaG.pgn" "Z1sXj.pgn" "NT30z.pgn" "lFM8K.pgn" "HR7NC.pgn" "rXJwP.pgn" "L2ae8.pgn" "OaBqN.pgn" "D1XBk.pgn" "44cWe.pgn" "9Z4ca.pgn" "Hbqms.pgn" "I2gxT.pgn" "21lYj.pgn" "wAWhD.pgn" "Jxq0c.pgn" "2YyeM.pgn" "H8FPS.pgn" "5wpp7.pgn" "ulfyl.pgn" "6MlT6.pgn" "ylO83.pgn" "../" "./")
+
+ ("/home/" (23293 6209 133074 720000) "../" "./" "dodge/")
+
+ ("/home/dodge/.emacs.d/modules/core-ui/" (23318 58286 66048 348000) "company/" "helm/" "../" "ivy/" "./" "ido/")
+
+ ("/home/dodge/.emacs.d/modules/core-ui/ido/" (23294 21704 92043 821000) "../" "autoload/" "./" "config.el" "packages.el")
+
+ ("/home/dodge/.emacs.d/modules/tools/password-store/" (23294 21704 100043 585000) "../" "autoload.el" "./" "test/" "config.el" "packages.el")
+
+ ("/home/dodge/doom-emacs/modules/lang/javascript/" (23314 53633 724863 900000) "../" "autoload.el" "./" "README.org" "config.el" "packages.el" "+screeps.el")
+
+ ("/home/dodge/doom-emacs/modules/lang/" (23314 53633 728863 765000) "nix/" "rust/" "org/" "elm/" "data/" "latex/" "../" "haskell/" "csharp/" "java/" "sh/" "ruby/" "purescript/" "lua/" "web/" "typescript/" "javascript/" "markdown/" "python/" "php/" "julia/" "./" "elixir/" "crystal/" "hy/" "clojure/" "perl/" "assembly/" "plantuml/" "rest/" "emacs-lisp/" "swift/" "scala/" "ocaml/" "go/" "cc/" "ledger/")
+
+ ("/home/dodge/doom-emacs/modules/" (23314 53633 732863 632000) "lang/" "feature/" "app/" "../" "private/" "completion/" "tools/" "./" "ui/")
+
+ ("/home/dodge/doom-emacs/" (23314 53633 712864 300000) "init.example.el" "modules/" "README.md" ".gitignore" "Makefile" "../" "core/" "bin/" ".git/" "./" "LICENSE" "init.test.el" "CHANGELOG.org" ".travis.yml" ".github/")
+
+ ("/home/dodge/.emacs.d/eshell/" (23310 62528 729787 664000) "../" "history" "./")
+
+ ("/home/dodge/.emacs.d/modules/feature/workspaces/" (23294 21704 96043 703000) "../" "autoload/" "./" "test/" "config.el" "packages.el")
+
+ ("/home/dodge/workspace/emacs/" (23313 33475 175852 372000) "modules/" "README.md" "init.el" ".gitignore" "config.org" "Makefile" "../" ".git/" ".gitmodules" "doom-core/" "./" "snippets/" "lisp/" "custom.el")
+
+ ("/home/dodge/workspace/ChessCom/ceac/chess_engines/" (23302 21994 394243 140000) "stockfish-tep/" "../" "bin/" "./" "stockfish/")
+
+ ("/home/dodge/workspace/ChessCom/" (23294 20849 969123 748000) "ceac/" "../" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

@@ -1,0 +1,143 @@
+;;; -*- coding: utf-8 -*-
+(("/home/dodge/workspace/ChessCom/ceac/TEP/" . 1105)
+ ("/home/dodge/workspace/ChessCom/ceac/jce/engineManager.js" . 32827)
+ ("/home/dodge/workspace/ChessCom/ceac/jce/chess.js" . 180473)
+ ("/home/dodge/workspace/ChessCom/ceac/engine/engine.js" . 23985)
+ ("/home/dodge/workspace/ChessCom/ceac/balancer/balancer.js" . 50409)
+ ("/home/dodge/workspace/ChessCom/ceac/found_tactics_readable.txt" . 2107)
+ ("/home/dodge/workspace/ChessCom/ceac/erik_games2.pgn" . 401)
+ ("/home/dodge/workspace/ChessCom/ceac/balancer/tester.js" . 13434)
+ ("/home/dodge/.emacs.d/.local/etc/workspaces/autosave" . 2365)
+ ("/home/dodge/.emacs.d/.local/cache/ido.last" . 23318)
+ ("/home/dodge/workspace/ChessCom/ceac/"
+  (dired-filename . "/home/dodge/workspace/ChessCom/ceac/.git"))
+ ("/home/dodge/workspace/ChessCom/ceac/.git/"
+  (dired-filename . "/home/dodge/workspace/ChessCom/ceac/.git/ORIG_HEAD"))
+ ("/home/dodge/.emacs.d/.local/etc/"
+  (dired-filename . "/home/dodge/.emacs.d/.local/etc/.."))
+ ("/home/dodge/.emacs.d/.local/dist-packages/"
+  (dired-filename . "/home/dodge/.emacs.d/.local/dist-packages/.."))
+ ("/home/dodge/.emacs.d/.local/cache/"
+  (dired-filename . "/home/dodge/.emacs.d/.local/cache/.."))
+ ("/home/dodge/.emacs.d/.local/"
+  (dired-filename . "/home/dodge/.emacs.d/.local/.."))
+ ("/home/dodge/.emacs.d/.local/etc/custom.el" . 1372)
+ ("/home/dodge/.emacs.d/lisp/"
+  (dired-filename . "/home/dodge/.emacs.d/lisp/.."))
+ ("/home/dodge/.emacs.d/"
+  (dired-filename . "/home/dodge/.emacs.d/custom.el"))
+ ("/home/dodge/.emacs.d/modules/gui/theme/packages.el" . 221)
+ ("/home/dodge/.emacs.d/network-security.data" . 2)
+ ("/home/dodge/workspace/ChessCom/ceac/TEP/thematicEvaluator.js" . 58292)
+ ("/home/dodge/.bashrc" . 3773)
+ ("/home/dodge/.emacs.d/modules/gui/theme/config.el" . 68)
+ ("/home/dodge/workspace/ChessCom/ceac/TEP/high_level_tactics.pgn" . 2)
+ ("/home/dodge/workspace/ChessCom/ceac/controller.js" . 9006)
+ ("/home/dodge/workspace/ChessCom/ceac/TEP/pm2.tep.config.js" . 583)
+ ("/home/dodge/workspace/ChessCom/ceac/balancer/libs/classifyMoves.js" . 150)
+ ("/home/dodge/workspace/ChessCom/ceac/balancer/"
+  (dired-filename . "/home/dodge/workspace/ChessCom/ceac/balancer/balancer-test.js"))
+ ("/home/dodge/workspace/ChessCom/ceac/tester/test.js" . 21)
+ ("/home/dodge/workspace/ChessCom/ceac/shared_libs/"
+  (dired-filename . "/home/dodge/workspace/ChessCom/ceac/shared_libs/erik_games.pgn"))
+ ("/home/dodge/workspace/ChessCom/ceac/shared_libs/to_pgn.py" . 271)
+ ("/home/dodge/workspace/ChessCom/ceac/shared_libs/misc.js" . 1543)
+ ("/home/dodge/Downloads/notes_for_dodge/"
+  (dired-filename . "/home/dodge/Downloads/notes_for_dodge/dan_tep_notes.txt"))
+ ("/home/dodge/Downloads/notes_for_dodge/dan_tep_notes.txt" . 1380)
+ ("/home/dodge/.emacs.d/modules/lang/cc/config.el" . 2785)
+ ("/home/dodge/.emacs.d/modules/lang/cc/README.org" . 101)
+ ("/home/dodge/.emacs.d/modules/lang/cc/packages.el" . 517)
+ ("/home/dodge/workspace/ChessCom/ceac/chess_engines/stockfish-tep/src/evaluate.cpp" . 3433)
+ ("/home/dodge/.emacs.d/init.el" . 64)
+ ("/home/dodge/.emacs.d/config.org" . 122434)
+ ("/home/dodge/.emacs.d/doom-core/core-popups.el" . 9834)
+ ("/home/dodge/.emacs.d/config.el" . 237)
+ ("/home/dodge/.emacs.d/.local/dist-packages/elpa/magit-20180517.1443/magit-apply.el" . 17245)
+ ("/home/dodge/.emacs.d/modules/feature/version-control/+git.el" . 186)
+ ("/home/dodge/.emacs.d/doom-core/core-keybinds.el" . 919)
+ ("/home/dodge/.emacs.d/modules/feature/version-control/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/feature/version-control/config.el"))
+ ("/home/dodge/.emacs.d/.local/dist-packages/elpa/which-key-20180426.733/which-key.el" . 31437)
+ ("/home/dodge/.emacs.d/modules/feature/version-control/config.el" . 103)
+ ("/home/dodge/.emacs.d/.local/dist-packages/elpa/js2-mode-20180521.1523/js2-mode.el" . 42313)
+ ("/home/dodge/.emacs.d/.local/dist-packages/elpa/helm-core-20180514.500/helm.el" . 9113)
+ ("/home/dodge/.emacs.d/.local/dist-packages/elpa/swiper-20180402.1857/swiper.el" . 2868)
+ ("/home/dodge/.emacs.d/.local/dist-packages/elpa/helm-core-20180514.500/helm-lib.el" . 21134)
+ ("/home/dodge/workspace/ChessCom/ceac/hard_tactics_data.txt" . 7059)
+ ("/home/dodge/.emacs.d/modules/personal/basic/bindings.el" . 10762)
+ ("/usr/share/emacs/25.3/etc/PROBLEMS" . 31)
+ ("/home/dodge/.emacs.d/doom-core/autoload/editor.el" . 1101)
+ ("/home/dodge/.emacs.d/.git/"
+  (dired-filename . "/home/dodge/.emacs.d/.git/packed-refs"))
+ ("/home/dodge/.emacs.d/modules/tools/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/tools/.."))
+ ("/home/dodge/.emacs.d/modules/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/feature"))
+ ("/home/dodge/.emacs.d/modules/feature/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/feature/version-control"))
+ ("/home/dodge/workspace/ChessCom/ceac/.gitignore" . 136)
+ ("/home/dodge/"
+  (dired-filename . "/home/dodge/.emacs.d"))
+ ("/home/dodge/.emacs.d/modules/core-ui/helm/config.el" . 1546)
+ ("/home/dodge/.emacs.d/modules/lang/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/lang/python"))
+ ("/home/dodge/.emacs.d/modules/lang/python/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/lang/python/config.el"))
+ ("/home/dodge/.emacs.d/modules/lang/python/config.el" . 260)
+ ("/home/dodge/.emacs.d/doom-core/core.el" . 7714)
+ ("/home/dodge/workspace/craigs-politics/craigcrawler/"
+  (dired-filename . "/home/dodge/workspace/craigs-politics/craigcrawler/.."))
+ ("/home/dodge/workspace/craigs-politics/"
+  (dired-filename . "/home/dodge/workspace/craigs-politics/politics.org"))
+ ("/home/dodge/.config/i3/config" . 7238)
+ ("/home/dodge/workspace/ChessCom/ceac/TEP/TEPBuildGames.js" . 693)
+ ("/home/dodge/workspace/ChessCom/ceac/TEP/TEPBuilder.js" . 377)
+ ("/home/dodge/workspace/ChessCom/ceac/balancer/config-sample.js" . 446)
+ ("/home/dodge/workspace/craigs-politics/politics.org" . 5158)
+ ("/home/dodge/doom-emacs/modules/lang/"
+  (dired-filename . "/home/dodge/doom-emacs/modules/lang/python"))
+ ("/home/dodge/.emacs.d/modules/lang/javascript/config.el" . 7167)
+ ("/home/dodge/.emacs.d/modules/core-ui/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/core-ui/.."))
+ ("/home/dodge/.emacs.d/modules/personal/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/personal/.."))
+ ("/home/dodge/doom-emacs/modules/lang/javascript/"
+  (dired-filename . "/home/dodge/doom-emacs/modules/lang/javascript/.."))
+ ("/home/dodge/.emacs.d/modules/gui/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/gui/.."))
+ ("/home/dodge/.emacs.d/modules/lang/javascript/+screeps.el" . 2)
+ ("/home/dodge/.emacs.d/modules/lang/javascript/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/lang/javascript/.."))
+ ("/home/dodge/.emacs.d/modules/core-ui/ido/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/core-ui/ido/config.el"))
+ ("/home/dodge/.emacs.d/modules/core-ui/ido/packages.el" . 161)
+ ("/home/dodge/.emacs.d/modules/lang/javascript/packages.el" . 64)
+ ("/home/dodge/.emacs.d/doom-core/core-editor.el" . 1687)
+ ("/home/dodge/workspace/"
+  (dired-filename . "/home/dodge/workspace/emacs"))
+ ("/home/dodge/workspace/emacs/"
+  (dired-filename . "/home/dodge/workspace/emacs/.git"))
+ ("/home/dodge/.emacs.d/modules/feature/workspaces/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/feature/workspaces/config.el"))
+ ("/home/dodge/.emacs.d/doom-core/"
+  (dired-filename . "/home/dodge/.emacs.d/doom-core/core-editor.el"))
+ ("/home/dodge/.emacs.d/modules/personal/basic/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/personal/basic/packages.el"))
+ ("/home/dodge/.emacs.d/doom-core/core-ui.el" . 360)
+ ("/home/dodge/.emacs.d/modules/feature/workspaces/config.el" . 2963)
+ ("/home/dodge/workspace/emacs/config.org" . 6508)
+ ("/home/dodge/workspace/ChessCom/ceac/chess_engines/stockfish-tep/"
+  (dired-filename . "/home/dodge/workspace/ChessCom/ceac/chess_engines/stockfish-tep/src"))
+ ("/home/dodge/workspace/ChessCom/ceac/chess_engines/stockfish-tep/src/build" . 192)
+ ("/home/dodge/workspace/ChessCom/ceac/chess_engines/stockfish-tep/src/Makefile" . 4457)
+ ("/home/dodge/workspace/ChessCom/ceac/chess_engines/stockfish-tep/src/"
+  (dired-filename . "/home/dodge/workspace/ChessCom/ceac/chess_engines/stockfish-tep/src/evaluate.h"))
+ ("/home/dodge/.emacs.d/.git/branches/"
+  (dired-filename . "/home/dodge/.emacs.d/.git/branches/."))
+ ("/home/dodge/.emacs.d/modules/feature/debugger/"
+  (dired-filename . "/home/dodge/.emacs.d/modules/feature/debugger/autoload"))
+ ("/home/dodge/.emacs.d/modules/gui/modeline/packages.el" . 233)
+ ("/home/dodge/.emacs.d/modules/gui/modeline/config.el" . 1053)
+ ("/home/dodge/.emacs.d/doom-core/autoload/"
+  (dired-filename . "/home/dodge/.emacs.d/doom-core/autoload/buffers.el")))

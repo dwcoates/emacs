@@ -1,0 +1,158 @@
+;; Object gh/gh-gist-api/dwcoates
+;; EIEIO PERSISTENT OBJECT
+(gh-cache "gh/gh-gist-api/dwcoates"
+  :file "dwcoates"
+  :object-name "gh/gh-gist-api/dwcoates"
+  :version "25.3.2/0.4/gh-4"
+  :entries #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8 data (("/users/dwcoates/gists" "GET" "55b421b9875ed128f478d78ded303a5db18d3a30") [eieio-class-tag--gh-cache-entry 1527881130.0216494 nil ([eieio-class-tag--gh-gist-gist "643aba92d786fcc1ea32a364fb22c5b8" "https://api.github.com/gists/643aba92d786fcc1ea32a364fb22c5b8" "https://gist.github.com/643aba92d786fcc1ea32a364fb22c5b8" ([eieio-class-tag--gh-gist-gist-file "borg-notes-latex-wrapper.el" 2418 "https://gist.githubusercontent.com/dwcoates/643aba92d786fcc1ea32a364fb22c5b8/raw/509e75686147fc9ca8df3335827eaa5a24e8dc52/borg-notes-latex-wrapper.el" nil]) nil "Adaptation of my org-notes.el latex wrappers for a stackexchange answer" "2018-01-29T17:39:08Z" "2018-01-29T17:43:23Z" "https://gist.github.com/643aba92d786fcc1ea32a364fb22c5b8.git" "https://gist.github.com/643aba92d786fcc1ea32a364fb22c5b8.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "3a3a00d6436e24105a874b3500b7d845" "https://api.github.com/gists/3a3a00d6436e24105a874b3500b7d845" "https://gist.github.com/3a3a00d6436e24105a874b3500b7d845" ([eieio-class-tag--gh-gist-gist-file "org-latex-export-region-to-pdf.el" 1314 "https://gist.githubusercontent.com/dwcoates/3a3a00d6436e24105a874b3500b7d845/raw/24c2c820faef58a84bc60ec656d39de8ba14264e/org-latex-export-region-to-pdf.el" nil]) t "A function for cleanly exporting current active region to pdf. Unlike normal exporting, prompts for filename and declutters output." "2018-01-27T19:55:29Z" "2018-01-27T19:55:29Z" "https://gist.github.com/3a3a00d6436e24105a874b3500b7d845.git" "https://gist.github.com/3a3a00d6436e24105a874b3500b7d845.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "0b0153046ae52a262d1a82cb7a46c3c5" "https://api.github.com/gists/0b0153046ae52a262d1a82cb7a46c3c5" "https://gist.github.com/0b0153046ae52a262d1a82cb7a46c3c5" ([eieio-class-tag--gh-gist-gist-file "eshell-swap-prompts.el" 899 "https://gist.githubusercontent.com/dwcoates/0b0153046ae52a262d1a82cb7a46c3c5/raw/5f629dd3b491cd37ef6d8f47cf48a7478682486c/eshell-swap-prompts.el" nil]) t "Swap between minimal/cwd+git eshell prompts." "2017-12-14T05:39:48Z" "2017-12-14T05:39:48Z" "https://gist.github.com/0b0153046ae52a262d1a82cb7a46c3c5.git" "https://gist.github.com/0b0153046ae52a262d1a82cb7a46c3c5.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "f859787d30b6f69702a2d997e3e4e23e" "https://api.github.com/gists/f859787d30b6f69702a2d997e3e4e23e" "https://gist.github.com/f859787d30b6f69702a2d997e3e4e23e" ([eieio-class-tag--gh-gist-gist-file "track-eshell.el" 929 "https://gist.githubusercontent.com/dwcoates/f859787d30b6f69702a2d997e3e4e23e/raw/0215d85e2c650429a4b71167b01cb340a804c411/track-eshell.el" nil]) t "Track eshell sessions dwim-style" "2017-12-13T19:51:22Z" "2017-12-13T19:51:23Z" "https://gist.github.com/f859787d30b6f69702a2d997e3e4e23e.git" "https://gist.github.com/f859787d30b6f69702a2d997e3e4e23e.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "72d6e3e9ab76451eab5cfef7be715ea4" "https://api.github.com/gists/72d6e3e9ab76451eab5cfef7be715ea4" "https://gist.github.com/72d6e3e9ab76451eab5cfef7be715ea4" ([eieio-class-tag--gh-gist-gist-file "sgml-copy-or-kill-element.el" 998 "https://gist.githubusercontent.com/dwcoates/72d6e3e9ab76451eab5cfef7be715ea4/raw/1e53bdae4d11c94cbc8c07d59a215aefe4f1ee44/sgml-copy-or-kill-element.el" nil]) t "Copy or kill HTML element at point in Emacs" "2017-12-01T19:50:13Z" "2017-12-01T19:52:15Z" "https://gist.github.com/72d6e3e9ab76451eab5cfef7be715ea4.git" "https://gist.github.com/72d6e3e9ab76451eab5cfef7be715ea4.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "c200a98e6e8d826cc3475024e5191cfb" "https://api.github.com/gists/c200a98e6e8d826cc3475024e5191cfb" "https://gist.github.com/c200a98e6e8d826cc3475024e5191cfb" ([eieio-class-tag--gh-gist-gist-file "repl.el" 3558 "https://gist.githubusercontent.com/dwcoates/c200a98e6e8d826cc3475024e5191cfb/raw/d94890a16f8400e484c02049d3dfbd9b3eea0f9d/repl.el" nil]) t "elisp code for interactive programming in python" "2017-06-07T18:32:09Z" "2017-12-15T00:53:53Z" "https://gist.github.com/c200a98e6e8d826cc3475024e5191cfb.git" "https://gist.github.com/c200a98e6e8d826cc3475024e5191cfb.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "fe95d9d43028ee77b1068936e063a1bb" "https://api.github.com/gists/fe95d9d43028ee77b1068936e063a1bb" "https://gist.github.com/fe95d9d43028ee77b1068936e063a1bb" ([eieio-class-tag--gh-gist-gist-file "repl.py" 3178 "https://gist.githubusercontent.com/dwcoates/fe95d9d43028ee77b1068936e063a1bb/raw/321f3e25f2a78420856ce828c1ca94c55c3843ad/repl.py" "(defvar python-shell-send-code-step-on-function nil
+  \"If non-nil, step sending a function to the python interpreter.\")
+
+(defun python-shell-step-after-defun ()
+  (forward-paragraph)
+  ;; when at last paragraph, don't step to beginning of \"next\" paragraph
+  (unless (equal (line-number-at-pos (point))
+                 (progn (forward-paragraph) (line-number-at-pos (point))))
+    (backward-paragraph)
+    (forward-line 1)))
+
+(defun python-shell-send-paragraph-and-step ()
+  \"Send current paragraph of code and move point to the beginning of next paragraph.\"
+  (interactive)
+  (save-excursion
+    (let* ((beg (progn (forward-paragraph)
+                       (backward-paragraph)
+                       (unless (equal (line-number-at-pos) 1) 
+                         (forward-line)) (point)))
+           (end (progn (forward-paragraph) 
+                       (unless (equal (line-number-at-pos (point))
+                                      (line-number-at-pos (point-max)))
+                         (forward-line -1))
+                       (end-of-line)
+                       (point)))
+           (num-lines (1+ (- (line-number-at-pos end)
+                             (line-number-at-pos beg)))))
+      (python-shell-send-region beg end)
+      (message (concat 
+                (format \"Sent %d line%s \"
+                        num-lines
+                        (if (equal num-lines 1) \"\" \"s\"))
+                (if (equal num-lines 1) 
+                    (format \"(line %d)\" (line-number-at-pos end))
+                  (format \"(lines %d-%d)\" 
+                          (line-number-at-pos beg) 
+                          (line-number-at-pos end)))
+                \" to Python interpreter\")
+               (line-number-at-pos beg)
+               (line-number-at-pos end))))
+  (python-shell-step-after-defun))
+
+(defun python-current-defun ()
+  \"`python-info-current-defun' doesn't work when on a blank line, for some reason.\"
+  (interactive)
+  (save-excursion (forward-paragraph)
+                  (backward-paragraph)
+                  (forward-line)
+                  (python-info-current-defun)))
+
+(defun python-shell-send-code-and-step ()
+  (interactive)
+  ;; xemacs doesn't have use-region-p
+  (unless (python-shell-get-process)
+    (run-python))
+  (cond ((use-region-p)
+         (let ((end (region-end))
+               (beg (region-beginning)))
+           (python-shell-send-region beg end)
+           (message \"Sent region between lines %d and %d to python interpreter\"
+                    (line-number-at-pos beg)
+                    (line-number-at-pos end))
+           (goto-char end)))
+        ;; send function if in a function, else send block and iterate
+        ((python-current-defun)
+         (progn
+           (python-shell-send-defun)
+           (message \"Sent '%s' function to python interpreter\"
+                    (propertize (python-current-defun) 'face
+                                '(:foreground \"#66D9EF\")))
+           (when python-shell-send-code-step-on-function
+             (python-nav-end-of-defun)
+             (forward-line -1)
+             (python-shell-step-after-defun))))
+        (t
+         (python-shell-send-paragraph-and-step))))"]) t "some elisp code for interactive pythoning" "2017-06-07T18:29:15Z" "2017-06-07T18:29:15Z" "https://gist.github.com/fe95d9d43028ee77b1068936e063a1bb.git" "https://gist.github.com/fe95d9d43028ee77b1068936e063a1bb.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] ([eieio-class-tag--gh-gist-history-entry [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] "08624ae6bafa1ef98600bd05975eaa5cd043ba90" "2017-06-07T18:29:15Z" [eieio-class-tag--gh-gist-history-change 76 76 0] "https://api.github.com/gists/fe95d9d43028ee77b1068936e063a1bb/08624ae6bafa1ef98600bd05975eaa5cd043ba90"]) nil] [eieio-class-tag--gh-gist-gist "22fa46b33bf1029fc60e1e9bb9e76338" "https://api.github.com/gists/22fa46b33bf1029fc60e1e9bb9e76338" "https://gist.github.com/22fa46b33bf1029fc60e1e9bb9e76338" ([eieio-class-tag--gh-gist-gist-file "python-send-code-dwim.el" 3172 "https://gist.githubusercontent.com/dwcoates/22fa46b33bf1029fc60e1e9bb9e76338/raw/2eeb255e4b08757f3be2d60d99174190aac3c8c7/python-send-code-dwim.el" nil]) t "Convenient function for sending python code to shell" "2017-03-19T07:26:28Z" "2017-12-15T01:01:14Z" "https://gist.github.com/22fa46b33bf1029fc60e1e9bb9e76338.git" "https://gist.github.com/22fa46b33bf1029fc60e1e9bb9e76338.git" 2 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "4a9ebcf29d419efbdbaba38fd205e39c" "https://api.github.com/gists/4a9ebcf29d419efbdbaba38fd205e39c" "https://gist.github.com/4a9ebcf29d419efbdbaba38fd205e39c" ([eieio-class-tag--gh-gist-gist-file "zip_snippet.py" 222 "https://gist.githubusercontent.com/dwcoates/4a9ebcf29d419efbdbaba38fd205e39c/raw/fc5e2bfbfe9a5448339bb98f52ba30c3794ae2f2/zip_snippet.py" nil]) t "pops" "2017-03-14T03:34:41Z" "2017-03-14T03:34:41Z" "https://gist.github.com/4a9ebcf29d419efbdbaba38fd205e39c.git" "https://gist.github.com/4a9ebcf29d419efbdbaba38fd205e39c.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "08a20422f77e2e65199016475ad3310d" "https://api.github.com/gists/08a20422f77e2e65199016475ad3310d" "https://gist.github.com/08a20422f77e2e65199016475ad3310d" ([eieio-class-tag--gh-gist-gist-file "read_json.py" 1084 "https://gist.githubusercontent.com/dwcoates/08a20422f77e2e65199016475ad3310d/raw/360888d119fc72ec7dcb547eff4b45b0b5cc4c4b/read_json.py" nil]) t "for pops" "2017-03-11T19:33:28Z" "2017-03-11T19:38:39Z" "https://gist.github.com/08a20422f77e2e65199016475ad3310d.git" "https://gist.github.com/08a20422f77e2e65199016475ad3310d.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "932ed3cfd514673ff47447c86c1a3537" "https://api.github.com/gists/932ed3cfd514673ff47447c86c1a3537" "https://gist.github.com/932ed3cfd514673ff47447c86c1a3537" ([eieio-class-tag--gh-gist-gist-file "parsing_json_2.py" 273 "https://gist.githubusercontent.com/dwcoates/932ed3cfd514673ff47447c86c1a3537/raw/45fefeb5f5e15722ba03f38859b330698c14331d/parsing_json_2.py" nil]) t "Second snippet for you" "2017-02-14T06:19:42Z" "2017-02-14T06:19:42Z" "https://gist.github.com/932ed3cfd514673ff47447c86c1a3537.git" "https://gist.github.com/932ed3cfd514673ff47447c86c1a3537.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "584d05e2aef2a689f2659b3c562938a7" "https://api.github.com/gists/584d05e2aef2a689f2659b3c562938a7" "https://gist.github.com/584d05e2aef2a689f2659b3c562938a7" ([eieio-class-tag--gh-gist-gist-file "parsing_json.py" 1047 "https://gist.githubusercontent.com/dwcoates/584d05e2aef2a689f2659b3c562938a7/raw/a44b76ff77e0aa29aa7435367967e89a5a018677/parsing_json.py" nil]) t "" "2017-02-14T05:42:48Z" "2017-02-14T05:42:48Z" "https://gist.github.com/584d05e2aef2a689f2659b3c562938a7.git" "https://gist.github.com/584d05e2aef2a689f2659b3c562938a7.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "2cfd90f865ddeba4e3846a3d1fca0656" "https://api.github.com/gists/2cfd90f865ddeba4e3846a3d1fca0656" "https://gist.github.com/2cfd90f865ddeba4e3846a3d1fca0656" ([eieio-class-tag--gh-gist-gist-file "parsing_json.py" 1047 "https://gist.githubusercontent.com/dwcoates/2cfd90f865ddeba4e3846a3d1fca0656/raw/a44b76ff77e0aa29aa7435367967e89a5a018677/parsing_json.py" nil]) nil "Parsing newline delmited json files for line-by-line preprocessing" "2017-02-14T05:42:40Z" "2017-02-14T05:42:40Z" "https://gist.github.com/2cfd90f865ddeba4e3846a3d1fca0656.git" "https://gist.github.com/2cfd90f865ddeba4e3846a3d1fca0656.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "26249b7c8a3519dba1bd5de1f835280a" "https://api.github.com/gists/26249b7c8a3519dba1bd5de1f835280a" "https://gist.github.com/26249b7c8a3519dba1bd5de1f835280a" ([eieio-class-tag--gh-gist-gist-file "CAPTURE-everything.org" 420 "https://gist.githubusercontent.com/dwcoates/26249b7c8a3519dba1bd5de1f835280a/raw/10d421f4ad855772379763c52f704d3166b73190/CAPTURE-everything.org" nil]) t "" "2017-01-14T02:05:11Z" "2017-01-14T02:05:11Z" "https://gist.github.com/26249b7c8a3519dba1bd5de1f835280a.git" "https://gist.github.com/26249b7c8a3519dba1bd5de1f835280a.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "9a265c66b3a0ddb7ea14" "https://api.github.com/gists/9a265c66b3a0ddb7ea14" "https://gist.github.com/9a265c66b3a0ddb7ea14" ([eieio-class-tag--gh-gist-gist-file "notes1.txt" 1917 "https://gist.githubusercontent.com/dwcoates/9a265c66b3a0ddb7ea14/raw/61808b73ff6d3d60116231f0a539073ee0af0ab8/notes1.txt" nil]) nil "" "2015-09-14T22:09:08Z" "2015-09-14T22:09:08Z" "https://gist.github.com/9a265c66b3a0ddb7ea14.git" "https://gist.github.com/9a265c66b3a0ddb7ea14.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil] [eieio-class-tag--gh-gist-gist "b6d7c8aa1cfaf15cd3c1" "https://api.github.com/gists/b6d7c8aa1cfaf15cd3c1" "https://gist.github.com/b6d7c8aa1cfaf15cd3c1" ([eieio-class-tag--gh-gist-gist-file "blank" 58 "https://gist.githubusercontent.com/dwcoates/b6d7c8aa1cfaf15cd3c1/raw/54c84e882c88197e8681c990e6fc50da182de574/blank" nil]) nil "blank" "2015-06-01T02:56:13Z" "2015-08-29T14:22:18Z" "https://gist.github.com/b6d7c8aa1cfaf15cd3c1.git" "https://gist.github.com/b6d7c8aa1cfaf15cd3c1.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] nil nil]) nil "W/\"193a4e0a502a258ab234fadcce06691d\"" nil] ("/gists/fe95d9d43028ee77b1068936e063a1bb" "GET" "763c0cb1144692f2a2e2e10bb10242dfed0d8a70") [eieio-class-tag--gh-cache-entry 1527881134.3536777 nil [eieio-class-tag--gh-gist-gist "fe95d9d43028ee77b1068936e063a1bb" "https://api.github.com/gists/fe95d9d43028ee77b1068936e063a1bb" "https://gist.github.com/fe95d9d43028ee77b1068936e063a1bb" ([eieio-class-tag--gh-gist-gist-file "repl.py" 3178 "https://gist.githubusercontent.com/dwcoates/fe95d9d43028ee77b1068936e063a1bb/raw/321f3e25f2a78420856ce828c1ca94c55c3843ad/repl.py" "(defvar python-shell-send-code-step-on-function nil
+  \"If non-nil, step sending a function to the python interpreter.\")
+
+(defun python-shell-step-after-defun ()
+  (forward-paragraph)
+  ;; when at last paragraph, don't step to beginning of \"next\" paragraph
+  (unless (equal (line-number-at-pos (point))
+                 (progn (forward-paragraph) (line-number-at-pos (point))))
+    (backward-paragraph)
+    (forward-line 1)))
+
+(defun python-shell-send-paragraph-and-step ()
+  \"Send current paragraph of code and move point to the beginning of next paragraph.\"
+  (interactive)
+  (save-excursion
+    (let* ((beg (progn (forward-paragraph)
+                       (backward-paragraph)
+                       (unless (equal (line-number-at-pos) 1) 
+                         (forward-line)) (point)))
+           (end (progn (forward-paragraph) 
+                       (unless (equal (line-number-at-pos (point))
+                                      (line-number-at-pos (point-max)))
+                         (forward-line -1))
+                       (end-of-line)
+                       (point)))
+           (num-lines (1+ (- (line-number-at-pos end)
+                             (line-number-at-pos beg)))))
+      (python-shell-send-region beg end)
+      (message (concat 
+                (format \"Sent %d line%s \"
+                        num-lines
+                        (if (equal num-lines 1) \"\" \"s\"))
+                (if (equal num-lines 1) 
+                    (format \"(line %d)\" (line-number-at-pos end))
+                  (format \"(lines %d-%d)\" 
+                          (line-number-at-pos beg) 
+                          (line-number-at-pos end)))
+                \" to Python interpreter\")
+               (line-number-at-pos beg)
+               (line-number-at-pos end))))
+  (python-shell-step-after-defun))
+
+(defun python-current-defun ()
+  \"`python-info-current-defun' doesn't work when on a blank line, for some reason.\"
+  (interactive)
+  (save-excursion (forward-paragraph)
+                  (backward-paragraph)
+                  (forward-line)
+                  (python-info-current-defun)))
+
+(defun python-shell-send-code-and-step ()
+  (interactive)
+  ;; xemacs doesn't have use-region-p
+  (unless (python-shell-get-process)
+    (run-python))
+  (cond ((use-region-p)
+         (let ((end (region-end))
+               (beg (region-beginning)))
+           (python-shell-send-region beg end)
+           (message \"Sent region between lines %d and %d to python interpreter\"
+                    (line-number-at-pos beg)
+                    (line-number-at-pos end))
+           (goto-char end)))
+        ;; send function if in a function, else send block and iterate
+        ((python-current-defun)
+         (progn
+           (python-shell-send-defun)
+           (message \"Sent '%s' function to python interpreter\"
+                    (propertize (python-current-defun) 'face
+                                '(:foreground \"#66D9EF\")))
+           (when python-shell-send-code-step-on-function
+             (python-nav-end-of-defun)
+             (forward-line -1)
+             (python-shell-step-after-defun))))
+        (t
+         (python-shell-send-paragraph-and-step))))"]) t "some elisp code for interactive pythoning" "2017-06-07T18:29:15Z" "2017-06-07T18:29:15Z" "https://gist.github.com/fe95d9d43028ee77b1068936e063a1bb.git" "https://gist.github.com/fe95d9d43028ee77b1068936e063a1bb.git" 0 [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] ([eieio-class-tag--gh-gist-history-entry [eieio-class-tag--gh-user 5027575 "https://api.github.com/users/dwcoates" "https://github.com/dwcoates" "dwcoates" nil] "08624ae6bafa1ef98600bd05975eaa5cd043ba90" "2017-06-07T18:29:15Z" [eieio-class-tag--gh-gist-history-change 76 76 0] "https://api.github.com/gists/fe95d9d43028ee77b1068936e063a1bb/08624ae6bafa1ef98600bd05975eaa5cd043ba90"]) nil] gh-gist-gist "W/\"b1eba40cc6313eb9c771ba468dfc60bb\"" nil]))
+  :timestamp 1527887951.0588703)
