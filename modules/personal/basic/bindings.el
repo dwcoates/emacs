@@ -16,6 +16,7 @@
  :prefix "C-x"
  :desc "Execute kmacro" "SPC" #'kmacro-call-macro
  :desc "Previous buffer" "C-b" #'doom/previous-buffer
+ :desc "Toggle window split" "|" #'+toggle-window-split
  (:desc "visualize"
    :desc "Whitespace mdoe"    "w"   #'whitespace-mode
    :desc "Blink cursor line"  "M-=" #'+doom/blink-cursor)
