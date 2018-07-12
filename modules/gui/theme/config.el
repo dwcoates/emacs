@@ -10,13 +10,13 @@
   :hook (after-change-major-mode . turn-on-solaire-mode)
   :hook (doom-popup-mode . turn-off-solaire-mode)
   :config
-  (setq solaire-mode-real-buffer-fn
-        (lambda (buf)
-          (and (not buffer-file-name)
-               (let ((mini-win (active-minibuffer-window)))
-                 (when mini-win
-                   (equal (window-buffer mini-win) buf))))
-          ))
+  ;; (setq solaire-mode-real-buffer-fn
+  ;;       (lambda (buf)
+  ;;         (and (not buffer-file-name)
+  ;;              (let ((mini-win (active-minibuffer-window)))
+  ;;                (when mini-win
+  ;;                  (equal (window-buffer mini-win) buf))))
+  ;;         ))
 
   ;; Minibuffer
   ; (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
