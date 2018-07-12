@@ -472,14 +472,8 @@
     (:map isearch-mode-map
       "M-i" 'helm-swoop-from-isearch)) ; hand search over to helm-swoop
  (:after helm
-   :prefix "C-x"
-   "M-f" 'helm-locate
-   ;; Help commands
-   "7 w" 'helm-wikipedia-suggest
-   "7 g" 'helm-google-suggest
-   "7 s" 'helm-surfraw
    (:map helm-map
-     :prefix ""
+     "C-c C-y" 'helm-yank-selection
      "C-z" 'helm-select-action
      "ESC"        nil
      "C-S-n"      #'helm-next-source
@@ -491,6 +485,13 @@
      "C-f"   'helm-apropos              ; great help function
      "C-r"   'helm-info-emacs
      "C-l"   'helm-locate-library)
+   :prefix "C-x"
+   "M-f" 'helm-locate
+   ;; Help commands
+   "7 w" 'helm-wikipedia-suggest
+   "7 g" 'helm-google-suggest
+   "7 s" 'helm-surfraw
+
    (:map helm-grep-mode-map
      "<return>" 'helm-grep-mode-jump-other-window
      "n"  'helm-grep-mode-jump-other-window-forward
