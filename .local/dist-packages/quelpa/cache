@@ -1,1 +1,0 @@
-((atchka-theme :fetcher github :repo "dwcoates/atchka" :files ("*")) (emacs-snippets :fetcher github :repo "hlissner/emacs-snippets" :files ("*")) (helm-describe-modes :fetcher github :repo "emacs-helm/helm-describe-modes") (rotate-text :fetcher github :repo "debug-ito/rotate-text.el"))
