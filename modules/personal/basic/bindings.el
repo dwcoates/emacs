@@ -95,6 +95,10 @@
    :desc "Terminal in project"    "T" #'+term/open-popup-in-project))
 
 (map!
+ :map help-mode-map
+ "f" 'ace-link-help)
+
+(map!
  :prefix "C-c"
  (:after yasnippet
    (:map yas-keymap
