@@ -82,7 +82,8 @@
   :commands (magit-status magit-blame)
   :config
   (set! :evil-state 'magit-status-mode 'emacs)
-  (set! :popup "^\\*magit.+\\*$" :regexp t :same t)
+  ;;FIXME: why doesn't the :same callback work?
+  (set! :popup "^.*Magit.*$" :regexp t :same #'(lambda () (and (> (count-windows) 100) t)) :modeline t)
   (after! evil
     ;; Switch to emacs state only while in `magit-blame-mode', then back when
     ;; its done (since it's a minor-mode).
