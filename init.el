@@ -83,3 +83,4 @@
        ;; scheme and additional ex commands for evil-mode. Use it as a reference
        ;; for your own.
        :personal basic)
+(put 'narrow-to-region 'disabled nil)

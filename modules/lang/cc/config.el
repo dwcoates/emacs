@@ -47,7 +47,7 @@ compilation database is present in the project.")
   (push (cons #'+cc-objc-header-file-p 'objc-mode) magic-mode-alist)
 
   :init
-  (setq-default c-basic-offset tab-width)
+  (setq-default c-basic-offset 2)
 
   :config
   (set! :electric '(c-mode c++-mode objc-mode java-mode)

@@ -3,6 +3,9 @@
 (def-package! js2-mode
   :mode "\\.js$"
   :interpreter "node"
+  :commands js2-jump-to-definition js2r-split-string js2r-rename-var js2r-kill js2r-unwrap
+            js2-indent-bounce js2-indent-bounce-backward js2-forward-sws js2-mode-forward-sexp
+            js2-backward-sexp +javascript/refactor-menu +javascript/skewer-this-buffer
   :config
   (setq js2-skip-preprocessor-directives t
         js2-highlight-external-variables nil
@@ -37,10 +40,20 @@
         (setq-local js2-strict-missing-semi-warning nil))))
   (add-hook 'flycheck-mode-hook #'+javascript|init-flycheck-eslint)
 
-  ;; (map! :map js2-mode-map
-  ;;       :localleader
-  ;;       "r" #'+javascript/refactor-menu
-  ;;       "S" #'+javascript/skewer-this-buffer)
+  (map! :map js2-mode-map
+        :prefix "C-c"
+        "." #'js2-jump-to-definition
+        "|" #'js2r-split-string
+        "n" #'js2r-rename-var
+        "k" #'js2r-kill
+        "[" #'js2r-unwrap
+        "SPC" #'js2-indent-bounce
+        "C-SPC" #'js2-indent-bounce-backward
+        "q" #'js2-forward-sws
+        "f" #'js2-mode-forward-sexp
+        "b" #'js2-backward-sexp
+        "r" #'+javascript/refactor-menu
+        "S" #'+javascript/skewer-this-buffer)
   )
 
 
