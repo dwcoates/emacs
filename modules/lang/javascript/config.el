@@ -3,9 +3,9 @@
 (def-package! js2-mode
   :mode "\\.js$"
   :interpreter "node"
-  :commands js2-jump-to-definition js2r-split-string js2r-rename-var js2r-kill js2r-unwrap
-            js2-indent-bounce js2-indent-bounce-backward js2-forward-sws js2-mode-forward-sexp
-            js2-backward-sexp +javascript/refactor-menu +javascript/skewer-this-buffer
+  :commands js2-jump-to-definition js2-indent-bounce js2-indent-bounce-backward
+            js2-forward-sws js2-mode-forward-sexp js2-backward-sexp
+            +javascript/refactor-menu +javascript/skewer-this-buffer
   :config
   (setq js2-skip-preprocessor-directives t
         js2-highlight-external-variables nil
@@ -74,7 +74,7 @@
    js2r-add-to-globals-annotation js2r-extract-var js2r-inline-var
    js2r-rename-var js2r-var-to-this js2r-arguments-to-object js2r-ternary-to-if
    js2r-split-var-declaration js2r-split-string js2r-unwrap js2r-log-this
-   js2r-debug-this js2r-forward-slurp js2r-forward-barf)
+   js2r-debug-this js2r-forward-slurp js2r-forward-barf js2r-kill)
   :init
   (def-menu! +javascript/refactor-menu
     "Refactoring commands for `js2-mode' buffers."
