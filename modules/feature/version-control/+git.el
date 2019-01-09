@@ -75,7 +75,8 @@
   (advice-add #'git-timemachine-show-revision :after #'+vcs*update-header-line)
 
   ;; Force evil to rehash keybindings for the current state
-  (add-hook 'git-timemachine-mode-hook #'evil-force-normal-state))
+  (when (featurep! :feature evil)
+    (add-hook 'git-timemachine-mode-hook #'evil-force-normal-state)))
 
 
 (def-package! magit

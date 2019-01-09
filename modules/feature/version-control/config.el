@@ -16,8 +16,9 @@
     '("*vc-change-log*" :size 15)
     '(vc-annotate-mode :same t))
 
-  (set! :evil-state 'vc-annotate-mode 'normal)
-  (set! :evil-state 'vc-git-log-view-mode 'normal))
+  (when (featurep! :feature evil)
+    (set! :evil-state 'vc-annotate-mode 'normal)
+    (set! :evil-state 'vc-git-log-view-mode 'normal)))
 
 (def-package! smerge-mode
   :hook (find-file . +vcs|enable-smerge-mode-maybe)
