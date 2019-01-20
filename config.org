@@ -2174,23 +2174,9 @@ Advise ~magit-push~ to backup =specifics.el= to a backup file in home.
 #+end_src
 
 #+begin_src emacs-lisp
-
 #+begin_src emacs-lisp
 (add-to-list 'load-path (concat lisp-dir "yas-org-pretty-symbols"))
 (require 'yas-org-pretty-symbols)
-#+end_src
-
-Log notes into a drawer for a cleaner, less ambiguous presentation
-
-#+begin_src emacs-lisp
-(setq org-log-into-drawer t)
-#+end_src
-
-Log notes with active headings
-
-#+begin_src emacs-lisp
-(setcdr (assoc 'note org-log-note-headings) "_Note taken on_ %T")
-(setcdr (assoc 'state org-log-note-headings) "_State changed from_ *%S* $\\rightarrow$ *%s* %T")
 #+end_src
 
 ** Appearance

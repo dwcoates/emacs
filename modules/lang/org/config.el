@@ -184,10 +184,13 @@ unfold to point on startup."
    org-goto-max-level          10
    org-scheduled-delay-days    0
    org-src-fontify-natively    t
+   org-log-into-drawer         t
    (set-face-attribute 'org-agenda-done nil
                        :foreground "olive drab"
-                       :weight 'ultra-light)
-   )
+                       :weight 'ultra-light))
+
+  (setcdr (assoc 'note org-log-note-headings) "_Note taken on_ %T")
+  (setcdr (assoc 'state org-log-note-headings) "_State changed from_ *%S* $\\rightarrow$ *%s* %T")
 
   ;; Custom links
   (org-link-set-parameters
