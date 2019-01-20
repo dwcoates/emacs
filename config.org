@@ -2181,12 +2181,6 @@ Advise ~magit-push~ to backup =specifics.el= to a backup file in home.
 
 ** General
 
-   ~htmlize~ is needed for pretty html syntax highlighting from org exports
-
-#+begin_src emacs-lisp
-(use-package htmlize)
-#+end_src
-
    Allow conversion to markdown. Useful for working with project readmes,
    etc., in org-mode.
 

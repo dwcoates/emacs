@@ -11,6 +11,8 @@
 ;;(package! org-bullets :recipe (:fetcher github :repo "hlissner/org-bullets"))
 (package! toc-org)
 
+(package! htmlize)
+
 (when (featurep! +attach)
   (package! org-download))
 

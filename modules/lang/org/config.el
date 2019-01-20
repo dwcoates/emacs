@@ -36,6 +36,7 @@
   :config
   (setq org-bullets-bullet-list '("•" "•" "•" "•")))
 
+(def-package! htmlize)
 
 ;;
 ;; Bootstrap
