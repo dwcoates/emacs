@@ -66,6 +66,7 @@
      +org|smartparens-compatibility-config
      +org|unfold-to-2nd-level-or-point
      +org|show-paren-mode-compatibility
+     +org-no-smartparens-patch
      ))
 
 
@@ -266,3 +267,8 @@ between the two."
                :key #'file-truename
                :test #'equal))
     (add-to-list 'recentf-exclude #'+org-is-agenda-file)))
+
+
+(defun +org-no-smartparens-patch ()
+  (when (featurep smartparens)
+    (smartparens-mode -1)))
