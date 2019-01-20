@@ -55,6 +55,7 @@ Make ~emacs-lisp-mode~ the default major mode.
                                                   (symbol-value file))))
                                 key))
 #+end_src
+
 ** disable helm modeline (possibly uselss)
 
 This code was useful before, but now doom makes helm come from minibuffer. Idk.
@@ -2181,109 +2182,6 @@ Advise ~magit-push~ to backup =specifics.el= to a backup file in home.
 
 ** Appearance
 
-Load =atchka-org-theme=
-
-#+begin_src emacs-lisp
-  (add-to-list 'load-path (concat doom-lisp-dir "atchka-org"))
-  (add-to-list 'load-path (concat doom-lisp-dir "atchka-org-blocks"))
-
-  (when (require 'atchka-org-blocks nil t)
-    (atchka-org-minor-mode t))
-
-  (when (and window-system (require 'atchka-org-theme nil t))
-
-    (load-theme 'atchka-org))
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package org-agenda-property
-  :config)
-#+end_src
-
-Org warnings:
-
-#+begin_src emacs-lisp
-  (set-face-attribute 'org-warning nil :foreground "red3" :weight 'bold)
-#+end_src
-
-Please truncate lines in org-mode. The last thing I want to see is a
-wrapped table, and everything should be paragraphed, anyway (M-q).
-
-#+begin_src emacs-lisp
-  (setq org-startup-truncated t)
-#+end_src
-
-Install org bullets for pretty org headers
-
-#+begin_src emacs-lisp
-(use-package org-bullets)
-#+end_src
-
-Org-mode hook
-
-#+BEGIN_SRC emacs-lisp
-  (defun dwc-org-mode-appearance-hook ()
-    (toggle-word-wrap)
-    (flyspell-mode)
-    (org-bullets-mode t)
-    (hl-line-mode -1))
-
-  (add-hook 'org-mode-hook 'dwc-org-mode-appearance-hook)
-#+END_SRC
-
-Org will automatically convert the LaTex names for symbols to their utf-8
-encodings (so long as they are preceded by a backslash.) For example, \Gamma is
-entered by typing "Gamma" preceded by a slash:
-
-#+begin_src emacs-lisp
-  (setq-default org-pretty-entities-include-sub-superscripts t
-                org-use-sub-superscripts nil)
-#+end_src
-
-Make Org latex fragments bigger:
-
-#+begin_src emacs-lisp
-(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
-#+end_src
-
-Hide certain symbols and markup
-
-#+begin_src emacs-lisp
-(setq org-hide-emphasis-markers t ;; Font lock should hide the emphasis marker 
-                                  ;; characters (inline code, bold, etc).
-      org-hidden-keywords '(title) 
-      org-hide-leading-stars t)
-#+end_src
-
-Hide all Org source blocks by default. 
-
-#+begin_src emacs-lisp
-(add-hook 'org-mode-hook 'org-babel-result-hide-all)
-#+end_src
-
-I add this advice to make the highlights on org agenda disappear when typing is
-going on in another buffer. Very distracting for me when a line an agenda buffer
-is highlighted in the other frame because I forgot my mouse cursor on it.
-
-#+begin_src emacs-lisp
-  ;; (defun org-agenda-highlight-entry-advice (func &rest args)
-  ;;   (when (frame-pointer-visible-p)
-  ;;     (funcall func args)))
-
-  ;; (add-hook 'after-init-hook 
-  ;;           (lambda () (advice-add 'org-agenda-highlight-todo :around 'org-agenda-highlight-entry-advice)))
-#+end_src
-
-Display inline images with a certain width to prevent overly large images
-
-#+begin_src emacs-lisp
-  (setq org-image-actual-width '(600))
-#+end_src
-
-*** Abbrevs
-
-Abbreviations 
-
 #+begin_src emacs-lisp
   (defun org-create-org-abbrev-table (latex-keywords)
     "Produce an `abbrev-table' for org mode using LATEX-KEYWORDS.
@@ -3649,6 +3547,7 @@ the number 9.
 If you make a mistake, you can usually correct it by pressing =U=, the
 “undo” command. First, clear the stack (=M-0 DEL=) and exit and restart Calc
 to make sure things start off with a clean slate.
+
 * Final/Cleanup
 
 Display start-up time and play a notification message.

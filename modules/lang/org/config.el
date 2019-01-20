@@ -42,7 +42,7 @@
 ;; Bootstrap
 ;;
 
-(def-package! atchka-org-theme)
+(when window-system (def-package! atchka-org-theme))
 
 (after! org
   ;; Occasionally, Emacs encounters an error loading the built-in org, aborting
@@ -73,7 +73,7 @@
      +org|unfold-to-2nd-level-or-point
      +org|show-paren-mode-compatibility
      +org|set-syntax-table
-     ))
+     org-babel-result-hide-all))
 
 ;;
 ;; Config hooks
@@ -143,11 +143,11 @@ unfold to point on startup."
    org-fontify-quote-and-verse-blocks t
    org-fontify-whole-heading-line t
    org-footnote-auto-label 'plain
-   org-hidden-keywords nil
-   org-hide-emphasis-markers nil
+   org-hidden-keywords '(title)
+   org-hide-emphasis-markers t
    org-hide-leading-stars t
    org-hide-leading-stars-before-indent-mode t
-   org-image-actual-width nil
+   org-image-actual-width '(600)
    org-indent-indentation-per-level 2
    org-indent-mode-turns-on-hiding-stars t
    org-pretty-entities nil
@@ -157,6 +157,7 @@ unfold to point on startup."
      (?b . ,(face-foreground 'warning))
      (?c . ,(face-foreground 'success)))
    org-startup-folded t
+   org-startup-truncated t
    org-startup-indented t
    org-startup-with-inline-images nil
    org-tags-column 0
@@ -172,12 +173,11 @@ unfold to point on startup."
    ;; current theme.
    org-preview-latex-image-directory (concat doom-cache-dir "org-latex/")
    org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
-   org-format-latex-options
-   (plist-put org-format-latex-options
-              :background (face-attribute (or (cadr (assq 'default face-remapping-alist))
-                                              'default)
-                                          :background nil t))
-
+   ;; org-format-latex-options
+   ;; (plist-put org-format-latex-options
+   ;;            :background (face-attribute (or (cadr (assq 'default face-remapping-alist))
+   ;;                                            'default)
+   ;;                                        :background nil t))
    org-deadline-warning-days 2
    ;; org-directory               personal-dir ; Paths to various locations in my personal organization workflow
    ;; org-default-notes-file      (concat org-directory "todo.org")
