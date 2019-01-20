@@ -57,13 +57,8 @@
   (+org-init-keybinds)
   (+org-hacks)
 
-  ;; (if (featurep! +atchka-org-theme)
-  ;;     (load-theme "/home/dodge/.emacs.d/modules/lang/org/+atchka-org-theme.el"))
-  ;; (if (featurep! +atchka-org-blocks)
-  ;;     (load! +atchka-org-blocks)
-  ;;   (message "\n\nno found feature\n\n")
-  ;;   )
-  )
+  (when (featurep! +atchka-org-blocks)
+      (load! +atchka-org-blocks)))
 
 (add-hook! org-mode
   #'(doom|disable-line-numbers  ; no line numbers
