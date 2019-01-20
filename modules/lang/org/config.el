@@ -171,7 +171,23 @@ unfold to point on startup."
    (plist-put org-format-latex-options
               :background (face-attribute (or (cadr (assq 'default face-remapping-alist))
                                               'default)
-                                          :background nil t)))
+                                          :background nil t))
+
+   org-deadline-warning-days 2
+   ;; org-directory               personal-dir ; Paths to various locations in my personal organization workflow
+   ;; org-default-notes-file      (concat org-directory "todo.org")
+   ;; org-journal-file            (concat org-directory "journal.org")
+   org-extend-today-until      4
+   org-footnote-section        nil
+   org-from-is-user-regexp     "\\<Dodge Coates\\>"
+   org-goto-interface          'outline-path-completion
+   org-goto-max-level          10
+   org-scheduled-delay-days    0
+   org-src-fontify-natively    t
+   (set-face-attribute 'org-agenda-done nil
+                       :foreground "olive drab"
+                       :weight 'ultra-light)
+   )
 
   ;; Custom links
   (org-link-set-parameters

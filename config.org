@@ -2165,33 +2165,7 @@ Advise ~magit-push~ to backup =specifics.el= to a backup file in home.
 
 * Org Mode
 
-#+begin_src emacs-lisp
-  (let ((inhibit-message nil))
-    (message "Configuring org-mode..."))
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun outline-down-heading ()
-    (interactive)
-    (org-up-heading-safe)
-    (outline-forward-same-level 1))
-  (define-key org-mode-map (kbd "C-c C-.") 'outline-down-heading)
-  (define-key org-mode-map (kbd "C-c C-,") 'outline-up-heading)
-#+end_src
-
 ** General
-
-   Allow conversion to markdown. Useful for working with project readmes,
-   etc., in org-mode.
-
-#+begin_src emacs-lisp
-  (eval-after-load "org"
-    '(require 'ox-md nil t))
-#+end_src
-
-  Add my ~org-notes~ package. This package allows you to link two notes
-  together.
-
 #+begin_src emacs-lisp
   (add-to-list 'load-path (concat lisp-dir "org-notes"))
   (require 'org-notes)
@@ -2199,59 +2173,7 @@ Advise ~magit-push~ to backup =specifics.el= to a backup file in home.
   (define-key org-mode-map (kbd "C-c L") 'org-notes-helm-link-notes)
 #+end_src
 
-   Now can use the :ignore: tag to ignore just headings (not their
-   content) on export.
-
 #+begin_src emacs-lisp
-  (require 'ox-extra)
-  (ox-extras-activate '(ignore-headlines))
-#+end_src
-
-   Some general defaults:
-
-#+begin_src emacs-lisp
-  (setq org-deadline-warning-days 2 
-        ;; Paths to various locations in my personal organization workflow
-        org-directory               personal-dir
-        org-default-notes-file      (concat org-directory "todo.org")
-        org-journal-file            (concat org-directory "journal.org")
-        org-extend-today-until      4
-        org-footnote-section        nil
-        org-from-is-user-regexp     "\\<Dodge Coates\\>"
-        org-goto-interface          'outline-path-completion
-        org-goto-max-level          10
-        org-scheduled-delay-days    0
-        org-src-fontify-natively    t)
-  (set-face-attribute 'org-agenda-done nil
-                      :foreground "olive drab" 
-                      :weight 'ultra-light
-                      )
-#+end_src
-
-   Some bindings for getting to org files faster
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c o e")
-                  (lambda () (interactive) (find-file (concat org-directory "everything.org"))))
-#+end_src
-
-#+begin_src emacs-lisp
-  (add-to-list 'load-path (concat lisp-dir "org-misc"))
-  (unless (require 'ob-misc nil t)
-    (warn "Cannot load ob-misc"))
-
-  (global-set-key (kbd "C-c C-v ;") 'org-edit-src-headers)
-  (global-set-key (kbd "C-c C-v :") 'org-print-src-headers)
-#+end_src
-
-#+begin_src emacs-lisp
-  ; (defun org-show-children-advice (funct &optional N)
-  ;   (funcall funct 3)) 
-  ; (advice-add 'org-show-children :around 'org-show-children-advice)
-#+end_src
-
-   Use my ~yas-org-pretty-symbols~ package for making snippet expansion more
-   manageable
 
 #+begin_src emacs-lisp
 (add-to-list 'load-path (concat lisp-dir "yas-org-pretty-symbols"))
