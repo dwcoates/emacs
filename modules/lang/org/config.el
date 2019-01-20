@@ -53,7 +53,11 @@
   (org-crypt-use-before-save-magic)
   (+org-init-ui)
   (+org-init-keybinds)
-  (+org-hacks))
+  (+org-hacks)
+
+  ;(if (featurep! +atchka-org) (load! +atchka-org) (message "\ndid not load theme\n"))
+  (if (featurep! +atchka-org-blocks) (load! +atchka-org-blocks) (message "\ndid not load blocks\n"))
+  )
 
 (add-hook! org-mode
   #'(doom|disable-line-numbers  ; no line numbers
