@@ -32,7 +32,9 @@
         org-crypt-key user-mail-address))
 
 (def-package! org-bullets
-  :commands org-bullets-mode)
+  :commands org-bullets-mode
+  :config
+  (setq org-bullets-bullet-list '("•" "•" "•" "•")))
 
 
 ;;

@@ -201,7 +201,6 @@ Download a package that provides some of the above help functions.
   (global-set-key (kbd "C-h C-S-f") 'find-function) 
   (global-set-key (kbd "C-h m") 'helm-describe-modes)
 #+end_src
-
 * Initialize
 
 I run linux, but this may be useful for those who use OSX. Description:
@@ -222,11 +221,7 @@ These have to be fetched with doom's method
   (add-to-list 'load-path (concat lisp-dir "goodies"))  ;; personal goodies
   (add-to-list 'load-path (concat lisp-dir "org-misc")) ;; org-misc functions
 #+end_src
-
-* GUI
-
 * Org
-
 ** agenda
 
 #+begin_src emacs-lisp
@@ -2120,7 +2115,7 @@ Don't use that annoying indentation style with the comments, please
   (define-key html-mode-map (kbd "C-c C-k") 'sgml-kill-element)
 #+end_src
 
-** Git [2/3]
+** Git [0/1]
 *** ~magit~
 
  #+BEGIN_SRC  emacs-lisp
@@ -2303,12 +2298,6 @@ Log notes with active headings
 #+end_src
 
 ** Appearance
-
-Org header appearance
-
-#+begin_src emacs-lisp
-  (setq org-bullets-bullet-list '("•" "•" "•" "•"))
-#+end_src
 
 Load =atchka-org-theme=
 
