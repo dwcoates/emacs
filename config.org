@@ -218,8 +218,8 @@ I run linux, but this may be useful for those who use OSX. Description:
 These have to be fetched with doom's method
 
 #+begin_src emacs-lisp
-  (add-to-list 'load-path (concat lisp-dir "goodies"))  ;; personal goodies
-  (add-to-list 'load-path (concat lisp-dir "org-misc")) ;; org-misc functions
+  (add-to-list 'load-path (concat doom-lisp-dir "goodies"))  ;; personal goodies
+  (add-to-list 'load-path (concat doom-lisp-dir "org-misc")) ;; org-misc functions
 #+end_src
 * Org
 ** agenda
@@ -385,7 +385,7 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
 * Editing
 
 #+begin_src emacs-lisp
-  (add-to-list 'load-path (concat lisp-dir "goodies"))
+  (add-to-list 'load-path (concat doom-lisp-dir "goodies"))
   (unless (require 'dwc-goodies nil t)
     (warn "Could not load dwc-goodies"))
 #+end_src
@@ -2167,7 +2167,7 @@ Advise ~magit-push~ to backup =specifics.el= to a backup file in home.
 
 ** General
 #+begin_src emacs-lisp
-  (add-to-list 'load-path (concat lisp-dir "org-notes"))
+  (add-to-list 'load-path (concat doom-lisp-dir "org-notes"))
   (require 'org-notes)
 
   (define-key org-mode-map (kbd "C-c L") 'org-notes-helm-link-notes)
@@ -2175,7 +2175,7 @@ Advise ~magit-push~ to backup =specifics.el= to a backup file in home.
 
 #+begin_src emacs-lisp
 #+begin_src emacs-lisp
-(add-to-list 'load-path (concat lisp-dir "yas-org-pretty-symbols"))
+(add-to-list 'load-path (concat doom-lisp-dir "yas-org-pretty-symbols"))
 (require 'yas-org-pretty-symbols)
 #+end_src
 
@@ -2184,8 +2184,8 @@ Advise ~magit-push~ to backup =specifics.el= to a backup file in home.
 Load =atchka-org-theme=
 
 #+begin_src emacs-lisp
-  (add-to-list 'load-path (concat lisp-dir "atchka-org"))
-  (add-to-list 'load-path (concat lisp-dir "atchka-org-blocks"))
+  (add-to-list 'load-path (concat doom-lisp-dir "atchka-org"))
+  (add-to-list 'load-path (concat doom-lisp-dir "atchka-org-blocks"))
 
   (when (require 'atchka-org-blocks nil t)
     (atchka-org-minor-mode t))
@@ -2751,7 +2751,7 @@ Sound command is set to =play= which is acquired on Ubuntu Linux with ~sudo apt 
     I use my org-capture-builder convenience package
 
 #+begin_src emacs-lisp
-  (add-to-list 'load-path (concat lisp-dir "org-capture-builder"))
+  (add-to-list 'load-path (concat doom-lisp-dir "org-capture-builder"))
   (require 'org-capture-builder)
 #+end_src
 
@@ -3330,7 +3330,7 @@ Make ~eshell~ cache passwords
 
 #+BEGIN_SRC emacs-lisp
 ;; Edit With Emacs (Google Chrome Extension)
-(add-to-list 'load-path (concat lisp-dir "edit-with-emacs"))
+(add-to-list 'load-path (concat doom-lisp-dir "edit-with-emacs"))
 (use-package edit-server
   :config
   (edit-server-start))

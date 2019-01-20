@@ -13,6 +13,8 @@
 
 (package! htmlize)
 
+(package! org-bullets)
+
 (when (featurep! +attach)
   (package! org-download))
 

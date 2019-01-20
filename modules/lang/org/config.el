@@ -72,8 +72,6 @@
      +org|unfold-to-2nd-level-or-point
      +org|show-paren-mode-compatibility
      +org|set-syntax-table
-
-     +org-no-smartparens-patch
      ))
 
 ;;
@@ -106,7 +104,8 @@ unfold to point on startup."
       (sp-local-pair "_" nil :unless '(sp-point-after-word-p sp-point-before-word-p))
       (sp-local-pair "/" nil :unless '(sp-point-after-word-p sp-point-before-word-p +org-sp-point-in-checkbox-p))
       (sp-local-pair "~" nil :unless '(sp-point-after-word-p sp-point-before-word-p))
-      (sp-local-pair "=" nil :unless '(sp-point-after-word-p sp-point-before-word-p)))))
+      (sp-local-pair "=" nil :unless '(sp-point-after-word-p sp-point-before-word-p)))
+    (smartparens-mode -1)))
 
 (defun +org|enable-auto-reformat-tables ()
   "Realign tables exiting insert mode (`evil-mode')."
@@ -290,10 +289,6 @@ between the two."
                :test #'equal))
     (add-to-list 'recentf-exclude #'+org-is-agenda-file)))
 
-
-(defun +org-no-smartparens-patch ()
-  (when (featurep smartparens)
-    (smartparens-mode -1)))
 
 (defun +org|set-syntax-table ()
   ;; Modify org syntax table to treat the following characters as word
