@@ -2181,26 +2181,6 @@ Advise ~magit-push~ to backup =specifics.el= to a backup file in home.
 
 ** General
 
-#+begin_src emacs-lisp
-  (diminish 'eldoc-mode)
-#+end_src
-
-
-   Modify org syntax table to treat the following characters as word
-   constituents. This way, commands like forward-word will not treat them as word
-   separators, which is annoying in org-mode.
-
-#+begin_src emacs-lisp
-  (modify-syntax-entry ?_ "w" org-mode-syntax-table)
-  (modify-syntax-entry ?- "w" org-mode-syntax-table)
-  (modify-syntax-entry ?= "w" org-mode-syntax-table)
-  (modify-syntax-entry ?| "w" org-mode-syntax-table)
-  (modify-syntax-entry ?$ "w" org-mode-syntax-table)
-  (modify-syntax-entry ?# "w" org-mode-syntax-table)
-  (modify-syntax-entry ?* "w" org-mode-syntax-table)
-  (modify-syntax-entry '(133 . 140) "w" org-mode-syntax-table) ; ascii characters with codes 133-140
-#+end_src
-
    ~htmlize~ is needed for pretty html syntax highlighting from org exports
 
 #+begin_src emacs-lisp

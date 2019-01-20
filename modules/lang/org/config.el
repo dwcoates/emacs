@@ -66,9 +66,10 @@
      +org|smartparens-compatibility-config
      +org|unfold-to-2nd-level-or-point
      +org|show-paren-mode-compatibility
+     +org|set-syntax-table
+
      +org-no-smartparens-patch
      ))
-
 
 ;;
 ;; Config hooks
@@ -272,3 +273,16 @@ between the two."
 (defun +org-no-smartparens-patch ()
   (when (featurep smartparens)
     (smartparens-mode -1)))
+
+(defun +org|set-syntax-table ()
+  ;; Modify org syntax table to treat the following characters as word
+  ;; constituents. This way, commands like forward-word will not treat them as
+  ;; word separators, which is annoying in org-mode.
+  (modify-syntax-entry ?_ "w" org-mode-syntax-table)
+  (modify-syntax-entry ?- "w" org-mode-syntax-table)
+  (modify-syntax-entry ?= "w" org-mode-syntax-table)
+  (modify-syntax-entry ?| "w" org-mode-syntax-table)
+  (modify-syntax-entry ?$ "w" org-mode-syntax-table)
+  (modify-syntax-entry ?# "w" org-mode-syntax-table)
+  (modify-syntax-entry ?* "w" org-mode-syntax-table)
+  (modify-syntax-entry '(133 . 140) "w" org-mode-syntax-table))
