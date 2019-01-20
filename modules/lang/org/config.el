@@ -56,8 +56,7 @@
   (+org-hacks)
 
   ;(if (featurep! +atchka-org) (load! +atchka-org) (message "\ndid not load theme\n"))
-  (if (featurep! +atchka-org-blocks) (load! +atchka-org-blocks) (message "\ndid not load blocks\n"))
-  )
+  (when (featurep! +atchka-org-blocks) (load! +atchka-org-blocks)))
 
 (add-hook! org-mode
   #'(doom|disable-line-numbers  ; no line numbers
