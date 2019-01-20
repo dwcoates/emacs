@@ -103,15 +103,16 @@ unfold to point on startup."
     (when (eq action 'insert)
       (sp--looking-at-p "\\s-*]")))
 
-  ;; make delimiter auto-closing a little more conservative
+  ; make delimiter auto-closing a little more conservative
   (after! smartparens
-    (sp-with-modes 'org-mode
-      (sp-local-pair "*" nil :unless '(sp-point-after-word-p sp-point-before-word-p sp-point-at-bol-p))
-      (sp-local-pair "_" nil :unless '(sp-point-after-word-p sp-point-before-word-p))
-      (sp-local-pair "/" nil :unless '(sp-point-after-word-p sp-point-before-word-p +org-sp-point-in-checkbox-p))
-      (sp-local-pair "~" nil :unless '(sp-point-after-word-p sp-point-before-word-p))
-      (sp-local-pair "=" nil :unless '(sp-point-after-word-p sp-point-before-word-p)))
-    (smartparens-mode -1)))
+    ;; (sp-with-modes 'org-mode
+    ;;   (sp-local-pair "*" nil :unless '(sp-point-after-word-p sp-point-before-word-p sp-point-at-bol-p))
+    ;;   (sp-local-pair "_" nil :unless '(sp-point-after-word-p sp-point-before-word-p))
+    ;;   (sp-local-pair "/" nil :unless '(sp-point-after-word-p sp-point-before-word-p +org-sp-point-in-checkbox-p))
+    ;;   (sp-local-pair "~" nil :unless '(sp-point-after-word-p sp-point-before-word-p))
+    ;;   (sp-local-pair "=" nil :unless '(sp-point-after-word-p sp-point-before-word-p)))
+    (smartparens-mode -1))
+  )
 
 (defun +org|enable-auto-reformat-tables ()
   "Realign tables exiting insert mode (`evil-mode')."
