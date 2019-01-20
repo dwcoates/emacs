@@ -57,7 +57,6 @@
         +capture         ; org-capture in and outside of Emacs
         +export          ; centralized export system + more backends
         +present         ; Emacs for presentations
-        ;+atchka-org-theme  ; theme for org-mode
         +atchka-org-blocks ; themify code blocks
         ;; TODO +publish
         )

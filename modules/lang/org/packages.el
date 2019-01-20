@@ -15,6 +15,12 @@
 
 (package! org-bullets)
 
+(package! atchka-org-theme
+  :recipe (:fetcher github
+                    :repo "dwcoates/atchka-org-theme"
+                    :files ("*")))
+
+
 (when (featurep! +attach)
   (package! org-download))
 

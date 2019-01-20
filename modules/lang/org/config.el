@@ -42,11 +42,13 @@
 ;; Bootstrap
 ;;
 
+(def-package! atchka-org-theme)
+
 (after! org
   ;; Occasionally, Emacs encounters an error loading the built-in org, aborting
   ;; the load. This results in a broken, partially loaded state. This require
   ;; tries to set it straight.
-  (require 'org)
+  ;(require 'org)
 
   (defvaralias 'org-directory '+org-dir)
 
@@ -55,8 +57,13 @@
   (+org-init-keybinds)
   (+org-hacks)
 
-  ;(if (featurep! +atchka-org) (load! +atchka-org) (message "\ndid not load theme\n"))
-  (when (featurep! +atchka-org-blocks) (load! +atchka-org-blocks)))
+  ;; (if (featurep! +atchka-org-theme)
+  ;;     (load-theme "/home/dodge/.emacs.d/modules/lang/org/+atchka-org-theme.el"))
+  ;; (if (featurep! +atchka-org-blocks)
+  ;;     (load! +atchka-org-blocks)
+  ;;   (message "\n\nno found feature\n\n")
+  ;;   )
+  )
 
 (add-hook! org-mode
   #'(doom|disable-line-numbers  ; no line numbers
