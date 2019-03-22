@@ -86,6 +86,13 @@
   ;;FIXME: why doesn't the :same callback work?
   (set! :popup 'magit-mode :same t :modeline t)
   (set! :popup ".*[mM]agit.*" :regex t :other t :modeline t)
+  ;;; Stop complaining about index.lock
+  (defun magit-remove-git-lock-file ()
+    "Remove git's index lock file, if it exists."
+    (interactive)
+    (let ((base (magit-toplevel)))
+      (delete-file (concat base "/.git/index.lock"))))
+  (magit-remove-popup-key)
   (after! evil
     ;; Switch to emacs state only while in `magit-blame-mode', then back when
     ;; its done (since it's a minor-mode).
