@@ -255,6 +255,8 @@ between the two."
         :n  "zO"  #'outline-show-all
         :n  "zr"  #'outline-show-all
 
+        "C-c M-RET" #'org-insert-item
+
         (:after org-agenda
           (:map org-agenda-mode-map
             :e "<escape>" #'org-agenda-Quit
