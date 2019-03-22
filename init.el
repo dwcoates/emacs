@@ -11,6 +11,7 @@
        syntax-checker    ; tasing you for every semicolon you forget
        version-control   ; remember, remember that commit in November
        workspaces        ; tab emulation, persistence & separate workspaces
+       chess
 
        :core-ui
        company           ; the ultimate code completion backend
