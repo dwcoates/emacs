@@ -144,6 +144,7 @@
    :desc "Toggle Emacs log"       "m" #'doom/popup-toggle-messages
    :desc "Command log"            "L" #'global-command-log-mode
    :desc "Describe function"      "f" #'describe-function
+   :desc "Find function definition" "C-f" #'find-function
    :desc "Describe key"           "k" #'describe-key
    :desc "Describe char"          "c" #'describe-char
    :desc "Describe mode"          "M" #'describe-mode
