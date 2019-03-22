@@ -15,5 +15,6 @@ limit the buffer size.`"
   "Like `ido-find-file', but use `small-ido-max-window-height' to
 limit the buffer size.`"
   (interactive)
-  (let ((ido-max-window-height +small-ido-max-window-height))
+  (let ((ido-max-window-height +small-ido-max-window-height)
+        (ido-mode 1))
     (call-interactively 'ido-find-file)))
