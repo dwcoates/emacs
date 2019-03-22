@@ -25,8 +25,9 @@ immediately runs it on the current candidate (ending the ivy session)."
 (def-package! ivy
   :init
   ;; need to add some commands to init ivy
+  (ivy-mode 1)
   :config
-  (setq ivy-height 12
+  (setq ivy-height 8
         ivy-do-completion-in-region nil
         ivy-wrap t
         ivy-fixed-height-minibuffer t
