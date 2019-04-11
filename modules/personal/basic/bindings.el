@@ -7,6 +7,7 @@
 (unbind-key "C-x b" global-map) ;; Remove doom/previous-buffer
 (unbind-key "C-x o" global-map) ;; Remove doom/kill-other-buffers
 (unbind-key "C-x SPC" global-map) ;; Remove rectangle-mark-mode
+(unbind-key "C-q" global-map) ;; Remove quoted-insert
 
 (define-key input-decode-map [?\C-m] [C-m]) ;; Distinguish C-m from carriage return
 
@@ -427,6 +428,17 @@
      "d"  'sp-delete-symbol
      "<backspace>"  'sp-backward-delete-symbol
      "<C-backspace>"  'sp-backward-kill-sexp))
+ ;;
+ ;; Avy
+ ;;
+ (:after avy
+   (:prefix "C-q" :map global-map
+     "o" 'avy-goto-char-in-line
+     "l" 'avy-goto-line
+     "j" 'avy-goto
+     "p" 'avy-goto-char-in-paragraph
+     "k" 'avy-goto-word-0-above
+     "j" 'avy-goto-word-0-below))
  ;;
  ;; Company
  ;;
