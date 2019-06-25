@@ -366,7 +366,8 @@ See `doom-line-numbers-style' to control the style of line numbers to display."
   "Disable the display of line numbers."
   (doom|enable-line-numbers -1))
 
-(add-hook! (prog-mode text-mode conf-mode) #'doom|enable-line-numbers)
+;;; No line numbers, please.
+;(add-hook! (prog-mode text-mode conf-mode) #'doom|enable-line-numbers)
 
 ;; Emacs 26+ has native line number support.
 ;; Line number column. A faster (or equivalent, in the worst case) line number
