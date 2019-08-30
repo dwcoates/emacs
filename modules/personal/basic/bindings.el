@@ -514,7 +514,12 @@
      "n"  'helm-grep-mode-jump-other-window-forward
      "p"  'helm-grep-mode-jump-other-window-backward)
    (:map minibuffer-local-map
-     "C-M-p" 'helm-minibuffer-history)))
+     "C-M-p" 'helm-minibuffer-history))
+ (:after counsel
+   (:map global-map
+   "M-x" 'counsel-M-x)
+   ;:prefix "C-x"
+   ))
 
   ;; (define-key org-mode-map (kbd "C-a") 'smart-beginning-of-line)
 

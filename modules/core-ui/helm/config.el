@@ -15,7 +15,7 @@
              helm-buffers-list helm-all-mark-rings helm-occur helm-insert-command-name helm-mode)
   :init
   (map! :map global-map
-        "M-x" 'helm-M-x
+        ;"M-x" 'helm-M-x
         "M-y"  'helm-show-kill-ring
         "C-h SPC"  'helm-all-mark-rings
         "C-x b"  'helm-mini
