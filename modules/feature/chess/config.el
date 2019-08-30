@@ -2,7 +2,7 @@
 
 (def-package! chess
   :config
-  (set! :popup 'chess-mode :size 100 :regexp t :autokill t :same t)
+  (set! :popup 'chess-mode :size 100 :regexp t :autokill t)
   (setq chess-images-directory
         (concat user-emacs-directory
                 ".local/dist-packages/elpa/chess-2.0.4/pieces/xboard")
