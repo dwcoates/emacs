@@ -1,6 +1,11 @@
 ;;; feature/chess/config.el -*- lexical-binding: t; -*-
 
 (def-package! chess
+  :init
+  (map!
+   :map global-map
+   :prefix "C-x 9"
+   "f" 'chess-show-fen-at-point)
   :config
   (set! :popup 'chess-mode :size 100 :regexp t :autokill t)
   (setq chess-images-directory
