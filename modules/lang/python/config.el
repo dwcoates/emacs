@@ -20,7 +20,7 @@ is loaded.")
   :init
   (setq python-environment-directory doom-cache-dir
         python-indent-guess-indent-offset-verbose nil
-        python-shell-interpreter "python")
+        python-shell-interpreter "python3")
   :config
   (add-hook! 'python-mode-hook #'(flycheck-mode highlight-numbers-mode))
 
