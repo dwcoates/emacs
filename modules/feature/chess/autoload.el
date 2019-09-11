@@ -1,7 +1,5 @@
 ;;; feature/chess/autoload.el -*- lexical-binding: t; -*-
 
-
-
 (defun chess-get-fen-on-line ()
   (interactive)
   (let ((chess-fen-regex "\\([bnrqkpBNRQKP1-8]*/?\\)+ [bw] \\(-\\|[KQkq]+\\) \\(-\\|[1-8]\\)")
@@ -21,4 +19,4 @@
 ;;;###autoload
 (defun chess-show-fen-at-point ()
   (interactive)
-  (make-pos-from-fen (call-interactively 'get-fen-on-line)))
+  (chess-make-pos-from-fen (call-interactively 'chess-get-fen-on-line)))
