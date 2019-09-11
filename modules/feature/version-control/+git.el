@@ -85,7 +85,7 @@
   (set! :evil-state 'magit-status-mode 'emacs)
   ;;FIXME: why doesn't the :same callback work?
   (set! :popup 'magit-mode :same t :modeline t)
-  (set! :popup ".*[mM]agit.*" :regex t :other t :modeline t)
+  (set! :popup ".*[mM]agit.*" :regex t :same t :modeline t)
   ;;; Stop complaining about index.lock
   (defun magit-remove-git-lock-file ()
     "Remove git's index lock file, if it exists."
