@@ -112,6 +112,16 @@
      "<tab>" yas-maybe-expand
      "<tab>" #'+snippets/expand-on-region)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Programming languages
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(map!
+ :prefix "C-c"
+ ;;; Emacs lisp
+ (:map emacs-lisp-mode-map
+   "!" 'ielm))
+
 (map!
  (:desc "workspace" :prefix "C-z"
    :desc "Display tab bar"          "TAB" #'+workspace/display
