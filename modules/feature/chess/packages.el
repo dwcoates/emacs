@@ -1,4 +1,3 @@
-;; -*- no-byte-compile: t; -*-
-;;; feature/chess/packages.el
+;;; feature/chess/packages.el -*- lexical-binding: t; -*-
 
 (package! chess)
