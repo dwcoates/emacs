@@ -527,7 +527,9 @@
      "C-M-p" 'helm-minibuffer-history))
  (:after counsel
    (:map global-map
-   "M-x" 'counsel-M-x)
+   "M-x" 'counsel-M-x
+   :prefix "C-c"
+   "g" 'counsel-projectile-grep)
    ;:prefix "C-x"
    ))
 
